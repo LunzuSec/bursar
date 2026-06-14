@@ -41,7 +41,6 @@
             overflow: hidden;
         }
         
-        /* Header Styles */
         .report-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -73,7 +72,6 @@
             border-top: 1px solid rgba(255,255,255,0.3);
         }
         
-        /* Student Info Card */
         .student-info {
             background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
             padding: 20px;
@@ -103,7 +101,6 @@
             color: #333;
         }
         
-        /* Status Badge */
         .status-badge {
             display: inline-block;
             padding: 6px 18px;
@@ -117,7 +114,6 @@
         .status-unpaid { background: #f44336; color: white; }
         .status-credit { background: #2196f3; color: white; }
         
-        /* Cards */
         .card {
             background: white;
             border-radius: 12px;
@@ -139,7 +135,6 @@
             padding: 20px;
         }
         
-        /* Summary Grid */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -169,7 +164,6 @@
         .amount-negative { color: #f44336; }
         .amount-credit { color: #2196f3; }
         
-        /* Installment Table */
         .installment-table {
             width: 100%;
             border-collapse: collapse;
@@ -188,14 +182,12 @@
             color: #555;
         }
         
-        /* Contact Section */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
         }
         
-        /* Policy Box */
         .policy-box {
             background: #fff3e0;
             border-left: 4px solid #ff9800;
@@ -205,7 +197,6 @@
             font-size: 13px;
         }
         
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -251,7 +242,6 @@
             background: #455a64;
         }
         
-        /* Footer */
         .report-footer {
             text-align: center;
             padding: 20px;
@@ -261,7 +251,6 @@
             background: #f8f9fa;
         }
         
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -325,7 +314,7 @@
     </style>
 </head>
 <body>
-    <!-- Loading Overlay (same as results.html) -->
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
         <h4 style="color: var(--primary-color);">Loading Fee Report</h4>
@@ -333,7 +322,6 @@
     </div>
     
     <div id="reportContainer" class="report-container" style="display: none;">
-        <!-- Header -->
         <div class="report-header">
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="School Logo" class="school-logo">
             <div class="school-name" id="schoolName">LUNZU SECONDARY SCHOOL</div>
@@ -341,37 +329,29 @@
             <div class="report-title" id="reportTitle"></div>
         </div>
         
-        <!-- Student Information -->
         <div class="student-info" id="studentInfo"></div>
         
-        <!-- Fee Summary Cards -->
         <div class="card">
             <div class="card-header"><i class="fas fa-money-bill-wave me-2"></i> FEE SUMMARY</div>
             <div class="card-body" id="feeSummary"></div>
         </div>
         
-        <!-- Installment History -->
         <div class="card">
             <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> INSTALLMENT PAYMENT HISTORY</div>
             <div class="card-body" id="installmentHistory"></div>
         </div>
         
-        <!-- Next Due Information -->
         <div id="nextDueContainer"></div>
         
-        <!-- Payment Instructions -->
         <div class="card">
             <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
             <div class="card-body" id="paymentInstructions"></div>
         </div>
         
-        <!-- Policy Information -->
         <div id="policyContainer"></div>
         
-        <!-- Footer -->
         <div class="report-footer" id="reportFooter"></div>
         
-        <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print Report</button>
             <button class="btn btn-secondary" onclick="window.close()"><i class="fas fa-times me-2"></i> Close Window</button>
@@ -382,7 +362,7 @@
 
     <script>
         // ============================================
-        // CONFIGURATION - SAME GAS URL AS results.html
+        // CONFIGURATION - SAME GAS URL
         // ============================================
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
         
@@ -394,7 +374,7 @@
         const termKey = urlParams.get('term');
         
         // ============================================
-        // JSONP API CALL - IDENTICAL TO results.html
+        // JSONP API CALL - SAME AS results.html
         // ============================================
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
@@ -446,7 +426,7 @@
         }
         
         // ============================================
-        // LOAD FEE REPORT - CALLS GAS (same as results.html)
+        // LOAD FEE REPORT - CALLS GAS DIRECTLY
         // ============================================
         async function loadFeeReport() {
             if (!studentName || !studentClass || !dateOfBirth) {
@@ -458,7 +438,7 @@
                 showLoading(true);
                 updateLoadingMessage('Fetching fee records...');
                 
-                // Single API call to get fee report data
+                // CALL GAS - SAME AS results.html
                 const response = await callGAS('getFeeReport', {
                     studentName: studentName,
                     studentClass: studentClass,
@@ -474,9 +454,7 @@
                     throw new Error(response.message || 'No fee records found');
                 }
                 
-                // Render the fee report
                 renderReport(response);
-                
                 showLoading(false);
                 
             } catch (error) {
@@ -487,26 +465,23 @@
         }
         
         // ============================================
-        // RENDER REPORT - Display fee data
+        // RENDER REPORT
         // ============================================
         function renderReport(data) {
             const config = data.termConfig || {};
             const isODL = data.studentClass && data.studentClass.includes("ODL");
             
-            // School Header
             document.getElementById('schoolName').textContent = isODL ? 
                 (config.schoolNameODL || "LUNZU OPEN SECONDARY SCHOOL") : 
                 (config.schoolName || "LUNZU SECONDARY SCHOOL");
             document.getElementById('schoolAddress').textContent = config.schoolAddress || "Private Bag 130, Lunzu, Malawi";
             document.getElementById('reportTitle').innerHTML = `COMPREHENSIVE FEE REPORT<br><small>${data.academicYear || ''} | ${data.term || ''}</small>`;
             
-            // Status badge class
             let statusClass = 'unpaid';
             if (data.paymentStatus === 'FULLY PAID') statusClass = 'paid';
             else if (data.paymentStatus === 'PARTIALLY PAID') statusClass = 'partial';
             else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
             
-            // Student Info
             document.getElementById('studentInfo').innerHTML = `
                 <div class="info-item">
                     <div class="info-label"><i class="fas fa-user"></i> STUDENT NAME</div>
@@ -528,7 +503,6 @@
                 </div>
             `;
             
-            // Fee Summary
             const cumulativeBalance = data.cumulativeBalance || 0;
             let balanceClass = '';
             let balancePrefix = '';
@@ -566,36 +540,15 @@
                         <div class="summary-label">Cumulative Balance</div>
                     </div>
                 </div>
-                ${data.statusMessage ? `
-                <div class="policy-box" style="margin-top: 15px; background: ${data.paymentStatus === 'FULLY PAID' ? '#e8f5e9' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#e3f2fd' : '#ffebee')}; border-left-color: ${data.paymentStatus === 'FULLY PAID' ? '#4caf50' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#2196f3' : '#f44336')}; margin: 15px 0 0 0;">
+                ${data.statusMessage ? `<div class="policy-box" style="margin-top: 15px; background: ${data.paymentStatus === 'FULLY PAID' ? '#e8f5e9' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#e3f2fd' : '#ffebee')}; border-left-color: ${data.paymentStatus === 'FULLY PAID' ? '#4caf50' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#2196f3' : '#f44336')}; margin: 15px 0 0 0;">
                     <strong><i class="fas fa-info-circle me-2"></i>Status Note:</strong> ${escapeHtml(data.statusMessage)}
-                </div>
-                ` : ''}
+                </div>` : ''}
             `;
             
-            // Installment History
             if (data.installments && data.installments.length > 0) {
-                let installmentsHtml = `
-                    <table class="installment-table">
-                        <thead>
-                            <tr>
-                                <th><i class="fas fa-hashtag"></i> Installment</th>
-                                <th><i class="fas fa-money-bill-wave"></i> Amount Paid</th>
-                                <th><i class="fas fa-calendar-check"></i> Payment Date</th>
-                                <th><i class="fas fa-check-circle"></i> Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+                let installmentsHtml = `<table class="installment-table"><thead><tr><th>Installment</th><th>Amount Paid</th><th>Payment Date</th><th>Status</th></tr></thead><tbody>`;
                 data.installments.forEach(inst => {
-                    installmentsHtml += `
-                        <tr>
-                            <td><strong>Installment ${inst.number} of 3</strong></td>
-                            <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
-                            <td>${inst.date || 'Date not recorded'}</td>
-                            <td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td>
-                        </tr>
-                    `;
+                    installmentsHtml += `<tr><td><strong>Installment ${inst.number} of 3</strong></td><td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td><td>${inst.date || 'Date not recorded'}</td><td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td></tr>`;
                 });
                 installmentsHtml += `</tbody></table>`;
                 document.getElementById('installmentHistory').innerHTML = installmentsHtml;
@@ -603,31 +556,17 @@
                 document.getElementById('installmentHistory').innerHTML = '<p style="text-align: center; color: #999; padding: 20px;"><i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.</p>';
             }
             
-            // Next Due Information
             if (data.nextDueInfo && data.nextDueInfo.hasNextDue) {
                 document.getElementById('nextDueContainer').innerHTML = `
                     <div class="card">
                         <div class="card-header"><i class="fas fa-clock me-2"></i> PENDING PAYMENT</div>
                         <div class="card-body">
                             <div class="summary-grid">
-                                <div class="summary-item">
-                                    <div class="summary-amount amount-negative">K${(data.nextDueInfo.amountDue || 0).toLocaleString()}</div>
-                                    <div class="summary-label">Next Installment Amount</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="summary-amount">Installment ${data.nextDueInfo.nextInstallmentNumber || '?'} of 3</div>
-                                    <div class="summary-label">Installment Number</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="summary-amount amount-negative">K${(data.nextDueInfo.totalRemainingAmount || 0).toLocaleString()}</div>
-                                    <div class="summary-label">Total Remaining</div>
-                                </div>
+                                <div class="summary-item"><div class="summary-amount amount-negative">K${(data.nextDueInfo.amountDue || 0).toLocaleString()}</div><div class="summary-label">Next Installment Amount</div></div>
+                                <div class="summary-item"><div class="summary-amount">Installment ${data.nextDueInfo.nextInstallmentNumber || '?'} of 3</div><div class="summary-label">Installment Number</div></div>
+                                <div class="summary-item"><div class="summary-amount amount-negative">K${(data.nextDueInfo.totalRemainingAmount || 0).toLocaleString()}</div><div class="summary-label">Total Remaining</div></div>
                             </div>
-                            ${data.nextDueInfo.suggestedDateMessage ? `
-                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;">
-                                <strong><i class="fas fa-calendar-alt me-2"></i>${escapeHtml(data.nextDueInfo.suggestedDateMessage)}</strong>
-                            </div>
-                            ` : ''}
+                            ${data.nextDueInfo.suggestedDateMessage ? `<div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;"><strong><i class="fas fa-calendar-alt me-2"></i>${escapeHtml(data.nextDueInfo.suggestedDateMessage)}</strong></div>` : ''}
                         </div>
                     </div>
                 `;
@@ -635,28 +574,16 @@
                 document.getElementById('nextDueContainer').innerHTML = '';
             }
             
-            // Payment Instructions
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "National Bank of Malawi, Lunzu Branch";
             
             document.getElementById('paymentInstructions').innerHTML = `
                 <div class="contact-grid">
-                    <div>
-                        <strong><i class="fas fa-building me-2"></i>Bank Details:</strong><br>
-                        ${escapeHtml(bankInfo)}<br><br>
-                        <strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong><br>
-                        <span style="font-family: monospace; font-size: 16px;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span>
-                    </div>
-                    <div>
-                        <strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong><br>
-                        <i class="fas fa-phone"></i> Phone: ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}<br>
-                        ${contactInfo.phone2 ? `<i class="fas fa-phone-alt"></i> Alternate: ${escapeHtml(contactInfo.phone2)}<br>` : ''}
-                        ${contactInfo.whatsapp ? `<i class="fab fa-whatsapp"></i> WhatsApp: ${escapeHtml(contactInfo.whatsapp)}` : ''}
-                    </div>
+                    <div><strong><i class="fas fa-building me-2"></i>Bank Details:</strong><br>${escapeHtml(bankInfo)}<br><br><strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong><br><span style="font-family: monospace; font-size: 16px;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span></div>
+                    <div><strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong><br><i class="fas fa-phone"></i> Phone: ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}<br>${contactInfo.phone2 ? `<i class="fas fa-phone-alt"></i> Alternate: ${escapeHtml(contactInfo.phone2)}<br>` : ''}${contactInfo.whatsapp ? `<i class="fab fa-whatsapp"></i> WhatsApp: ${escapeHtml(contactInfo.whatsapp)}` : ''}</div>
                 </div>
             `;
             
-            // Policy Information
             const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
             
             document.getElementById('policyContainer').innerHTML = `
@@ -666,20 +593,15 @@
                 </div>
             `;
             
-            // Footer
             document.getElementById('reportFooter').innerHTML = `
                 <i class="fas fa-calendar-alt me-2"></i>Report generated on: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
                 <i class="fas fa-certificate me-2"></i>This is an official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')} - Office of the Bursar
             `;
             
-            // Show container
             document.getElementById('reportContainer').style.display = 'block';
             document.title = `Fee Report - ${data.studentName} | ${data.term || 'Fee Report'}`;
         }
         
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -705,12 +627,8 @@
                     <h4 style="color: #dc3545;">Error Loading Fee Report</h4>
                     <p>${escapeHtml(message)}</p>
                     <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                        <button onclick="window.close()" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Close Window
-                        </button>
-                        <button onclick="location.reload()" class="btn btn-primary">
-                            <i class="fas fa-redo"></i> Try Again
-                        </button>
+                        <button onclick="window.close()" class="btn btn-secondary"><i class="fas fa-times"></i> Close Window</button>
+                        <button onclick="location.reload()" class="btn btn-primary"><i class="fas fa-redo"></i> Try Again</button>
                     </div>
                 </div>
             `;
@@ -719,14 +637,11 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
         
-        // ============================================
-        // INITIALIZE - Call GAS on load (same as results.html)
-        // ============================================
+        // INITIALIZE - Call GAS on load (SAME AS results.html)
         document.addEventListener('DOMContentLoaded', function() {
             loadFeeReport();
         });
         
-        // Keyboard shortcut for print (Ctrl+P)
         document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                 e.preventDefault();
