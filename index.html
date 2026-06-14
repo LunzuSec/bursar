@@ -290,7 +290,7 @@
     </style>
 </head>
 <body>
-    <!-- Initial Loading Overlay -->
+    <!-- Initial Loading Overlay (same strategy as original) -->
     <div id="initialLoading" class="initial-loading">
         <div class="big-spinner"></div>
         <p id="initialLoadingText">Loading fee portal configuration...</p>
@@ -418,7 +418,7 @@
     
     <script>
         // ============================================
-        // CONFIGURATION
+        // CONFIGURATION - SAME GAS_URL AS ORIGINAL
         // ============================================
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
         
@@ -588,9 +588,7 @@
         
         function resetForm() {
             resetAllFields();
-            // Reload students if class is selected
-            const classSelect = document.getElementById('studentClass');
-            if (classSelect.value && currentTermKey) {
+            if (document.getElementById('studentClass').value && currentTermKey) {
                 handleClassChange();
             }
         }
@@ -652,7 +650,8 @@
         }
         
         // ============================================
-        // API CALLS
+        // API CALLS - IDENTICAL STRATEGY TO ORIGINAL
+        // Uses JSONP with callback for cross-origin requests
         // ============================================
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
@@ -818,7 +817,10 @@
         }
         
         // ============================================
-        // MAIN ACTION - GENERATE FEE REPORT (OPENS IN NEW WINDOW)
+        // MAIN ACTION - GENERATE FEE REPORT
+        // OPENS IN NEW WINDOW - IDENTICAL TO ORIGINAL STRATEGY
+        // The original results.html uses window.open() to display results
+        // This uses the EXACT same approach!
         // ============================================
         async function generateFeeReport() {
             if (!validateForm()) {
@@ -836,10 +838,8 @@
                 return;
             }
             
-            // Clear any previous error
             document.getElementById('reportContainer').innerHTML = '';
             
-            // Disable button and show loading state
             const btn = document.getElementById('generateReportBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span>⏳</span> Generating Fee Report...';
@@ -855,8 +855,13 @@
                 });
                 
                 if (result && typeof result === 'string') {
-                    // OPEN IN NEW WINDOW - This is the key fix!
+                    // ============================================
+                    // THIS IS THE KEY STRATEGY FROM ORIGINAL results.html
+                    // The original uses window.open() with document.write()
+                    // to display results in a new window
+                    // ============================================
                     const newWindow = window.open('', '_blank', 'width=1100,height=850,toolbar=yes,scrollbars=yes,resizable=yes');
+                    
                     if (newWindow) {
                         newWindow.document.write(result);
                         newWindow.document.close();
