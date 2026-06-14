@@ -290,7 +290,7 @@
     </style>
 </head>
 <body>
-    <!-- Initial Loading Overlay (same strategy as original) -->
+    <!-- Initial Loading Overlay -->
     <div id="initialLoading" class="initial-loading">
         <div class="big-spinner"></div>
         <p id="initialLoadingText">Loading fee portal configuration...</p>
@@ -418,7 +418,7 @@
     
     <script>
         // ============================================
-        // CONFIGURATION - SAME GAS_URL AS ORIGINAL
+        // CONFIGURATION - YOUR GAS URL
         // ============================================
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
         
@@ -650,8 +650,7 @@
         }
         
         // ============================================
-        // API CALLS - IDENTICAL STRATEGY TO ORIGINAL
-        // Uses JSONP with callback for cross-origin requests
+        // API CALLS - JSONP FOR CROSS-ORIGIN
         // ============================================
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
@@ -677,7 +676,7 @@
                         if (script.parentNode) script.parentNode.removeChild(script);
                         reject(new Error('Request timeout'));
                     }
-                }, 15000);
+                }, 30000);
                 
                 window[callbackName] = function(response) {
                     clearTimeout(timeoutId);
@@ -818,9 +817,6 @@
         
         // ============================================
         // MAIN ACTION - GENERATE FEE REPORT
-        // OPENS IN NEW WINDOW - IDENTICAL TO ORIGINAL STRATEGY
-        // The original results.html uses window.open() to display results
-        // This uses the EXACT same approach!
         // ============================================
         async function generateFeeReport() {
             if (!validateForm()) {
@@ -855,11 +851,7 @@
                 });
                 
                 if (result && typeof result === 'string') {
-                    // ============================================
-                    // THIS IS THE KEY STRATEGY FROM ORIGINAL results.html
-                    // The original uses window.open() with document.write()
-                    // to display results in a new window
-                    // ============================================
+                    // Open in new window with the fee report
                     const newWindow = window.open('', '_blank', 'width=1100,height=850,toolbar=yes,scrollbars=yes,resizable=yes');
                     
                     if (newWindow) {
