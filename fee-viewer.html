@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Report Viewer - Lunzu Secondary School</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .viewer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .viewer-header {
+            background: linear-gradient(135deg, #003366, #00509e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .viewer-header h1 { font-size: 24px; margin-bottom: 5px; }
+        .search-section { padding: 25px; background: #f8f9fa; border-bottom: 1px solid #e0e0e0; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 12px; font-weight: 600; color: #003366; margin-bottom: 5px; }
+        select, input { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; }
+        button {
+            background: #003366;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background: #00509e; transform: translateY(-2px); }
+        .result-container { padding: 25px; }
+        .loading { text-align: center; padding: 40px; display: none; }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #003366;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        .fee-report-content { margin-top: 20px; }
+        iframe { width: 100%; min-height: 600px; border: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="viewer-container">
+        <div class="viewer-header">
+            <h1>📄 Fee Report Viewer</h1>
+            <p>Lunzu Secondary School - Comprehensive Fee Statement</p>
+        </div>
+        
+        <div class="search-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Select Term</label>
+                    <select id="termSelect"><option value="">Loading terms...</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Student Class</label>
+                    <select id="classSelect">
+                        <option value="">Select Class</option>
+                        <option value="Form 1">Form 1</option>
+                        <option value="Form 2">Form 2</option>
+                        <option value="Form 3">Form 3</option>
+                        <option value="Form 4">Form 4</option>
+                        <option value="Form 1 ODL">Form 1 ODL</option>
+                        <option value="Form 2 ODL">Form 2 ODL</option>
+                        <option value="Form 3 ODL">Form 3 ODL</option>
+                        <option value="Form 4 ODL">Form 4 ODL</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <select id="studentNameSelect"><option value="">Select Class first</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth (YYYY-MM-DD)</label>
+                    <input type="text" id="dobInput" placeholder="e.g., 2005-01-15">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <button onclick="loadFeeReport()">💰 Generate Fee Report</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="result-container">
+            <div class="loading" id="loading"><div class="spinner"></div><p style="margin-top: 10px;">Generating fee report...</p></div>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="fee-report-content" id="feeReportContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
+        let availableTerms = [];
+        
+        function callGAS(action, params = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                params.callback = callbackName;
+                params.action = action;
+                let url = GAS_URL + '?';
+                const urlParams = [];
+                for (const key in params) {
+                    if (params[key] !== undefined && params[key] !== null) {
+                        urlParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+                    }
+                }
+                url += urlParams.join('&');
+                const script = document.createElement('script');
+                script.src = url;
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) { delete window[callbackName]; if (script.parentNode) script.parentNode.removeChild(script); reject(new Error('Request timeout')); }
+                }, 30000);
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    if (response && response.error) reject(new Error(response.error));
+                    else resolve(response);
+                };
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Connection failed'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+        
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const terms = await callGAS('getAvailableTerms', {});
+                if (terms && Array.isArray(terms)) {
+                    availableTerms = terms;
+                    const termSelect = document.getElementById('termSelect');
+                    termSelect.innerHTML = '<option value="">Select Term</option>';
+                    terms.forEach(term => {
+                        const option = document.createElement('option');
+                        option.value = term.key;
+                        option.textContent = term.display;
+                        if (term.isActive) option.selected = true;
+                        termSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading terms:', error);
+            }
+        });
+        
+        document.getElementById('classSelect').addEventListener('change', async function() {
+            const selectedClass = this.value;
+            const selectedTerm = document.getElementById('termSelect').value;
+            if (selectedClass && selectedTerm) {
+                try {
+                    const names = await callGAS('getStudentNames', { studentClass: selectedClass, term: selectedTerm });
+                    const studentSelect = document.getElementById('studentNameSelect');
+                    if (Array.isArray(names) && names.length > 0) {
+                        studentSelect.innerHTML = '<option value="">Select Student</option>';
+                        names.forEach(name => {
+                            const option = document.createElement('option');
+                            option.value = name;
+                            option.textContent = name;
+                            studentSelect.appendChild(option);
+                        });
+                    } else {
+                        studentSelect.innerHTML = '<option value="">No students found</option>';
+                    }
+                } catch (error) {
+                    console.error('Error loading students:', error);
+                }
+            }
+        });
+        
+        async function loadFeeReport() {
+            const studentName = document.getElementById('studentNameSelect').value;
+            const studentClass = document.getElementById('classSelect').value;
+            const dateOfBirth = document.getElementById('dobInput').value;
+            const termKey = document.getElementById('termSelect').value;
+            
+            if (!studentName || !studentClass || !dateOfBirth) {
+                document.getElementById('errorMessage').textContent = 'Please fill in all fields';
+                document.getElementById('errorMessage').style.display = 'block';
+                setTimeout(() => document.getElementById('errorMessage').style.display = 'none', 5000);
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('feeReportContent').innerHTML = '';
+            
+            try {
+                const htmlContent = await callGAS('getFeeReportHTML', {
+                    studentName: studentName,
+                    studentClass: studentClass,
+                    dateOfBirth: dateOfBirth,
+                    term: termKey
+                });
+                
+                if (htmlContent && typeof htmlContent === 'string') {
+                    document.getElementById('feeReportContent').innerHTML = htmlContent;
+                } else {
+                    throw new Error('Invalid response');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = 'Failed to load fee report: ' + error.message;
+                document.getElementById('errorMessage').style.display = 'block';
+                setTimeout(() => document.getElementById('errorMessage').style.display = 'none', 5000);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
