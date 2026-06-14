@@ -1,528 +1,741 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fee Report - Lunzu Secondary School</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Report - Lunzu Secondary School</title>
     
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@500;600;700&display=swap" rel="stylesheet">
     
-    .report-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    /* Header Styles */
-    .report-header {
-      background: linear-gradient(135deg, #1a237e, #0d47a1);
-      color: white;
-      padding: 25px 30px;
-      border-radius: 15px 15px 0 0;
-      text-align: center;
-    }
-    
-    .school-name {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    
-    .school-address {
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    
-    .report-title {
-      font-size: 16px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.3);
-    }
-    
-    /* Student Info Card */
-    .student-info {
-      background: white;
-      padding: 20px;
-      border-radius: 0 0 15px 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    
-    .info-item {
-      padding: 10px 20px;
-    }
-    
-    .info-label {
-      font-size: 11px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .info-value {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-    }
-    
-    /* Status Badge */
-    .status-badge {
-      display: inline-block;
-      padding: 6px 18px;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 13px;
-    }
-    
-    .status-paid { background: #4caf50; color: white; }
-    .status-partial { background: #ff9800; color: white; }
-    .status-unpaid { background: #f44336; color: white; }
-    .status-credit { background: #2196f3; color: white; }
-    
-    /* Cards */
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-    
-    .card-header {
-      background: #f8f9fa;
-      padding: 15px 20px;
-      border-bottom: 2px solid #e0e0e0;
-      font-weight: bold;
-      font-size: 16px;
-      color: #1a237e;
-    }
-    
-    .card-body {
-      padding: 20px;
-    }
-    
-    /* Summary Grid */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-    }
-    
-    .summary-item {
-      text-align: center;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 10px;
-    }
-    
-    .summary-amount {
-      font-size: 24px;
-      font-weight: bold;
-      color: #1a237e;
-    }
-    
-    .summary-label {
-      font-size: 11px;
-      color: #666;
-      margin-top: 5px;
-    }
-    
-    /* Installment Table */
-    .installment-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    .installment-table th,
-    .installment-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .installment-table th {
-      background: #f5f5f5;
-      font-weight: bold;
-      color: #555;
-    }
-    
-    .amount-positive {
-      color: #4caf50;
-      font-weight: bold;
-    }
-    
-    .amount-negative {
-      color: #f44336;
-      font-weight: bold;
-    }
-    
-    .amount-credit {
-      color: #2196f3;
-      font-weight: bold;
-    }
-    
-    /* Contact Section */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-    
-    /* Policy Box */
-    .policy-box {
-      background: #fff3e0;
-      border-left: 4px solid #ff9800;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-    
-    /* Action Buttons */
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    
-    .btn {
-      padding: 12px 30px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-    }
-    
-    .btn-primary {
-      background: #1a237e;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: #0d47a1;
-    }
-    
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-    
-    .btn-secondary:hover {
-      background: #5a6268;
-    }
-    
-    .btn-print {
-      background: #607d8b;
-      color: white;
-    }
-    
-    .btn-print:hover {
-      background: #455a64;
-    }
-    
-    /* Footer */
-    .report-footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 11px;
-      color: #999;
-      border-top: 1px solid #e0e0e0;
-      margin-top: 20px;
-    }
-    
-    @media print {
-      body {
-        background: white;
-        padding: 0;
-        margin: 0;
-      }
-      .action-buttons {
-        display: none;
-      }
-      .btn-print {
-        display: none;
-      }
-      .card {
-        break-inside: avoid;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      .info-item {
-        flex: 100%;
-        text-align: center;
-        padding: 8px;
-      }
-      .summary-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .installment-table th,
-      .installment-table td {
-        padding: 8px;
-        font-size: 12px;
-      }
-      .action-buttons {
-        flex-direction: column;
-      }
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #00509e;
+            --accent-color: #ffd700;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        /* Header Styles */
+        .report-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .school-logo {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .school-name {
+            font-family: 'Roboto Slab', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .school-address {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .report-title {
+            font-size: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        /* Student Info Card */
+        .student-info {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .info-item {
+            padding: 10px 20px;
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .status-paid { background: #4caf50; color: white; }
+        .status-partial { background: #ff9800; color: white; }
+        .status-unpaid { background: #f44336; color: white; }
+        .status-credit { background: #2196f3; color: white; }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            margin: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .card-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .summary-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .summary-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .amount-positive { color: #4caf50; }
+        .amount-negative { color: #f44336; }
+        .amount-credit { color: #2196f3; }
+        
+        /* Installment Table */
+        .installment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .installment-table th,
+        .installment-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .installment-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        /* Policy Box */
+        .policy-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-print {
+            background: #607d8b;
+            color: white;
+        }
+        
+        .btn-print:hover {
+            background: #455a64;
+        }
+        
+        /* Footer */
+        .report-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            color: #999;
+            border-top: 1px solid var(--border-color);
+            background: #f8f9fa;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-icon {
+            font-size: 3rem;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .student-info { flex-direction: column; }
+            .info-item { text-align: center; }
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+            .installment-table th, .installment-table td { padding: 8px; font-size: 12px; }
+            .action-buttons { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+        
+        @media print {
+            .action-buttons, .loading-overlay { display: none !important; }
+            body { padding: 0; margin: 0; background: white; }
+            .card { break-inside: avoid; }
+        }
+    </style>
 </head>
 <body>
-<div class="report-container" id="reportContainer">
-  <!-- Header -->
-  <div class="report-header">
-    <div class="school-name" id="schoolName"></div>
-    <div class="school-address" id="schoolAddress"></div>
-    <div class="report-title" id="reportTitle"></div>
-  </div>
-  
-  <!-- Student Information -->
-  <div class="student-info" id="studentInfo"></div>
-  
-  <!-- Fee Summary Cards -->
-  <div class="card">
-    <div class="card-header">💰 FEE SUMMARY</div>
-    <div class="card-body" id="feeSummary"></div>
-  </div>
-  
-  <!-- Installment History -->
-  <div class="card">
-    <div class="card-header">📅 INSTALLMENT PAYMENT HISTORY</div>
-    <div class="card-body" id="installmentHistory"></div>
-  </div>
-  
-  <!-- Next Due Information -->
-  <div id="nextDueContainer"></div>
-  
-  <!-- Payment Instructions -->
-  <div class="card">
-    <div class="card-header">💳 PAYMENT INSTRUCTIONS</div>
-    <div class="card-body" id="paymentInstructions"></div>
-  </div>
-  
-  <!-- Policy Information -->
-  <div id="policyContainer"></div>
-  
-  <!-- Footer -->
-  <div class="report-footer" id="reportFooter"></div>
-  
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <button class="btn btn-print" onclick="window.print()">🖨️ Print Report</button>
-    <button class="btn btn-secondary" onclick="window.close()">❌ Close Window</button>
-  </div>
-</div>
-
-<script>
-  // Get data from parent window (passed via URL or directly)
-  window.onload = function() {
-    // Try to get data from parent window if passed via postMessage
-    if (window.opener && window.opener.feeReportData) {
-      renderReport(window.opener.feeReportData);
-    } 
-    // Or get from URL parameters
-    else {
-      const urlParams = new URLSearchParams(window.location.search);
-      const encodedData = urlParams.get('data');
-      if (encodedData) {
-        try {
-          const feeReport = JSON.parse(decodeURIComponent(encodedData));
-          renderReport(feeReport);
-        } catch(e) {
-          document.body.innerHTML = '<div style="padding:20px;color:red;"><h3>Error</h3><p>Failed to load fee report data</p></div>';
-        }
-      } else {
-        document.body.innerHTML = '<div style="padding:20px;color:red;"><h3>Error</h3><p>No fee report data provided</p></div>';
-      }
-    }
-  };
-  
-  function renderReport(feeReport) {
-    // School Header
-    document.getElementById('schoolName').textContent = feeReport.studentClass.includes('ODL') ? 
-      feeReport.termConfig.schoolNameODL : feeReport.termConfig.schoolName;
-    document.getElementById('schoolAddress').textContent = feeReport.termConfig.schoolAddress;
-    document.getElementById('reportTitle').innerHTML = `COMPREHENSIVE FEE REPORT<br><small>${feeReport.academicYear} | ${feeReport.term}</small>`;
+    <!-- Loading Overlay (same as results.html) -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <h4 style="color: var(--primary-color);">Loading Fee Report</h4>
+        <p id="loadingMessage">Please wait...</p>
+    </div>
     
-    // Student Info
-    const statusClass = feeReport.paymentStatus === 'FULLY PAID' ? 'paid' : 
-                        (feeReport.paymentStatus === 'PARTIALLY PAID' ? 'partial' :
-                        (feeReport.paymentStatus === 'CREDIT AVAILABLE' ? 'credit' : 'unpaid'));
-    
-    document.getElementById('studentInfo').innerHTML = `
-      <div class="info-item">
-        <div class="info-label">STUDENT NAME</div>
-        <div class="info-value">${escapeHtml(feeReport.studentName)}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-label">CLASS</div>
-        <div class="info-value">${escapeHtml(feeReport.studentClass)}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-label">DATE OF BIRTH</div>
-        <div class="info-value">${escapeHtml(feeReport.dateOfBirth)}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-label">PAYMENT STATUS</div>
-        <div class="info-value">
-          <span class="status-badge status-${statusClass}">${escapeHtml(feeReport.paymentStatus)}</span>
+    <div id="reportContainer" class="report-container" style="display: none;">
+        <!-- Header -->
+        <div class="report-header">
+            <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="School Logo" class="school-logo">
+            <div class="school-name" id="schoolName">LUNZU SECONDARY SCHOOL</div>
+            <div class="school-address" id="schoolAddress">Private Bag 130, Lunzu, Malawi</div>
+            <div class="report-title" id="reportTitle"></div>
         </div>
-      </div>
-    `;
-    
-    // Fee Summary
-    document.getElementById('feeSummary').innerHTML = `
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-amount">K${feeReport.feesPerTerm.toLocaleString()}</div>
-          <div class="summary-label">Term Fees</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-amount">K${feeReport.totalPaidThisTerm.toLocaleString()}</div>
-          <div class="summary-label">Total Paid (This Term)</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-amount ${feeReport.previousBalance < 0 ? 'amount-negative' : (feeReport.previousBalance > 0 ? 'amount-credit' : '')}">
-            K${Math.abs(feeReport.previousBalance).toLocaleString()}
-          </div>
-          <div class="summary-label">Previous Balance</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-amount ${feeReport.cumulativeBalance < 0 ? 'amount-negative' : (feeReport.cumulativeBalance > 0 ? 'amount-credit' : 'amount-positive')}" style="font-size: 28px;">
-            K${Math.abs(feeReport.cumulativeBalance).toLocaleString()}
-          </div>
-          <div class="summary-label">Cumulative Balance</div>
-        </div>
-      </div>
-      ${feeReport.statusMessage ? `
-      <div class="policy-box" style="margin-top: 15px; background: ${feeReport.paymentStatus === 'FULLY PAID' ? '#e8f5e9' : (feeReport.paymentStatus === 'CREDIT AVAILABLE' ? '#e3f2fd' : '#ffebee')}; border-left-color: ${feeReport.paymentStatus === 'FULLY PAID' ? '#4caf50' : (feeReport.paymentStatus === 'CREDIT AVAILABLE' ? '#2196f3' : '#f44336')};">
-        <strong>Status Note:</strong> ${escapeHtml(feeReport.statusMessage)}
-      </div>
-      ` : ''}
-    `;
-    
-    // Installment History
-    if (feeReport.installments && feeReport.installments.length > 0) {
-      let installmentsHtml = `
-        <table class="installment-table">
-          <thead>
-            <tr>
-              <th>Installment</th>
-              <th>Amount Paid</th>
-              <th>Payment Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-      feeReport.installments.forEach(inst => {
-        installmentsHtml += `
-          <tr>
-            <td>Installment ${inst.number} of 3</td>
-            <td class="amount-positive">K${inst.amount.toLocaleString()}</td>
-            <td>${inst.date || 'Date not recorded'}</td>
-            <td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td>
-          </tr>
-        `;
-      });
-      installmentsHtml += `</tbody></table>`;
-      document.getElementById('installmentHistory').innerHTML = installmentsHtml;
-    } else {
-      document.getElementById('installmentHistory').innerHTML = '<p style="text-align: center; color: #999;">No installment payments recorded for this term.</p>';
-    }
-    
-    // Next Due
-    if (feeReport.nextDueInfo && feeReport.nextDueInfo.hasNextDue) {
-      document.getElementById('nextDueContainer').innerHTML = `
+        
+        <!-- Student Information -->
+        <div class="student-info" id="studentInfo"></div>
+        
+        <!-- Fee Summary Cards -->
         <div class="card">
-          <div class="card-header">⏰ PENDING PAYMENT</div>
-          <div class="card-body">
-            <div class="summary-grid">
-              <div class="summary-item">
-                <div class="summary-amount">K${feeReport.nextDueInfo.amountDue.toLocaleString()}</div>
-                <div class="summary-label">Next Installment Amount</div>
-              </div>
-              <div class="summary-item">
-                <div class="summary-amount">${feeReport.nextDueInfo.nextInstallmentNumber} of 3</div>
-                <div class="summary-label">Installment Number</div>
-              </div>
-              <div class="summary-item">
-                <div class="summary-amount amount-negative">K${feeReport.nextDueInfo.totalRemainingAmount.toLocaleString()}</div>
-                <div class="summary-label">Total Remaining</div>
-              </div>
-            </div>
-            ${feeReport.nextDueInfo.suggestedDateMessage ? `
-            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;">
-              <strong>📌 ${escapeHtml(feeReport.nextDueInfo.suggestedDateMessage)}</strong>
-            </div>
-            ` : ''}
-          </div>
+            <div class="card-header"><i class="fas fa-money-bill-wave me-2"></i> FEE SUMMARY</div>
+            <div class="card-body" id="feeSummary"></div>
         </div>
-      `;
-    }
-    
-    // Payment Instructions
-    document.getElementById('paymentInstructions').innerHTML = `
-      <div class="contact-grid">
-        <div>
-          <strong>🏦 Bank Details:</strong><br>
-          ${escapeHtml(feeReport.bankInfo)}<br><br>
-          <strong>Account Number:</strong><br>
-          ${escapeHtml(feeReport.contactInfo.accountNumber)}
+        
+        <!-- Installment History -->
+        <div class="card">
+            <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> INSTALLMENT PAYMENT HISTORY</div>
+            <div class="card-body" id="installmentHistory"></div>
         </div>
-        <div>
-          <strong>📞 Contact for Fee Queries:</strong><br>
-          Phone: ${escapeHtml(feeReport.contactInfo.phone1)}<br>
-          ${feeReport.contactInfo.phone2 ? `Alternate: ${escapeHtml(feeReport.contactInfo.phone2)}<br>` : ''}
-          ${feeReport.contactInfo.whatsapp ? `WhatsApp: ${escapeHtml(feeReport.contactInfo.whatsapp)}` : ''}
+        
+        <!-- Next Due Information -->
+        <div id="nextDueContainer"></div>
+        
+        <!-- Payment Instructions -->
+        <div class="card">
+            <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
+            <div class="card-body" id="paymentInstructions"></div>
         </div>
-      </div>
-    `;
+        
+        <!-- Policy Information -->
+        <div id="policyContainer"></div>
+        
+        <!-- Footer -->
+        <div class="report-footer" id="reportFooter"></div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print Report</button>
+            <button class="btn btn-secondary" onclick="window.close()"><i class="fas fa-times me-2"></i> Close Window</button>
+        </div>
+    </div>
     
-    // Policy
-    document.getElementById('policyContainer').innerHTML = `
-      <div class="policy-box">
-        <strong>📋 Fee Policy Information</strong><br>
-        ${escapeHtml(feeReport.governmentPolicy)}
-      </div>
-    `;
-    
-    // Footer
-    document.getElementById('reportFooter').innerHTML = `
-      Report generated on: ${new Date(feeReport.reportGenerated).toLocaleString()}<br>
-      This is an official fee statement from ${escapeHtml(feeReport.termConfig.schoolName)} - Office of the Bursar
-    `;
-  }
-  
-  function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-</script>
+    <div id="errorContainer" style="display: none;"></div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - SAME GAS URL AS results.html
+        // ============================================
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
+        
+        // Get URL parameters (passed from main portal)
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentName = urlParams.get('name');
+        const studentClass = urlParams.get('class');
+        const dateOfBirth = urlParams.get('dob');
+        const termKey = urlParams.get('term');
+        
+        // ============================================
+        // JSONP API CALL - IDENTICAL TO results.html
+        // ============================================
+        function callGAS(action, params = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                params.callback = callbackName;
+                params.action = action;
+                
+                let url = GAS_URL + '?';
+                const urlParams = [];
+                for (const key in params) {
+                    if (params[key] !== undefined && params[key] !== null) {
+                        urlParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+                    }
+                }
+                url += urlParams.join('&');
+                
+                const script = document.createElement('script');
+                script.src = url;
+                
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) script.parentNode.removeChild(script);
+                        reject(new Error('Request timeout. Please try again.'));
+                    }
+                }, 15000);
+                
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    
+                    if (response && response.error) {
+                        reject(new Error(response.error));
+                    } else {
+                        resolve(response);
+                    }
+                };
+                
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Connection failed. Please check your internet.'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+        
+        // ============================================
+        // LOAD FEE REPORT - CALLS GAS (same as results.html)
+        // ============================================
+        async function loadFeeReport() {
+            if (!studentName || !studentClass || !dateOfBirth) {
+                showError('Missing student information. Please go back and try again.');
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                updateLoadingMessage('Fetching fee records...');
+                
+                // Single API call to get fee report data
+                const response = await callGAS('getFeeReport', {
+                    studentName: studentName,
+                    studentClass: studentClass,
+                    dateOfBirth: dateOfBirth,
+                    term: termKey
+                });
+                
+                if (!response || response.error) {
+                    throw new Error(response?.error || 'Failed to load fee report');
+                }
+                
+                if (!response.success) {
+                    throw new Error(response.message || 'No fee records found');
+                }
+                
+                // Render the fee report
+                renderReport(response);
+                
+                showLoading(false);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message);
+                showLoading(false);
+            }
+        }
+        
+        // ============================================
+        // RENDER REPORT - Display fee data
+        // ============================================
+        function renderReport(data) {
+            const config = data.termConfig || {};
+            const isODL = data.studentClass && data.studentClass.includes("ODL");
+            
+            // School Header
+            document.getElementById('schoolName').textContent = isODL ? 
+                (config.schoolNameODL || "LUNZU OPEN SECONDARY SCHOOL") : 
+                (config.schoolName || "LUNZU SECONDARY SCHOOL");
+            document.getElementById('schoolAddress').textContent = config.schoolAddress || "Private Bag 130, Lunzu, Malawi";
+            document.getElementById('reportTitle').innerHTML = `COMPREHENSIVE FEE REPORT<br><small>${data.academicYear || ''} | ${data.term || ''}</small>`;
+            
+            // Status badge class
+            let statusClass = 'unpaid';
+            if (data.paymentStatus === 'FULLY PAID') statusClass = 'paid';
+            else if (data.paymentStatus === 'PARTIALLY PAID') statusClass = 'partial';
+            else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
+            
+            // Student Info
+            document.getElementById('studentInfo').innerHTML = `
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-user"></i> STUDENT NAME</div>
+                    <div class="info-value">${escapeHtml(data.studentName || '-')}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-graduation-cap"></i> CLASS</div>
+                    <div class="info-value">${escapeHtml(data.studentClass || '-')}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-calendar"></i> DATE OF BIRTH</div>
+                    <div class="info-value">${escapeHtml(data.dateOfBirth || '-')}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-credit-card"></i> PAYMENT STATUS</div>
+                    <div class="info-value">
+                        <span class="status-badge status-${statusClass}">${escapeHtml(data.paymentStatus || 'UNKNOWN')}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Fee Summary
+            const cumulativeBalance = data.cumulativeBalance || 0;
+            let balanceClass = '';
+            let balancePrefix = '';
+            if (cumulativeBalance < 0) {
+                balanceClass = 'amount-credit';
+                balancePrefix = 'CREDIT: K';
+            } else if (cumulativeBalance > 0) {
+                balanceClass = 'amount-negative';
+                balancePrefix = 'K';
+            } else {
+                balanceClass = '';
+                balancePrefix = 'K';
+            }
+            
+            document.getElementById('feeSummary').innerHTML = `
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-amount">K${(data.feesPerTerm || 0).toLocaleString()}</div>
+                        <div class="summary-label">Term Fees</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
+                        <div class="summary-label">Total Paid (This Term)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount ${data.previousBalance < 0 ? 'amount-credit' : (data.previousBalance > 0 ? 'amount-negative' : '')}">
+                            ${data.previousBalance < 0 ? 'K' + Math.abs(data.previousBalance).toLocaleString() + ' CR' : 'K' + (data.previousBalance || 0).toLocaleString()}
+                        </div>
+                        <div class="summary-label">Previous Balance</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount ${balanceClass}" style="font-size: 28px;">
+                            ${cumulativeBalance < 0 ? 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' CR' : 'K' + cumulativeBalance.toLocaleString()}
+                        </div>
+                        <div class="summary-label">Cumulative Balance</div>
+                    </div>
+                </div>
+                ${data.statusMessage ? `
+                <div class="policy-box" style="margin-top: 15px; background: ${data.paymentStatus === 'FULLY PAID' ? '#e8f5e9' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#e3f2fd' : '#ffebee')}; border-left-color: ${data.paymentStatus === 'FULLY PAID' ? '#4caf50' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#2196f3' : '#f44336')}; margin: 15px 0 0 0;">
+                    <strong><i class="fas fa-info-circle me-2"></i>Status Note:</strong> ${escapeHtml(data.statusMessage)}
+                </div>
+                ` : ''}
+            `;
+            
+            // Installment History
+            if (data.installments && data.installments.length > 0) {
+                let installmentsHtml = `
+                    <table class="installment-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> Installment</th>
+                                <th><i class="fas fa-money-bill-wave"></i> Amount Paid</th>
+                                <th><i class="fas fa-calendar-check"></i> Payment Date</th>
+                                <th><i class="fas fa-check-circle"></i> Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                data.installments.forEach(inst => {
+                    installmentsHtml += `
+                        <tr>
+                            <td><strong>Installment ${inst.number} of 3</strong></td>
+                            <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
+                            <td>${inst.date || 'Date not recorded'}</td>
+                            <td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td>
+                        </tr>
+                    `;
+                });
+                installmentsHtml += `</tbody></table>`;
+                document.getElementById('installmentHistory').innerHTML = installmentsHtml;
+            } else {
+                document.getElementById('installmentHistory').innerHTML = '<p style="text-align: center; color: #999; padding: 20px;"><i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.</p>';
+            }
+            
+            // Next Due Information
+            if (data.nextDueInfo && data.nextDueInfo.hasNextDue) {
+                document.getElementById('nextDueContainer').innerHTML = `
+                    <div class="card">
+                        <div class="card-header"><i class="fas fa-clock me-2"></i> PENDING PAYMENT</div>
+                        <div class="card-body">
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <div class="summary-amount amount-negative">K${(data.nextDueInfo.amountDue || 0).toLocaleString()}</div>
+                                    <div class="summary-label">Next Installment Amount</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="summary-amount">Installment ${data.nextDueInfo.nextInstallmentNumber || '?'} of 3</div>
+                                    <div class="summary-label">Installment Number</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="summary-amount amount-negative">K${(data.nextDueInfo.totalRemainingAmount || 0).toLocaleString()}</div>
+                                    <div class="summary-label">Total Remaining</div>
+                                </div>
+                            </div>
+                            ${data.nextDueInfo.suggestedDateMessage ? `
+                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;">
+                                <strong><i class="fas fa-calendar-alt me-2"></i>${escapeHtml(data.nextDueInfo.suggestedDateMessage)}</strong>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('nextDueContainer').innerHTML = '';
+            }
+            
+            // Payment Instructions
+            const contactInfo = data.contactInfo || {};
+            const bankInfo = data.bankInfo || "National Bank of Malawi, Lunzu Branch";
+            
+            document.getElementById('paymentInstructions').innerHTML = `
+                <div class="contact-grid">
+                    <div>
+                        <strong><i class="fas fa-building me-2"></i>Bank Details:</strong><br>
+                        ${escapeHtml(bankInfo)}<br><br>
+                        <strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong><br>
+                        <span style="font-family: monospace; font-size: 16px;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong><br>
+                        <i class="fas fa-phone"></i> Phone: ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}<br>
+                        ${contactInfo.phone2 ? `<i class="fas fa-phone-alt"></i> Alternate: ${escapeHtml(contactInfo.phone2)}<br>` : ''}
+                        ${contactInfo.whatsapp ? `<i class="fab fa-whatsapp"></i> WhatsApp: ${escapeHtml(contactInfo.whatsapp)}` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Policy Information
+            const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
+            
+            document.getElementById('policyContainer').innerHTML = `
+                <div class="policy-box">
+                    <strong><i class="fas fa-gavel me-2"></i>Fee Policy Information</strong><br>
+                    ${escapeHtml(governmentPolicy)}
+                </div>
+            `;
+            
+            // Footer
+            document.getElementById('reportFooter').innerHTML = `
+                <i class="fas fa-calendar-alt me-2"></i>Report generated on: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
+                <i class="fas fa-certificate me-2"></i>This is an official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')} - Office of the Bursar
+            `;
+            
+            // Show container
+            document.getElementById('reportContainer').style.display = 'block';
+            document.title = `Fee Report - ${data.studentName} | ${data.term || 'Fee Report'}`;
+        }
+        
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.style.display = show ? 'flex' : 'none';
+        }
+        
+        function updateLoadingMessage(message) {
+            const msgEl = document.getElementById('loadingMessage');
+            if (msgEl) msgEl.textContent = message;
+        }
+        
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h4 style="color: #dc3545;">Error Loading Fee Report</h4>
+                    <p>${escapeHtml(message)}</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button onclick="window.close()" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Close Window
+                        </button>
+                        <button onclick="location.reload()" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+            `;
+            errorContainer.style.display = 'block';
+            document.getElementById('reportContainer').style.display = 'none';
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+        
+        // ============================================
+        // INITIALIZE - Call GAS on load (same as results.html)
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeeReport();
+        });
+        
+        // Keyboard shortcut for print (Ctrl+P)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+            if (e.key === 'Escape') {
+                window.close();
+            }
+        });
+    </script>
 </body>
 </html>
