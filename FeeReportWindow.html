@@ -203,6 +203,7 @@
             justify-content: center;
             padding: 20px;
             border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -213,6 +214,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .btn-primary {
@@ -240,6 +244,15 @@
         
         .btn-print:hover {
             background: #455a64;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
         }
         
         .report-footer {
@@ -303,7 +316,7 @@
             .summary-grid { grid-template-columns: 1fr 1fr; }
             .installment-table th, .installment-table td { padding: 8px; font-size: 12px; }
             .action-buttons { flex-direction: column; }
-            .btn { width: 100%; }
+            .btn { width: 100%; justify-content: center; }
         }
         
         @media print {
@@ -354,7 +367,8 @@
         
         <div class="action-buttons">
             <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print Report</button>
-            <button class="btn btn-secondary" onclick="window.close()"><i class="fas fa-times me-2"></i> Close Window</button>
+            <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn"><i class="fas fa-download me-2"></i> Download PDF</button>
+            <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close Window</button>
         </div>
     </div>
     
@@ -372,6 +386,10 @@
         const studentClass = urlParams.get('class');
         const dateOfBirth = urlParams.get('dob');
         const termKey = urlParams.get('term');
+        
+        // Cache for fee report data
+        let cachedFeeReport = null;
+        let isGeneratingPDF = false;
         
         // ============================================
         // JSONP API CALL - SAME AS results.html
@@ -454,6 +472,9 @@
                     throw new Error(response.message || 'No fee records found');
                 }
                 
+                // Cache the response
+                cachedFeeReport = response;
+                
                 renderReport(response);
                 showLoading(false);
                 
@@ -507,14 +528,13 @@
             let balanceClass = '';
             let balancePrefix = '';
             if (cumulativeBalance < 0) {
-                balanceClass = 'amount-credit';
-                balancePrefix = 'CREDIT: K';
-            } else if (cumulativeBalance > 0) {
                 balanceClass = 'amount-negative';
-                balancePrefix = 'K';
+                balancePrefix = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' OWED';
+            } else if (cumulativeBalance > 0) {
+                balanceClass = 'amount-credit';
+                balancePrefix = 'K' + cumulativeBalance.toLocaleString() + ' CR';
             } else {
-                balanceClass = '';
-                balancePrefix = 'K';
+                balancePrefix = 'K0';
             }
             
             document.getElementById('feeSummary').innerHTML = `
@@ -528,14 +548,14 @@
                         <div class="summary-label">Total Paid (This Term)</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-amount ${data.previousBalance < 0 ? 'amount-credit' : (data.previousBalance > 0 ? 'amount-negative' : '')}">
-                            ${data.previousBalance < 0 ? 'K' + Math.abs(data.previousBalance).toLocaleString() + ' CR' : 'K' + (data.previousBalance || 0).toLocaleString()}
+                        <div class="summary-amount ${data.previousBalance < 0 ? 'amount-negative' : (data.previousBalance > 0 ? 'amount-credit' : '')}">
+                            ${data.previousBalance < 0 ? 'K' + Math.abs(data.previousBalance).toLocaleString() + ' OWED' : 'K' + (data.previousBalance || 0).toLocaleString()}
                         </div>
                         <div class="summary-label">Previous Balance</div>
                     </div>
                     <div class="summary-item">
                         <div class="summary-amount ${balanceClass}" style="font-size: 28px;">
-                            ${cumulativeBalance < 0 ? 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' CR' : 'K' + cumulativeBalance.toLocaleString()}
+                            ${balancePrefix}
                         </div>
                         <div class="summary-label">Cumulative Balance</div>
                     </div>
@@ -548,7 +568,8 @@
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `<table class="installment-table"><thead><tr><th>Installment</th><th>Amount Paid</th><th>Payment Date</th><th>Status</th></tr></thead><tbody>`;
                 data.installments.forEach(inst => {
-                    installmentsHtml += `<tr><td><strong>Installment ${inst.number} of 3</strong></td><td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td><td>${inst.date || 'Date not recorded'}</td><td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td></tr>`;
+                    const installmentName = getInstallmentName(inst.number);
+                    installmentsHtml += `<tr><td><strong>${installmentName}</strong></td><td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td><td>${inst.date || 'Date not recorded'}</td><td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td></tr>`;
                 });
                 installmentsHtml += `</tbody></table>`;
                 document.getElementById('installmentHistory').innerHTML = installmentsHtml;
@@ -556,22 +577,32 @@
                 document.getElementById('installmentHistory').innerHTML = '<p style="text-align: center; color: #999; padding: 20px;"><i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.</p>';
             }
             
-            if (data.nextDueInfo && data.nextDueInfo.hasNextDue) {
-                document.getElementById('nextDueContainer').innerHTML = `
+            // Show next due info if applicable
+            const nextDueContainer = document.getElementById('nextDueContainer');
+            if (data.cumulativeBalance < 0) {
+                const amountDue = Math.abs(data.cumulativeBalance);
+                nextDueContainer.innerHTML = `
                     <div class="card">
                         <div class="card-header"><i class="fas fa-clock me-2"></i> PENDING PAYMENT</div>
                         <div class="card-body">
                             <div class="summary-grid">
-                                <div class="summary-item"><div class="summary-amount amount-negative">K${(data.nextDueInfo.amountDue || 0).toLocaleString()}</div><div class="summary-label">Next Installment Amount</div></div>
-                                <div class="summary-item"><div class="summary-amount">Installment ${data.nextDueInfo.nextInstallmentNumber || '?'} of 3</div><div class="summary-label">Installment Number</div></div>
-                                <div class="summary-item"><div class="summary-amount amount-negative">K${(data.nextDueInfo.totalRemainingAmount || 0).toLocaleString()}</div><div class="summary-label">Total Remaining</div></div>
+                                <div class="summary-item">
+                                    <div class="summary-amount amount-negative">K${amountDue.toLocaleString()}</div>
+                                    <div class="summary-label">Amount Due</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="summary-amount" style="color: #ff9800;">${data.paymentStatus || 'PENDING'}</div>
+                                    <div class="summary-label">Payment Status</div>
+                                </div>
                             </div>
-                            ${data.nextDueInfo.suggestedDateMessage ? `<div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;"><strong><i class="fas fa-calendar-alt me-2"></i>${escapeHtml(data.nextDueInfo.suggestedDateMessage)}</strong></div>` : ''}
+                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;">
+                                <strong><i class="fas fa-calendar-alt me-2"></i>Please clear your fee balance to avoid penalties.</strong>
+                            </div>
                         </div>
                     </div>
                 `;
             } else {
-                document.getElementById('nextDueContainer').innerHTML = '';
+                nextDueContainer.innerHTML = '';
             }
             
             const contactInfo = data.contactInfo || {};
@@ -602,6 +633,16 @@
             document.title = `Fee Report - ${data.studentName} | ${data.term || 'Fee Report'}`;
         }
         
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function getInstallmentName(number) {
+            if (number === 1) return "First Installment";
+            if (number === 2) return "Second Installment";
+            if (number === 3) return "Third Installment";
+            return "Installment " + number;
+        }
+        
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -626,9 +667,10 @@
                     <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     <h4 style="color: #dc3545;">Error Loading Fee Report</h4>
                     <p>${escapeHtml(message)}</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                        <button onclick="window.close()" class="btn btn-secondary"><i class="fas fa-times"></i> Close Window</button>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                        <button onclick="closeWindow()" class="btn btn-secondary"><i class="fas fa-times"></i> Close Window</button>
                         <button onclick="location.reload()" class="btn btn-primary"><i class="fas fa-redo"></i> Try Again</button>
+                        <button onclick="window.history.back()" class="btn btn-print"><i class="fas fa-arrow-left"></i> Go Back</button>
                     </div>
                 </div>
             `;
@@ -637,18 +679,90 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
         
+        function closeWindow() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.close();
+            }
+        }
+        
+        // ============================================
+        // DOWNLOAD PDF FUNCTION
+        // ============================================
+        async function downloadPDF() {
+            if (!cachedFeeReport || isGeneratingPDF) {
+                if (!cachedFeeReport) alert('Fee report not loaded yet. Please wait.');
+                return;
+            }
+            
+            isGeneratingPDF = true;
+            const btn = document.getElementById('downloadPdfBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
+            
+            try {
+                showLoading(true);
+                updateLoadingMessage('Generating PDF...');
+                
+                const pdfResponse = await callGAS('generateFeeReportPDF', {
+                    studentName: cachedFeeReport.studentName,
+                    studentClass: cachedFeeReport.studentClass,
+                    dateOfBirth: cachedFeeReport.dateOfBirth,
+                    term: cachedFeeReport.termKey
+                });
+                
+                if (pdfResponse && !pdfResponse.error && pdfResponse.pdfBase64) {
+                    const fileName = pdfResponse.fileName || 
+                        `${cachedFeeReport.studentName.replace(/\s+/g, '_')}_${cachedFeeReport.academicYear || 'Unknown'}_${(cachedFeeReport.term || 'Report').replace(/\s+/g, '_')}_Fee_Report.pdf`;
+                    
+                    const byteCharacters = atob(pdfResponse.pdfBase64);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                    alert('PDF downloaded successfully!');
+                } else {
+                    throw new Error(pdfResponse?.error || 'Failed to generate PDF');
+                }
+            } catch (error) {
+                alert('Failed to generate PDF: ' + error.message);
+            } finally {
+                isGeneratingPDF = false;
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showLoading(false);
+            }
+        }
+        
+        // ============================================
         // INITIALIZE - Call GAS on load (SAME AS results.html)
+        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             loadFeeReport();
         });
         
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                 e.preventDefault();
                 window.print();
             }
             if (e.key === 'Escape') {
-                window.close();
+                closeWindow();
             }
         });
     </script>
