@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Fee Report - Lunzu Secondary School</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
             font-family: 'Poppins', sans-serif;
             background-color: var(--light-bg);
             color: #333;
-            padding: 20px;
+            padding: 8px;
             min-height: 100vh;
         }
         
@@ -44,69 +44,85 @@
         .report-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 25px 30px;
+            padding: 18px 12px;
             text-align: center;
         }
         
         .school-logo {
-            height: 60px;
-            margin-bottom: 10px;
+            height: 45px;
+            margin-bottom: 6px;
+            max-width: 100%;
         }
         
         .school-name {
             font-family: 'Roboto Slab', serif;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            word-wrap: break-word;
         }
         
         .school-address {
-            font-size: 12px;
+            font-size: 10px;
             opacity: 0.8;
+            word-wrap: break-word;
         }
         
         .report-title {
-            font-size: 16px;
-            margin-top: 12px;
-            padding-top: 12px;
+            font-size: 13px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .report-title small {
+            font-size: 11px;
+            opacity: 0.9;
+            display: block;
         }
         
         .student-info {
             background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
-            padding: 20px;
+            padding: 12px;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
         }
         
         .info-item {
-            padding: 10px 20px;
-            flex: 1;
-            min-width: 180px;
+            padding: 5px 8px;
+            min-width: 0;
+        }
+        
+        .info-item-full {
+            grid-column: 1 / -1;
         }
         
         .info-label {
-            font-size: 11px;
+            font-size: 9px;
             color: var(--primary-color);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             font-weight: 600;
+            display: block;
         }
         
         .info-value {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             color: #333;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .status-badge {
             display: inline-block;
-            padding: 6px 18px;
+            padding: 3px 12px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 11px;
+            white-space: nowrap;
         }
         
         .status-paid { background: #4caf50; color: white; }
@@ -116,107 +132,163 @@
         
         .card {
             background: white;
-            border-radius: 12px;
-            margin: 20px;
+            border-radius: 10px;
+            margin: 10px 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
         
         .card-header {
             background: #f8f9fa;
-            padding: 15px 20px;
+            padding: 10px 12px;
             border-bottom: 2px solid var(--accent-color);
             font-weight: bold;
-            font-size: 16px;
+            font-size: 13px;
             color: var(--primary-color);
         }
         
+        .card-header i {
+            margin-right: 6px;
+        }
+        
         .card-body {
-            padding: 20px;
+            padding: 12px;
+            overflow-x: auto;
         }
         
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
         
         .summary-item {
             text-align: center;
-            padding: 15px;
+            padding: 10px 6px;
             background: #f8f9fa;
-            border-radius: 10px;
+            border-radius: 8px;
+        }
+        
+        .summary-item-full {
+            grid-column: 1 / -1;
         }
         
         .summary-amount {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--primary-color);
+            word-wrap: break-word;
         }
         
         .summary-label {
-            font-size: 11px;
+            font-size: 9px;
             color: #666;
-            margin-top: 5px;
+            margin-top: 2px;
+            word-wrap: break-word;
         }
         
         .amount-positive { color: #4caf50; }
         .amount-negative { color: #f44336; }
         .amount-credit { color: #2196f3; }
         
+        /* Mobile-friendly table wrapper */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -4px;
+            padding: 0 4px;
+        }
+        
         .installment-table {
             width: 100%;
+            min-width: 300px;
             border-collapse: collapse;
+            font-size: 12px;
         }
         
         .installment-table th,
         .installment-table td {
-            padding: 12px;
+            padding: 8px 6px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            word-wrap: break-word;
         }
         
         .installment-table th {
             background: #f5f5f5;
             font-weight: bold;
             color: #555;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        
+        .installment-table tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .installment-table td:first-child {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        /* Card-style mobile view for installments */
+        .installment-cards {
+            display: none;
         }
         
         .contact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .contact-grid > div {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 12px;
+        }
+        
+        .contact-grid strong {
+            font-size: 11px;
+            display: block;
+            margin-bottom: 4px;
         }
         
         .policy-box {
             background: #fff3e0;
             border-left: 4px solid #ff9800;
-            padding: 15px;
-            margin: 20px;
+            padding: 10px 12px;
+            margin: 10px 8px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 11px;
+            word-wrap: break-word;
         }
         
         .action-buttons {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             justify-content: center;
-            padding: 20px;
+            padding: 12px;
             border-top: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
         
         .btn {
-            padding: 12px 30px;
+            padding: 10px 18px;
             border: none;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            flex: 1;
+            min-width: 100px;
+            justify-content: center;
         }
         
         .btn-primary {
@@ -255,10 +327,19 @@
             background: #218838;
         }
         
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
         .report-footer {
             text-align: center;
-            padding: 20px;
-            font-size: 11px;
+            padding: 15px;
+            font-size: 10px;
             color: #999;
             border-top: 1px solid var(--border-color);
             background: #f8f9fa;
@@ -276,16 +357,17 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
         
         .spinner {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border: 4px solid #f3f3f3;
             border-top: 4px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         @keyframes spin {
@@ -293,36 +375,218 @@
             100% { transform: rotate(360deg); }
         }
         
+        .loading-overlay h4 {
+            font-size: 16px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .loading-overlay p {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+        
         .error-message {
             text-align: center;
-            padding: 40px;
-            max-width: 500px;
-            margin: 40px auto;
+            padding: 30px 20px;
+            max-width: 400px;
+            margin: 30px auto;
             background: white;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .error-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #dc3545;
+            margin-bottom: 12px;
+        }
+        
+        .error-message h4 {
+            font-size: 16px;
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .error-message p {
+            font-size: 13px;
+            color: #666;
             margin-bottom: 15px;
         }
         
+        .error-message .btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Status message in fee summary */
+        .status-message-box {
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .student-info { flex-direction: column; }
-            .info-item { text-align: center; }
-            .summary-grid { grid-template-columns: 1fr 1fr; }
-            .installment-table th, .installment-table td { padding: 8px; font-size: 12px; }
-            .action-buttons { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
+            body { padding: 5px; }
+            
+            .school-name { font-size: 16px; }
+            .report-title { font-size: 12px; }
+            
+            .student-info {
+                grid-template-columns: 1fr 1fr;
+                padding: 10px;
+                gap: 3px;
+            }
+            
+            .info-item {
+                padding: 4px 6px;
+            }
+            
+            .info-value {
+                font-size: 13px;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            
+            .summary-amount {
+                font-size: 16px;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 8px 14px;
+                font-size: 11px;
+                min-width: 80px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .card {
+                margin: 8px 5px;
+            }
+            
+            .card-header {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+            
+            .card-body {
+                padding: 10px;
+            }
+            
+            .installment-table {
+                font-size: 11px;
+                min-width: 280px;
+            }
+            
+            .installment-table th,
+            .installment-table td {
+                padding: 6px 4px;
+            }
+            
+            .installment-table th {
+                font-size: 9px;
+            }
+            
+            .status-badge {
+                font-size: 10px;
+                padding: 2px 10px;
+            }
+            
+            .policy-box {
+                font-size: 10px;
+                padding: 8px 10px;
+                margin: 8px 5px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .student-info {
+                grid-template-columns: 1fr;
+                gap: 2px;
+            }
+            
+            .info-item {
+                padding: 3px 4px;
+            }
+            
+            .info-item-full {
+                grid-column: 1;
+            }
+            
+            .info-value {
+                font-size: 12px;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+            }
+            
+            .summary-item {
+                padding: 8px 4px;
+            }
+            
+            .summary-amount {
+                font-size: 14px;
+            }
+            
+            .summary-label {
+                font-size: 8px;
+            }
+            
+            .installment-table {
+                font-size: 10px;
+                min-width: 260px;
+            }
+            
+            .installment-table th,
+            .installment-table td {
+                padding: 4px 3px;
+            }
+            
+            .school-logo {
+                height: 35px;
+            }
+            
+            .school-name {
+                font-size: 14px;
+            }
+            
+            .report-title {
+                font-size: 11px;
+            }
+            
+            .report-title small {
+                font-size: 10px;
+            }
         }
         
         @media print {
             .action-buttons, .loading-overlay { display: none !important; }
             body { padding: 0; margin: 0; background: white; }
             .card { break-inside: avoid; }
+            .report-container { border-radius: 0; box-shadow: none; }
         }
     </style>
 </head>
@@ -366,9 +630,9 @@
         <div class="report-footer" id="reportFooter"></div>
         
         <div class="action-buttons">
-            <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print Report</button>
+            <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print</button>
             <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn"><i class="fas fa-download me-2"></i> Download PDF</button>
-            <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close Window</button>
+            <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close</button>
         </div>
     </div>
     
@@ -505,36 +769,55 @@
             
             document.getElementById('studentInfo').innerHTML = `
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-user"></i> STUDENT NAME</div>
-                    <div class="info-value">${escapeHtml(data.studentName || '-')}</div>
+                    <span class="info-label"><i class="fas fa-user"></i> STUDENT</span>
+                    <span class="info-value">${escapeHtml(data.studentName || '-')}</span>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-graduation-cap"></i> CLASS</div>
-                    <div class="info-value">${escapeHtml(data.studentClass || '-')}</div>
+                    <span class="info-label"><i class="fas fa-graduation-cap"></i> CLASS</span>
+                    <span class="info-value">${escapeHtml(data.studentClass || '-')}</span>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-calendar"></i> DATE OF BIRTH</div>
-                    <div class="info-value">${escapeHtml(data.dateOfBirth || '-')}</div>
+                    <span class="info-label"><i class="fas fa-calendar"></i> DOB</span>
+                    <span class="info-value">${escapeHtml(data.dateOfBirth || '-')}</span>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-credit-card"></i> PAYMENT STATUS</div>
-                    <div class="info-value">
+                    <span class="info-label"><i class="fas fa-credit-card"></i> STATUS</span>
+                    <span class="info-value">
                         <span class="status-badge status-${statusClass}">${escapeHtml(data.paymentStatus || 'UNKNOWN')}</span>
-                    </div>
+                    </span>
                 </div>
             `;
             
             const cumulativeBalance = data.cumulativeBalance || 0;
             let balanceClass = '';
-            let balancePrefix = '';
+            let balanceDisplay = '';
             if (cumulativeBalance < 0) {
                 balanceClass = 'amount-negative';
-                balancePrefix = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' OWED';
+                balanceDisplay = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' OWED';
             } else if (cumulativeBalance > 0) {
                 balanceClass = 'amount-credit';
-                balancePrefix = 'K' + cumulativeBalance.toLocaleString() + ' CR';
+                balanceDisplay = 'K' + cumulativeBalance.toLocaleString() + ' CR';
             } else {
-                balancePrefix = 'K0';
+                balanceDisplay = 'K0';
+            }
+            
+            // Build status message box
+            let statusMessageHtml = '';
+            if (data.statusMessage) {
+                let bgColor = '#ffebee';
+                let borderColor = '#f44336';
+                if (data.paymentStatus === 'FULLY PAID') {
+                    bgColor = '#e8f5e9';
+                    borderColor = '#4caf50';
+                } else if (data.paymentStatus === 'CREDIT AVAILABLE') {
+                    bgColor = '#e3f2fd';
+                    borderColor = '#2196f3';
+                }
+                statusMessageHtml = `
+                    <div class="status-message-box" style="background: ${bgColor}; border-left: 4px solid ${borderColor};">
+                        <strong><i class="fas fa-info-circle me-2"></i>Status Note:</strong> ${escapeHtml(data.statusMessage)}
+                    </div>
+                `;
             }
             
             document.getElementById('feeSummary').innerHTML = `
@@ -545,7 +828,7 @@
                     </div>
                     <div class="summary-item">
                         <div class="summary-amount">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
-                        <div class="summary-label">Total Paid (This Term)</div>
+                        <div class="summary-label">Total Paid</div>
                     </div>
                     <div class="summary-item">
                         <div class="summary-amount ${data.previousBalance < 0 ? 'amount-negative' : (data.previousBalance > 0 ? 'amount-credit' : '')}">
@@ -554,27 +837,53 @@
                         <div class="summary-label">Previous Balance</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-amount ${balanceClass}" style="font-size: 28px;">
-                            ${balancePrefix}
+                        <div class="summary-amount ${balanceClass}" style="font-size: 20px;">
+                            ${balanceDisplay}
                         </div>
                         <div class="summary-label">Cumulative Balance</div>
                     </div>
                 </div>
-                ${data.statusMessage ? `<div class="policy-box" style="margin-top: 15px; background: ${data.paymentStatus === 'FULLY PAID' ? '#e8f5e9' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#e3f2fd' : '#ffebee')}; border-left-color: ${data.paymentStatus === 'FULLY PAID' ? '#4caf50' : (data.paymentStatus === 'CREDIT AVAILABLE' ? '#2196f3' : '#f44336')}; margin: 15px 0 0 0;">
-                    <strong><i class="fas fa-info-circle me-2"></i>Status Note:</strong> ${escapeHtml(data.statusMessage)}
-                </div>` : ''}
+                ${statusMessageHtml}
             `;
             
+            // Installment History - with responsive table
             if (data.installments && data.installments.length > 0) {
-                let installmentsHtml = `<table class="installment-table"><thead><tr><th>Installment</th><th>Amount Paid</th><th>Payment Date</th><th>Status</th></tr></thead><tbody>`;
+                let installmentsHtml = `
+                    <div class="table-wrapper">
+                        <table class="installment-table">
+                            <thead>
+                                <tr>
+                                    <th>Installment</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
                 data.installments.forEach(inst => {
                     const installmentName = getInstallmentName(inst.number);
-                    installmentsHtml += `<tr><td><strong>${installmentName}</strong></td><td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td><td>${inst.date || 'Date not recorded'}</td><td><span class="status-badge status-paid" style="padding: 4px 12px; font-size: 11px;">PAID</span></td></tr>`;
+                    installmentsHtml += `
+                        <tr>
+                            <td><strong>${installmentName}</strong></td>
+                            <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
+                            <td>${inst.date || 'Not recorded'}</td>
+                            <td><span class="status-badge status-paid" style="padding: 3px 10px; font-size: 10px;">PAID</span></td>
+                        </tr>
+                    `;
                 });
-                installmentsHtml += `</tbody></table>`;
+                installmentsHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
                 document.getElementById('installmentHistory').innerHTML = installmentsHtml;
             } else {
-                document.getElementById('installmentHistory').innerHTML = '<p style="text-align: center; color: #999; padding: 20px;"><i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.</p>';
+                document.getElementById('installmentHistory').innerHTML = `
+                    <div style="text-align: center; color: #999; padding: 15px;">
+                        <i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.
+                    </div>
+                `;
             }
             
             // Show next due info if applicable
@@ -586,16 +895,16 @@
                         <div class="card-header"><i class="fas fa-clock me-2"></i> PENDING PAYMENT</div>
                         <div class="card-body">
                             <div class="summary-grid">
-                                <div class="summary-item">
-                                    <div class="summary-amount amount-negative">K${amountDue.toLocaleString()}</div>
+                                <div class="summary-item summary-item-full">
+                                    <div class="summary-amount amount-negative" style="font-size: 22px;">K${amountDue.toLocaleString()}</div>
                                     <div class="summary-label">Amount Due</div>
                                 </div>
-                                <div class="summary-item">
-                                    <div class="summary-amount" style="color: #ff9800;">${data.paymentStatus || 'PENDING'}</div>
+                                <div class="summary-item summary-item-full">
+                                    <div class="summary-amount" style="color: #ff9800; font-size: 16px;">${data.paymentStatus || 'PENDING'}</div>
                                     <div class="summary-label">Payment Status</div>
                                 </div>
                             </div>
-                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin-top: 15px;">
+                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin: 10px 0 0 0;">
                                 <strong><i class="fas fa-calendar-alt me-2"></i>Please clear your fee balance to avoid penalties.</strong>
                             </div>
                         </div>
@@ -610,8 +919,19 @@
             
             document.getElementById('paymentInstructions').innerHTML = `
                 <div class="contact-grid">
-                    <div><strong><i class="fas fa-building me-2"></i>Bank Details:</strong><br>${escapeHtml(bankInfo)}<br><br><strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong><br><span style="font-family: monospace; font-size: 16px;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span></div>
-                    <div><strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong><br><i class="fas fa-phone"></i> Phone: ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}<br>${contactInfo.phone2 ? `<i class="fas fa-phone-alt"></i> Alternate: ${escapeHtml(contactInfo.phone2)}<br>` : ''}${contactInfo.whatsapp ? `<i class="fab fa-whatsapp"></i> WhatsApp: ${escapeHtml(contactInfo.whatsapp)}` : ''}</div>
+                    <div>
+                        <strong><i class="fas fa-building me-2"></i>Bank Details:</strong>
+                        ${escapeHtml(bankInfo)}
+                        <br><br>
+                        <strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong>
+                        <br><span style="font-family: monospace; font-size: 15px; font-weight: bold;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong>
+                        <i class="fas fa-phone"></i> ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}
+                        ${contactInfo.phone2 ? `<br><i class="fas fa-phone-alt"></i> ${escapeHtml(contactInfo.phone2)}` : ''}
+                        ${contactInfo.whatsapp ? `<br><i class="fab fa-whatsapp"></i> ${escapeHtml(contactInfo.whatsapp)}` : ''}
+                    </div>
                 </div>
             `;
             
@@ -625,8 +945,8 @@
             `;
             
             document.getElementById('reportFooter').innerHTML = `
-                <i class="fas fa-calendar-alt me-2"></i>Report generated on: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
-                <i class="fas fa-certificate me-2"></i>This is an official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')} - Office of the Bursar
+                <i class="fas fa-calendar-alt me-2"></i>Generated: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
+                <i class="fas fa-certificate me-2"></i>Official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')}
             `;
             
             document.getElementById('reportContainer').style.display = 'block';
@@ -637,9 +957,9 @@
         // HELPER FUNCTIONS
         // ============================================
         function getInstallmentName(number) {
-            if (number === 1) return "First Installment";
-            if (number === 2) return "Second Installment";
-            if (number === 3) return "Third Installment";
+            if (number === 1) return "1st Installment";
+            if (number === 2) return "2nd Installment";
+            if (number === 3) return "3rd Installment";
             return "Installment " + number;
         }
         
@@ -665,12 +985,12 @@
             errorContainer.innerHTML = `
                 <div class="error-message">
                     <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                    <h4 style="color: #dc3545;">Error Loading Fee Report</h4>
+                    <h4>Error Loading Fee Report</h4>
                     <p>${escapeHtml(message)}</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
-                        <button onclick="closeWindow()" class="btn btn-secondary"><i class="fas fa-times"></i> Close Window</button>
+                    <div class="btn-group">
+                        <button onclick="closeWindow()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
                         <button onclick="location.reload()" class="btn btn-primary"><i class="fas fa-redo"></i> Try Again</button>
-                        <button onclick="window.history.back()" class="btn btn-print"><i class="fas fa-arrow-left"></i> Go Back</button>
+                        <button onclick="window.history.back()" class="btn btn-print"><i class="fas fa-arrow-left"></i> Back</button>
                     </div>
                 </div>
             `;
