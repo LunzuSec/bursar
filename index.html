@@ -392,6 +392,9 @@
                     <button type="button" class="btn btn-secondary" onclick="resetForm()">
                         <span>🔄</span> Reset Form
                     </button>
+                    <button type="button" class="btn btn-back" onclick="goBackToPortal()">
+                        <span>←</span> Back to Student Portal
+                    </button>
                 </div>
             </form>
             
@@ -591,6 +594,10 @@
             if (document.getElementById('studentClass').value && currentTermKey) {
                 handleClassChange();
             }
+        }
+        
+        function goBackToPortal() {
+            window.location.href = 'https://lunzusec.github.io/School_results/student-portal.html';
         }
         
         // ============================================
@@ -818,7 +825,7 @@
         // ============================================
         // MAIN ACTION - GENERATE FEE REPORT
         // ============================================
-        async function generateFeeReport() {
+        function generateFeeReport() {
             if (!validateForm()) {
                 showError('Please fill in all required fields.');
                 return;
@@ -834,46 +841,20 @@
                 return;
             }
             
-            document.getElementById('reportContainer').innerHTML = '';
+            clearError();
             
-            const btn = document.getElementById('generateReportBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span>⏳</span> Generating Fee Report...';
-            btn.disabled = true;
+            // Open fee report in new tab - let FeeReportWindow.html handle its own loading
+            const feeReportUrl = `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
+            const newTab = window.open(feeReportUrl, '_blank');
             
-            try {
-                // Call the server to get the fee report HTML
-                const result = await callGAS('getFeeReportHTML', {
-                    studentName: studentName,
-                    studentClass: studentClass,
-                    dateOfBirth: dateOfBirth,
-                    term: termKey
-                });
-                
-                if (result && typeof result === 'string') {
-                    // Open in new window with the fee report
-                    const newWindow = window.open('', '_blank', 'width=1100,height=850,toolbar=yes,scrollbars=yes,resizable=yes');
-                    
-                    if (newWindow) {
-                        newWindow.document.write(result);
-                        newWindow.document.close();
-                        showSuccess('Fee report opened in new window!');
-                    } else {
-                        showError('Please allow pop-ups to view the fee report.');
-                    }
-                } else if (result && result.error) {
-                    showError(result.error);
-                } else {
-                    showError('Failed to generate fee report. Please try again.');
-                }
-                
-            } catch (error) {
-                console.error('Error generating fee report:', error);
-                showError('Failed to generate fee report: ' + error.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+            if (!newTab) {
+                showError('Please allow pop-ups to view the fee report.');
+                return;
             }
+            
+            newTab.focus();
+            showSuccess('Opening fee report in new tab...');
+            setTimeout(() => clearError(), 2000);
         }
         
         // ============================================
@@ -946,6 +927,15 @@
                 const infoDiv = container.querySelector('.alert-info');
                 if (infoDiv) infoDiv.remove();
             }, 5000);
+        }
+        
+        function clearError() {
+            const container = document.getElementById('reportContainer');
+            if (container.innerHTML !== '') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 3000);
+            }
         }
         
         async function testAPIConnection() {
