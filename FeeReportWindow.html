@@ -261,6 +261,28 @@
             word-wrap: break-word;
         }
         
+        .payment-instructions-box {
+            background: #e8f0fe;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 15px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            word-wrap: break-word;
+        }
+        
+        .payment-instructions-box strong {
+            color: var(--primary-color);
+        }
+        
+        .payment-instructions-box .instruction-section {
+            margin-bottom: 10px;
+        }
+        
+        .payment-instructions-box .instruction-section:last-child {
+            margin-bottom: 0;
+        }
+        
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -504,6 +526,12 @@
                 padding: 8px 10px;
                 margin: 8px 5px;
             }
+            
+            .payment-instructions-box {
+                font-size: 11px;
+                padding: 10px 12px;
+                margin: 8px 5px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -609,6 +637,22 @@
         <div class="card">
             <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
             <div class="card-body" id="paymentInstructions"></div>
+        </div>
+        
+        <!-- Payment Instructions - English and Chichewa -->
+        <div class="payment-instructions-box" id="paymentInstructionsBox">
+            <div class="instruction-section">
+                <strong><i class="fas fa-info-circle me-2"></i>ENGLISH:</strong>
+                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsEnglish">
+                    All fees must be paid into the school's bank account. Provide a receipt via acceptable channel or in person. For digital submissions, send a screenshot showing the school's account number, transaction date, and student name/description. SMS messages alone are not accepted as they can be edited—screenshots must clearly show the sender. Incomplete submissions will delay verification.
+                </p>
+            </div>
+            <div class="instruction-section" style="border-top: 1px solid #dee2e6; padding-top: 10px; margin-top: 10px;">
+                <strong><i class="fas fa-info-circle me-2"></i>CHICHEWA:</strong>
+                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsChichewa">
+                    Ndalama zonse ziyenera kulipidwa ku akaunti ya banki ya sukulu. Perekani risiti kudzera njira yovomerezeka kapena mwawekha. Ngati mukutumiza digito, tumizani screenshot yosonyeza nambala ya akaunti ya sukulu, tsiku la kubweza ndalama, ndi dzina / kufotokozera kwa wophunzira. Mauthenga a SMS okha sangavomerezedwe chifukwa amatha kusinthidwa—screenshot ziyenera kusonyeza bwino wotumiza. Ngati zonse zosowa sizinaperekedwe, kutsimikizira kwa malipiro kungachedwe.
+                </p>
+            </div>
         </div>
         
         <div id="policyContainer"></div>
@@ -833,7 +877,6 @@
             `;
             
             // Installment History - with responsive table
-            // Display dates exactly as they appear in the sheet
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `
                     <div class="table-wrapper">
@@ -850,7 +893,6 @@
                 `;
                 data.installments.forEach(inst => {
                     const installmentName = getInstallmentName(inst.number);
-                    // Display date exactly as it came from the sheet - no reformatting
                     const dateDisplay = inst.date || 'Not recorded';
                     installmentsHtml += `
                         <tr>
@@ -923,6 +965,16 @@
                     </div>
                 </div>
             `;
+            
+            // Update Payment Instructions with data from server (if available)
+            if (data.paymentInstructions) {
+                if (data.paymentInstructions.english) {
+                    document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
+                }
+                if (data.paymentInstructions.chichewa) {
+                    document.getElementById('paymentInstructionsChichewa').textContent = data.paymentInstructions.chichewa;
+                }
+            }
             
             const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
             
