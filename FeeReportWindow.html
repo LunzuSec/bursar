@@ -233,11 +233,6 @@
             font-size: 11px;
         }
         
-        /* Card-style mobile view for installments */
-        .installment-cards {
-            display: none;
-        }
-        
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -325,15 +320,6 @@
         
         .btn-success:hover {
             background: #218838;
-        }
-        
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
         }
         
         .report-footer {
@@ -847,6 +833,7 @@
             `;
             
             // Installment History - with responsive table
+            // Display dates exactly as they appear in the sheet
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `
                     <div class="table-wrapper">
@@ -863,11 +850,13 @@
                 `;
                 data.installments.forEach(inst => {
                     const installmentName = getInstallmentName(inst.number);
+                    // Display date exactly as it came from the sheet - no reformatting
+                    const dateDisplay = inst.date || 'Not recorded';
                     installmentsHtml += `
                         <tr>
                             <td><strong>${installmentName}</strong></td>
                             <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
-                            <td>${inst.date || 'Not recorded'}</td>
+                            <td>${escapeHtml(dateDisplay)}</td>
                             <td><span class="status-badge status-paid" style="padding: 3px 10px; font-size: 10px;">PAID</span></td>
                         </tr>
                     `;
