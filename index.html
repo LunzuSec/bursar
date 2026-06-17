@@ -4,333 +4,440 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunzu Secondary School - Fee Report Portal</title>
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
             min-height: 100vh;
             padding: 20px;
+            background: #0a1f2e;
+            /* banknote background via canvas will be injected, but we keep a fallback */
+            position: relative;
+            overflow-x: hidden;
         }
-        
+
+        /* container for canvas background */
+        #bg-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            /* allow clicks to pass through to the form */
+        }
+
+        #bg-canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .container {
-            max-width: 800px;
+            position: relative;
+            z-index: 1;
+            max-width: 820px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(3px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
-        
+
         .header {
-            background: linear-gradient(135deg, #1a3c6e 0%, #2c5282 100%);
+            background: linear-gradient(145deg, #0d2b45, #1a3c5e);
             color: white;
-            padding: 25px;
+            padding: 25px 20px;
             text-align: center;
+            border-bottom: 3px solid #fbbf24;
         }
-        
+
         .logo {
-            max-width: 120px;
-            margin-bottom: 15px;
+            max-width: 110px;
+            margin-bottom: 12px;
             background: white;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        
-        h1 { font-size: 24px; margin-bottom: 8px; }
-        h2 { font-size: 18px; color: #ffd700; margin-bottom: 5px; }
-        h3 { font-size: 16px; color: #cbd5e0; }
-        
-        .content { padding: 30px; }
-        .form-group { margin-bottom: 25px; }
-        
+
+        h1 {
+            font-size: 26px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-size: 19px;
+            color: #fcd34d;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 15px;
+            color: #bdd3e8;
+            margin-top: 2px;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 30px 28px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #2d3748;
-            font-size: 16px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
         }
-        
+
         .required-star {
-            color: #e53e3e;
+            color: #dc2626;
+            margin-right: 2px;
         }
-        
-        select, input {
+
+        select,
+        input {
             width: 100%;
-            padding: 14px;
+            padding: 13px 14px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.25s ease;
+            background: #f8fafc;
         }
-        
-        select:disabled, input:disabled {
-            background-color: #f7fafc;
-            color: #a0aec0;
+
+        select:disabled,
+        input:disabled {
+            background: #f1f5f9;
+            color: #64748b;
             cursor: not-allowed;
             opacity: 0.7;
         }
-        
-        select:focus, input:focus {
+
+        select:focus,
+        input:focus {
             outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            background: white;
         }
-        
+
         .buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 14px;
+            margin-top: 28px;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             flex: 1;
-            min-width: 200px;
-            padding: 16px;
+            min-width: 180px;
+            padding: 15px 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.3s ease;
+            transition: 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        
+
         .btn-primary {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            background: linear-gradient(145deg, #2563eb, #1d4ed8);
             color: white;
         }
-        
+
         .btn-primary:disabled {
-            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+            background: #94a3b8;
             cursor: not-allowed;
             opacity: 0.6;
+            box-shadow: none;
         }
-        
+
         .btn-primary:not(:disabled):hover {
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(145deg, #1d4ed8, #1e40af);
         }
-        
+
         .btn-secondary {
-            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            background: linear-gradient(145deg, #16a34a, #15803d);
             color: white;
         }
-        
-        .btn-secondary:not(:disabled):hover {
-            background: linear-gradient(135deg, #2f855a 0%, #276749 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
+            background: linear-gradient(145deg, #15803d, #166534);
         }
-        
+
         .btn-back {
-            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            background: linear-gradient(145deg, #475569, #334155);
             color: white;
         }
-        
+
         .btn-back:hover {
-            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(71, 85, 105, 0.3);
         }
-        
+
         .progress-container {
-            margin: 15px 0;
+            margin: 18px 0 10px 0;
             display: none;
         }
-        
+
         .progress-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
             font-size: 14px;
-            color: #4a5568;
+            color: #1e293b;
+            font-weight: 500;
+            margin-bottom: 4px;
         }
-        
+
         .progress-bar {
-            height: 8px;
-            background-color: #e2e8f0;
-            border-radius: 4px;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 20px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4299e1 0%, #3182ce 100%);
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
             width: 0%;
-            transition: width 0.5s ease-in-out;
-            border-radius: 4px;
+            transition: width 0.4s ease;
+            border-radius: 20px;
         }
-        
+
         .students-loading {
             text-align: center;
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
-            margin: 10px 0;
-            border-left: 4px solid #4299e1;
+            padding: 14px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            margin: 12px 0;
+            border-left: 4px solid #3b82f6;
             display: none;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
-        
+
         .students-loaded {
             text-align: center;
-            padding: 15px;
-            background: #f0fff4;
-            border-radius: 8px;
-            margin: 10px 0;
-            border-left: 4px solid #38a169;
+            padding: 14px;
+            background: #dcfce7;
+            border-radius: 10px;
+            margin: 12px 0;
+            border-left: 4px solid #16a34a;
             display: none;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
-        
+
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid #e2e8f0;
-            border-top: 3px solid #4299e1;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #cbd5e1;
+            border-top: 3px solid #2563eb;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
             display: inline-block;
         }
-        
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        
+
         .alert {
-            padding: 15px;
-            border-radius: 8px;
+            padding: 16px 20px;
+            border-radius: 12px;
             margin: 20px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 500;
         }
-        
+
         .alert-error {
-            background: #fed7d7;
-            color: #742a2a;
-            border-left: 4px solid #e53e3e;
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 5px solid #dc2626;
         }
-        
+
         .alert-success {
-            background: #c6f6d5;
-            color: #22543d;
-            border-left: 4px solid #38a169;
+            background: #dcfce7;
+            color: #166534;
+            border-left: 5px solid #16a34a;
         }
-        
+
         .alert-info {
-            background: #bee3f8;
-            color: #2c5282;
-            border-left: 4px solid #4299e1;
+            background: #dbeafe;
+            color: #1e3a8a;
+            border-left: 5px solid #2563eb;
         }
-        
+
         .footer {
             text-align: center;
-            padding: 20px;
-            background: #f7fafc;
+            padding: 18px;
+            background: #f1f5f9;
             border-top: 1px solid #e2e8f0;
-            color: #718096;
+            color: #475569;
             font-size: 14px;
         }
-        
+
         .footer a {
-            color: #4299e1;
+            color: #2563eb;
             text-decoration: none;
+            font-weight: 500;
         }
-        
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
         .initial-loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(10, 31, 46, 0.92);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 9999;
             color: white;
         }
-        
+
         .initial-loading .big-spinner {
             width: 60px;
             height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid #ffd700;
+            border: 5px solid rgba(255, 255, 255, 0.15);
+            border-top: 5px solid #fbbf24;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 20px;
         }
-        
+
+        .initial-loading p {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .info-note {
+            margin-top: 24px;
+            padding: 18px;
+            background: #e0f2fe;
+            border-radius: 14px;
+            font-size: 14px;
+            border: 1px solid #b8d9f0;
+            color: #0c4a6e;
+        }
+
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .container { border-radius: 10px; }
-            .header { padding: 20px 15px; }
-            .content { padding: 20px; }
-            .btn { min-width: 100%; }
-            .buttons { flex-direction: column; }
-            h1 { font-size: 20px; }
-            h2 { font-size: 16px; }
+            body {
+                padding: 10px;
+            }
+            .container {
+                border-radius: 14px;
+            }
+            .header {
+                padding: 18px 12px;
+            }
+            .content {
+                padding: 20px 16px;
+            }
+            .btn {
+                min-width: 100%;
+            }
+            .buttons {
+                flex-direction: column;
+            }
+            h1 {
+                font-size: 21px;
+            }
+            h2 {
+                font-size: 16px;
+            }
+            .logo {
+                max-width: 80px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Background Canvas for banknotes (stationary + motion) -->
+    <div id="bg-canvas-container">
+        <canvas id="banknoteCanvas"></canvas>
+    </div>
+
     <!-- Initial Loading Overlay -->
     <div id="initialLoading" class="initial-loading">
         <div class="big-spinner"></div>
         <p id="initialLoadingText">Loading fee portal configuration...</p>
     </div>
-    
+
+    <!-- Main Card -->
     <div class="container">
         <div class="header">
-            <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" 
-                 alt="Malawi Government Logo" 
-                 class="logo">
+            <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Malawi Government Logo" class="logo">
             <h1>LUNZU SECONDARY SCHOOL</h1>
             <h2 id="termHeader">Comprehensive Fee Report Portal</h2>
             <h3>Office of the Bursar</h3>
         </div>
-        
+
         <div class="content">
             <!-- Term Selection -->
             <div class="form-group">
-                <label for="termSelect">
-                    <span class="required-star">*</span> Select Term:
-                </label>
+                <label for="termSelect"><span class="required-star">*</span> Select Term:</label>
                 <select id="termSelect" required onchange="handleTermChange()">
                     <option value="" disabled selected>Loading terms...</option>
                 </select>
-                <small style="color: #718096; font-size: 12px; display: block; margin-top: 5px;">
+                <small style="color: #64748b; font-size: 12px; display: block; margin-top: 5px;">
                     Select which term's fee records you want to view
                 </small>
             </div>
-            
+
             <!-- API Status -->
-            <div style="text-align:center;margin:10px 0;padding:10px;background:#f7fafc;border-radius:8px;">
+            <div style="text-align:center; margin:10px 0; padding:10px; background:#f8fafc; border-radius:10px;">
                 <span id="apiStatus">Checking connection...</span>
             </div>
-            
+
             <!-- Form -->
-            <form id="feeForm">
+            <form id="feeForm" autocomplete="off">
                 <div class="form-group">
-                    <label for="studentClass">
-                        <span class="required-star">*</span> Class:
-                    </label>
+                    <label for="studentClass"><span class="required-star">*</span> Class:</label>
                     <select id="studentClass" required onchange="handleClassChange()" disabled>
                         <option value="" disabled selected>Select Class</option>
                         <option value="Form 1">Form 1</option>
@@ -343,7 +450,7 @@
                         <option value="Form 4 ODL">Form 4 ODL</option>
                     </select>
                 </div>
-                
+
                 <!-- Progress Bar for Loading Students -->
                 <div id="progressContainer" class="progress-container">
                     <div class="progress-label">
@@ -354,37 +461,32 @@
                         <div id="progressFill" class="progress-fill"></div>
                     </div>
                 </div>
-                
-                <!-- Student Loading Indicator -->
+
                 <div id="studentsLoading" class="students-loading">
                     <div class="spinner"></div>
                     <span id="studentsLoadingText">Loading fee records...</span>
                 </div>
-                
+
                 <div id="studentsLoaded" class="students-loaded">
                     <span>✅</span>
                     <span id="studentsLoadedText">Ready to generate report</span>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="studentName">
-                        <span class="required-star">*</span> Student Name:
-                    </label>
+                    <label for="studentName"><span class="required-star">*</span> Student Name:</label>
                     <select id="studentName" required disabled>
                         <option value="" disabled selected>-- Select Class First --</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="dateOfBirth">
-                        <span class="required-star">*</span> Date of Birth:
-                    </label>
+                    <label for="dateOfBirth"><span class="required-star">*</span> Date of Birth:</label>
                     <input type="date" id="dateOfBirth" required>
-                    <small style="color: #718096; font-size: 12px; display: block; margin-top: 5px;">
+                    <small style="color: #64748b; font-size: 12px; display: block; margin-top: 5px;">
                         Format: YYYY-MM-DD (e.g., 2010-05-15) - Used to verify your identity
                     </small>
                 </div>
-                
+
                 <div class="buttons">
                     <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled>
                         <span>💰</span> Generate Fee Report
@@ -397,10 +499,10 @@
                     </button>
                 </div>
             </form>
-            
+
             <div id="reportContainer"></div>
-            
-            <div class="info-note" style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; font-size: 13px;">
+
+            <div class="info-note">
                 <strong>📌 Important Information:</strong><br>
                 • This report shows your complete fee payment history for the selected term<br>
                 • Includes installment breakdown, outstanding balances, and next due dates<br>
@@ -408,40 +510,144 @@
                 • Payment receipts should be kept for future reference
             </div>
         </div>
-        
+
         <div class="footer">
             <p>© <span id="currentYear"></span> Lunzu Secondary School - Office of the Bursar</p>
             <p>For fee inquiries: 
-                <a href="https://wa.me/265888866269" target="_blank">
-                    WhatsApp: +265 888 866 269
-                </a>
+                <a href="https://wa.me/265888866269" target="_blank">WhatsApp: +265 888 866 269</a>
             </p>
         </div>
     </div>
-    
+
     <script>
-        // ============================================
-        // CONFIGURATION - YOUR GAS URL
-        // ============================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
-        
-        // ============================================
-        // GLOBAL VARIABLES
-        // ============================================
+        // ============================================================
+        // 1. BANKNOTE BACKGROUND (Canvas with floating notes)
+        // ============================================================
+        (function initBanknoteBackground() {
+            const canvas = document.getElementById('banknoteCanvas');
+            const container = document.getElementById('bg-canvas-container');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            let notes = [];
+            const NOTE_COUNT = 28;
+            const BASE_SPEED = 0.25;
+
+            function resizeCanvas() {
+                const rect = container.getBoundingClientRect();
+                canvas.width = rect.width || window.innerWidth;
+                canvas.height = rect.height || window.innerHeight;
+                w = canvas.width;
+                h = canvas.height;
+            }
+
+            // Banknote emoji + some "money" symbols
+            const symbols = ['💵', '💰', '💶', '💷', '💴', '🪙', '₿', '💳', '🏦', '💹'];
+
+            function randomNote() {
+                return {
+                    x: Math.random() * w,
+                    y: Math.random() * h - 20,
+                    size: 28 + Math.random() * 36,
+                    speedX: (Math.random() - 0.5) * 0.8,
+                    speedY: 0.2 + Math.random() * 0.6,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 0.02,
+                    opacity: 0.2 + Math.random() * 0.35,
+                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
+                    phase: Math.random() * 100,
+                };
+            }
+
+            function initNotes() {
+                notes = [];
+                for (let i = 0; i < NOTE_COUNT; i++) {
+                    notes.push(randomNote());
+                }
+            }
+
+            function drawNotes() {
+                ctx.clearRect(0, 0, w, h);
+
+                // subtle gradient overlay to make notes blend better
+                const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.7);
+                grad.addColorStop(0, 'rgba(10, 31, 46, 0.15)');
+                grad.addColorStop(1, 'rgba(10, 31, 46, 0.50)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
+
+                // draw each note
+                notes.forEach(n => {
+                    ctx.save();
+                    ctx.translate(n.x, n.y);
+                    ctx.rotate(n.rotation * Math.PI / 180);
+                    ctx.globalAlpha = n.opacity;
+                    ctx.font = `${n.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    // subtle shadow for depth
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 12;
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                    ctx.shadowBlur = 16;
+                    ctx.fillText(n.symbol, 0, 0);
+
+                    // add a secondary tiny note overlay for texture
+                    ctx.shadowBlur = 0;
+                    ctx.font = `${n.size * 0.4}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+                    ctx.fillStyle = 'rgba(255,215,0,0.2)';
+                    ctx.fillText('§', n.size * 0.2, -n.size * 0.2);
+                    ctx.restore();
+
+                    // update position
+                    n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.0003) * 0.15;
+                    n.y += n.speedY * 0.5 + Math.sin(n.phase + performance.now() * 0.0005) * 0.1;
+                    n.rotation += n.rotSpeed;
+
+                    // wrap around edges
+                    if (n.x > w + 50) n.x = -50;
+                    if (n.x < -50) n.x = w + 50;
+                    if (n.y > h + 50) n.y = -50;
+                    if (n.y < -50) n.y = h + 50;
+                });
+
+                requestAnimationFrame(drawNotes);
+            }
+
+            function startBackground() {
+                resizeCanvas();
+                initNotes();
+                drawNotes();
+            }
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                // reposition notes to fit new canvas
+                notes.forEach(n => {
+                    n.x = Math.min(Math.max(n.x, 0), w);
+                    n.y = Math.min(Math.max(n.y, 0), h);
+                });
+            });
+
+            startBackground();
+        })();
+
+        // ============================================================
+        // 2. MAIN APPLICATION LOGIC (unchanged, with slight tweaks)
+        // ============================================================
+
+        const GAS_URL =
+            'https://script.google.com/macros/s/AKfycbwSe_HeUAigVjBiN-rmcq0FPiJRKsLBBtw2VGGhLWlMCrIvT3WeQ0MpjdMdI4HDGnkbZQ/exec';
+
         let availableTerms = [];
         let currentTermKey = null;
         let isLoadingStudents = false;
         let loadingInterval = null;
         let loadingProgress = 0;
-        
-        // ============================================
-        // INITIALIZATION
-        // ============================================
+
         window.onload = async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
             showInitialLoading(true, "Loading fee portal configuration...");
-            
             try {
                 await loadAvailableTerms();
                 await testAPIConnection();
@@ -453,7 +659,7 @@
                 showError('Failed to initialize: ' + error.message);
             }
         };
-        
+
         function showInitialLoading(show, message = 'Loading...') {
             const overlay = document.getElementById('initialLoading');
             const textEl = document.getElementById('initialLoadingText');
@@ -464,16 +670,13 @@
                 overlay.style.display = 'none';
             }
         }
-        
-        // ============================================
-        // TERM MANAGEMENT
-        // ============================================
+
+        // ----- TERM MANAGEMENT -----
         async function loadAvailableTerms() {
             return new Promise(async (resolve, reject) => {
                 try {
                     console.log('Loading available terms...');
                     const terms = await callGAS('getAvailableTerms', {});
-                    
                     if (terms && Array.isArray(terms) && terms.length > 0) {
                         availableTerms = terms;
                         populateTermDropdown(terms);
@@ -485,36 +688,31 @@
                 } catch (error) {
                     console.error('Error loading terms:', error);
                     document.getElementById('apiStatus').innerHTML = '❌ Error loading terms';
-                    document.getElementById('apiStatus').style.color = '#e53e3e';
+                    document.getElementById('apiStatus').style.color = '#dc2626';
                     reject(error);
                 }
             });
         }
-        
+
         function populateTermDropdown(terms) {
             const termSelect = document.getElementById('termSelect');
             termSelect.innerHTML = '';
-            
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.disabled = true;
             defaultOption.textContent = '-- Select Term --';
             termSelect.appendChild(defaultOption);
-            
+
             const grouped = {};
             terms.forEach(term => {
-                if (!grouped[term.academicYear]) {
-                    grouped[term.academicYear] = [];
-                }
+                if (!grouped[term.academicYear]) grouped[term.academicYear] = [];
                 grouped[term.academicYear].push(term);
             });
-            
+
             let activeTermData = null;
-            
             for (const [year, yearTerms] of Object.entries(grouped)) {
                 const optgroup = document.createElement('optgroup');
                 optgroup.label = year;
-                
                 yearTerms.forEach(term => {
                     const option = document.createElement('option');
                     option.value = term.key;
@@ -528,93 +726,77 @@
                     }
                     optgroup.appendChild(option);
                 });
-                
                 termSelect.appendChild(optgroup);
             }
-            
+
             if (activeTermData) {
-                document.getElementById('termHeader').textContent = 
+                document.getElementById('termHeader').textContent =
                     `${activeTermData.academicYear} ${activeTermData.term} Fee Report`;
                 currentTermKey = activeTermData.key;
-                console.log('Default term loaded:', activeTermData.display);
             } else if (terms.length > 0) {
                 const firstTerm = terms[0];
                 termSelect.value = firstTerm.key;
                 currentTermKey = firstTerm.key;
-                document.getElementById('termHeader').textContent = 
+                document.getElementById('termHeader').textContent =
                     `${firstTerm.academicYear} ${firstTerm.term} Fee Report`;
-                console.log('First term loaded as default:', firstTerm.display);
             }
-            
             document.getElementById('studentClass').disabled = false;
         }
-        
+
         function handleTermChange() {
             const termSelect = document.getElementById('termSelect');
             const selectedValue = termSelect.value;
-            
             if (!selectedValue) {
                 currentTermKey = null;
                 document.getElementById('termHeader').textContent = 'Comprehensive Fee Report Portal';
                 resetAllFields();
                 return;
             }
-            
             const selectedTerm = availableTerms.find(t => t.key === selectedValue);
-            
             if (selectedTerm) {
                 currentTermKey = selectedTerm.key;
-                document.getElementById('termHeader').textContent = 
+                document.getElementById('termHeader').textContent =
                     `${selectedTerm.academicYear} ${selectedTerm.term} Fee Report`;
                 resetAllFields();
             }
         }
-        
+
         function resetAllFields() {
-            const classSelect = document.getElementById('studentClass');
-            classSelect.value = '';
-            
+            document.getElementById('studentClass').value = '';
             const studentName = document.getElementById('studentName');
             const dateOfBirth = document.getElementById('dateOfBirth');
-            
             studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
             studentName.disabled = true;
             dateOfBirth.value = '';
-            
             document.getElementById('reportContainer').innerHTML = '';
             document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('studentsLoading').style.display = 'none';
             document.getElementById('studentsLoaded').style.display = 'none';
-            
             document.getElementById('generateReportBtn').disabled = true;
         }
-        
+
         function resetForm() {
             resetAllFields();
             if (document.getElementById('studentClass').value && currentTermKey) {
                 handleClassChange();
             }
         }
-        
+
         function goBackToPortal() {
             window.location.href = 'https://lunzusec.github.io/School_results/student-portal.html';
         }
-        
-        // ============================================
-        // PROGRESS BAR FUNCTIONS
-        // ============================================
+
+        // ----- PROGRESS BAR -----
         function startProgressAnimation(message = 'Loading fee records...') {
             loadingProgress = 0;
             const progressContainer = document.getElementById('progressContainer');
             const progressFill = document.getElementById('progressFill');
             const progressText = document.getElementById('progressText');
             const progressLabel = document.getElementById('progressLabel');
-            
             progressContainer.style.display = 'block';
             progressFill.style.width = '0%';
             progressText.textContent = '0%';
             progressLabel.textContent = message;
-            
             stopProgressAnimation();
             loadingInterval = setInterval(() => {
                 if (loadingProgress < 90) {
@@ -625,22 +807,19 @@
                 }
             }, 200);
         }
-        
-        function completeProgressAnimation(success = true, message = '', loadTime = 0) {
+
+        function completeProgressAnimation(success = true, message = '') {
             if (loadingInterval) {
                 clearInterval(loadingInterval);
                 loadingInterval = null;
             }
-            
             const progressFill = document.getElementById('progressFill');
             const progressText = document.getElementById('progressText');
             const progressLabel = document.getElementById('progressLabel');
-            
             if (success) {
                 progressFill.style.width = '100%';
                 progressText.textContent = '100%';
                 progressLabel.textContent = message || 'Complete!';
-                
                 setTimeout(() => {
                     document.getElementById('progressContainer').style.display = 'none';
                 }, 1000);
@@ -648,23 +827,21 @@
                 document.getElementById('progressContainer').style.display = 'none';
             }
         }
-        
+
         function stopProgressAnimation() {
             if (loadingInterval) {
                 clearInterval(loadingInterval);
                 loadingInterval = null;
             }
         }
-        
-        // ============================================
-        // API CALLS - JSONP FOR CROSS-ORIGIN
-        // ============================================
+
+        // ----- API CALLS (JSONP) -----
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
                 params.callback = callbackName;
                 params.action = action;
-                
+
                 let url = GAS_URL + '?';
                 const urlParams = [];
                 for (const key in params) {
@@ -673,10 +850,9 @@
                     }
                 }
                 url += urlParams.join('&');
-                
+
                 const script = document.createElement('script');
                 script.src = url;
-                
                 const timeoutId = setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
@@ -684,104 +860,81 @@
                         reject(new Error('Request timeout'));
                     }
                 }, 30000);
-                
+
                 window[callbackName] = function(response) {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
-                    
                     if (response && response.error) {
                         reject(new Error(response.error));
                     } else {
                         resolve(response);
                     }
                 };
-                
                 script.onerror = function() {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
                     reject(new Error('Connection failed'));
                 };
-                
                 document.head.appendChild(script);
             });
         }
-        
-        // ============================================
-        // FORM HANDLING
-        // ============================================
+
+        // ----- FORM HANDLING -----
         function setupForm() {
             document.getElementById('studentClass').addEventListener('change', handleClassChange);
-            document.getElementById('studentName').addEventListener('change', () => {
-                updateButtonState();
-            });
-            document.getElementById('dateOfBirth').addEventListener('change', () => {
-                updateButtonState();
-            });
-            document.getElementById('termSelect').addEventListener('change', () => {
-                updateButtonState();
-            });
+            document.getElementById('studentName').addEventListener('change', updateButtonState);
+            document.getElementById('dateOfBirth').addEventListener('change', updateButtonState);
+            document.getElementById('termSelect').addEventListener('change', updateButtonState);
         }
-        
+
         async function handleClassChange() {
             const studentClass = document.getElementById('studentClass').value;
-            
             const studentName = document.getElementById('studentName');
             studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
             studentName.disabled = true;
             document.getElementById('dateOfBirth').value = '';
             document.getElementById('reportContainer').innerHTML = '';
             document.getElementById('generateReportBtn').disabled = true;
-            
+
             if (studentClass && studentClass !== "" && currentTermKey) {
                 await loadStudentNames(studentClass, currentTermKey);
             } else if (studentClass && !currentTermKey) {
                 showError('Please select a term first.');
             }
         }
-        
+
         async function loadStudentNames(studentClass, termKey) {
             if (isLoadingStudents) return;
-            
             isLoadingStudents = true;
-            
             startProgressAnimation(`Loading students from ${studentClass}...`);
             document.getElementById('studentsLoaded').style.display = 'none';
             document.getElementById('studentsLoading').style.display = 'flex';
-            
+
             try {
-                const names = await callGAS('getStudentNames', { 
+                const names = await callGAS('getStudentNames', {
                     studentClass: studentClass,
                     term: termKey
                 });
-                
+
                 if (Array.isArray(names) && names.length > 0) {
                     populateStudentDropdown(names);
-                    
-                    completeProgressAnimation(true, `Loaded ${names.length} student(s) from ${studentClass}`, 0);
-                    
+                    completeProgressAnimation(true, `Loaded ${names.length} student(s) from ${studentClass}`);
                     const loadedDiv = document.getElementById('studentsLoaded');
                     const loadedText = document.getElementById('studentsLoadedText');
                     loadedText.innerHTML = `✅ Loaded ${names.length} student(s) from ${studentClass}`;
                     loadedDiv.style.display = 'flex';
-                    
                     document.getElementById('studentName').disabled = false;
-                    
                     setTimeout(() => {
-                        if (loadedDiv.style.display === 'flex') {
-                            loadedDiv.style.display = 'none';
-                        }
-                    }, 2000);
-                    
+                        if (loadedDiv.style.display === 'flex') loadedDiv.style.display = 'none';
+                    }, 2500);
                 } else {
                     populateStudentDropdown([]);
-                    
                     completeProgressAnimation(false);
                     showInfo(`No students found for ${studentClass} in the selected term`);
                     document.getElementById('studentName').disabled = true;
                 }
-                
             } catch (error) {
                 console.error('Error loading names:', error);
                 completeProgressAnimation(false);
@@ -793,11 +946,10 @@
                 updateButtonState();
             }
         }
-        
+
         function populateStudentDropdown(names) {
             const select = document.getElementById('studentName');
             select.innerHTML = '';
-            
             if (names.length === 0) {
                 const option = document.createElement('option');
                 option.value = '';
@@ -812,7 +964,6 @@
                 defaultOption.selected = true;
                 defaultOption.textContent = `-- Select Student (${names.length} available) --`;
                 select.appendChild(defaultOption);
-                
                 names.forEach(name => {
                     const option = document.createElement('option');
                     option.value = name;
@@ -821,87 +972,77 @@
                 });
             }
         }
-        
-        // ============================================
-        // MAIN ACTION - GENERATE FEE REPORT
-        // ============================================
+
+        // ----- GENERATE FEE REPORT -----
         function generateFeeReport() {
             if (!validateForm()) {
                 showError('Please fill in all required fields.');
                 return;
             }
-            
             const studentName = document.getElementById('studentName').value.trim();
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const termKey = document.getElementById('termSelect').value;
-            
+
             if (!isValidDate(dateOfBirth)) {
                 showError('Please enter a valid date (YYYY-MM-DD).');
                 return;
             }
-            
             clearError();
-            
-            // Open fee report in new tab - let FeeReportWindow.html handle its own loading
-            const feeReportUrl = `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
+
+            const feeReportUrl =
+                `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
             const newTab = window.open(feeReportUrl, '_blank');
-            
             if (!newTab) {
                 showError('Please allow pop-ups to view the fee report.');
                 return;
             }
-            
             newTab.focus();
             showSuccess('Opening fee report in new tab...');
             setTimeout(() => clearError(), 2000);
         }
-        
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
+
+        // ----- HELPERS -----
         function updateButtonState() {
             const studentName = document.getElementById('studentName').value;
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
-            const isFormValid = studentName && studentClass && dateOfBirth && term && 
-                                studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
-            
+            const isFormValid = studentName && studentClass && dateOfBirth && term &&
+                studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
             document.getElementById('generateReportBtn').disabled = !isFormValid || isLoadingStudents;
         }
-        
+
         function validateForm() {
             const studentName = document.getElementById('studentName').value;
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
-            
-            return studentName && studentClass && dateOfBirth && term && 
-                   studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
+            return studentName && studentClass && dateOfBirth && term &&
+                studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
         }
-        
+
         function isValidDate(dateString) {
             const regex = /^\d{4}-\d{2}-\d{2}$/;
             if (!regex.test(dateString)) return false;
             const date = new Date(dateString);
             return date instanceof Date && !isNaN(date);
         }
-        
+
         function showError(message) {
             const container = document.getElementById('reportContainer');
             container.innerHTML = `
-                <div class="alert alert-error" style="margin-top: 20px;">
-                    <span>❌</span>
-                    <div><strong>Error:</strong> ${message.replace(/\n/g, '<br>')}</div>
-                </div>
-            `;
+                    <div class="alert alert-error" style="margin-top: 20px;">
+                        <span>❌</span>
+                        <div><strong>Error:</strong> ${message.replace(/\n/g, '<br>')}</div>
+                    </div>
+                `;
             setTimeout(() => {
                 const errorDiv = container.querySelector('.alert-error');
                 if (errorDiv) errorDiv.remove();
             }, 8000);
         }
-        
+
         function showSuccess(message) {
             const container = document.getElementById('reportContainer');
             const successDiv = document.createElement('div');
@@ -909,46 +1050,43 @@
             successDiv.style.marginTop = '20px';
             successDiv.innerHTML = `<span>✅</span><div>${message}</div>`;
             container.appendChild(successDiv);
-            
             setTimeout(() => {
                 if (successDiv.parentNode) successDiv.remove();
             }, 5000);
         }
-        
+
         function showInfo(message) {
             const container = document.getElementById('reportContainer');
             container.innerHTML = `
-                <div class="alert alert-info" style="margin-top: 20px;">
-                    <span>ℹ️</span>
-                    <div>${message}</div>
-                </div>
-            `;
+                    <div class="alert alert-info" style="margin-top: 20px;">
+                        <span>ℹ️</span>
+                        <div>${message}</div>
+                    </div>
+                `;
             setTimeout(() => {
                 const infoDiv = container.querySelector('.alert-info');
                 if (infoDiv) infoDiv.remove();
             }, 5000);
         }
-        
+
         function clearError() {
             const container = document.getElementById('reportContainer');
             if (container.innerHTML !== '') {
-                setTimeout(() => {
-                    container.innerHTML = '';
-                }, 3000);
+                setTimeout(() => { container.innerHTML = ''; }, 3000);
             }
         }
-        
+
         async function testAPIConnection() {
             try {
                 const result = await callGAS('test', {});
                 if (result && result.success) {
                     document.getElementById('apiStatus').innerHTML = '✅ Connected to Server';
-                    document.getElementById('apiStatus').style.color = '#38a169';
+                    document.getElementById('apiStatus').style.color = '#16a34a';
                 }
             } catch (error) {
                 console.error('API test failed:', error);
                 document.getElementById('apiStatus').innerHTML = '⚠️ Connection slow - Features may load slower';
-                document.getElementById('apiStatus').style.color = '#ed8936';
+                document.getElementById('apiStatus').style.color = '#d97706';
             }
         }
     </script>
