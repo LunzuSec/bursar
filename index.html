@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunzu Secondary School - Fee Report Portal</title>
+    <title>Lunzu Secondary School - Fee Portal</title>
     <style>
         * {
             margin: 0;
@@ -420,7 +420,7 @@
 </head>
 <body>
 
-    <!-- Background Canvas for banknotes (stationary + motion) -->
+    <!-- Background Canvas for banknotes -->
     <div id="bg-canvas-container">
         <canvas id="banknoteCanvas"></canvas>
     </div>
@@ -431,12 +431,12 @@
         <p id="initialLoadingText">Loading fee portal configuration...</p>
     </div>
 
-    <!-- Main Card - fully transparent/glass -->
+    <!-- Main Card -->
     <div class="container">
         <div class="header">
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Malawi Government Logo" class="logo">
             <h1>LUNZU SECONDARY SCHOOL</h1>
-            <h2 id="termHeader">Comprehensive Fee Report Portal</h2>
+            <h2 id="termHeader">Fee Report Portal</h2>
             <h3>Office of the Bursar</h3>
         </div>
 
@@ -506,7 +506,7 @@
                     <label for="dateOfBirth"><span class="required-star">*</span> Date of Birth:</label>
                     <input type="date" id="dateOfBirth" required>
                     <small style="color: #bcc9db; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8;">
-                        Format: YYYY-MM-DD (e.g., 2010-05-15) - Used to verify your identity
+                        Format: YYYY-MM-DD - Used to verify your identity
                     </small>
                 </div>
 
@@ -528,8 +528,8 @@
             <div class="info-note">
                 <strong>📌 Important Information:</strong><br>
                 • This report shows your complete fee payment history for the selected term<br>
-                • Includes installment breakdown, outstanding balances, and next due dates<br>
-                • For any discrepancies, please contact the accounts office using the information in the report<br>
+                • Includes installment breakdown and current balance status<br>
+                • For any discrepancies, please contact the accounts office<br>
                 • Payment receipts should be kept for future reference
             </div>
         </div>
@@ -553,7 +553,6 @@
             let w, h;
             let notes = [];
             const NOTE_COUNT = 32;
-            const BASE_SPEED = 0.25;
 
             function resizeCanvas() {
                 const rect = container.getBoundingClientRect();
@@ -590,7 +589,6 @@
             function drawNotes() {
                 ctx.clearRect(0, 0, w, h);
 
-                // soft vignette to blend edges
                 const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.75);
                 grad.addColorStop(0, 'rgba(10, 31, 46, 0.08)');
                 grad.addColorStop(1, 'rgba(10, 31, 46, 0.45)');
@@ -611,15 +609,12 @@
                     ctx.shadowColor = 'rgba(0,0,0,0.5)';
                     ctx.shadowBlur = 20;
                     ctx.fillText(n.symbol, 0, 0);
-
-                    // small accent
                     ctx.shadowBlur = 0;
                     ctx.font = `${n.size * 0.35}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
                     ctx.fillStyle = 'rgba(255,215,0,0.15)';
                     ctx.fillText('§', n.size * 0.25, -n.size * 0.2);
                     ctx.restore();
 
-                    // update position
                     n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.00025) * 0.2;
                     n.y += n.speedY * 0.4 + Math.sin(n.phase + performance.now() * 0.0004) * 0.15;
                     n.rotation += n.rotSpeed;
@@ -651,11 +646,10 @@
         })();
 
         // ============================================================
-        // 2. MAIN APPLICATION LOGIC (unchanged)
+        // 2. MAIN APPLICATION LOGIC
         // ============================================================
 
-        const GAS_URL =
-            'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
 
         let availableTerms = [];
         let currentTermKey = null;
@@ -767,7 +761,7 @@
             const selectedValue = termSelect.value;
             if (!selectedValue) {
                 currentTermKey = null;
-                document.getElementById('termHeader').textContent = 'Comprehensive Fee Report Portal';
+                document.getElementById('termHeader').textContent = 'Fee Report Portal';
                 resetAllFields();
                 return;
             }
