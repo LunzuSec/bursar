@@ -2,287 +2,1060 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fee Report - <?= studentName ?> | <?= academicYear ?> <?= term ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Fee Report - Lunzu Secondary School</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #00509e;
+            --accent-color: #ffd700;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: #eef2f6;
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            padding: 8px;
             min-height: 100vh;
         }
+        
         .report-container {
-            max-width: 1000px;
-            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            background: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+            background: white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(0, 51, 102, 0.06);
         }
+        
         .report-header {
-            background: linear-gradient(145deg, #002b54 0%, #004080 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 12px 24px 10px;
+            padding: 18px 12px;
             text-align: center;
         }
-        .school-name { font-size: 19px; font-weight: 700; letter-spacing: 0.8px; }
-        .school-address { font-size: 9.5px; opacity: 0.8; font-weight: 300; }
-        .report-title { font-size: 12px; margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255, 215, 0, 0.2); font-weight: 500; }
-        .report-title small { font-weight: 300; opacity: 0.85; }
+        
+        .school-logo {
+            height: 45px;
+            margin-bottom: 6px;
+            max-width: 100%;
+        }
+        
+        .school-name {
+            font-family: 'Roboto Slab', serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            word-wrap: break-word;
+        }
+        
+        .school-address {
+            font-size: 10px;
+            opacity: 0.8;
+            word-wrap: break-word;
+        }
+        
+        .report-title {
+            font-size: 13px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .report-title small {
+            font-size: 11px;
+            opacity: 0.9;
+            display: block;
+        }
+        
         .student-info {
-            background: #f7faff;
-            padding: 6px 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            border-bottom: 1px solid #e8edf4;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
         }
-        .info-item { padding: 3px 10px; flex: 1; min-width: 120px; }
-        .info-label { font-size: 8.5px; color: #003366; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; opacity: 0.7; }
-        .info-value { font-size: 13px; font-weight: 600; color: #1a2a3a; margin-top: 0px; line-height: 1.3; }
-        .status-badge { display: inline-block; padding: 3px 14px; border-radius: 30px; font-weight: 700; font-size: 11px; letter-spacing: 0.3px; }
-        .status-paid { background: #10b981; color: white; }
-        .status-partial { background: #f59e0b; color: white; }
-        .status-unpaid { background: #ef4444; color: white; }
+        
+        .info-item {
+            padding: 5px 8px;
+            min-width: 0;
+        }
+        
+        .info-item-full {
+            grid-column: 1 / -1;
+        }
+        
+        .info-label {
+            font-size: 9px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            display: block;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        
+        .status-paid { background: #4caf50; color: white; }
+        .status-partial { background: #ff9800; color: white; }
+        .status-unpaid { background: #f44336; color: white; }
+        .status-credit { background: #2196f3; color: white; }
         .status-overpaid { background: #8b5cf6; color: white; }
-        .card { background: white; margin: 8px 16px 6px; overflow: hidden; border: 1px solid #e8edf4; border-radius: 10px; }
-        .card-header { background: #fafcff; padding: 5px 14px; border-bottom: 2px solid #fbbf24; font-weight: 700; font-size: 12px; color: #002b54; display: flex; align-items: center; gap: 6px; }
-        .card-header span { font-size: 14px; }
-        .card-body { padding: 8px 14px; }
-        .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .summary-item { text-align: center; padding: 8px 6px; background: #f8fafc; border-radius: 8px; border: 1px solid #eef2f6; }
-        .summary-amount { font-size: 17px; font-weight: 700; color: #002b54; letter-spacing: 0.3px; }
-        .summary-label { font-size: 9px; color: #64748b; margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
-        .amount-positive { color: #10b981; }
-        .amount-negative { color: #ef4444; }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            margin: 10px 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .card-header {
+            background: #f8f9fa;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: bold;
+            font-size: 13px;
+            color: var(--primary-color);
+        }
+        
+        .card-header i {
+            margin-right: 6px;
+        }
+        
+        .card-body {
+            padding: 12px;
+            overflow-x: auto;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 10px 6px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .summary-item-full {
+            grid-column: 1 / -1;
+        }
+        
+        .summary-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            word-wrap: break-word;
+        }
+        
+        .summary-label {
+            font-size: 9px;
+            color: #666;
+            margin-top: 2px;
+            word-wrap: break-word;
+        }
+        
+        .amount-positive { color: #4caf50; }
+        .amount-negative { color: #f44336; }
+        .amount-credit { color: #2196f3; }
         .amount-overpaid { color: #8b5cf6; }
-        .amount-zero { color: #64748b; }
-        .status-note-box { margin-top: 6px; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 500; line-height: 1.4; }
-        .installment-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-        .installment-table th { padding: 5px 8px; text-align: left; background: #f1f5f9; font-weight: 700; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #334155; border-bottom: 2px solid #e2e8f0; }
-        .installment-table td { padding: 5px 8px; border-bottom: 1px solid #eef2f6; color: #1e293b; }
-        .installment-table tbody tr:last-child td { border-bottom: none; }
-        .installment-table .status-badge { font-size: 9px; padding: 2px 10px; }
-        .reminder-box { padding: 8px 14px; margin: 6px 16px; border-radius: 8px; }
-        .reminder-box strong { display: block; font-size: 12px; margin-bottom: 2px; }
-        .reminder-box p { font-size: 11px; color: #1e293b; line-height: 1.4; }
-        .reminder-danger { background: #fef2f2; border-left: 4px solid #ef4444; }
+        .amount-zero { color: #666; }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -4px;
+            padding: 0 4px;
+        }
+        
+        .installment-table {
+            width: 100%;
+            min-width: 300px;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .installment-table th,
+        .installment-table td {
+            padding: 8px 6px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            word-wrap: break-word;
+        }
+        
+        .installment-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #555;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        
+        .installment-table tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .installment-table td:first-child {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .contact-grid > div {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 12px;
+        }
+        
+        .contact-grid strong {
+            font-size: 11px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .policy-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 12px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            word-wrap: break-word;
+        }
+        
+        .payment-instructions-box {
+            background: #e8f0fe;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 15px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            word-wrap: break-word;
+        }
+        
+        .payment-instructions-box strong {
+            color: var(--primary-color);
+        }
+        
+        .payment-instructions-box .instruction-section {
+            margin-bottom: 10px;
+        }
+        
+        .payment-instructions-box .instruction-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 100px;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-print {
+            background: #607d8b;
+            color: white;
+        }
+        .btn-print:hover {
+            background: #455a64;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .report-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 10px;
+            color: #999;
+            border-top: 1px solid var(--border-color);
+            background: #f8f9fa;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-overlay h4 {
+            font-size: 16px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .loading-overlay p {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 30px 20px;
+            max-width: 400px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-icon {
+            font-size: 2.5rem;
+            color: #dc3545;
+            margin-bottom: 12px;
+        }
+        
+        .error-message h4 {
+            font-size: 16px;
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .error-message p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .status-note-box {
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .reminder-box {
+            padding: 8px 14px;
+            margin: 6px 16px;
+            border-radius: 8px;
+        }
+        
+        .reminder-box strong {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+        
+        .reminder-box p {
+            font-size: 11px;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+        
+        .reminder-danger {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
         .reminder-danger strong { color: #b91c1c; }
-        .reminder-success { background: #ecfdf5; border-left: 4px solid #10b981; }
+        
+        .reminder-success {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
         .reminder-success strong { color: #065f46; }
-        .reminder-info { background: #f0f4ff; border-left: 4px solid #8b5cf6; }
+        
+        .reminder-info {
+            background: #f0f4ff;
+            border-left: 4px solid #8b5cf6;
+        }
         .reminder-info strong { color: #5b21b6; }
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 11px; color: #1e293b; }
-        .contact-grid strong { color: #002b54; font-weight: 600; }
-        .contact-grid div { line-height: 1.5; }
-        .payment-instructions-box { background: #ecf7ff; border-left: 4px solid #003366; padding: 8px 14px; margin: 6px 16px; border-radius: 8px; font-size: 10.5px; }
-        .payment-instructions-box .instruction-section { margin-bottom: 6px; }
-        .payment-instructions-box .instruction-section:last-child { margin-bottom: 0; }
-        .payment-instructions-box strong { color: #002b54; font-weight: 700; font-size: 10.5px; }
-        .payment-instructions-box p { margin-top: 2px; margin-bottom: 0; line-height: 1.4; color: #1e293b; }
-        .instruction-divider { border-top: 1px solid rgba(0, 51, 102, 0.10); padding-top: 6px; margin-top: 6px; }
-        .policy-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 8px 14px; margin: 6px 16px; border-radius: 8px; font-size: 10.5px; color: #1e293b; line-height: 1.4; }
-        .policy-box strong { color: #92400e; display: block; font-size: 11px; margin-bottom: 2px; }
-        .report-footer { text-align: center; padding: 8px 16px; font-size: 9px; color: #94a3b8; border-top: 1px solid #eef2f6; background: #fafcff; line-height: 1.5; }
-        .report-footer strong { color: #475569; font-weight: 600; }
-        .action-buttons { display: flex; gap: 10px; justify-content: center; padding: 12px 16px 14px; flex-wrap: wrap; border-top: 1px solid #eef2f6; background: #fafcff; }
-        .btn { padding: 8px 22px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-print { background: #475569; color: white; }
-        .btn-print:hover { background: #334155; transform: translateY(-1px); }
-        .btn-secondary { background: #e2e8f0; color: #1e293b; }
-        .btn-secondary:hover { background: #cbd5e1; transform: translateY(-1px); }
-        @media print {
-            @page { size: A4; margin: 0.4cm 0.5cm; }
-            body { background: white; padding: 0; margin: 0; display: block; min-height: auto; }
-            .report-container { max-width: 100%; margin: 0; box-shadow: none; border-radius: 0; border: none; }
-            .action-buttons { display: none !important; }
-            .report-header { padding: 8px 16px; background: #002b54 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .student-info { padding: 4px 14px; background: #f7faff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .status-badge { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .card { margin: 5px 10px 4px; break-inside: avoid; page-break-inside: avoid; }
-            .summary-item { background: #f8fafc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        }
+        
         @media (max-width: 768px) {
-            .student-info { flex-direction: column; gap: 2px; padding: 6px 14px; }
-            .info-item { text-align: center; min-width: unset; padding: 2px 4px; }
-            .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            body { padding: 5px; }
+            .school-name { font-size: 16px; }
+            .report-title { font-size: 12px; }
+            .student-info { grid-template-columns: 1fr 1fr; padding: 10px; gap: 3px; }
+            .info-item { padding: 4px 6px; }
+            .info-value { font-size: 13px; }
+            .summary-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .summary-amount { font-size: 16px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 10px; }
+            .btn { padding: 8px 14px; font-size: 11px; min-width: 80px; }
             .action-buttons { flex-direction: column; align-items: stretch; }
-            .btn { justify-content: center; width: 100%; }
-            .contact-grid { grid-template-columns: 1fr; gap: 8px; }
+            .btn { width: 100%; justify-content: center; }
+            .card { margin: 8px 5px; }
+            .card-header { font-size: 12px; padding: 8px 10px; }
+            .card-body { padding: 10px; }
+            .installment-table { font-size: 11px; min-width: 280px; }
+            .installment-table th, .installment-table td { padding: 6px 4px; }
+            .installment-table th { font-size: 9px; }
+            .status-badge { font-size: 10px; padding: 2px 10px; }
+            .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
+            .payment-instructions-box { font-size: 11px; padding: 10px 12px; margin: 8px 5px; }
         }
+        
         @media (max-width: 480px) {
+            .student-info { grid-template-columns: 1fr; gap: 2px; }
+            .info-item { padding: 3px 4px; }
+            .info-item-full { grid-column: 1; }
+            .info-value { font-size: 12px; }
             .summary-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
-            .summary-item { padding: 4px 2px; }
-            .summary-amount { font-size: 13px; }
-            .summary-label { font-size: 7px; }
-            .installment-table { font-size: 9px; }
-            .installment-table th, .installment-table td { padding: 3px 4px; }
-            .card-body { padding: 6px 8px; }
-            .info-value { font-size: 11px; }
+            .summary-item { padding: 8px 4px; }
+            .summary-amount { font-size: 14px; }
+            .summary-label { font-size: 8px; }
+            .installment-table { font-size: 10px; min-width: 260px; }
+            .installment-table th, .installment-table td { padding: 4px 3px; }
+            .school-logo { height: 35px; }
+            .school-name { font-size: 14px; }
+            .report-title { font-size: 11px; }
+        }
+        
+        @media print {
+            .action-buttons, .loading-overlay { display: none !important; }
+            body { padding: 0; margin: 0; background: white; }
+            .card { break-inside: avoid; }
+            .report-container { border-radius: 0; box-shadow: none; }
         }
     </style>
 </head>
 <body>
-<div class="report-container">
-    <div class="report-header">
-        <div class="school-name"><?= schoolName ?></div>
-        <div class="school-address"><?= schoolAddress ?></div>
-        <div class="report-title">COMPREHENSIVE FEE REPORT<br><small><?= academicYear ?> | <?= term ?></small></div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <h4 style="color: var(--primary-color);">Loading Fee Report</h4>
+        <p id="loadingMessage">Please wait...</p>
     </div>
-
-    <div class="student-info">
-        <div class="info-item">
-            <div class="info-label">STUDENT NAME</div>
-            <div class="info-value"><?= studentName ?></div>
+    
+    <div id="reportContainer" class="report-container" style="display: none;">
+        <div class="report-header">
+            <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="School Logo" class="school-logo">
+            <div class="school-name" id="schoolName">LUNZU SECONDARY SCHOOL</div>
+            <div class="school-address" id="schoolAddress">Private Bag 130, Lunzu, Malawi</div>
+            <div class="report-title" id="reportTitle"></div>
         </div>
-        <div class="info-item">
-            <div class="info-label">CLASS</div>
-            <div class="info-value"><?= studentClass ?></div>
+        
+        <div class="student-info" id="studentInfo"></div>
+        
+        <div class="card">
+            <div class="card-header"><i class="fas fa-money-bill-wave me-2"></i> FEE SUMMARY</div>
+            <div class="card-body" id="feeSummary"></div>
         </div>
-        <div class="info-item">
-            <div class="info-label">DATE OF BIRTH</div>
-            <div class="info-value"><?= dateOfBirth ?></div>
+        
+        <div class="card">
+            <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> INSTALLMENT PAYMENT HISTORY</div>
+            <div class="card-body" id="installmentHistory"></div>
         </div>
-        <div class="info-item">
-            <div class="info-label">PAYMENT STATUS</div>
-            <div class="info-value"><span class="status-badge status-<?= statusClass ?>"><?= paymentStatus ?></span></div>
+        
+        <!-- Outstanding Notice -->
+        <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
+            <strong>⚠️ URGENT PAYMENT REMINDER</strong>
+            <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>.</p>
+            <p style="margin-top:4px;">Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
+        </div>
+        
+        <div id="overpaidNotice" style="display:none;" class="reminder-box reminder-info">
+            <strong>💜 OVERPAYMENT NOTICE</strong>
+            <p>You have overpaid by <strong id="overpaidAmount"></strong>.</p>
+            <p style="margin-top:4px;">This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
+        </div>
+        
+        <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
+            <strong>✅ FULLY PAID</strong>
+            <p>Your fees for this term are fully paid. Thank you for your timely payment!</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
+            <div class="card-body" id="paymentInstructions"></div>
+        </div>
+        
+        <!-- Payment Instructions - English and Chichewa -->
+        <div class="payment-instructions-box" id="paymentInstructionsBox">
+            <div class="instruction-section">
+                <strong><i class="fas fa-info-circle me-2"></i>ENGLISH:</strong>
+                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsEnglish">
+                    All fees must be paid into the school's bank account. Provide a receipt via acceptable channel or in person. For digital submissions, send a screenshot showing the school's account number, transaction date, and student name/description. SMS messages alone are not accepted as they can be edited—screenshots must clearly show the sender. Incomplete submissions will delay verification.
+                </p>
+            </div>
+            <div class="instruction-section" style="border-top: 1px solid #dee2e6; padding-top: 10px; margin-top: 10px;">
+                <strong><i class="fas fa-info-circle me-2"></i>CHICHEWA:</strong>
+                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsChichewa">
+                    Ndalama zonse ziyenera kulipidwa ku akaunti ya banki ya sukulu. Perekani risiti kudzera njira yovomerezeka kapena mwawekha. Ngati mukutumiza digito, tumizani screenshot yosonyeza nambala ya akaunti ya sukulu, tsiku la kubweza ndalama, ndi dzina / kufotokozera kwa wophunzira. Mauthenga a SMS okha sangavomerezedwe chifukwa amatha kusinthidwa—screenshot ziyenera kusonyeza bwino wotumiza. Ngati zonse zosowa sizinaperekedwe, kutsimikizira kwa malipiro kungachedwe.
+                </p>
+            </div>
+        </div>
+        
+        <div id="policyContainer"></div>
+        
+        <div class="report-footer" id="reportFooter"></div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print</button>
+            <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn"><i class="fas fa-download me-2"></i> Download PDF</button>
+            <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close</button>
         </div>
     </div>
+    
+    <div id="errorContainer" style="display: none;"></div>
 
-    <div class="card">
-        <div class="card-header"><span>💰</span> FEE SUMMARY</div>
-        <div class="card-body">
-            <div class="summary-grid">
-                <div class="summary-item">
-                    <div class="summary-amount">K<?= feesPerTermFormatted ?></div>
-                    <div class="summary-label">Fees Per Term</div>
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
+        
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentName = urlParams.get('name');
+        const studentClass = urlParams.get('class');
+        const dateOfBirth = urlParams.get('dob');
+        const termKey = urlParams.get('term');
+        
+        // Cache for fee report data
+        let cachedFeeReport = null;
+        let isGeneratingPDF = false;
+        
+        // ============================================
+        // JSONP API CALL
+        // ============================================
+        function callGAS(action, params = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                params.callback = callbackName;
+                params.action = action;
+                
+                let url = GAS_URL + '?';
+                const urlParams = [];
+                for (const key in params) {
+                    if (params[key] !== undefined && params[key] !== null) {
+                        urlParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+                    }
+                }
+                url += urlParams.join('&');
+                
+                const script = document.createElement('script');
+                script.src = url;
+                
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) script.parentNode.removeChild(script);
+                        reject(new Error('Request timeout. Please try again.'));
+                    }
+                }, 15000);
+                
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    
+                    if (response && response.error) {
+                        reject(new Error(response.error));
+                    } else {
+                        resolve(response);
+                    }
+                };
+                
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Connection failed. Please check your internet.'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+        
+        // ============================================
+        // LOAD FEE REPORT
+        // ============================================
+        async function loadFeeReport() {
+            if (!studentName || !studentClass || !dateOfBirth) {
+                showError('Missing student information. Please go back and try again.');
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                updateLoadingMessage('Fetching fee records...');
+                
+                const response = await callGAS('getFeeReport', {
+                    studentName: studentName,
+                    studentClass: studentClass,
+                    dateOfBirth: dateOfBirth,
+                    term: termKey
+                });
+                
+                if (!response || response.error) {
+                    throw new Error(response?.error || 'Failed to load fee report');
+                }
+                
+                if (!response.success) {
+                    throw new Error(response.message || 'No fee records found');
+                }
+                
+                cachedFeeReport = response;
+                renderReport(response);
+                showLoading(false);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message);
+                showLoading(false);
+            }
+        }
+        
+        // ============================================
+        // RENDER REPORT
+        // ============================================
+        function renderReport(data) {
+            const config = data.termConfig || {};
+            const isODL = data.studentClass && data.studentClass.includes("ODL");
+            
+            document.getElementById('schoolName').textContent = isODL ? 
+                (config.schoolNameODL || "LUNZU OPEN SECONDARY SCHOOL") : 
+                (config.schoolName || "LUNZU SECONDARY SCHOOL");
+            document.getElementById('schoolAddress').textContent = config.schoolAddress || "Private Bag 130, Lunzu, Malawi";
+            document.getElementById('reportTitle').innerHTML = `COMPREHENSIVE FEE REPORT<br><small>${data.academicYear || ''} | ${data.term || ''}</small>`;
+            
+            let statusClass = 'unpaid';
+            if (data.paymentStatus === 'FULLY PAID') statusClass = 'paid';
+            else if (data.paymentStatus === 'PARTIALLY PAID') statusClass = 'partial';
+            else if (data.paymentStatus === 'OVERPAID') statusClass = 'overpaid';
+            else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
+            
+            document.getElementById('studentInfo').innerHTML = `
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-user"></i> STUDENT</span>
+                    <span class="info-value">${escapeHtml(data.studentName || '-')}</span>
                 </div>
-                <div class="summary-item">
-                    <div class="summary-amount amount-positive">K<?= totalPaidFormatted ?></div>
-                    <div class="summary-label">Total Paid This Term</div>
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-graduation-cap"></i> CLASS</span>
+                    <span class="info-value">${escapeHtml(data.studentClass || '-')}</span>
                 </div>
-                <div class="summary-item">
-                    <div class="summary-amount <?= previousBalanceClass ?>"><?= previousBalanceDisplay ?></div>
-                    <div class="summary-label">Previous Term Balance</div>
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-calendar"></i> DOB</span>
+                    <span class="info-value">${escapeHtml(data.dateOfBirth || '-')}</span>
                 </div>
-                <div class="summary-item">
-                    <div class="summary-amount <?= cumulativeBalanceClass ?>" style="font-size: 20px;">
-                        <?= cumulativeBalanceDisplay ?>
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-credit-card"></i> STATUS</span>
+                    <span class="info-value">
+                        <span class="status-badge status-${statusClass}">${escapeHtml(data.paymentStatus || 'UNKNOWN')}</span>
+                    </span>
+                </div>
+            `;
+            
+            // Format balances with clear language
+            const cumulativeBalance = data.cumulativeBalance || 0;
+            let balanceDisplay = '';
+            let balanceClass = '';
+            if (cumulativeBalance < 0) {
+                balanceClass = 'amount-negative';
+                balanceDisplay = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' (To Pay)';
+            } else if (cumulativeBalance > 0) {
+                balanceClass = 'amount-overpaid';
+                balanceDisplay = 'K' + cumulativeBalance.toLocaleString() + ' (Overpaid)';
+            } else {
+                balanceClass = 'amount-zero';
+                balanceDisplay = 'K0';
+            }
+            
+            const previousBalance = data.previousBalance || 0;
+            let prevBalanceDisplay = '';
+            let prevBalanceClass = '';
+            if (previousBalance < 0) {
+                prevBalanceClass = 'amount-negative';
+                prevBalanceDisplay = 'K' + Math.abs(previousBalance).toLocaleString() + ' (To Pay)';
+            } else if (previousBalance > 0) {
+                prevBalanceClass = 'amount-overpaid';
+                prevBalanceDisplay = 'K' + previousBalance.toLocaleString() + ' (Overpaid)';
+            } else {
+                prevBalanceClass = 'amount-zero';
+                prevBalanceDisplay = 'K0';
+            }
+            
+            // Build status message box
+            let statusMessageHtml = '';
+            if (data.statusMessage) {
+                let bgColor = '#ffebee';
+                let borderColor = '#f44336';
+                if (data.paymentStatus === 'FULLY PAID') {
+                    bgColor = '#e8f5e9';
+                    borderColor = '#4caf50';
+                } else if (data.paymentStatus === 'OVERPAID' || data.paymentStatus === 'CREDIT AVAILABLE') {
+                    bgColor = '#e3f2fd';
+                    borderColor = '#2196f3';
+                }
+                statusMessageHtml = `
+                    <div class="status-note-box" style="background: ${bgColor}; border-left: 4px solid ${borderColor};">
+                        <strong><i class="fas fa-info-circle me-2"></i>Note:</strong> ${escapeHtml(data.statusMessage)}
                     </div>
-                    <div class="summary-label">Current Balance</div>
+                `;
+            }
+            
+            document.getElementById('feeSummary').innerHTML = `
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-amount">K${(data.feesPerTerm || 0).toLocaleString()}</div>
+                        <div class="summary-label">Fees Per Term</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount amount-positive">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
+                        <div class="summary-label">Total Paid This Term</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount ${prevBalanceClass}">${prevBalanceDisplay}</div>
+                        <div class="summary-label">Previous Term Balance</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-amount ${balanceClass}" style="font-size: 20px;">
+                            ${balanceDisplay}
+                        </div>
+                        <div class="summary-label">Current Balance</div>
+                    </div>
                 </div>
-            </div>
-            <? if (statusMessage) { ?>
-            <div class="status-note-box" style="background:<?= statusBgColor ?>; border-left:4px solid <?= statusBorderColor ?>;">
-                <strong>Note:</strong> <?= statusMessage ?>
-            </div>
-            <? } ?>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header"><span>📅</span> PAYMENT HISTORY</div>
-        <div class="card-body">
-            <? if (installments && installments.length > 0) { ?>
-                <table class="installment-table">
-                    <thead>
+                ${statusMessageHtml}
+            `;
+            
+            // Installment History
+            if (data.installments && data.installments.length > 0) {
+                let installmentsHtml = `
+                    <div class="table-wrapper">
+                        <table class="installment-table">
+                            <thead>
+                                <tr>
+                                    <th>Payment Reference</th>
+                                    <th>Amount Paid</th>
+                                    <th>Payment Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                data.installments.forEach(inst => {
+                    const installmentName = getInstallmentName(inst.number);
+                    const dateDisplay = inst.date || 'Not recorded';
+                    installmentsHtml += `
                         <tr>
-                            <th>Payment Reference</th>
-                            <th>Amount Paid</th>
-                            <th>Payment Date</th>
-                            <th>Status</th>
+                            <td><strong>${installmentName}</strong></td>
+                            <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
+                            <td>${escapeHtml(dateDisplay)}</td>
+                            <td><span class="status-badge status-paid" style="padding: 3px 10px; font-size: 10px;">PAID</span></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <? for (var i = 0; i < installments.length; i++) { ?>
-                        <tr>
-                            <td><strong><?= installments[i].installmentName ?></strong></td>
-                            <td class="amount-positive">K<?= installments[i].amountFormatted ?></td>
-                            <td><?= installments[i].date || 'Date not recorded' ?></td>
-                            <td><span class="status-badge status-paid">PAID</span></td>
-                        </tr>
-                        <? } ?>
-                    </tbody>
-                </table>
-            <? } else { ?>
-                <p style="text-align:center;color:#94a3b8;padding:12px 0;font-size:12px;">No payment records found for this term.</p>
-            <? } ?>
-        </div>
-    </div>
-
-    <? if (hasOutstandingBalance) { ?>
-    <div class="reminder-box reminder-danger">
-        <strong>⚠️ URGENT PAYMENT REMINDER</strong>
-        <p>You have an outstanding balance of <strong><?= outstandingBalanceFormatted ?></strong>.</p>
-        <p style="margin-top:4px;">Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
-    </div>
-    <? } elseif (hasOverpaid) { ?>
-    <div class="reminder-box reminder-info">
-        <strong>💜 OVERPAYMENT NOTICE</strong>
-        <p>You have overpaid by <strong><?= overpaidAmountFormatted ?></strong>.</p>
-        <p style="margin-top:4px;">This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
-    </div>
-    <? } elseif (isFullyPaid) { ?>
-    <div class="reminder-box reminder-success">
-        <strong>✅ FULLY PAID</strong>
-        <p>Your fees for <?= term ?> are fully paid. Thank you for your timely payment!</p>
-    </div>
-    <? } ?>
-
-    <div class="card">
-        <div class="card-header"><span>💳</span> PAYMENT INSTRUCTIONS</div>
-        <div class="card-body">
-            <div class="contact-grid">
-                <div>
-                    <strong>🏦 Bank Details:</strong><br><?= bankInfo ?><br><br>
-                    <strong>Account Number:</strong><br><?= accountNumber ?>
+                    `;
+                });
+                installmentsHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                document.getElementById('installmentHistory').innerHTML = installmentsHtml;
+            } else {
+                document.getElementById('installmentHistory').innerHTML = `
+                    <div style="text-align: center; color: #999; padding: 15px;">
+                        <i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.
+                    </div>
+                `;
+            }
+            
+            // Show notices based on balance
+            const outstandingNotice = document.getElementById('outstandingNotice');
+            const overpaidNotice = document.getElementById('overpaidNotice');
+            const fullyPaidNotice = document.getElementById('fullyPaidNotice');
+            
+            if (cumulativeBalance < 0) {
+                outstandingNotice.style.display = 'block';
+                document.getElementById('outstandingAmount').textContent = 'K' + Math.abs(cumulativeBalance).toLocaleString();
+                overpaidNotice.style.display = 'none';
+                fullyPaidNotice.style.display = 'none';
+            } else if (cumulativeBalance > 0) {
+                outstandingNotice.style.display = 'none';
+                overpaidNotice.style.display = 'block';
+                document.getElementById('overpaidAmount').textContent = 'K' + cumulativeBalance.toLocaleString();
+                fullyPaidNotice.style.display = 'none';
+            } else {
+                outstandingNotice.style.display = 'none';
+                overpaidNotice.style.display = 'none';
+                fullyPaidNotice.style.display = 'block';
+            }
+            
+            // Payment Instructions
+            const contactInfo = data.contactInfo || {};
+            const bankInfo = data.bankInfo || "FDH Bank, Lunzu Branch";
+            
+            document.getElementById('paymentInstructions').innerHTML = `
+                <div class="contact-grid">
+                    <div>
+                        <strong><i class="fas fa-building me-2"></i>Bank Details:</strong>
+                        ${escapeHtml(bankInfo)}
+                        <br><br>
+                        <strong><i class="fas fa-hashtag me-2"></i>Account Number:</strong>
+                        <br><span style="font-family: monospace; font-size: 15px; font-weight: bold;">${escapeHtml(contactInfo.accountNumber || '129 00000 98673')}</span>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-phone-alt me-2"></i>Contact for Fee Queries:</strong>
+                        <i class="fas fa-phone"></i> ${escapeHtml(contactInfo.phone1 || '+265 888 866 269')}
+                        ${contactInfo.phone2 ? `<br><i class="fas fa-phone-alt"></i> ${escapeHtml(contactInfo.phone2)}` : ''}
+                        ${contactInfo.whatsapp ? `<br><i class="fab fa-whatsapp"></i> ${escapeHtml(contactInfo.whatsapp)}` : ''}
+                    </div>
                 </div>
-                <div>
-                    <strong>📞 Contact for Fee Queries:</strong><br>
-                    Phone: <?= contactPhone1 ?><br>
-                    <? if (contactWhatsapp) { ?>WhatsApp: <?= contactWhatsapp ?><? } ?>
+            `;
+            
+            // Update Payment Instructions
+            if (data.paymentInstructions) {
+                if (data.paymentInstructions.english) {
+                    document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
+                }
+                if (data.paymentInstructions.chichewa) {
+                    document.getElementById('paymentInstructionsChichewa').textContent = data.paymentInstructions.chichewa;
+                }
+            }
+            
+            const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
+            
+            document.getElementById('policyContainer').innerHTML = `
+                <div class="policy-box">
+                    <strong><i class="fas fa-gavel me-2"></i>Fee Policy Information</strong><br>
+                    ${escapeHtml(governmentPolicy)}
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="payment-instructions-box">
-        <div class="instruction-section">
-            <strong>📘 ENGLISH:</strong>
-            <p><?= paymentInstructionsEnglish ?></p>
-        </div>
-        <div class="instruction-section instruction-divider">
-            <strong>📗 CHICHEWA:</strong>
-            <p><?= paymentInstructionsChichewa ?></p>
-        </div>
-    </div>
-
-    <div class="policy-box">
-        <strong>📋 Fee Policy Information</strong>
-        <?= governmentPolicy ?>
-    </div>
-
-    <div class="report-footer">
-        Report generated on: <?= reportGeneratedDate ?><br>
-        This is an official fee statement from <?= schoolName ?> - Office of the Bursar<br>
-        <strong>Note: All payments must be made directly to the school bank account. No cash or mobile money payments accepted at the school.</strong>
-    </div>
-
-    <div class="action-buttons">
-        <button class="btn btn-print" onclick="window.print()">🖨️ Print Report</button>
-        <button class="btn btn-secondary" onclick="window.close()">✕ Close Window</button>
-    </div>
-</div>
-<script>
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') { window.close(); }
-    });
-</script>
+            `;
+            
+            document.getElementById('reportFooter').innerHTML = `
+                <i class="fas fa-calendar-alt me-2"></i>Generated: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
+                <i class="fas fa-certificate me-2"></i>Official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')}
+                <br><strong>Note: All payments must be made directly to the school bank account. No cash or mobile money payments accepted at the school.</strong>
+            `;
+            
+            document.getElementById('reportContainer').style.display = 'block';
+            document.title = `Fee Report - ${data.studentName} | ${data.term || 'Fee Report'}`;
+        }
+        
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function getInstallmentName(number) {
+            if (number === 1) return "1st Installment";
+            if (number === 2) return "2nd Installment";
+            if (number === 3) return "3rd Installment";
+            return "Installment " + number;
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.style.display = show ? 'flex' : 'none';
+        }
+        
+        function updateLoadingMessage(message) {
+            const msgEl = document.getElementById('loadingMessage');
+            if (msgEl) msgEl.textContent = message;
+        }
+        
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h4>Error Loading Fee Report</h4>
+                    <p>${escapeHtml(message)}</p>
+                    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                        <button onclick="closeWindow()" class="btn btn-secondary" style="flex:1; min-width:80px;"><i class="fas fa-times"></i> Close</button>
+                        <button onclick="location.reload()" class="btn btn-primary" style="flex:1; min-width:80px;"><i class="fas fa-redo"></i> Try Again</button>
+                        <button onclick="window.history.back()" class="btn btn-print" style="flex:1; min-width:80px;"><i class="fas fa-arrow-left"></i> Back</button>
+                    </div>
+                </div>
+            `;
+            errorContainer.style.display = 'block';
+            document.getElementById('reportContainer').style.display = 'none';
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+        
+        function closeWindow() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.close();
+            }
+        }
+        
+        // ============================================
+        // DOWNLOAD PDF
+        // ============================================
+        async function downloadPDF() {
+            if (!cachedFeeReport || isGeneratingPDF) {
+                if (!cachedFeeReport) alert('Fee report not loaded yet. Please wait.');
+                return;
+            }
+            
+            isGeneratingPDF = true;
+            const btn = document.getElementById('downloadPdfBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
+            
+            try {
+                showLoading(true);
+                updateLoadingMessage('Generating PDF...');
+                
+                const pdfResponse = await callGAS('generateFeeReportPDF', {
+                    studentName: cachedFeeReport.studentName,
+                    studentClass: cachedFeeReport.studentClass,
+                    dateOfBirth: cachedFeeReport.dateOfBirth,
+                    term: cachedFeeReport.termKey
+                });
+                
+                if (pdfResponse && !pdfResponse.error && pdfResponse.pdfBase64) {
+                    const fileName = pdfResponse.fileName || 
+                        `${cachedFeeReport.studentName.replace(/\s+/g, '_')}_${cachedFeeReport.academicYear || 'Unknown'}_${(cachedFeeReport.term || 'Report').replace(/\s+/g, '_')}_Fee_Report.pdf`;
+                    
+                    const byteCharacters = atob(pdfResponse.pdfBase64);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                } else {
+                    throw new Error(pdfResponse?.error || 'Failed to generate PDF');
+                }
+            } catch (error) {
+                alert('Failed to generate PDF: ' + error.message);
+            } finally {
+                isGeneratingPDF = false;
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showLoading(false);
+            }
+        }
+        
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeeReport();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+            if (e.key === 'Escape') {
+                closeWindow();
+            }
+        });
+    </script>
 </body>
 </html>
