@@ -129,6 +129,7 @@
         .status-partial { background: #ff9800; color: white; }
         .status-unpaid { background: #f44336; color: white; }
         .status-credit { background: #2196f3; color: white; }
+        .status-overpaid { background: #8b5cf6; color: white; }
         
         .card {
             background: white;
@@ -158,7 +159,7 @@
         
         .summary-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
         
@@ -190,8 +191,9 @@
         .amount-positive { color: #4caf50; }
         .amount-negative { color: #f44336; }
         .amount-credit { color: #2196f3; }
+        .amount-overpaid { color: #8b5cf6; }
+        .amount-zero { color: #666; }
         
-        /* Mobile-friendly table wrapper */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -312,7 +314,6 @@
             background: var(--primary-color);
             color: white;
         }
-        
         .btn-primary:hover {
             background: var(--secondary-color);
         }
@@ -321,7 +322,6 @@
             background: #6c757d;
             color: white;
         }
-        
         .btn-secondary:hover {
             background: #5a6268;
         }
@@ -330,7 +330,6 @@
             background: #607d8b;
             color: white;
         }
-        
         .btn-print:hover {
             background: #455a64;
         }
@@ -339,7 +338,6 @@
             background: #28a745;
             color: white;
         }
-        
         .btn-success:hover {
             background: #218838;
         }
@@ -423,177 +421,87 @@
             margin-bottom: 15px;
         }
         
-        .error-message .btn-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        /* Status message in fee summary */
-        .status-message-box {
+        .status-note-box {
             padding: 10px 12px;
             border-radius: 8px;
             margin-top: 10px;
             font-size: 12px;
         }
         
-        /* Mobile Responsiveness */
+        .reminder-box {
+            padding: 8px 14px;
+            margin: 6px 16px;
+            border-radius: 8px;
+        }
+        
+        .reminder-box strong {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+        
+        .reminder-box p {
+            font-size: 11px;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+        
+        .reminder-danger {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        .reminder-danger strong { color: #b91c1c; }
+        
+        .reminder-success {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
+        .reminder-success strong { color: #065f46; }
+        
+        .reminder-info {
+            background: #f0f4ff;
+            border-left: 4px solid #8b5cf6;
+        }
+        .reminder-info strong { color: #5b21b6; }
+        
         @media (max-width: 768px) {
             body { padding: 5px; }
-            
             .school-name { font-size: 16px; }
             .report-title { font-size: 12px; }
-            
-            .student-info {
-                grid-template-columns: 1fr 1fr;
-                padding: 10px;
-                gap: 3px;
-            }
-            
-            .info-item {
-                padding: 4px 6px;
-            }
-            
-            .info-value {
-                font-size: 13px;
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-            }
-            
-            .summary-amount {
-                font-size: 16px;
-            }
-            
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .btn {
-                padding: 8px 14px;
-                font-size: 11px;
-                min-width: 80px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .card {
-                margin: 8px 5px;
-            }
-            
-            .card-header {
-                font-size: 12px;
-                padding: 8px 10px;
-            }
-            
-            .card-body {
-                padding: 10px;
-            }
-            
-            .installment-table {
-                font-size: 11px;
-                min-width: 280px;
-            }
-            
-            .installment-table th,
-            .installment-table td {
-                padding: 6px 4px;
-            }
-            
-            .installment-table th {
-                font-size: 9px;
-            }
-            
-            .status-badge {
-                font-size: 10px;
-                padding: 2px 10px;
-            }
-            
-            .policy-box {
-                font-size: 10px;
-                padding: 8px 10px;
-                margin: 8px 5px;
-            }
-            
-            .payment-instructions-box {
-                font-size: 11px;
-                padding: 10px 12px;
-                margin: 8px 5px;
-            }
+            .student-info { grid-template-columns: 1fr 1fr; padding: 10px; gap: 3px; }
+            .info-item { padding: 4px 6px; }
+            .info-value { font-size: 13px; }
+            .summary-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .summary-amount { font-size: 16px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 10px; }
+            .btn { padding: 8px 14px; font-size: 11px; min-width: 80px; }
+            .action-buttons { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; justify-content: center; }
+            .card { margin: 8px 5px; }
+            .card-header { font-size: 12px; padding: 8px 10px; }
+            .card-body { padding: 10px; }
+            .installment-table { font-size: 11px; min-width: 280px; }
+            .installment-table th, .installment-table td { padding: 6px 4px; }
+            .installment-table th { font-size: 9px; }
+            .status-badge { font-size: 10px; padding: 2px 10px; }
+            .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
+            .payment-instructions-box { font-size: 11px; padding: 10px 12px; margin: 8px 5px; }
         }
         
         @media (max-width: 480px) {
-            .student-info {
-                grid-template-columns: 1fr;
-                gap: 2px;
-            }
-            
-            .info-item {
-                padding: 3px 4px;
-            }
-            
-            .info-item-full {
-                grid-column: 1;
-            }
-            
-            .info-value {
-                font-size: 12px;
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 4px;
-            }
-            
-            .summary-item {
-                padding: 8px 4px;
-            }
-            
-            .summary-amount {
-                font-size: 14px;
-            }
-            
-            .summary-label {
-                font-size: 8px;
-            }
-            
-            .installment-table {
-                font-size: 10px;
-                min-width: 260px;
-            }
-            
-            .installment-table th,
-            .installment-table td {
-                padding: 4px 3px;
-            }
-            
-            .school-logo {
-                height: 35px;
-            }
-            
-            .school-name {
-                font-size: 14px;
-            }
-            
-            .report-title {
-                font-size: 11px;
-            }
-            
-            .report-title small {
-                font-size: 10px;
-            }
+            .student-info { grid-template-columns: 1fr; gap: 2px; }
+            .info-item { padding: 3px 4px; }
+            .info-item-full { grid-column: 1; }
+            .info-value { font-size: 12px; }
+            .summary-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+            .summary-item { padding: 8px 4px; }
+            .summary-amount { font-size: 14px; }
+            .summary-label { font-size: 8px; }
+            .installment-table { font-size: 10px; min-width: 260px; }
+            .installment-table th, .installment-table td { padding: 4px 3px; }
+            .school-logo { height: 35px; }
+            .school-name { font-size: 14px; }
+            .report-title { font-size: 11px; }
         }
         
         @media print {
@@ -632,7 +540,17 @@
             <div class="card-body" id="installmentHistory"></div>
         </div>
         
-        <div id="nextDueContainer"></div>
+        <!-- Outstanding Notice -->
+        <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
+            <strong>⚠️ URGENT PAYMENT REMINDER</strong>
+            <p>Outstanding Balance: <strong id="outstandingAmount"></strong></p>
+            <p style="margin-top:4px;">Please clear your outstanding balance as soon as possible. All fees must be deposited directly to the school bank account below.</p>
+        </div>
+        
+        <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
+            <strong>✅ FULLY PAID</strong>
+            <p>Your fees are fully paid. Thank you for your timely payment!</p>
+        </div>
         
         <div class="card">
             <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
@@ -670,11 +588,11 @@
 
     <script>
         // ============================================
-        // CONFIGURATION - SAME GAS URL
+        // CONFIGURATION
         // ============================================
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
         
-        // Get URL parameters (passed from main portal)
+        // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const studentName = urlParams.get('name');
         const studentClass = urlParams.get('class');
@@ -686,7 +604,7 @@
         let isGeneratingPDF = false;
         
         // ============================================
-        // JSONP API CALL - SAME AS results.html
+        // JSONP API CALL
         // ============================================
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
@@ -738,7 +656,7 @@
         }
         
         // ============================================
-        // LOAD FEE REPORT - CALLS GAS DIRECTLY
+        // LOAD FEE REPORT
         // ============================================
         async function loadFeeReport() {
             if (!studentName || !studentClass || !dateOfBirth) {
@@ -750,7 +668,6 @@
                 showLoading(true);
                 updateLoadingMessage('Fetching fee records...');
                 
-                // CALL GAS - SAME AS results.html
                 const response = await callGAS('getFeeReport', {
                     studentName: studentName,
                     studentClass: studentClass,
@@ -766,9 +683,7 @@
                     throw new Error(response.message || 'No fee records found');
                 }
                 
-                // Cache the response
                 cachedFeeReport = response;
-                
                 renderReport(response);
                 showLoading(false);
                 
@@ -796,6 +711,7 @@
             if (data.paymentStatus === 'FULLY PAID') statusClass = 'paid';
             else if (data.paymentStatus === 'PARTIALLY PAID') statusClass = 'partial';
             else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
+            else if (data.paymentStatus === 'OVERPAID') statusClass = 'overpaid';
             
             document.getElementById('studentInfo').innerHTML = `
                 <div class="info-item">
@@ -825,10 +741,25 @@
                 balanceClass = 'amount-negative';
                 balanceDisplay = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' OWED';
             } else if (cumulativeBalance > 0) {
-                balanceClass = 'amount-credit';
+                balanceClass = 'amount-overpaid';
                 balanceDisplay = 'K' + cumulativeBalance.toLocaleString() + ' CR';
             } else {
+                balanceClass = 'amount-zero';
                 balanceDisplay = 'K0';
+            }
+            
+            const previousBalance = data.previousBalance || 0;
+            let prevBalanceClass = '';
+            let prevBalanceDisplay = '';
+            if (previousBalance < 0) {
+                prevBalanceClass = 'amount-negative';
+                prevBalanceDisplay = 'K' + Math.abs(previousBalance).toLocaleString() + ' OWED';
+            } else if (previousBalance > 0) {
+                prevBalanceClass = 'amount-overpaid';
+                prevBalanceDisplay = 'K' + previousBalance.toLocaleString() + ' CR';
+            } else {
+                prevBalanceClass = 'amount-zero';
+                prevBalanceDisplay = 'K0';
             }
             
             // Build status message box
@@ -839,12 +770,12 @@
                 if (data.paymentStatus === 'FULLY PAID') {
                     bgColor = '#e8f5e9';
                     borderColor = '#4caf50';
-                } else if (data.paymentStatus === 'CREDIT AVAILABLE') {
+                } else if (data.paymentStatus === 'CREDIT AVAILABLE' || data.paymentStatus === 'OVERPAID') {
                     bgColor = '#e3f2fd';
                     borderColor = '#2196f3';
                 }
                 statusMessageHtml = `
-                    <div class="status-message-box" style="background: ${bgColor}; border-left: 4px solid ${borderColor};">
+                    <div class="status-note-box" style="background: ${bgColor}; border-left: 4px solid ${borderColor};">
                         <strong><i class="fas fa-info-circle me-2"></i>Status Note:</strong> ${escapeHtml(data.statusMessage)}
                     </div>
                 `;
@@ -857,13 +788,11 @@
                         <div class="summary-label">Term Fees</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-amount">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
+                        <div class="summary-amount amount-positive">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
                         <div class="summary-label">Total Paid</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-amount ${data.previousBalance < 0 ? 'amount-negative' : (data.previousBalance > 0 ? 'amount-credit' : '')}">
-                            ${data.previousBalance < 0 ? 'K' + Math.abs(data.previousBalance).toLocaleString() + ' OWED' : 'K' + (data.previousBalance || 0).toLocaleString()}
-                        </div>
+                        <div class="summary-amount ${prevBalanceClass}">${prevBalanceDisplay}</div>
                         <div class="summary-label">Previous Balance</div>
                     </div>
                     <div class="summary-item">
@@ -876,16 +805,16 @@
                 ${statusMessageHtml}
             `;
             
-            // Installment History - with responsive table
+            // Installment History
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `
                     <div class="table-wrapper">
                         <table class="installment-table">
                             <thead>
                                 <tr>
-                                    <th>Installment</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
+                                    <th>Payment Reference</th>
+                                    <th>Amount Paid</th>
+                                    <th>Payment Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -917,34 +846,23 @@
                 `;
             }
             
-            // Show next due info if applicable
-            const nextDueContainer = document.getElementById('nextDueContainer');
-            if (data.cumulativeBalance < 0) {
-                const amountDue = Math.abs(data.cumulativeBalance);
-                nextDueContainer.innerHTML = `
-                    <div class="card">
-                        <div class="card-header"><i class="fas fa-clock me-2"></i> PENDING PAYMENT</div>
-                        <div class="card-body">
-                            <div class="summary-grid">
-                                <div class="summary-item summary-item-full">
-                                    <div class="summary-amount amount-negative" style="font-size: 22px;">K${amountDue.toLocaleString()}</div>
-                                    <div class="summary-label">Amount Due</div>
-                                </div>
-                                <div class="summary-item summary-item-full">
-                                    <div class="summary-amount" style="color: #ff9800; font-size: 16px;">${data.paymentStatus || 'PENDING'}</div>
-                                    <div class="summary-label">Payment Status</div>
-                                </div>
-                            </div>
-                            <div class="policy-box" style="background: #e3f2fd; border-left-color: #2196f3; margin: 10px 0 0 0;">
-                                <strong><i class="fas fa-calendar-alt me-2"></i>Please clear your fee balance to avoid penalties.</strong>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            // Show notices based on balance
+            const outstandingNotice = document.getElementById('outstandingNotice');
+            const fullyPaidNotice = document.getElementById('fullyPaidNotice');
+            
+            if (cumulativeBalance < 0) {
+                outstandingNotice.style.display = 'block';
+                document.getElementById('outstandingAmount').textContent = 'K' + Math.abs(cumulativeBalance).toLocaleString();
+                fullyPaidNotice.style.display = 'none';
+            } else if (cumulativeBalance === 0) {
+                outstandingNotice.style.display = 'none';
+                fullyPaidNotice.style.display = 'block';
             } else {
-                nextDueContainer.innerHTML = '';
+                outstandingNotice.style.display = 'none';
+                fullyPaidNotice.style.display = 'none';
             }
             
+            // Payment Instructions
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "National Bank of Malawi, Lunzu Branch";
             
@@ -966,7 +884,7 @@
                 </div>
             `;
             
-            // Update Payment Instructions with data from server (if available)
+            // Update Payment Instructions
             if (data.paymentInstructions) {
                 if (data.paymentInstructions.english) {
                     document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
@@ -1028,10 +946,10 @@
                     <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     <h4>Error Loading Fee Report</h4>
                     <p>${escapeHtml(message)}</p>
-                    <div class="btn-group">
-                        <button onclick="closeWindow()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
-                        <button onclick="location.reload()" class="btn btn-primary"><i class="fas fa-redo"></i> Try Again</button>
-                        <button onclick="window.history.back()" class="btn btn-print"><i class="fas fa-arrow-left"></i> Back</button>
+                    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                        <button onclick="closeWindow()" class="btn btn-secondary" style="flex:1; min-width:80px;"><i class="fas fa-times"></i> Close</button>
+                        <button onclick="location.reload()" class="btn btn-primary" style="flex:1; min-width:80px;"><i class="fas fa-redo"></i> Try Again</button>
+                        <button onclick="window.history.back()" class="btn btn-print" style="flex:1; min-width:80px;"><i class="fas fa-arrow-left"></i> Back</button>
                     </div>
                 </div>
             `;
@@ -1049,7 +967,7 @@
         }
         
         // ============================================
-        // DOWNLOAD PDF FUNCTION
+        // DOWNLOAD PDF
         // ============================================
         async function downloadPDF() {
             if (!cachedFeeReport || isGeneratingPDF) {
@@ -1095,7 +1013,6 @@
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
                     }, 100);
-                    alert('PDF downloaded successfully!');
                 } else {
                     throw new Error(pdfResponse?.error || 'Failed to generate PDF');
                 }
@@ -1110,7 +1027,7 @@
         }
         
         // ============================================
-        // INITIALIZE - Call GAS on load (SAME AS results.html)
+        // INITIALIZE
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             loadFeeReport();
