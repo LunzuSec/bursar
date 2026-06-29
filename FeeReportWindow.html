@@ -46,6 +46,24 @@
             color: white;
             padding: 18px 12px;
             text-align: center;
+            position: relative;
+        }
+        
+        .admin-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #8b5cf6;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: none;
+        }
+        .admin-badge.show {
+            display: inline-block;
         }
         
         .school-logo {
@@ -342,6 +360,18 @@
             background: #218838;
         }
         
+        .btn-admin {
+            background: #8b5cf6;
+            color: white;
+        }
+        .btn-admin:hover {
+            background: #7c3aed;
+        }
+        .btn-admin.active {
+            background: #7c3aed;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        
         .report-footer {
             text-align: center;
             padding: 15px;
@@ -464,6 +494,103 @@
         }
         .reminder-info strong { color: #5b21b6; }
         
+        /* Password Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-box {
+            background: rgba(20, 35, 55, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        .modal-box h3 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .modal-box p {
+            color: #d1d9e6;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .modal-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .modal-box input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .modal-box .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .modal-box .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-box .btn-confirm {
+            background: rgba(139, 92, 246, 0.8);
+            color: white;
+        }
+        .modal-box .btn-confirm:hover {
+            background: rgba(139, 92, 246, 1);
+        }
+        .modal-box .btn-cancel {
+            background: rgba(100, 116, 139, 0.5);
+            color: white;
+        }
+        .modal-box .btn-cancel:hover {
+            background: rgba(100, 116, 139, 0.7);
+        }
+        .modal-box .error-msg {
+            color: #f87171;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        .modal-box .error-msg.show {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             body { padding: 5px; }
             .school-name { font-size: 16px; }
@@ -486,6 +613,7 @@
             .status-badge { font-size: 10px; padding: 2px 10px; }
             .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
             .payment-instructions-box { font-size: 11px; padding: 10px 12px; margin: 8px 5px; }
+            .admin-badge { font-size: 7px; padding: 2px 8px; top: 5px; right: 8px; }
         }
         
         @media (max-width: 480px) {
@@ -502,10 +630,11 @@
             .school-logo { height: 35px; }
             .school-name { font-size: 14px; }
             .report-title { font-size: 11px; }
+            .modal-box { padding: 20px; }
         }
         
         @media print {
-            .action-buttons, .loading-overlay { display: none !important; }
+            .action-buttons, .loading-overlay, .modal-overlay, .admin-badge { display: none !important; }
             body { padding: 0; margin: 0; background: white; }
             .card { break-inside: avoid; }
             .report-container { border-radius: 0; box-shadow: none; }
@@ -513,6 +642,20 @@
     </style>
 </head>
 <body>
+    <!-- Password Modal -->
+    <div id="adminModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
+            <p>Enter the admin password to enable administrative mode.<br><small style="color:#94a3b8;">(No DOB required in admin mode)</small></p>
+            <input type="password" id="adminPasswordInput" placeholder="Enter password" maxlength="20">
+            <div id="modalError" class="error-msg">Incorrect password. Please try again.</div>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeAdminModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmAdminPassword()">Unlock</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
@@ -522,6 +665,7 @@
     
     <div id="reportContainer" class="report-container" style="display: none;">
         <div class="report-header">
+            <span id="adminBadge" class="admin-badge"><i class="fas fa-user-shield me-1"></i> ADMIN MODE</span>
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="School Logo" class="school-logo">
             <div class="school-name" id="schoolName">LUNZU SECONDARY SCHOOL</div>
             <div class="school-address" id="schoolAddress">Private Bag 130, Lunzu, Malawi</div>
@@ -586,6 +730,7 @@
         <div class="action-buttons">
             <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print</button>
             <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn"><i class="fas fa-download me-2"></i> Download PDF</button>
+            <button class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn"><i class="fas fa-user-shield me-2"></i> <span id="adminModeText">Admin Mode</span></button>
             <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close</button>
         </div>
     </div>
@@ -600,15 +745,100 @@
         
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const studentName = urlParams.get('name');
-        const studentClass = urlParams.get('class');
-        const dateOfBirth = urlParams.get('dob');
+        let studentName = urlParams.get('name');
+        let studentClass = urlParams.get('class');
+        let dateOfBirth = urlParams.get('dob');
         const termKey = urlParams.get('term');
+        const adminParam = urlParams.get('admin');
         
-        // Cache for fee report data
+        let isAdminMode = adminParam === 'true';
         let cachedFeeReport = null;
         let isGeneratingPDF = false;
         
+        // ============================================
+        // ADMIN MODE FUNCTIONS
+        // ============================================
+        function openAdminModal() {
+            if (isAdminMode) {
+                isAdminMode = false;
+                updateAdminUI();
+                showInfo('🔒 Admin mode disabled');
+                setTimeout(() => clearError(), 2000);
+                return;
+            }
+            document.getElementById('adminModal').classList.add('show');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('modalError').classList.remove('show');
+            document.getElementById('adminPasswordInput').focus();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('show');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('modalError').classList.remove('show');
+        }
+
+        async function confirmAdminPassword() {
+            const password = document.getElementById('adminPasswordInput').value.trim();
+            if (!password) {
+                document.getElementById('modalError').textContent = 'Please enter a password.';
+                document.getElementById('modalError').classList.add('show');
+                return;
+            }
+
+            try {
+                const result = await callGAS('verifyAdmin', { password: password });
+                if (result && result.success) {
+                    isAdminMode = true;
+                    updateAdminUI();
+                    closeAdminModal();
+                    // Reload with admin mode
+                    reloadWithAdminMode();
+                } else {
+                    document.getElementById('modalError').textContent = 'Incorrect password. Please try again.';
+                    document.getElementById('modalError').classList.add('show');
+                    document.getElementById('adminPasswordInput').value = '';
+                    document.getElementById('adminPasswordInput').focus();
+                }
+            } catch (error) {
+                document.getElementById('modalError').textContent = 'Error verifying password: ' + error.message;
+                document.getElementById('modalError').classList.add('show');
+            }
+        }
+
+        function reloadWithAdminMode() {
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('admin', 'true');
+            // Remove DOB from URL since it's not needed
+            currentUrl.searchParams.delete('dob');
+            window.location.href = currentUrl.toString();
+        }
+
+        function updateAdminUI() {
+            const btnText = document.getElementById('adminModeText');
+            const btn = document.getElementById('adminModeBtn');
+            const badge = document.getElementById('adminBadge');
+            
+            if (isAdminMode) {
+                btnText.textContent = '🔓 Admin ON';
+                btn.classList.add('active');
+                badge.classList.add('show');
+            } else {
+                btnText.textContent = '🔒 Admin Mode';
+                btn.classList.remove('active');
+                badge.classList.remove('show');
+            }
+        }
+
+        document.getElementById('adminPasswordInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                confirmAdminPassword();
+            }
+            if (e.key === 'Escape') {
+                closeAdminModal();
+            }
+        });
+
         // ============================================
         // JSONP API CALL
         // ============================================
@@ -665,21 +895,36 @@
         // LOAD FEE REPORT
         // ============================================
         async function loadFeeReport() {
-            if (!studentName || !studentClass || !dateOfBirth) {
+            if (!studentName || !studentClass) {
                 showError('Missing student information. Please go back and try again.');
                 return;
             }
             
             try {
                 showLoading(true);
-                updateLoadingMessage('Fetching fee records...');
                 
-                const response = await callGAS('getFeeReport', {
-                    studentName: studentName,
-                    studentClass: studentClass,
-                    dateOfBirth: dateOfBirth,
-                    term: termKey
-                });
+                let response;
+                if (isAdminMode) {
+                    updateLoadingMessage('Fetching fee records (Admin Mode - DOB bypassed)...');
+                    // Admin: No DOB required
+                    response = await callGAS('getFeeReportAdmin', {
+                        studentName: studentName,
+                        studentClass: studentClass,
+                        term: termKey
+                    });
+                } else {
+                    if (!dateOfBirth) {
+                        throw new Error('Date of Birth is required.');
+                    }
+                    updateLoadingMessage('Fetching fee records...');
+                    response = await callGAS('getFeeReport', {
+                        studentName: studentName,
+                        studentClass: studentClass,
+                        dateOfBirth: dateOfBirth,
+                        term: termKey,
+                        isAdmin: false
+                    });
+                }
                 
                 if (!response || response.error) {
                     throw new Error(response?.error || 'Failed to load fee report');
@@ -692,6 +937,7 @@
                 cachedFeeReport = response;
                 renderReport(response);
                 showLoading(false);
+                updateAdminUI();
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -730,7 +976,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-calendar"></i> DOB</span>
-                    <span class="info-value">${escapeHtml(data.dateOfBirth || '-')}</span>
+                    <span class="info-value">${escapeHtml(data.dateOfBirth || 'Not recorded')}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-credit-card"></i> STATUS</span>
@@ -971,6 +1217,28 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
         
+        function showInfo(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `
+                <div style="background:#e8f0fe; border-left:4px solid #3b82f6; padding:12px 16px; margin:10px 0; border-radius:8px; max-width:500px; margin:20px auto;">
+                    <i class="fas fa-info-circle me-2" style="color:#3b82f6;"></i>
+                    <span style="color:#1e293b;">${escapeHtml(message)}</span>
+                </div>
+            `;
+            setTimeout(() => {
+                if (container.innerHTML !== '') {
+                    container.innerHTML = '';
+                }
+            }, 3000);
+        }
+        
+        function clearError() {
+            const container = document.getElementById('errorContainer');
+            if (container.innerHTML !== '') {
+                setTimeout(() => { container.innerHTML = ''; }, 3000);
+            }
+        }
+        
         function closeWindow() {
             if (window.history.length > 1) {
                 window.history.back();
@@ -998,12 +1266,22 @@
                 showLoading(true);
                 updateLoadingMessage('Generating PDF...');
                 
-                const pdfResponse = await callGAS('generateFeeReportPDF', {
-                    studentName: cachedFeeReport.studentName,
-                    studentClass: cachedFeeReport.studentClass,
-                    dateOfBirth: cachedFeeReport.dateOfBirth,
-                    term: cachedFeeReport.termKey
-                });
+                let pdfResponse;
+                if (isAdminMode) {
+                    pdfResponse = await callGAS('generateFeeReportPDFAdmin', {
+                        studentName: cachedFeeReport.studentName,
+                        studentClass: cachedFeeReport.studentClass,
+                        term: cachedFeeReport.termKey
+                    });
+                } else {
+                    pdfResponse = await callGAS('generateFeeReportPDF', {
+                        studentName: cachedFeeReport.studentName,
+                        studentClass: cachedFeeReport.studentClass,
+                        dateOfBirth: cachedFeeReport.dateOfBirth,
+                        term: cachedFeeReport.termKey,
+                        isAdmin: false
+                    });
+                }
                 
                 if (pdfResponse && !pdfResponse.error && pdfResponse.pdfBase64) {
                     const fileName = pdfResponse.fileName || 
@@ -1043,6 +1321,7 @@
         // INITIALIZE
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            updateAdminUI();
             loadFeeReport();
         });
         
