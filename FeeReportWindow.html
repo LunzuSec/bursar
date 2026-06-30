@@ -148,6 +148,7 @@
         .status-unpaid { background: #f44336; color: white; }
         .status-credit { background: #2196f3; color: white; }
         .status-overpaid { background: #8b5cf6; color: white; }
+        .status-refund { background: #8b5cf6; color: white; }
         
         .card {
             background: white;
@@ -177,7 +178,7 @@
         
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
         }
         
@@ -210,6 +211,7 @@
         .amount-negative { color: #f44336; }
         .amount-credit { color: #2196f3; }
         .amount-overpaid { color: #8b5cf6; }
+        .amount-refund { color: #8b5cf6; }
         .amount-zero { color: #666; }
         
         .table-wrapper {
@@ -221,7 +223,7 @@
         
         .installment-table {
             width: 100%;
-            min-width: 300px;
+            min-width: 350px;
             border-collapse: collapse;
             font-size: 12px;
         }
@@ -251,6 +253,14 @@
         .installment-table td:first-child {
             font-weight: 600;
             font-size: 11px;
+        }
+        
+        .installment-table .refund-row td:first-child {
+            color: #8b5cf6;
+        }
+        
+        .installment-table .refund-row td:nth-child(2) {
+            color: #8b5cf6;
         }
         
         .contact-grid {
@@ -607,7 +617,7 @@
             .card { margin: 8px 5px; }
             .card-header { font-size: 12px; padding: 8px 10px; }
             .card-body { padding: 10px; }
-            .installment-table { font-size: 11px; min-width: 280px; }
+            .installment-table { font-size: 11px; min-width: 300px; }
             .installment-table th, .installment-table td { padding: 6px 4px; }
             .installment-table th { font-size: 9px; }
             .status-badge { font-size: 10px; padding: 2px 10px; }
@@ -625,7 +635,7 @@
             .summary-item { padding: 8px 4px; }
             .summary-amount { font-size: 14px; }
             .summary-label { font-size: 8px; }
-            .installment-table { font-size: 10px; min-width: 260px; }
+            .installment-table { font-size: 10px; min-width: 280px; }
             .installment-table th, .installment-table td { padding: 4px 3px; }
             .school-logo { height: 35px; }
             .school-name { font-size: 14px; }
@@ -680,7 +690,7 @@
         </div>
         
         <div class="card">
-            <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> INSTALLMENT PAYMENT HISTORY</div>
+            <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> PAYMENT HISTORY</div>
             <div class="card-body" id="installmentHistory"></div>
         </div>
         
@@ -947,7 +957,20 @@
         }
         
         // ============================================
-        // RENDER REPORT
+        // UPDATED INSTALLMENT NAME - SUPPORTS 6 INSTALLMENTS
+        // ============================================
+        function getInstallmentName(number) {
+            if (number === 1) return "1st Installment";
+            if (number === 2) return "2nd Installment";
+            if (number === 3) return "3rd Installment";
+            if (number === 4) return "4th Installment";
+            if (number === 5) return "5th Installment";
+            if (number === 6) return "6th Installment";
+            return "Installment " + number;
+        }
+        
+        // ============================================
+        // RENDER REPORT - UPDATED FOR REFUNDS
         // ============================================
         function renderReport(data) {
             const config = data.termConfig || {};
@@ -1034,6 +1057,24 @@
                 `;
             }
             
+            // Build summary with refunds
+            let refundsHtml = '';
+            if (data.totalRefunds && data.totalRefunds > 0) {
+                refundsHtml = `
+                    <div class="summary-item">
+                        <div class="summary-amount amount-refund">-K${data.totalRefunds.toLocaleString()}</div>
+                        <div class="summary-label">Total Refunds</div>
+                    </div>
+                `;
+            } else {
+                refundsHtml = `
+                    <div class="summary-item">
+                        <div class="summary-amount amount-zero">K0</div>
+                        <div class="summary-label">Total Refunds</div>
+                    </div>
+                `;
+            }
+            
             document.getElementById('feeSummary').innerHTML = `
                 <div class="summary-grid">
                     <div class="summary-item">
@@ -1044,6 +1085,7 @@
                         <div class="summary-amount amount-positive">K${(data.totalPaidThisTerm || 0).toLocaleString()}</div>
                         <div class="summary-label">Total Paid This Term</div>
                     </div>
+                    ${refundsHtml}
                     <div class="summary-item">
                         <div class="summary-amount ${prevBalanceClass}">${prevBalanceDisplay}</div>
                         <div class="summary-label">Previous Term Balance</div>
@@ -1058,7 +1100,7 @@
                 ${statusMessageHtml}
             `;
             
-            // Installment History
+            // Installment History - Updated to handle refunds
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `
                     <div class="table-wrapper">
@@ -1066,7 +1108,7 @@
                             <thead>
                                 <tr>
                                     <th>Payment Reference</th>
-                                    <th>Amount Paid</th>
+                                    <th>Amount</th>
                                     <th>Payment Date</th>
                                     <th>Status</th>
                                 </tr>
@@ -1074,14 +1116,21 @@
                             <tbody>
                 `;
                 data.installments.forEach(inst => {
-                    const installmentName = getInstallmentName(inst.number);
+                    const installmentName = inst.displayName || getInstallmentName(inst.number);
                     const dateDisplay = inst.date || 'Not recorded';
+                    const isRefund = inst.isRefund || inst.amount < 0;
+                    const amount = inst.displayAmount || Math.abs(inst.amount || 0);
+                    const amountPrefix = isRefund ? '-K' : 'K';
+                    const statusText = isRefund ? 'REFUND' : 'PAID';
+                    const statusClass = isRefund ? 'status-refund' : 'status-paid';
+                    const rowClass = isRefund ? 'refund-row' : '';
+                    
                     installmentsHtml += `
-                        <tr>
+                        <tr class="${rowClass}">
                             <td><strong>${installmentName}</strong></td>
-                            <td class="amount-positive">K${(inst.amount || 0).toLocaleString()}</td>
+                            <td>${amountPrefix}${amount.toLocaleString()}</td>
                             <td>${escapeHtml(dateDisplay)}</td>
-                            <td><span class="status-badge status-paid" style="padding: 3px 10px; font-size: 10px;">PAID</span></td>
+                            <td><span class="status-badge ${statusClass}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
                         </tr>
                     `;
                 });
@@ -1094,7 +1143,7 @@
             } else {
                 document.getElementById('installmentHistory').innerHTML = `
                     <div style="text-align: center; color: #999; padding: 15px;">
-                        <i class="fas fa-receipt me-2"></i>No installment payments recorded for this term.
+                        <i class="fas fa-receipt me-2"></i>No payment records found for this term.
                     </div>
                 `;
             }
@@ -1174,13 +1223,6 @@
         // ============================================
         // HELPER FUNCTIONS
         // ============================================
-        function getInstallmentName(number) {
-            if (number === 1) return "1st Installment";
-            if (number === 2) return "2nd Installment";
-            if (number === 3) return "3rd Installment";
-            return "Installment " + number;
-        }
-        
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
