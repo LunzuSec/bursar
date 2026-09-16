@@ -217,6 +217,17 @@
             box-shadow: 0 12px 28px rgba(22, 163, 74, 0.3);
         }
 
+        .btn-subscribe {
+            background: rgba(6, 182, 212, 0.7);
+            color: white;
+        }
+        .btn-subscribe:hover {
+            transform: translateY(-3px);
+            background: rgba(6, 182, 212, 0.9);
+            box-shadow: 0 12px 28px rgba(6, 182, 212, 0.3);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
         .btn-admin {
             background: rgba(139, 92, 246, 0.7);
             color: white;
@@ -453,6 +464,7 @@
             justify-content: center;
             align-items: center;
             z-index: 10000;
+            padding: 16px;
         }
         .modal-overlay.show {
             display: flex;
@@ -465,7 +477,7 @@
             border-radius: 20px;
             padding: 30px;
             max-width: 400px;
-            width: 90%;
+            width: 100%;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
         .modal-box h3 {
@@ -536,6 +548,172 @@
             display: block;
         }
 
+        /* ---------- SUBSCRIBE MODAL ---------- */
+        .subscribe-modal-box {
+            background: rgba(20, 35, 55, 0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.35);
+            border-radius: 20px;
+            padding: 26px 24px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        }
+        .subscribe-modal-box h3 {
+            color: #67e8f9;
+            margin-bottom: 6px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .subscribe-modal-box .sub-intro {
+            color: #cbd5e1;
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .subscribe-modal-box .modal-form-group {
+            margin-bottom: 14px;
+            text-align: left;
+        }
+        .subscribe-modal-box label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 13px;
+        }
+        .subscribe-modal-box select,
+        .subscribe-modal-box input[type="email"],
+        .subscribe-modal-box input[type="date"] {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 11px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transition: 0.2s;
+        }
+        .subscribe-modal-box select option {
+            background: #1e2f3f;
+            color: #fff;
+        }
+        .subscribe-modal-box select:focus,
+        .subscribe-modal-box input:focus {
+            outline: none;
+            border-color: #67e8f9;
+            background: rgba(255, 255, 255, 0.13);
+        }
+        .subscribe-modal-box .consent-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(139, 92, 246, 0.14);
+            border: 1px solid rgba(139, 92, 246, 0.32);
+            border-radius: 11px;
+            padding: 12px;
+            margin: 14px 0;
+        }
+        .subscribe-modal-box .consent-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: #8b5cf6;
+        }
+        .subscribe-modal-box .consent-row label {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #e9d5ff;
+            margin: 0;
+        }
+        .subscribe-modal-box .helper {
+            display: block;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .subscribe-modal-box .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .subscribe-modal-box .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .subscribe-modal-box .btn-confirm {
+            background: rgba(6, 182, 212, 0.85);
+            color: #fff;
+        }
+        .subscribe-modal-box .btn-confirm:not(:disabled):hover {
+            background: rgba(6, 182, 212, 1);
+        }
+        .subscribe-modal-box .btn-confirm:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .subscribe-modal-box .btn-cancel {
+            background: rgba(100, 116, 139, 0.55);
+            color: #fff;
+        }
+        .subscribe-modal-box .btn-cancel:hover {
+            background: rgba(100, 116, 139, 0.75);
+        }
+        .subscribe-modal-box .status-info {
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-bottom: 14px;
+            line-height: 1.5;
+            display: none;
+        }
+        .subscribe-modal-box .status-info.show {
+            display: block;
+        }
+        .subscribe-modal-box .status-info.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 3px solid #10b981;
+            color: #a7f3d0;
+        }
+        .subscribe-modal-box .status-info.none {
+            background: rgba(59, 130, 246, 0.15);
+            border-left: 3px solid #3b82f6;
+            color: #bfdbfe;
+        }
+        .subscribe-modal-box .status-info.error {
+            background: rgba(220, 38, 38, 0.2);
+            border-left: 3px solid #dc2626;
+            color: #fecaca;
+        }
+        .subscribe-modal-box .status-info.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 3px solid #10b981;
+            color: #a7f3d0;
+        }
+        .subscribe-modal-box .spinner-small {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
         @media (max-width: 600px) {
             body { padding: 10px; }
             .container { border-radius: 18px; }
@@ -547,6 +725,7 @@
             h2 { font-size: 16px; }
             .logo { max-width: 80px; }
             .modal-box { padding: 20px; }
+            .subscribe-modal-box { padding: 20px 16px; }
         }
     </style>
 </head>
@@ -566,6 +745,79 @@
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeAdminModal()">Cancel</button>
                 <button class="btn-confirm" onclick="confirmAdminPassword()">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------- Subscribe Modal ---------- -->
+    <div id="subscribeModal" class="modal-overlay">
+        <div class="subscribe-modal-box">
+            <h3>📧 Subscribe to Fee Alert Emails</h3>
+            <p class="sub-intro">
+                Receive an email whenever the school updates your child's fee records.
+            </p>
+
+            <div id="subStatusInfo" class="status-info"></div>
+
+            <div class="modal-form-group">
+                <label for="subTermSelect">Academic Term:</label>
+                <select id="subTermSelect" disabled>
+                    <option value="" disabled selected>Loading terms...</option>
+                </select>
+            </div>
+
+            <div class="modal-form-group">
+                <label for="subStudentClass">Class:</label>
+                <select id="subStudentClass" disabled>
+                    <option value="" disabled selected>Select Class</option>
+                    <option value="Form 1">Form 1</option>
+                    <option value="Form 2">Form 2</option>
+                    <option value="Form 3">Form 3</option>
+                    <option value="Form 4">Form 4</option>
+                    <option value="Form 1 ODL">Form 1 ODL</option>
+                    <option value="Form 2 ODL">Form 2 ODL</option>
+                    <option value="Form 3 ODL">Form 3 ODL</option>
+                    <option value="Form 4 ODL">Form 4 ODL</option>
+                </select>
+            </div>
+
+            <div class="modal-form-group">
+                <label for="subStudentName">Student Name:</label>
+                <select id="subStudentName" disabled>
+                    <option value="" disabled selected>-- Select Class First --</option>
+                </select>
+            </div>
+
+            <div class="modal-form-group">
+                <label for="subDateOfBirth">Student Date of Birth:</label>
+                <input type="date" id="subDateOfBirth">
+                <span class="helper">Format: YYYY-MM-DD — used to verify the student's identity.</span>
+            </div>
+
+            <div class="modal-form-group">
+                <label for="subParentEmail">Your Email Address:</label>
+                <input type="email" id="subParentEmail" placeholder="parent@example.com">
+                <span class="helper">Fee statements and reminders will be sent to this address.</span>
+            </div>
+
+            <div class="consent-row">
+                <input type="checkbox" id="subConsentCheck">
+                <label for="subConsentCheck">
+                    I confirm I am the parent or guardian of the student named above, and I agree
+                    to receive fee statements and payment reminders by email for this student.
+                </label>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeSubscribeModal()">Cancel</button>
+                <button class="btn-confirm" id="subSubscribeBtn" onclick="submitSubscribe()" disabled>
+                    Subscribe
+                </button>
+            </div>
+            <div style="text-align:center; margin-top:10px;">
+                <button class="btn-cancel" style="width:100%; background:transparent; border:1px solid rgba(255,255,255,0.15);" id="subUnsubscribeBtn" onclick="submitUnsubscribe()" disabled>
+                    🚫 Remove existing subscription
+                </button>
             </div>
         </div>
     </div>
@@ -662,6 +914,9 @@
                     <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled>
                         <span>💰</span> Generate Fee Report
                     </button>
+                    <button type="button" class="btn btn-subscribe" onclick="openSubscribeModal()">
+                        <span>📧</span> Subscribe to Fee Alerts
+                    </button>
                     <button type="button" class="btn btn-secondary" onclick="resetForm()">
                         <span>🔄</span> Reset Form
                     </button>
@@ -680,6 +935,7 @@
                 <strong>📌 Important Information:</strong><br>
                 • This report shows your complete fee payment history for the selected term<br>
                 • Includes installment breakdown and current balance status<br>
+                • Subscribe to email alerts to be notified when fees are updated<br>
                 • For any discrepancies, please contact the accounts office<br>
                 • Payment receipts should be kept for future reference
             </div>
@@ -810,6 +1066,12 @@
         let loadingProgress = 0;
         let isAdminMode = false;
 
+        // Subscription modal state
+        let subTerms = [];
+        let subCurrentTermKey = null;
+        let subIsLoadingStudents = false;
+        let subCurrentStatus = null;
+
         // ----- ADMIN MODE WITH PASSWORD -----
         function openAdminModal() {
             if (isAdminMode) {
@@ -847,7 +1109,6 @@
                     closeAdminModal();
                     showSuccess('🔑 Admin mode activated successfully!');
                     setTimeout(() => clearError(), 3000);
-                    // Reload student names if class is selected
                     const studentClass = document.getElementById('studentClass').value;
                     if (studentClass && studentClass !== "" && currentTermKey) {
                         handleClassChange();
@@ -865,12 +1126,8 @@
         }
 
         document.getElementById('adminPasswordInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                confirmAdminPassword();
-            }
-            if (e.key === 'Escape') {
-                closeAdminModal();
-            }
+            if (e.key === 'Enter') confirmAdminPassword();
+            if (e.key === 'Escape') closeAdminModal();
         });
 
         function updateAdminUI() {
@@ -1373,6 +1630,292 @@
                 document.getElementById('apiStatus').innerHTML = '⚠️ Connection slow - Features may load slower';
                 document.getElementById('apiStatus').style.color = '#fcd34d';
             }
+        }
+
+        // ============================================================
+        // 3. SUBSCRIBE MODAL LOGIC
+        // ============================================================
+
+        function openSubscribeModal() {
+            document.getElementById('subscribeModal').classList.add('show');
+            resetSubscribeForm();
+            loadSubTerms();
+        }
+
+        function closeSubscribeModal() {
+            document.getElementById('subscribeModal').classList.remove('show');
+        }
+
+        document.getElementById('subscribeModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSubscribeModal();
+        });
+
+        async function loadSubTerms() {
+            const sel = document.getElementById('subTermSelect');
+            sel.innerHTML = '<option value="" disabled selected>Loading terms...</option>';
+            sel.disabled = true;
+            try {
+                const terms = await callGAS('getAvailableTerms', {});
+                if (Array.isArray(terms) && terms.length) {
+                    subTerms = terms;
+                    sel.innerHTML = '';
+                    const def = document.createElement('option');
+                    def.value = ''; def.disabled = true; def.selected = true;
+                    def.textContent = '-- Select Term --';
+                    sel.appendChild(def);
+
+                    const grouped = {};
+                    terms.forEach(t => {
+                        if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
+                        grouped[t.academicYear].push(t);
+                    });
+
+                    let activeTermData = null;
+                    Object.keys(grouped).forEach(year => {
+                        const og = document.createElement('optgroup');
+                        og.label = year;
+                        grouped[year].forEach(term => {
+                            const opt = document.createElement('option');
+                            opt.value = term.key;
+                            opt.textContent = term.display;
+                            if (term.isActive) {
+                                opt.selected = true;
+                                subCurrentTermKey = term.key;
+                                activeTermData = term;
+                            }
+                            og.appendChild(opt);
+                        });
+                        sel.appendChild(og);
+                    });
+
+                    if (!activeTermData && terms.length) {
+                        sel.value = terms[0].key;
+                        subCurrentTermKey = terms[0].key;
+                    }
+                    sel.disabled = false;
+                    document.getElementById('subStudentClass').disabled = false;
+                }
+            } catch (e) {
+                showSubStatus('error', 'Could not load terms: ' + e.message);
+            }
+        }
+
+        function resetSubscribeForm() {
+            document.getElementById('subStudentClass').value = '';
+            const nameSel = document.getElementById('subStudentName');
+            nameSel.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
+            nameSel.disabled = true;
+            document.getElementById('subDateOfBirth').value = '';
+            document.getElementById('subParentEmail').value = '';
+            document.getElementById('subConsentCheck').checked = false;
+            subCurrentStatus = null;
+            hideSubStatus();
+            updateSubButtons();
+        }
+
+        document.getElementById('subTermSelect').addEventListener('change', function() {
+            subCurrentTermKey = this.value;
+            resetSubscribeForm();
+            loadSubTermsSilent();
+        });
+
+        async function loadSubTermsSilent() {
+            // Keeps dropdown populated when term changes; no-op if already loaded
+        }
+
+        document.getElementById('subStudentClass').addEventListener('change', async function() {
+            const cls = this.value;
+            const nameSel = document.getElementById('subStudentName');
+            nameSel.innerHTML = '<option value="" disabled selected>Loading students...</option>';
+            nameSel.disabled = true;
+            document.getElementById('subDateOfBirth').value = '';
+            subCurrentStatus = null;
+            hideSubStatus();
+            updateSubButtons();
+
+            if (!cls || !subCurrentTermKey) return;
+            if (subIsLoadingStudents) return;
+            subIsLoadingStudents = true;
+            try {
+                const names = await callGAS('getStudentNames', {
+                    studentClass: cls,
+                    term: subCurrentTermKey
+                });
+                nameSel.innerHTML = '';
+                if (Array.isArray(names) && names.length) {
+                    const def = document.createElement('option');
+                    def.value = ''; def.disabled = true; def.selected = true;
+                    def.textContent = `-- Select Student (${names.length} available) --`;
+                    nameSel.appendChild(def);
+                    names.forEach(n => {
+                        const opt = document.createElement('option');
+                        opt.value = n; opt.textContent = n;
+                        nameSel.appendChild(opt);
+                    });
+                    nameSel.disabled = false;
+                } else {
+                    const opt = document.createElement('option');
+                    opt.value = ''; opt.disabled = true; opt.selected = true;
+                    opt.textContent = '-- No students found --';
+                    nameSel.appendChild(opt);
+                }
+            } catch (e) {
+                showSubStatus('error', 'Failed to load students: ' + e.message);
+            } finally {
+                subIsLoadingStudents = false;
+                updateSubButtons();
+            }
+        });
+
+        document.getElementById('subStudentName').addEventListener('change', checkSubStatus);
+        document.getElementById('subDateOfBirth').addEventListener('change', () => {
+            checkSubStatus();
+            updateSubButtons();
+        });
+        document.getElementById('subParentEmail').addEventListener('input', updateSubButtons);
+        document.getElementById('subConsentCheck').addEventListener('change', updateSubButtons);
+
+        async function checkSubStatus() {
+            const studentName = document.getElementById('subStudentName').value;
+            const studentClass = document.getElementById('subStudentClass').value;
+            const dob = document.getElementById('subDateOfBirth').value;
+            const term = document.getElementById('subTermSelect').value;
+
+            subCurrentStatus = null;
+            if (!studentName || !studentClass || !dob || !term) {
+                hideSubStatus();
+                return;
+            }
+            try {
+                const res = await callGAS('getSubscriptionStatus', {
+                    studentName, studentClass, dateOfBirth: dob, term
+                });
+                if (res && res.success) {
+                    subCurrentStatus = res;
+                    if (res.hasSubscription) {
+                        showSubStatus('active',
+                            `✅ An active subscription is already on file for <strong>${escapeHtml(res.studentName)}</strong>. ` +
+                            `Email: <strong>${escapeHtml(res.maskedEmail)}</strong>. ` +
+                            `You can update it by entering a new email and clicking Subscribe, or remove it below.`
+                        );
+                    } else {
+                        showSubStatus('none',
+                            `ℹ️ No fee alert subscription yet for <strong>${escapeHtml(res.studentName)}</strong>. Fill in your email and subscribe.`
+                        );
+                    }
+                }
+            } catch (e) {
+                // Silent — user can still subscribe
+                console.warn('Status check failed:', e);
+            }
+            updateSubButtons();
+        }
+
+        function updateSubButtons() {
+            const studentName = document.getElementById('subStudentName').value;
+            const studentClass = document.getElementById('subStudentClass').value;
+            const dob = document.getElementById('subDateOfBirth').value;
+            const email = document.getElementById('subParentEmail').value.trim();
+            const consent = document.getElementById('subConsentCheck').checked;
+            const term = document.getElementById('subTermSelect').value;
+
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
+            const canSubscribe = studentName && studentClass && dob && term && emailOk && consent;
+            const canUnsubscribe = studentName && studentClass && dob && term;
+
+            document.getElementById('subSubscribeBtn').disabled = !canSubscribe;
+            document.getElementById('subUnsubscribeBtn').disabled = !canUnsubscribe;
+        }
+
+        async function submitSubscribe() {
+            const studentName = document.getElementById('subStudentName').value;
+            const studentClass = document.getElementById('subStudentClass').value;
+            const dob = document.getElementById('subDateOfBirth').value;
+            const email = document.getElementById('subParentEmail').value.trim();
+            const term = document.getElementById('subTermSelect').value;
+            const consent = document.getElementById('subConsentCheck').checked;
+
+            const btn = document.getElementById('subSubscribeBtn');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-small"></span> Subscribing...';
+            hideSubStatus();
+
+            try {
+                const res = await callGAS('subscribeFeeEmail', {
+                    studentName, studentClass, dateOfBirth: dob,
+                    parentEmail: email, term, consent: consent ? 'true' : 'false'
+                });
+
+                if (res && res.success) {
+                    showSubStatus('success', '✅ ' + escapeHtml(res.message));
+                    document.getElementById('subParentEmail').value = '';
+                    document.getElementById('subConsentCheck').checked = false;
+                    // Refresh status
+                    setTimeout(checkSubStatus, 800);
+                } else {
+                    showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Subscription failed.'));
+                }
+            } catch (e) {
+                showSubStatus('error', '❌ ' + escapeHtml(e.message));
+            } finally {
+                btn.innerHTML = original;
+                updateSubButtons();
+            }
+        }
+
+        async function submitUnsubscribe() {
+            const studentName = document.getElementById('subStudentName').value;
+            const studentClass = document.getElementById('subStudentClass').value;
+            const dob = document.getElementById('subDateOfBirth').value;
+            const term = document.getElementById('subTermSelect').value;
+
+            if (!confirm('Are you sure you want to remove the fee alert subscription for ' + studentName + '?')) {
+                return;
+            }
+
+            const btn = document.getElementById('subUnsubscribeBtn');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-small"></span> Removing...';
+            hideSubStatus();
+
+            try {
+                const res = await callGAS('unsubscribeFeeEmail', {
+                    studentName, studentClass, dateOfBirth: dob, term
+                });
+                if (res && res.success) {
+                    showSubStatus('success', '✅ ' + escapeHtml(res.message));
+                    subCurrentStatus = null;
+                    setTimeout(checkSubStatus, 800);
+                } else {
+                    showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Unsubscribe failed.'));
+                }
+            } catch (e) {
+                showSubStatus('error', '❌ ' + escapeHtml(e.message));
+            } finally {
+                btn.innerHTML = original;
+                updateSubButtons();
+            }
+        }
+
+        function showSubStatus(type, html) {
+            const el = document.getElementById('subStatusInfo');
+            el.className = 'status-info show ' + type;
+            el.innerHTML = html;
+        }
+        function hideSubStatus() {
+            const el = document.getElementById('subStatusInfo');
+            el.className = 'status-info';
+            el.innerHTML = '';
+        }
+
+        function escapeHtml(s) {
+            if (s == null) return '';
+            const d = document.createElement('div');
+            d.textContent = String(s);
+            return d.innerHTML;
         }
     </script>
 </body>
