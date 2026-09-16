@@ -450,7 +450,6 @@
             display: none;
         }
 
-        /* Password Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -548,7 +547,6 @@
             display: block;
         }
 
-        /* ---------- SUBSCRIBE MODAL ---------- */
         .subscribe-modal-box {
             background: rgba(20, 35, 55, 0.97);
             backdrop-filter: blur(12px);
@@ -749,7 +747,7 @@
         </div>
     </div>
 
-    <!-- ---------- Subscribe Modal ---------- -->
+    <!-- Subscribe Modal -->
     <div id="subscribeModal" class="modal-overlay">
         <div class="subscribe-modal-box">
             <h3>📧 Subscribe to Fee Alert Emails</h3>
@@ -795,9 +793,11 @@
             </div>
 
             <div class="modal-form-group">
-                <label for="subParentEmail">Your Email Address:</label>
-                <input type="email" id="subParentEmail" placeholder="parent@example.com">
-                <span class="helper">Fee statements and reminders will be sent to this address.</span>
+                <label>Alert Email:</label>
+                <input type="email" id="subParentEmail" value="" readonly
+                       style="opacity:0.75; cursor:not-allowed;"
+                       placeholder="Loading...">
+                <span class="helper">Fee alerts are sent to the school-managed email address. You don't need to type anything.</span>
             </div>
 
             <div class="consent-row">
@@ -1058,6 +1058,7 @@
 
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
         const ADMIN_PASSWORD = "lss001";
+        const FEE_ALERT_EMAIL = "example@/change email address";
 
         let availableTerms = [];
         let currentTermKey = null;
@@ -1066,13 +1067,12 @@
         let loadingProgress = 0;
         let isAdminMode = false;
 
-        // Subscription modal state
-        let subTerms = [];
+        // Subscribe modal state
         let subCurrentTermKey = null;
         let subIsLoadingStudents = false;
         let subCurrentStatus = null;
 
-        // ----- ADMIN MODE WITH PASSWORD -----
+        // ----- ADMIN MODE -----
         function openAdminModal() {
             if (isAdminMode) {
                 isAdminMode = false;
@@ -1163,7 +1163,7 @@
             }
         }
 
-        // ----- TERM MANAGEMENT -----
+        // ----- INIT -----
         window.onload = async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             showInitialLoading(true, "Loading fee portal configuration...");
@@ -1194,12 +1194,10 @@
         async function loadAvailableTerms() {
             return new Promise(async (resolve, reject) => {
                 try {
-                    console.log('Loading available terms...');
                     const terms = await callGAS('getAvailableTerms', {});
                     if (terms && Array.isArray(terms) && terms.length > 0) {
                         availableTerms = terms;
                         populateTermDropdown(terms);
-                        console.log('Terms loaded:', terms.length);
                         resolve(terms);
                     } else {
                         reject(new Error('No terms received from server'));
@@ -1357,7 +1355,7 @@
             }
         }
 
-        // ----- API CALLS (JSONP) -----
+        // ----- API (JSONP) -----
         function callGAS(action, params = {}) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
@@ -1497,7 +1495,7 @@
             }
         }
 
-        // ----- GENERATE FEE REPORT -----
+        // ----- GENERATE REPORT -----
         function generateFeeReport() {
             if (!validateForm()) {
                 showError('Please fill in all required fields.');
@@ -1640,6 +1638,8 @@
             document.getElementById('subscribeModal').classList.add('show');
             resetSubscribeForm();
             loadSubTerms();
+            // Display the fixed alert email (readonly, so parents just see it)
+            document.getElementById('subParentEmail').value = FEE_ALERT_EMAIL;
         }
 
         function closeSubscribeModal() {
@@ -1657,7 +1657,6 @@
             try {
                 const terms = await callGAS('getAvailableTerms', {});
                 if (Array.isArray(terms) && terms.length) {
-                    subTerms = terms;
                     sel.innerHTML = '';
                     const def = document.createElement('option');
                     def.value = ''; def.disabled = true; def.selected = true;
@@ -1706,22 +1705,17 @@
             nameSel.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
             nameSel.disabled = true;
             document.getElementById('subDateOfBirth').value = '';
-            document.getElementById('subParentEmail').value = '';
             document.getElementById('subConsentCheck').checked = false;
             subCurrentStatus = null;
             hideSubStatus();
             updateSubButtons();
+            document.getElementById('subParentEmail').value = FEE_ALERT_EMAIL;
         }
 
         document.getElementById('subTermSelect').addEventListener('change', function() {
             subCurrentTermKey = this.value;
             resetSubscribeForm();
-            loadSubTermsSilent();
         });
-
-        async function loadSubTermsSilent() {
-            // Keeps dropdown populated when term changes; no-op if already loaded
-        }
 
         document.getElementById('subStudentClass').addEventListener('change', async function() {
             const cls = this.value;
@@ -1772,7 +1766,6 @@
             checkSubStatus();
             updateSubButtons();
         });
-        document.getElementById('subParentEmail').addEventListener('input', updateSubButtons);
         document.getElementById('subConsentCheck').addEventListener('change', updateSubButtons);
 
         async function checkSubStatus() {
@@ -1794,18 +1787,18 @@
                     subCurrentStatus = res;
                     if (res.hasSubscription) {
                         showSubStatus('active',
-                            `✅ An active subscription is already on file for <strong>${escapeHtml(res.studentName)}</strong>. ` +
-                            `Email: <strong>${escapeHtml(res.maskedEmail)}</strong>. ` +
-                            `You can update it by entering a new email and clicking Subscribe, or remove it below.`
+                            `✅ Fee alerts are already ON for <strong>${escapeHtml(res.studentName)}</strong>. ` +
+                            `Alerts go to <strong>${escapeHtml(res.alertEmail)}</strong>. ` +
+                            `You can remove them using the button below.`
                         );
                     } else {
                         showSubStatus('none',
-                            `ℹ️ No fee alert subscription yet for <strong>${escapeHtml(res.studentName)}</strong>. Fill in your email and subscribe.`
+                            `ℹ️ Fee alerts are OFF for <strong>${escapeHtml(res.studentName)}</strong>. ` +
+                            `Tick the consent box and click Subscribe to turn them ON.`
                         );
                     }
                 }
             } catch (e) {
-                // Silent — user can still subscribe
                 console.warn('Status check failed:', e);
             }
             updateSubButtons();
@@ -1815,13 +1808,10 @@
             const studentName = document.getElementById('subStudentName').value;
             const studentClass = document.getElementById('subStudentClass').value;
             const dob = document.getElementById('subDateOfBirth').value;
-            const email = document.getElementById('subParentEmail').value.trim();
             const consent = document.getElementById('subConsentCheck').checked;
             const term = document.getElementById('subTermSelect').value;
 
-            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-
-            const canSubscribe = studentName && studentClass && dob && term && emailOk && consent;
+            const canSubscribe = studentName && studentClass && dob && term && consent;
             const canUnsubscribe = studentName && studentClass && dob && term;
 
             document.getElementById('subSubscribeBtn').disabled = !canSubscribe;
@@ -1832,7 +1822,6 @@
             const studentName = document.getElementById('subStudentName').value;
             const studentClass = document.getElementById('subStudentClass').value;
             const dob = document.getElementById('subDateOfBirth').value;
-            const email = document.getElementById('subParentEmail').value.trim();
             const term = document.getElementById('subTermSelect').value;
             const consent = document.getElementById('subConsentCheck').checked;
 
@@ -1845,14 +1834,12 @@
             try {
                 const res = await callGAS('subscribeFeeEmail', {
                     studentName, studentClass, dateOfBirth: dob,
-                    parentEmail: email, term, consent: consent ? 'true' : 'false'
+                    term, consent: consent ? 'true' : 'false'
                 });
 
                 if (res && res.success) {
                     showSubStatus('success', '✅ ' + escapeHtml(res.message));
-                    document.getElementById('subParentEmail').value = '';
                     document.getElementById('subConsentCheck').checked = false;
-                    // Refresh status
                     setTimeout(checkSubStatus, 800);
                 } else {
                     showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Subscription failed.'));
