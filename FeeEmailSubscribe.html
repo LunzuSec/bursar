@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscribe to Fee Alerts - Lunzu Secondary School</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    background: #0a1f2e;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .container {
+    max-width: 620px;
+    width: 100%;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,215,0,0.25);
+    overflow: hidden;
+  }
+  .header {
+    background: rgba(10,30,50,0.75);
+    color: #fff;
+    padding: 22px 20px;
+    text-align: center;
+    border-bottom: 2px solid rgba(255,215,0,0.3);
+  }
+  .header h1 { font-size: 22px; letter-spacing: 1px; }
+  .header h2 { font-size: 15px; color: #fcd34d; margin-top: 4px; font-weight: 500; }
+  .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 4px; font-weight: 300; }
+  .content { padding: 26px 24px; background: rgba(255,255,255,0.06); }
+  .form-group { margin-bottom: 18px; }
+  label {
+    display: block; margin-bottom: 6px;
+    font-weight: 600; color: #f0f4fa; font-size: 14px;
+  }
+  .required-star { color: #fbbf24; margin-right: 3px; }
+  select, input[type="email"], input[type="date"], input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    font-size: 15px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    transition: 0.25s;
+  }
+  select option { background: #1e2f3f; color: #fff; }
+  select:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
+  select:focus, input:focus {
+    outline: none; border-color: #fbbf24;
+    background: rgba(255,255,255,0.22);
+    box-shadow: 0 0 0 4px rgba(251,191,36,0.15);
+  }
+  small.helper {
+    display: block; margin-top: 5px;
+    color: #bcc9db; font-size: 12px; opacity: 0.85;
+  }
+  .consent-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .consent-row input[type="checkbox"] {
+    width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;
+    accent-color: #8b5cf6;
+  }
+  .consent-row label {
+    font-weight: 400; font-size: 13px; line-height: 1.5;
+    color: #e9d5ff; margin: 0;
+  }
+  .buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+  .btn {
+    flex: 1; min-width: 160px;
+    padding: 14px 18px;
+    border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: 0.2s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary { background: rgba(37,99,235,0.75); color: white; }
+  .btn-primary:not(:disabled):hover { background: rgba(37,99,235,0.95); transform: translateY(-2px); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-secondary { background: rgba(22,163,74,0.75); color: white; }
+  .btn-secondary:not(:disabled):hover { background: rgba(22,163,74,0.95); transform: translateY(-2px); }
+  .btn-back { background: rgba(71,85,105,0.75); color: white; }
+  .btn-back:hover { background: rgba(71,85,105,0.95); transform: translateY(-2px); }
+
+  .alert {
+    padding: 14px 18px; border-radius: 12px;
+    margin: 16px 0; display: none;
+    font-size: 14px; line-height: 1.5;
+    border-left: 5px solid;
+  }
+  .alert.show { display: block; }
+  .alert-error { background: rgba(220,38,38,0.25); color: #fee2e2; border-color: #dc2626; }
+  .alert-success { background: rgba(22,163,74,0.25); color: #dcfce7; border-color: #16a34a; }
+  .alert-info { background: rgba(37,99,235,0.25); color: #dbeafe; border-color: #3b82f6; }
+
+  .spinner-small {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .info-note {
+    margin-top: 22px; padding: 16px;
+    border-radius: 14px;
+    background: rgba(30,58,95,0.35);
+    border: 1px solid rgba(255,215,0,0.15);
+    color: #e8edf5; font-size: 13px; line-height: 1.6;
+  }
+  .info-note strong { color: #fcd34d; }
+  .footer {
+    text-align: center; padding: 14px;
+    background: rgba(0,0,0,0.25);
+    color: #b8c4d4; font-size: 12px;
+  }
+  .footer a { color: #fbbf24; text-decoration: none; }
+  .status-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .status-pill.active { background: #10b981; color: white; }
+  .status-pill.none { background: #64748b; color: white; }
+
+  @media (max-width: 560px) {
+    body { padding: 10px; }
+    .container { border-radius: 18px; }
+    .content { padding: 18px 14px; }
+    .btn { min-width: 100%; }
+    .buttons { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>LUNZU SECONDARY SCHOOL</h1>
+    <h2>Subscribe to Fee Alert Emails</h2>
+    <h3>Office of the Bursar</h3>
+  </div>
+
+  <div class="content">
+    <div class="alert alert-info show" id="introAlert">
+      Enter your child's details and your email address to receive fee statements and payment reminders automatically.
+    </div>
+
+    <form id="subscribeForm" autocomplete="off">
+
+      <div class="form-group">
+        <label for="termSelect"><span class="required-star">*</span> Academic Term:</label>
+        <select id="termSelect" required disabled>
+          <option value="" disabled selected>Loading terms...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="studentClass"><span class="required-star">*</span> Class:</label>
+        <select id="studentClass" required disabled>
+          <option value="" disabled selected>Select Class</option>
+          <option value="Form 1">Form 1</option>
+          <option value="Form 2">Form 2</option>
+          <option value="Form 3">Form 3</option>
+          <option value="Form 4">Form 4</option>
+          <option value="Form 1 ODL">Form 1 ODL</option>
+          <option value="Form 2 ODL">Form 2 ODL</option>
+          <option value="Form 3 ODL">Form 3 ODL</option>
+          <option value="Form 4 ODL">Form 4 ODL</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="studentName"><span class="required-star">*</span> Student Name:</label>
+        <select id="studentName" required disabled>
+          <option value="" disabled selected>-- Select Class First --</option>
+        </select>
+        <small class="helper" id="studentLoadHint">Loads after you pick a class.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="dateOfBirth"><span class="required-star">*</span> Student Date of Birth:</label>
+        <input type="date" id="dateOfBirth" required>
+        <small class="helper">Format: YYYY-MM-DD — used to verify the student's identity.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="parentEmail"><span class="required-star">*</span> Your Email Address:</label>
+        <input type="email" id="parentEmail" required placeholder="parent@example.com">
+        <small class="helper">Fee statements and reminders will be sent to this email.</small>
+      </div>
+
+      <div class="consent-row">
+        <input type="checkbox" id="consentCheck">
+        <label for="consentCheck">
+          I confirm I am the parent or guardian of the student named above, and I agree to receive
+          fee statements and payment reminders by email for this student.
+        </label>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="btn btn-primary" id="subscribeBtn" onclick="subscribeNow()" disabled>
+          <span>📧</span> Subscribe to Fee Alerts
+        </button>
+        <button type="button" class="btn btn-secondary" id="unsubscribeBtn" onclick="unsubscribeNow()" disabled>
+          <span>🚫</span> Unsubscribe
+        </button>
+        <button type="button" class="btn btn-back" onclick="goBackToPortal()">
+          <span>←</span> Back to Portal
+        </button>
+      </div>
+    </form>
+
+    <div id="resultAlert" class="alert"></div>
+
+    <div class="info-note">
+      <strong>📌 What you'll receive:</strong><br>
+      • A fee statement email whenever the school updates your child's fee records<br>
+      • Current balance and payment status<br>
+      • Bank account details and payment instructions<br>
+      • Both English and Chichewa instructions<br><br>
+      <strong>🔒 Privacy:</strong> Your email is used only for fee-related communication for this student.
+      You can unsubscribe at any time using the button above or by contacting the bursar.
+    </div>
+  </div>
+
+  <div class="footer">
+    © <span id="year"></span> Lunzu Secondary School — Office of the Bursar<br>
+    For help: <a href="https://wa.me/265888866269" target="_blank">WhatsApp +265 888 866 269</a>
+  </div>
+</div>
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbymkG-uEtO6OzTZKoEfh7aT_nKNar9wEkfXA5P2RnujnwcGhPzxHN6TUv3iymK62tl0/exec';
+
+  let availableTerms = [];
+  let currentTermKey = null;
+  let isLoadingStudents = false;
+  let currentStatus = null;
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- JSONP caller ----------
+  function callGAS(action, params = {}) {
+    return new Promise((resolve, reject) => {
+      const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+      params.callback = callbackName;
+      params.action = action;
+
+      const urlParams = [];
+      for (const key in params) {
+        if (params[key] !== undefined && params[key] !== null) {
+          urlParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+        }
+      }
+      const url = GAS_URL + '?' + urlParams.join('&');
+
+      const script = document.createElement('script');
+      script.src = url;
+      const timeoutId = setTimeout(() => {
+        if (window[callbackName]) {
+          delete window[callbackName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+          reject(new Error('Request timeout'));
+        }
+      }, 30000);
+
+      window[callbackName] = function(response) {
+        clearTimeout(timeoutId);
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (response && response.error) reject(new Error(response.error));
+        else resolve(response);
+      };
+      script.onerror = function() {
+        clearTimeout(timeoutId);
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        reject(new Error('Connection failed'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  // ---------- Init ----------
+  window.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const terms = await callGAS('getAvailableTerms', {});
+      if (Array.isArray(terms) && terms.length) {
+        availableTerms = terms;
+        populateTerms(terms);
+      } else {
+        showAlert('error', 'Could not load academic terms. Please refresh.');
+      }
+    } catch (e) {
+      showAlert('error', 'Could not reach server: ' + e.message);
+    }
+  });
+
+  function populateTerms(terms) {
+    const sel = document.getElementById('termSelect');
+    sel.innerHTML = '';
+    const def = document.createElement('option');
+    def.value = ''; def.disabled = true; def.textContent = '-- Select Term --';
+    sel.appendChild(def);
+
+    const grouped = {};
+    terms.forEach(t => {
+      if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
+      grouped[t.academicYear].push(t);
+    });
+
+    let activeTermData = null;
+    Object.keys(grouped).forEach(year => {
+      const og = document.createElement('optgroup');
+      og.label = year;
+      grouped[year].forEach(term => {
+        const opt = document.createElement('option');
+        opt.value = term.key;
+        opt.textContent = term.display;
+        if (term.isActive) {
+          opt.selected = true;
+          currentTermKey = term.key;
+          activeTermData = term;
+        }
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    });
+
+    if (!activeTermData && terms.length) {
+      sel.value = terms[0].key;
+      currentTermKey = terms[0].key;
+    }
+    sel.disabled = false;
+    document.getElementById('studentClass').disabled = false;
+  }
+
+  document.getElementById('termSelect').addEventListener('change', function() {
+    currentTermKey = this.value;
+    resetStudentFields();
+  });
+
+  document.getElementById('studentClass').addEventListener('change', async function() {
+    resetStudentFields();
+    if (this.value && currentTermKey) {
+      await loadStudents(this.value, currentTermKey);
+    }
+  });
+
+  document.getElementById('studentName').addEventListener('change', checkSubscription);
+  document.getElementById('dateOfBirth').addEventListener('change', () => {
+    checkSubscription();
+    updateButtons();
+  });
+  document.getElementById('parentEmail').addEventListener('input', updateButtons);
+  document.getElementById('consentCheck').addEventListener('change', updateButtons);
+
+  function resetStudentFields() {
+    const nameSel = document.getElementById('studentName');
+    nameSel.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
+    nameSel.disabled = true;
+    document.getElementById('dateOfBirth').value = '';
+    document.getElementById('parentEmail').value = '';
+    document.getElementById('consentCheck').checked = false;
+    hideAlert();
+    updateButtons();
+  }
+
+  async function loadStudents(studentClass, termKey) {
+    if (isLoadingStudents) return;
+    isLoadingStudents = true;
+    const nameSel = document.getElementById('studentName');
+    nameSel.innerHTML = '<option value="" disabled selected>Loading students...</option>';
+    nameSel.disabled = true;
+    try {
+      const names = await callGAS('getStudentNames', { studentClass, term: termKey });
+      nameSel.innerHTML = '';
+      if (Array.isArray(names) && names.length) {
+        const def = document.createElement('option');
+        def.value = ''; def.disabled = true; def.selected = true;
+        def.textContent = `-- Select Student (${names.length} available) --`;
+        nameSel.appendChild(def);
+        names.forEach(n => {
+          const opt = document.createElement('option');
+          opt.value = n; opt.textContent = n;
+          nameSel.appendChild(opt);
+        });
+        document.getElementById('studentLoadHint').textContent = `Loaded ${names.length} student(s).`;
+      } else {
+        const opt = document.createElement('option');
+        opt.value = ''; opt.disabled = true; opt.selected = true;
+        opt.textContent = '-- No students found --';
+        nameSel.appendChild(opt);
+        document.getElementById('studentLoadHint').textContent = 'No students for this class.';
+      }
+      nameSel.disabled = false;
+    } catch (e) {
+      showAlert('error', 'Failed to load students: ' + e.message);
+    } finally {
+      isLoadingStudents = false;
+    }
+  }
+
+  async function checkSubscription() {
+    const studentName = document.getElementById('studentName').value;
+    const studentClass = document.getElementById('studentClass').value;
+    const dob = document.getElementById('dateOfBirth').value;
+    const term = document.getElementById('termSelect').value;
+
+    currentStatus = null;
+    if (!studentName || !studentClass || !dob || !term) return;
+
+    try {
+      const res = await callGAS('getSubscriptionStatus', {
+        studentName, studentClass, dateOfBirth: dob, term
+      });
+      if (res && res.success) {
+        currentStatus = res;
+        if (res.hasSubscription) {
+          showAlert('info',
+            `✅ An active subscription is already on file for <strong>${escapeHtml(res.studentName)}</strong>. ` +
+            `Email: <strong>${escapeHtml(res.maskedEmail)}</strong>. ` +
+            `You can update it by entering a new email and clicking Subscribe, or remove it by clicking Unsubscribe.`
+          );
+        } else {
+          showAlert('info',
+            `ℹ️ No fee alert subscription yet for <strong>${escapeHtml(res.studentName)}</strong>. Fill in your email and subscribe.`
+          );
+        }
+      }
+    } catch (e) {
+      // Silent fail — user can still subscribe
+      console.warn('Status check failed:', e);
+    }
+    updateButtons();
+  }
+
+  function updateButtons() {
+    const studentName = document.getElementById('studentName').value;
+    const studentClass = document.getElementById('studentClass').value;
+    const dob = document.getElementById('dateOfBirth').value;
+    const email = document.getElementById('parentEmail').value.trim();
+    const consent = document.getElementById('consentCheck').checked;
+    const term = document.getElementById('termSelect').value;
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
+    const canSubscribe = studentName && studentClass && dob && term && emailOk && consent;
+    const canUnsubscribe = studentName && studentClass && dob && term;
+
+    document.getElementById('subscribeBtn').disabled = !canSubscribe;
+    document.getElementById('unsubscribeBtn').disabled = !canUnsubscribe;
+  }
+
+  async function subscribeNow() {
+    const studentName = document.getElementById('studentName').value;
+    const studentClass = document.getElementById('studentClass').value;
+    const dob = document.getElementById('dateOfBirth').value;
+    const email = document.getElementById('parentEmail').value.trim();
+    const term = document.getElementById('termSelect').value;
+    const consent = document.getElementById('consentCheck').checked;
+
+    const btn = document.getElementById('subscribeBtn');
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-small"></span> Subscribing...';
+    hideAlert();
+
+    try {
+      const res = await callGAS('subscribeFeeEmail', {
+        studentName, studentClass, dateOfBirth: dob,
+        parentEmail: email, term, consent: consent ? 'true' : 'false'
+      });
+
+      if (res && res.success) {
+        showAlert('success', '✅ ' + escapeHtml(res.message));
+        document.getElementById('parentEmail').value = '';
+        document.getElementById('consentCheck').checked = false;
+        checkSubscription();
+      } else {
+        showAlert('error', '❌ ' + escapeHtml(res?.error || 'Subscription failed.'));
+      }
+    } catch (e) {
+      showAlert('error', '❌ ' + escapeHtml(e.message));
+    } finally {
+      btn.innerHTML = original;
+      updateButtons();
+    }
+  }
+
+  async function unsubscribeNow() {
+    const studentName = document.getElementById('studentName').value;
+    const studentClass = document.getElementById('studentClass').value;
+    const dob = document.getElementById('dateOfBirth').value;
+    const term = document.getElementById('termSelect').value;
+
+    if (!confirm('Are you sure you want to remove the fee alert subscription for ' + studentName + '?')) {
+      return;
+    }
+
+    const btn = document.getElementById('unsubscribeBtn');
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-small"></span> Removing...';
+    hideAlert();
+
+    try {
+      const res = await callGAS('unsubscribeFeeEmail', {
+        studentName, studentClass, dateOfBirth: dob, term
+      });
+      if (res && res.success) {
+        showAlert('success', '✅ ' + escapeHtml(res.message));
+        currentStatus = null;
+      } else {
+        showAlert('error', '❌ ' + escapeHtml(res?.error || 'Unsubscribe failed.'));
+      }
+    } catch (e) {
+      showAlert('error', '❌ ' + escapeHtml(e.message));
+    } finally {
+      btn.innerHTML = original;
+      updateButtons();
+    }
+  }
+
+  function showAlert(type, html) {
+    const el = document.getElementById('resultAlert');
+    el.className = 'alert show alert-' + (type === 'success' ? 'success' : type === 'info' ? 'info' : 'error');
+    el.innerHTML = html;
+  }
+  function hideAlert() {
+    const el = document.getElementById('resultAlert');
+    el.className = 'alert';
+    el.innerHTML = '';
+  }
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    const d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+
+  function goBackToPortal() {
+    window.location.href = 'https://lunzusec.github.io/School_results/index.html';
+  }
+</script>
+</body>
+</html>
