@@ -223,8 +223,14 @@
   .preview-header .count strong { color: var(--primary); }
 
   /* ============================================
-     RECEIPT SHEET
+     RECEIPT SHEET — A4 print layout with grid
      ============================================ */
+  #receiptContainer {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 12px;
+  }
+
   .receipt-sheet {
     width: 210mm;
     height: 297mm;
@@ -235,18 +241,25 @@
     page-break-after: always;
     break-after: page;
     overflow: hidden;
-  }
-  .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
-
-  /* FULL: 3 cols × 3 rows = 9 per page */
-  .layout-full .receipt-sheet {
+    box-sizing: border-box;
+    /* Default grid: 3×3 */
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 3mm;
   }
+  .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* COMPACT: 4 cols × 4 rows = 16 per page */
+  /* FULL layout: 3 cols × 3 rows = 9 per page */
+  .layout-full .receipt-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3mm;
+    padding: 5mm;
+  }
+
+  /* COMPACT layout: 4 cols × 4 rows = 16 per page */
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -265,10 +278,11 @@
     overflow: hidden;
     background: white;
     height: 100%;
+    box-sizing: border-box;
   }
 
   /* ============================================
-     WATERMARK — subtle, behind everything, no solid block
+     WATERMARK — clearly visible
      ============================================ */
   .watermark {
     position: absolute;
@@ -279,18 +293,19 @@
     text-transform: uppercase;
     pointer-events: none;
     white-space: nowrap;
-    opacity: 0.06;         /* very light */
-    color: #dc2626;        /* solid red */
+    opacity: 0.14;
+    color: #dc2626;
     z-index: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .watermark.paid { color: #059669; }
   .watermark.over { color: #7c3aed; }
   .watermark.due { color: #dc2626; }
-  /* no border — just text */
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
   /* ============================================
-     HEADER — receipt number is a flex slot, not absolute
+     HEADER
      ============================================ */
   .receipt-header {
     display: flex;
@@ -344,7 +359,6 @@
     white-space: nowrap;
   }
 
-  /* receipt number sits at top-right, in its own column */
   .receipt-number {
     flex-shrink: 0;
     font-family: 'Courier New', monospace;
@@ -375,7 +389,7 @@
     margin-bottom: 1px;
   }
 
-  /* Body — flex column, fills remaining space */
+  /* Body */
   .receipt-body {
     flex: 1;
     display: flex;
@@ -461,6 +475,7 @@
     margin-top: 3px; padding: 3px 5px;
     border-radius: 3px;
     line-height: 1.3;
+    font-weight: 700;
   }
   .balance-note.ok { background: #dcfce7; color: #166534; }
   .balance-note.due { background: #fee2e2; color: #991b1b; }
@@ -506,10 +521,7 @@
   /* ============================================
      FULL LAYOUT TYPOGRAPHY (9 per page)
      ============================================ */
-  .layout-full .receipt-number {
-    font-size: 7px;
-    padding: 1.5px 5px;
-  }
+  .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
   .layout-full .receipt-header .doc-type { font-size: 6.5px; }
@@ -520,12 +532,8 @@
   .layout-full .student-line .left { font-size: 9px; }
   .layout-full .student-line .right { font-size: 7px; }
   .layout-full .payments-table { font-size: 7px; }
-  .layout-full .payments-table thead th {
-    font-size: 5.5px; padding: 1.5px 2.5px;
-  }
-  .layout-full .payments-table tbody td {
-    font-size: 7px; padding: 1.5px 2.5px;
-  }
+  .layout-full .payments-table thead th { font-size: 5.5px; padding: 1.5px 2.5px; }
+  .layout-full .payments-table tbody td { font-size: 7px; padding: 1.5px 2.5px; }
   .layout-full .payments-table tbody td.dt { font-size: 6.5px; }
   .layout-full .totals-block { padding: 3px 4px; margin-top: 3px; }
   .layout-full .totals-row { font-size: 7px; padding: 1px 0; }
@@ -536,63 +544,42 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
-  .layout-full .watermark {
-    font-size: 26px;
-    letter-spacing: 4px;
-  }
+  .layout-full .watermark { font-size: 26px; letter-spacing: 4px; }
 
   /* ============================================
      COMPACT LAYOUT TYPOGRAPHY (16 per page)
      ============================================ */
-  .layout-compact .receipt {
-    padding: 2mm;
-    border-width: 1px;
-  }
-  .layout-compact .receipt-number {
-    font-size: 5.5px;
-    padding: 1px 3px;
-  }
+  .layout-compact .receipt { padding: 2mm; border-width: 1px; }
+  .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
   .layout-compact .receipt-number .num-label { font-size: 4px; }
-  .layout-compact .receipt-header {
-    padding-bottom: 2px;
-    margin-bottom: 2px;
-    gap: 3px;
-    min-height: 24px;
-  }
+  .layout-compact .receipt-header { padding-bottom: 2px; margin-bottom: 2px; gap: 3px; min-height: 24px; }
   .layout-compact .receipt-header .crest { width: 16px; height: 16px; }
   .layout-compact .receipt-header .school { font-size: 7px; }
   .layout-compact .receipt-header .doc-type { font-size: 5px; letter-spacing: 0.4px; }
   .layout-compact .receipt-header .period { display: none; }
   .layout-compact .receipt-header .range-badge { display: none; }
-
   .layout-compact .receipt-body { font-size: 5.5px; }
   .layout-compact .student-line { padding: 1.5px 0; margin-bottom: 2px; }
   .layout-compact .student-line .left { font-size: 7px; }
   .layout-compact .student-line .right { font-size: 5.5px; }
   .layout-compact .payments-table { font-size: 5.5px; margin-bottom: 2px; }
-  .layout-compact .payments-table thead th {
-    font-size: 4.5px; padding: 1px 2px;
-  }
-  .layout-compact .payments-table tbody td {
-    font-size: 5.5px; padding: 1px 2px;
-  }
+  .layout-compact .payments-table thead th { font-size: 4.5px; padding: 1px 2px; }
+  .layout-compact .payments-table tbody td { font-size: 5.5px; padding: 1px 2px; }
   .layout-compact .payments-table tbody td.dt { font-size: 5px; }
   .layout-compact .totals-block { padding: 2px 3px; margin-top: 2px; }
   .layout-compact .totals-row { font-size: 5.5px; padding: 0.5px 0; }
   .layout-compact .totals-row.big { font-size: 7px; margin-top: 1px; padding-top: 1px; }
   .layout-compact .totals-row .prev-hint { font-size: 4.5px; }
-  .layout-compact .balance-note { display: none; }
+  /* CHANGED: compact balance note is now VISIBLE */
+  .layout-compact .balance-note { font-size: 5px; padding: 2px 3px; margin-top: 2px; }
   .layout-compact .receipt-footer { padding-top: 1.5px; margin-top: 1.5px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .left .office { font-size: 5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
-  .layout-compact .watermark {
-    font-size: 16px;
-    letter-spacing: 2px;
-  }
+  .layout-compact .watermark { font-size: 16px; letter-spacing: 2px; }
 
-  /* empty grid slots */
+  /* Empty grid slots */
   .empty-sheet-slot {
     border: 1.2px dashed #eef2f6;
     border-radius: 6px;
@@ -627,29 +614,26 @@
     body { background: white; padding: 0; margin: 0; }
     .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
+    #receiptContainer { overflow: visible !important; }
     .receipt-sheet {
       box-shadow: none;
       margin: 0;
       width: 210mm;
       height: 297mm;
+      page-break-after: always;
+      break-after: page;
     }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
+    .watermark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .balance-note, .totals-block, .receipt-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     @page { size: A4 portrait; margin: 0; }
   }
 
-  /* MOBILE */
+  /* MOBILE — keep the A4 grid, allow horizontal scroll */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
-    .layout-full .receipt-sheet,
-    .layout-compact .receipt-sheet {
-      width: 100%; height: auto;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
-      padding: 8px; box-shadow: none;
-      border: 1px dashed var(--border);
-    }
-    .receipt { height: auto; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
+    #receiptContainer { overflow-x: auto; padding-bottom: 12px; }
   }
 </style>
 </head>
@@ -1091,7 +1075,7 @@
     if (from && to) msg += `<strong>between ${formatDateDisplay(from)} and ${formatDateDisplay(to)}</strong>.`;
     else if (from) msg += `<strong>on or after ${formatDateDisplay(from)}</strong>.`;
     else if (to) msg += `<strong>on or before ${formatDateDisplay(to)}</strong>.`;
-    msg += ' Qualifying students will show <em>all</em> their payments (dated and undated) on their receipts.';
+    msg += ' Qualifying students will show <em>all</em> their payments on their receipts.';
     if (undated) msg += ' <em>Undated payments can also qualify a student when no dated payment matches.</em>';
 
     el.innerHTML = msg;
@@ -1558,7 +1542,6 @@
     const yyyy = d.getFullYear();
     const hh = String(d.getHours()).padStart(2, '0');
     const mi = String(d.getMinutes()).padStart(2, '0');
-    const ss = String(d.getSeconds()).padStart(2, '0');
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
@@ -1594,11 +1577,18 @@
     }
 
     const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
-    const balanceNoteText = isPaid
-      ? 'Fees for ' + escapeHtml(termInfo.termDisplay) + ' are fully paid.'
-      : isOver
-        ? 'Credit of K' + safeMoney(balance) + ' will be applied to future fees.'
-        : 'Outstanding balance of K' + safeMoney(Math.abs(balance)) + ' remains payable.';
+
+    // Prominent status banner — shows in BOTH layouts
+    let statusBannerText = '';
+    if (isPaid) {
+      statusBannerText = '✅ FULLY PAID — Thank you';
+    } else if (isOver) {
+      statusBannerText = '💜 Credit: K' + safeMoney(balance) + ' (applied to future fees)';
+    } else {
+      statusBannerText = '⚠️ Outstanding balance: K' + safeMoney(Math.abs(balance));
+    }
+    const balanceNoteHtml = '<div class="balance-note ' + balanceNoteClass + '">'
+      + statusBannerText + '</div>';
 
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
@@ -1606,7 +1596,6 @@
     const numText = receiptNumber || 'PENDING';
     const numClass = receiptNumber ? '' : ' pending';
 
-    // header extras
     let headerExtra = '';
     if (termInfo.rangeLabel && layout !== 'compact') {
       headerExtra = '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>';
@@ -1626,15 +1615,17 @@
     const totalsRows = [];
     if (layout === 'compact') {
       totalsRows.push('<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
-      totalsRows.push('<div class="totals-row"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>');
-      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      if (prevBalance !== 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">B/F</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
+          + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row"><span class="label">Paid</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     } else {
       totalsRows.push('<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
       if (prevBalance !== 0) {
-        totalsRows.push('<div class="totals-row"><span class="label">Previous balance</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
-          + (prevBalance < 0 ? '' : '+') + 'K' + safeMoney(Math.abs(prevBalance))
-          + (prevBalance < 0 ? ' (due)' : ' (credit)') + '</span></div>');
+        totalsRows.push('<div class="totals-row"><span class="label">Balance B/F</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
+          + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
       }
       totalsRows.push('<div class="totals-row big" style="border-top:1px dashed #cbd5e1;margin-top:2px;padding-top:2px;"><span class="label" style="color:#002b54;font-weight:700;">Total payable</span><span style="color:#002b54;font-weight:700;">K' + safeMoney(totalPayable) + '</span></div>');
       totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
@@ -1643,10 +1634,6 @@
       }
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     }
-
-    const balanceNoteHtml = layout === 'compact'
-      ? ''
-      : '<div class="balance-note ' + balanceNoteClass + '">' + balanceNoteText + '</div>';
 
     return '<div class="receipt">'
       + '<div class="receipt-header">'
