@@ -68,35 +68,22 @@
   }
   .controls select:focus, .controls input:focus { outline: none; border-color: var(--primary); }
 
-  .mode-tabs {
+  .mode-tabs, .layout-toggle {
     display: flex; gap: 6px;
-    background: #f1f5f9; padding: 4px;
+    padding: 4px;
     border-radius: 10px; margin-bottom: 14px;
   }
-  .mode-tabs button {
+  .mode-tabs { background: #f1f5f9; }
+  .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
+  .mode-tabs button, .layout-toggle button {
     flex: 1; padding: 10px 14px;
     background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: var(--muted);
+    font-size: 13px; font-weight: 600;
     cursor: pointer; transition: 0.15s;
   }
-  .mode-tabs button.active {
-    background: white; color: var(--primary);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  }
-
-  .layout-toggle {
-    display: flex; gap: 6px;
-    background: #fffbeb; padding: 4px;
-    border-radius: 10px; margin-bottom: 14px;
-    border: 1px solid #fde68a;
-  }
-  .layout-toggle button {
-    flex: 1; padding: 10px 14px;
-    background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: #92400e;
-    cursor: pointer; transition: 0.15s;
-  }
-  .layout-toggle button.active {
+  .mode-tabs button { color: var(--muted); }
+  .layout-toggle button { color: #92400e; }
+  .mode-tabs button.active, .layout-toggle button.active {
     background: white; color: var(--primary);
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
@@ -215,11 +202,12 @@
   .preview-header .count strong { color: var(--primary); }
 
   /* ============================================
-     RECEIPT GRIDS
+     RECEIPT SHEET
      ============================================ */
   .receipt-sheet {
-    width: 210mm; min-height: 297mm;
-    margin: 0 auto 20px; background: white;
+    width: 210mm;
+    margin: 0 auto 20px;
+    background: white;
     padding: 6mm;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     page-break-after: always;
@@ -227,33 +215,65 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* Full layout: 2 cols × 2 rows */
+  /* ---------- FULL layout: 2 × 2, auto-height rows ---------- */
   .layout-full .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-auto-rows: min-content;
     gap: 4mm;
+    align-content: start;
+  }
+  .layout-full .receipt {
+    min-height: 130mm; /* so a 1-payment receipt isn't a stub */
   }
 
-  /* Compact layout: 4 cols × 3 rows */
+  /* ---------- COMPACT layout: 4 × N, auto-height rows ---------- */
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-auto-rows: min-content;
     gap: 2mm;
     padding: 4mm;
+    align-content: start;
   }
-
-  .receipt {
-    border: 1.2px dashed #94a3b8;
-    border-radius: 6px; padding: 5mm;
-    position: relative;
-    display: flex; flex-direction: column; justify-content: space-between;
-    overflow: hidden; background: white;
+  .layout-compact .receipt {
+    min-height: 55mm; /* enough for the header + 1 payment row + totals */
   }
 
   /* ============================================
-     FULL RECEIPT STYLES
+     RECEIPT BASE
+     ============================================ */
+  .receipt {
+    border: 1.2px dashed #94a3b8;
+    border-radius: 6px;
+    padding: 5mm;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    background: white;
+  }
+
+  /* Inner flex: header at top, body expands, footer at bottom */
+  .receipt-body {
+    flex: 1 1 auto;
+    font-size: 10.5px;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Payments table stretches to fill leftover space */
+  .payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+
+  /* ============================================
+     FULL RECEIPT TYPOGRAPHY
      ============================================ */
   .receipt-header {
     display: flex; align-items: center; gap: 8px;
@@ -285,8 +305,6 @@
     letter-spacing: 0.3px;
   }
 
-  .receipt-body { flex: 1; font-size: 10.5px; line-height: 1.4; }
-
   .student-line {
     display: flex; justify-content: space-between;
     padding: 4px 0; border-bottom: 1px dashed #e2e8f0;
@@ -295,10 +313,6 @@
   .student-line .left { font-weight: 700; color: var(--primary); font-size: 12px; }
   .student-line .right { font-size: 10px; color: var(--muted); text-align: right; }
 
-  .payments-table {
-    width: 100%; border-collapse: collapse;
-    margin-bottom: 6px; font-size: 10px;
-  }
   .payments-table thead th {
     background: #f1f5f9; color: var(--muted);
     font-size: 8.5px; text-transform: uppercase;
@@ -326,8 +340,9 @@
   .totals-block {
     background: #f1f5f9;
     border-left: 3px solid var(--accent);
-    border-radius: 4px; padding: 6px 8px;
-    margin-top: 6px;
+    border-radius: 4px;
+    padding: 6px 8px;
+    margin-top: auto; /* push to bottom of body */
   }
   .totals-row {
     display: flex; justify-content: space-between;
@@ -380,15 +395,25 @@
     font-size: 8.5px; color: var(--muted); font-weight: 700;
   }
 
+  /* ============================================
+     WATERMARK — sits behind content, centered in actual receipt area
+     ============================================ */
   .watermark {
-    position: absolute; top: 50%; left: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%) rotate(-18deg);
-    font-size: 24px; font-weight: 900;
-    letter-spacing: 3px; text-transform: uppercase;
-    pointer-events: none; white-space: nowrap;
-    border: 3px solid; border-radius: 8px;
-    padding: 3px 12px;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+    border: 3px solid;
+    border-radius: 10px;
+    padding: 4px 14px;
+    z-index: 0;
   }
+  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
   .watermark.paid { color: rgba(5, 150, 105, 0.10); border-color: rgba(5, 150, 105, 0.10); }
   .watermark.over { color: rgba(124, 58, 237, 0.10); border-color: rgba(124, 58, 237, 0.10); }
   .watermark.due { color: rgba(220, 38, 38, 0.09); border-color: rgba(220, 38, 38, 0.09); }
@@ -399,7 +424,7 @@
   }
 
   /* ============================================
-     COMPACT RECEIPT OVERRIDES (4×3 layout, ~48×93mm cells)
+     COMPACT OVERRIDES
      ============================================ */
   .layout-compact .receipt {
     padding: 2.5mm;
@@ -428,28 +453,17 @@
     letter-spacing: 0.6px;
     margin-top: 1px;
   }
-  .layout-compact .receipt-header .period {
-    display: none;
-  }
-  .layout-compact .receipt-header .range-badge {
-    display: none;
-  }
+  .layout-compact .receipt-header .period { display: none; }
+  .layout-compact .receipt-header .range-badge { display: none; }
 
-  .layout-compact .receipt-body {
-    font-size: 7px;
-    line-height: 1.3;
-  }
+  .layout-compact .receipt-body { font-size: 7px; line-height: 1.3; }
 
   .layout-compact .student-line {
     padding: 2px 0;
     margin-bottom: 2px;
   }
-  .layout-compact .student-line .left {
-    font-size: 8.5px;
-  }
-  .layout-compact .student-line .right {
-    font-size: 6.5px;
-  }
+  .layout-compact .student-line .left { font-size: 8.5px; }
+  .layout-compact .student-line .right { font-size: 6.5px; }
 
   .layout-compact .payments-table {
     margin-bottom: 2px;
@@ -464,9 +478,7 @@
     padding: 1.5px 2px;
     font-size: 6.5px;
   }
-  .layout-compact .payments-table tbody td.dt {
-    font-size: 6px;
-  }
+  .layout-compact .payments-table tbody td.dt { font-size: 6px; }
 
   .layout-compact .totals-block {
     padding: 3px 4px;
@@ -490,17 +502,13 @@
     margin-top: 1px;
   }
 
-  .layout-compact .balance-note {
-    display: none;
-  }
+  .layout-compact .balance-note { display: none; }
 
   .layout-compact .receipt-footer {
     padding-top: 2px;
     margin-top: 2px;
   }
-  .layout-compact .receipt-footer .left {
-    display: none;
-  }
+  .layout-compact .receipt-footer .left { display: none; }
   .layout-compact .receipt-footer .right {
     font-size: 6px;
     width: 100%;
@@ -516,7 +524,7 @@
   .layout-compact .watermark {
     font-size: 14px;
     letter-spacing: 2px;
-    padding: 1px 6px;
+    padding: 2px 8px;
     border-width: 2px;
   }
 
@@ -550,8 +558,8 @@
     .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
     .receipt-sheet {
-      box-shadow: none; margin: 0;
-      min-height: 297mm;
+      box-shadow: none;
+      margin: 0;
     }
     .layout-full .receipt-sheet { padding: 6mm; }
     .layout-compact .receipt-sheet { padding: 4mm; }
@@ -564,12 +572,13 @@
     .row { grid-template-columns: 1fr; }
     .layout-full .receipt-sheet,
     .layout-compact .receipt-sheet {
-      width: 100%; min-height: auto;
+      width: 100%;
       grid-template-columns: 1fr;
-      grid-template-rows: auto;
       padding: 8px; box-shadow: none;
       border: 1px dashed var(--border);
     }
+    .layout-full .receipt { min-height: auto; }
+    .layout-compact .receipt { min-height: auto; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
   }
 </style>
@@ -598,7 +607,7 @@
 
     <div class="layout-toggle">
       <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 4 per page</button>
-      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 12 per page</button>
+      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — up to 12 per page</button>
     </div>
 
     <div class="row">
@@ -681,8 +690,8 @@
 
     <div class="info">
       <strong>Layout tips:</strong>
-      <strong>Full</strong> gives you a proper receipt with previous balance, footer, and address — 4 per A4.
-      <strong>Compact</strong> packs 12 per A4 — good for high-volume days. Compact drops the footer text and hides the "previous balance" as a small inline hint next to Balance.
+      <strong>Full</strong> — 4 large receipts per A4 sheet with all the detail. Use at the end of term.
+      <strong>Compact</strong> — up to 12 smaller slips per A4. Receipts automatically resize to their content — a student with one payment gets a short slip, one with six payments gets a taller slip. The page packs as many rows as will fit.
     </div>
   </div>
 
@@ -716,7 +725,7 @@
   let currentClass = null;
   let receiptData = null;
   let currentMode = 'single';
-  let currentLayout = 'full';  // 'full' | 'compact'
+  let currentLayout = 'full';
   let selectedStudents = new Set();
 
   const dataCache = new Map();
@@ -861,9 +870,6 @@
     loadTerms();
   }
 
-  // ============================================================
-  // INIT
-  // ============================================================
   window.onload = function () {
     try {
       if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
@@ -1038,7 +1044,6 @@
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
-    // Re-render the preview with the new layout
     if (selectedStudents.size > 0 && receiptData) {
       const students = Array.from(selectedStudents)
         .map(rn => receiptData.students.find(s => s.rowNumber === rn))
@@ -1281,6 +1286,11 @@
   // ============================================================
   // PREVIEW RENDERING
   // ============================================================
+  // Compact layout: 4 columns, rows auto-size. We pack receipts into
+  // pages by estimating how many will fit at their natural heights.
+  // For simplicity we group by 12 per sheet, but the CSS handles the
+  // actual auto-sizing; if a sheet overflows, the browser wraps it to
+  // the next page cleanly because each receipt is page-break-avoid.
   function renderPreview(students) {
     if (!students || !students.length) {
       document.getElementById('receiptContainer').innerHTML = '';
@@ -1288,7 +1298,6 @@
     }
 
     const perSheet = currentLayout === 'compact' ? 12 : 4;
-    const cols = currentLayout === 'compact' ? 4 : 2;
 
     const from = getDateFromInput();
     const to = getDateToInput();
@@ -1346,7 +1355,6 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
-    // Payments rows
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
       rowsHTML = '<tr><td colspan="3" style="padding:6px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
@@ -1374,9 +1382,8 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
-    // ----- COMPACT layout: minimal receipt -----
+    // ----- COMPACT -----
     if (layout === 'compact') {
-      // Previous-balance hint shown inline next to Balance
       let prevHint = '';
       if (prevBalance !== 0) {
         prevHint = '<span class="prev-hint">'
@@ -1420,7 +1427,7 @@
       + '</div>';
     }
 
-    // ----- FULL layout: rich receipt -----
+    // ----- FULL -----
     return '<div class="receipt">'
       + '<div class="receipt-number">[Pending]</div>'
       + '<div class="receipt-header">'
