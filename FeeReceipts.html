@@ -318,7 +318,7 @@
     border-radius: 6px;
   }
 
-  /* loading overlay for buttons */
+  /* loading overlay */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -385,7 +385,7 @@
 
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student — shows every payment recorded in the term. 4 receipts per A4 sheet.</p>
+    <p class="subtitle">One receipt per student — shows every payment recorded in the term plus any previous balance. 4 receipts per A4 sheet.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -694,9 +694,8 @@
     document.getElementById('btnSelectAll').style.display = mode === 'batch' ? 'inline-block' : 'none';
     clearSelection();
     if (mode === 'single') {
-      if (currentClass) handleClassChange(); // re-populate student select
+      if (currentClass) handleClassChange();
     } else {
-      // If we already have data, render list immediately
       if (receiptData) renderStudentList(receiptData.students);
     }
   }
@@ -767,7 +766,6 @@
     }
 
     if (fromCache) {
-      // Tiny toast-style note
       console.log('Loaded from cache — instant.');
     }
   }
@@ -783,7 +781,6 @@
     def.textContent = '-- Select Student (' + students.length + ' total) --';
     sel.appendChild(def);
 
-    // Show students with payments first
     const withPay = students.filter(s => s.hasPayments);
     const withoutPay = students.filter(s => !s.hasPayments);
 
@@ -825,7 +822,6 @@
     selectedStudents.clear();
     selectedStudents.add(student.rowNumber);
 
-    // Render single receipt immediately
     renderPreview([student]);
     document.getElementById('btnPrint').disabled = false;
     document.getElementById('btnPDF').disabled = false;
@@ -836,13 +832,11 @@
   // ============================================================
   function renderStudentList(students) {
     const list = document.getElementById('studentList');
-    // Sort: with payments first, then alphabetical
     const sorted = students.slice().sort((a, b) => {
       if (a.hasPayments !== b.hasPayments) return a.hasPayments ? -1 : 1;
       return a.studentName.localeCompare(b.studentName);
     });
 
-    // Build the whole HTML as a string for speed
     let html = '';
     if (!sorted.length) {
       html = '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">No students found.</div>';
@@ -880,7 +874,6 @@
     }
     list.innerHTML = html;
 
-    // Attach a single delegated listener for speed
     list.removeEventListener('change', onStudentListChange);
     list.addEventListener('change', onStudentListChange);
 
@@ -919,7 +912,6 @@
     updateSelectAllLabel();
     updatePreviewHeader();
 
-    // Render preview live as they tick
     if (count > 0 && currentMode === 'batch') {
       const students = Array.from(selectedStudents)
         .map(rn => receiptData.students.find(s => s.rowNumber === rn))
@@ -960,7 +952,7 @@
   }
 
   // ============================================================
-  // PREVIEW RENDERING — single string, then innerHTML (very fast)
+  // PREVIEW RENDERING
   // ============================================================
   function renderPreview(students) {
     if (!students || !students.length) {
@@ -981,7 +973,6 @@
       const group = students.slice(i, i + 4);
       html += '<div class="receipt-sheet">';
       group.forEach(s => { html += buildReceiptHTML(s, termInfo); });
-      // Pad with empty slots so the cut lines look right
       for (let k = group.length; k < 4; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
@@ -997,6 +988,7 @@
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
       : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
     const balance = safeNum(student.cumulativeBalance);
+    const prevBalance = safeNum(student.previousBalance);
     const isPaid = balance === 0;
     const isOver = balance > 0;
 
@@ -1027,6 +1019,10 @@
         ? 'Credit of K' + safeMoney(balance) + ' will be applied to future fees.'
         : 'Outstanding balance of K' + safeMoney(Math.abs(balance)) + ' remains payable.';
 
+    // Total payable = this term's fees + any outstanding previous balance
+    const outstandingPrev = Math.max(0, -prevBalance);
+    const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
+
     return '<div class="receipt">'
       + '<div class="receipt-number">[Pending]</div>'
       + '<div class="receipt-header">'
@@ -1048,6 +1044,15 @@
         + '</table>'
         + '<div class="totals-block">'
           + '<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>'
+          + (prevBalance !== 0
+              ? '<div class="totals-row"><span class="label">Previous balance</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">' +
+                  (prevBalance < 0 ? '' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) +
+                  (prevBalance < 0 ? ' (due)' : ' (credit)') + '</span></div>'
+              : '')
+          + '<div class="totals-row" style="border-top:1px dashed #cbd5e1;margin-top:3px;padding-top:4px;">'
+            + '<span class="label" style="color:#002b54;font-weight:700;">Total payable</span>'
+            + '<span style="color:#002b54;font-weight:700;">K' + safeMoney(totalPayable) + '</span>'
+          + '</div>'
           + '<div class="totals-row"><span class="label">Total paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>'
           + (student.totalRefunded > 0 ? '<div class="totals-row"><span class="label">Refunded</span><span style="color:#7c3aed;font-weight:700;">−K' + safeMoney(student.totalRefunded) + '</span></div>' : '')
           + '<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>'
@@ -1078,7 +1083,6 @@
 
     showLoading('Preparing receipts…');
 
-    // Assign receipt numbers in one call
     let numbers = [];
     try {
       const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
@@ -1091,12 +1095,10 @@
 
     applyReceiptNumbers(students, numbers);
 
-    // Commit the counter (fire-and-forget, do not block print)
     callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => {
       console.warn('Counter commit failed:', e);
     });
 
-    // Log receipts (fire-and-forget)
     const receiptsLog = students.map((s, idx) => ({
       receiptNumber: numbers[idx] || '',
       studentName: s.studentName,
@@ -1113,14 +1115,11 @@
 
     hideLoading();
 
-    // Trigger the browser print dialog on next frame
     setTimeout(() => window.print(), 150);
   }
 
   async function saveAsPDF() {
-    // Same flow, just hint at the "Save as PDF" destination
     await printReceipts();
-    // The user picks "Save as PDF" in the print dialog
   }
 
   function getSelectedStudents() {
@@ -1131,7 +1130,6 @@
   }
 
   function applyReceiptNumbers(students, numbers) {
-    // Update the receipt numbers in the DOM directly (fast)
     const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
     receipts.forEach((el, idx) => {
       if (numbers[idx]) el.textContent = numbers[idx];
