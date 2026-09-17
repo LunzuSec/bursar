@@ -267,78 +267,67 @@
     height: 100%;
   }
 
-  /* Watermark */
+  /* ============================================
+     WATERMARK — subtle, behind everything, no solid block
+     ============================================ */
   .watermark {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%) rotate(-18deg);
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     pointer-events: none;
     white-space: nowrap;
-    border: 3px solid;
-    border-radius: 8px;
+    opacity: 0.06;         /* very light */
+    color: #dc2626;        /* solid red */
     z-index: 0;
   }
+  .watermark.paid { color: #059669; }
+  .watermark.over { color: #7c3aed; }
+  .watermark.due { color: #dc2626; }
+  /* no border — just text */
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
-  .watermark.paid { color: rgba(5, 150, 105, 0.09); border-color: rgba(5, 150, 105, 0.09); }
-  .watermark.over { color: rgba(124, 58, 237, 0.09); border-color: rgba(124, 58, 237, 0.09); }
-  .watermark.due { color: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.08); }
 
-  /* Receipt number - top right corner */
-  .receipt-number {
-    position: absolute;
-    top: 2.5mm; right: 2.5mm;
-    font-family: 'Courier New', monospace;
-    font-weight: 700;
-    background: #f1f5f9;
-    padding: 1px 5px;
-    border-radius: 3px;
-    border: 1px solid #cbd5e1;
-    letter-spacing: 0.3px;
-    z-index: 2;
-  }
-  .receipt-number.pending {
-    color: #b45309;
-    background: #fffbeb;
-    border-color: #fde68a;
-  }
-
-  /* Header */
+  /* ============================================
+     HEADER — receipt number is a flex slot, not absolute
+     ============================================ */
   .receipt-header {
-    display: flex; align-items: center; gap: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     border-bottom: 1.2px solid var(--primary);
-    padding-bottom: 3px; margin-bottom: 4px;
-    padding-right: 55px; /* space for receipt number */
-    min-height: 32px;
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+    min-height: 34px;
   }
-  .receipt-header img {
-    width: 24px; height: 24px; object-fit: contain;
+  .receipt-header .crest {
+    width: 26px; height: 26px;
+    object-fit: contain;
     flex-shrink: 0;
   }
-  .receipt-header .title { flex: 1; min-width: 0; }
+  .receipt-header .title {
+    flex: 1;
+    min-width: 0;
+  }
   .receipt-header .school {
     font-weight: 700;
     color: var(--primary);
     letter-spacing: 0.2px;
-    line-height: 1.1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.15;
   }
   .receipt-header .doc-type {
-    color: var(--accent);
+    color: #b45309;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    line-height: 1.1;
+    line-height: 1.15;
     margin-top: 1px;
   }
   .receipt-header .period {
     color: var(--muted);
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1.15;
     margin-top: 1px;
     white-space: nowrap;
     overflow: hidden;
@@ -348,13 +337,45 @@
     display: inline-block;
     background: #ecfdf5; color: #065f46;
     font-weight: 700;
-    padding: 1px 5px; border-radius: 20px;
+    padding: 1px 5px;
+    border-radius: 20px;
     margin-top: 1px;
     letter-spacing: 0.3px;
     white-space: nowrap;
   }
 
-  /* Body — flex column */
+  /* receipt number sits at top-right, in its own column */
+  .receipt-number {
+    flex-shrink: 0;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: var(--primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .receipt-number.pending {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+  .receipt-number .num-label {
+    display: block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 1px;
+  }
+
+  /* Body — flex column, fills remaining space */
   .receipt-body {
     flex: 1;
     display: flex;
@@ -410,7 +431,6 @@
     color: #cbd5e1; font-style: italic;
   }
 
-  /* Totals — pinned to bottom of body area */
   .totals-block {
     margin-top: auto;
     background: #f1f5f9;
@@ -446,7 +466,6 @@
   .balance-note.due { background: #fee2e2; color: #991b1b; }
   .balance-note.over { background: #ede9fe; color: #5b21b6; }
 
-  /* Footer — pinned to bottom of receipt */
   .receipt-footer {
     margin-top: 3px;
     padding-top: 3px;
@@ -487,37 +506,39 @@
   /* ============================================
      FULL LAYOUT TYPOGRAPHY (9 per page)
      ============================================ */
-  .layout-full .receipt-number { font-size: 7px; }
-  .layout-full .receipt-header .school { font-size: 8.5px; }
-  .layout-full .receipt-header .doc-type { font-size: 6px; }
-  .layout-full .receipt-header .period { font-size: 6px; }
+  .layout-full .receipt-number {
+    font-size: 7px;
+    padding: 1.5px 5px;
+  }
+  .layout-full .receipt-number .num-label { font-size: 5px; }
+  .layout-full .receipt-header .school { font-size: 9px; }
+  .layout-full .receipt-header .doc-type { font-size: 6.5px; }
+  .layout-full .receipt-header .period { font-size: 6.5px; }
   .layout-full .receipt-header .range-badge { font-size: 5.5px; }
   .layout-full .receipt-body { font-size: 7px; }
   .layout-full .student-line { padding: 2px 0; margin-bottom: 3px; }
-  .layout-full .student-line .left { font-size: 8.5px; }
-  .layout-full .student-line .right { font-size: 6.5px; }
-  .layout-full .payments-table { font-size: 6.5px; }
+  .layout-full .student-line .left { font-size: 9px; }
+  .layout-full .student-line .right { font-size: 7px; }
+  .layout-full .payments-table { font-size: 7px; }
   .layout-full .payments-table thead th {
     font-size: 5.5px; padding: 1.5px 2.5px;
   }
   .layout-full .payments-table tbody td {
-    font-size: 6.5px; padding: 1.5px 2.5px;
+    font-size: 7px; padding: 1.5px 2.5px;
   }
-  .layout-full .payments-table tbody td.dt { font-size: 6px; }
+  .layout-full .payments-table tbody td.dt { font-size: 6.5px; }
   .layout-full .totals-block { padding: 3px 4px; margin-top: 3px; }
-  .layout-full .totals-row { font-size: 6.5px; padding: 1px 0; }
-  .layout-full .totals-row.big { font-size: 8.5px; }
+  .layout-full .totals-row { font-size: 7px; padding: 1px 0; }
+  .layout-full .totals-row.big { font-size: 9px; }
   .layout-full .totals-row .prev-hint { font-size: 5.5px; }
-  .layout-full .balance-note { font-size: 6px; padding: 2px 4px; margin-top: 2px; }
+  .layout-full .balance-note { font-size: 6.5px; padding: 2px 4px; margin-top: 2px; }
   .layout-full .receipt-footer { padding-top: 2px; margin-top: 2px; }
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
   .layout-full .watermark {
-    font-size: 22px;
-    letter-spacing: 2px;
-    padding: 3px 10px;
-    border-width: 2px;
+    font-size: 26px;
+    letter-spacing: 4px;
   }
 
   /* ============================================
@@ -528,18 +549,17 @@
     border-width: 1px;
   }
   .layout-compact .receipt-number {
-    font-size: 6px;
-    top: 1.5mm; right: 1.5mm;
-    padding: 0.5px 3px;
+    font-size: 5.5px;
+    padding: 1px 3px;
   }
+  .layout-compact .receipt-number .num-label { font-size: 4px; }
   .layout-compact .receipt-header {
-    padding-right: 40px;
     padding-bottom: 2px;
     margin-bottom: 2px;
     gap: 3px;
-    min-height: 22px;
+    min-height: 24px;
   }
-  .layout-compact .receipt-header img { width: 15px; height: 15px; }
+  .layout-compact .receipt-header .crest { width: 16px; height: 16px; }
   .layout-compact .receipt-header .school { font-size: 7px; }
   .layout-compact .receipt-header .doc-type { font-size: 5px; letter-spacing: 0.4px; }
   .layout-compact .receipt-header .period { display: none; }
@@ -562,18 +582,20 @@
   .layout-compact .totals-row.big { font-size: 7px; margin-top: 1px; padding-top: 1px; }
   .layout-compact .totals-row .prev-hint { font-size: 4.5px; }
   .layout-compact .balance-note { display: none; }
-  .layout-compact .receipt-footer {
-    padding-top: 1.5px; margin-top: 1.5px;
-  }
+  .layout-compact .receipt-footer { padding-top: 1.5px; margin-top: 1.5px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .left .office { font-size: 5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
   .layout-compact .watermark {
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    padding: 1px 5px;
-    border-width: 1.5px;
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  /* empty grid slots */
+  .empty-sheet-slot {
+    border: 1.2px dashed #eef2f6;
+    border-radius: 6px;
   }
 
   /* LOADING OVERLAY */
@@ -737,9 +759,9 @@
 
     <div class="info">
       <strong>Layouts:</strong>
-      <strong>Full</strong> — 9 slightly larger receipts per A4 (3×3). Good default.
-      <strong>Compact</strong> — 16 receipts per A4 (4×4). Best for bulk printing on busy days.
-      Every receipt is auto-sized to its content. Numbers are unique and never reused.
+      <strong>Full</strong> — 9 receipts per A4 (3×3).
+      <strong>Compact</strong> — 16 receipts per A4 (4×4).
+      Numbers are unique and never reused.
     </div>
   </div>
 
@@ -1581,10 +1603,10 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
-    const numText = receiptNumber || '— PENDING —';
+    const numText = receiptNumber || 'PENDING';
     const numClass = receiptNumber ? '' : ' pending';
 
-    // ----- Build the receipt HTML (shared structure) -----
+    // header extras
     let headerExtra = '';
     if (termInfo.rangeLabel && layout !== 'compact') {
       headerExtra = '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>';
@@ -1627,13 +1649,16 @@
       : '<div class="balance-note ' + balanceNoteClass + '">' + balanceNoteText + '</div>';
 
     return '<div class="receipt">'
-      + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
       + '<div class="receipt-header">'
-        + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
+        + '<img class="crest" src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
         + '<div class="title">'
           + '<div class="school">' + escapeHtml(schoolName) + '</div>'
           + '<div class="doc-type">' + escapeHtml(termInfo.termDisplay) + ' · FEE RECEIPT</div>'
           + headerExtra
+        + '</div>'
+        + '<div class="receipt-number' + numClass + '">'
+          + '<span class="num-label">Receipt No.</span>'
+          + escapeHtml(numText)
         + '</div>'
       + '</div>'
       + '<div class="receipt-body">'
