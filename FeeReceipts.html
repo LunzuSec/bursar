@@ -68,35 +68,22 @@
   }
   .controls select:focus, .controls input:focus { outline: none; border-color: var(--primary); }
 
-  .mode-tabs {
+  .mode-tabs, .layout-toggle {
     display: flex; gap: 6px;
-    background: #f1f5f9; padding: 4px;
+    padding: 4px;
     border-radius: 10px; margin-bottom: 14px;
   }
-  .mode-tabs button {
+  .mode-tabs { background: #f1f5f9; }
+  .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
+  .mode-tabs button, .layout-toggle button {
     flex: 1; padding: 10px 14px;
     background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: var(--muted);
+    font-size: 13px; font-weight: 600;
     cursor: pointer; transition: 0.15s;
   }
-  .mode-tabs button.active {
-    background: white; color: var(--primary);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  }
-
-  .layout-toggle {
-    display: flex; gap: 6px;
-    background: #fffbeb; padding: 4px;
-    border-radius: 10px; margin-bottom: 14px;
-    border: 1px solid #fde68a;
-  }
-  .layout-toggle button {
-    flex: 1; padding: 10px 14px;
-    background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: #92400e;
-    cursor: pointer; transition: 0.15s;
-  }
-  .layout-toggle button.active {
+  .mode-tabs button { color: var(--muted); }
+  .layout-toggle button { color: #92400e; }
+  .mode-tabs button.active, .layout-toggle button.active {
     background: white; color: var(--primary);
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
@@ -155,6 +142,16 @@
     font-size: 11px; color: var(--muted); display: block;
     margin-top: 2px; font-weight: 400;
   }
+  .student-row .dup-warn {
+    font-size: 10.5px;
+    color: #b45309;
+    background: #fffbeb;
+    padding: 1px 6px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 2px;
+    font-weight: 600;
+  }
   .status-pill {
     font-size: 10px; font-weight: 700;
     padding: 3px 9px; border-radius: 20px;
@@ -203,6 +200,17 @@
   }
   .error-msg.show { display: block; }
 
+  .warning-msg {
+    background: #fffbeb; color: #92400e;
+    padding: 12px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 12px;
+    border-left: 4px solid #f59e0b;
+    display: none;
+    line-height: 1.5;
+  }
+  .warning-msg.show { display: block; }
+  .warning-msg strong { color: #78350f; }
+
   .preview-header {
     max-width: 1000px; margin: 0 auto 12px;
     justify-content: space-between; align-items: center;
@@ -215,101 +223,180 @@
   .preview-header .count strong { color: var(--primary); }
 
   /* ============================================
-     RECEIPT GRIDS
+     RECEIPT SHEET
      ============================================ */
   .receipt-sheet {
-    width: 210mm; min-height: 297mm;
-    margin: 0 auto 20px; background: white;
-    padding: 6mm;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto 20px;
+    background: white;
+    padding: 5mm;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     page-break-after: always;
     break-after: page;
+    overflow: hidden;
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* Full layout: 2 cols × 2 rows */
+  /* FULL: 3 cols × 3 rows = 9 per page */
   .layout-full .receipt-sheet {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 4mm;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3mm;
   }
 
-  /* Compact layout: 4 cols × 3 rows */
+  /* COMPACT: 4 cols × 4 rows = 16 per page */
   .layout-compact .receipt-sheet {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: 2mm;
     padding: 4mm;
   }
 
   .receipt {
     border: 1.2px dashed #94a3b8;
-    border-radius: 6px; padding: 5mm;
+    border-radius: 6px;
+    padding: 3mm;
     position: relative;
-    display: flex; flex-direction: column; justify-content: space-between;
-    overflow: hidden; background: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: white;
+    height: 100%;
   }
 
-  /* ============================================
-     FULL RECEIPT STYLES
-     ============================================ */
-  .receipt-header {
-    display: flex; align-items: center; gap: 8px;
-    border-bottom: 1.5px solid var(--primary);
-    padding-bottom: 5px; margin-bottom: 6px;
+  /* Watermark */
+  .watermark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+    border: 3px solid;
+    border-radius: 8px;
+    z-index: 0;
   }
-  .receipt-header img { width: 34px; height: 34px; object-fit: contain; }
-  .receipt-header .title { flex: 1; }
+  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
+  .watermark.paid { color: rgba(5, 150, 105, 0.09); border-color: rgba(5, 150, 105, 0.09); }
+  .watermark.over { color: rgba(124, 58, 237, 0.09); border-color: rgba(124, 58, 237, 0.09); }
+  .watermark.due { color: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.08); }
+
+  /* Receipt number - top right corner */
+  .receipt-number {
+    position: absolute;
+    top: 2.5mm; right: 2.5mm;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #cbd5e1;
+    letter-spacing: 0.3px;
+    z-index: 2;
+  }
+  .receipt-number.pending {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+
+  /* Header */
+  .receipt-header {
+    display: flex; align-items: center; gap: 5px;
+    border-bottom: 1.2px solid var(--primary);
+    padding-bottom: 3px; margin-bottom: 4px;
+    padding-right: 55px; /* space for receipt number */
+    min-height: 32px;
+  }
+  .receipt-header img {
+    width: 24px; height: 24px; object-fit: contain;
+    flex-shrink: 0;
+  }
+  .receipt-header .title { flex: 1; min-width: 0; }
   .receipt-header .school {
-    font-size: 12px; font-weight: 700;
-    color: var(--primary); letter-spacing: 0.4px;
-    line-height: 1.15;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.2px;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .receipt-header .doc-type {
-    font-size: 9px; color: var(--accent);
-    font-weight: 700; letter-spacing: 1.4px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
+    line-height: 1.1;
+    margin-top: 1px;
   }
   .receipt-header .period {
-    font-size: 9px; color: var(--muted);
-    margin-top: 1px; font-weight: 600;
+    color: var(--muted);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .receipt-header .range-badge {
     display: inline-block;
     background: #ecfdf5; color: #065f46;
-    font-size: 8.5px; font-weight: 700;
-    padding: 1px 6px; border-radius: 20px;
-    margin-top: 2px;
+    font-weight: 700;
+    padding: 1px 5px; border-radius: 20px;
+    margin-top: 1px;
     letter-spacing: 0.3px;
+    white-space: nowrap;
   }
 
-  .receipt-body { flex: 1; font-size: 10.5px; line-height: 1.4; }
+  /* Body — flex column */
+  .receipt-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    line-height: 1.3;
+  }
 
   .student-line {
     display: flex; justify-content: space-between;
-    padding: 4px 0; border-bottom: 1px dashed #e2e8f0;
-    margin-bottom: 6px;
+    padding: 3px 0; border-bottom: 1px dashed #e2e8f0;
+    margin-bottom: 4px;
+    gap: 4px;
   }
-  .student-line .left { font-weight: 700; color: var(--primary); font-size: 12px; }
-  .student-line .right { font-size: 10px; color: var(--muted); text-align: right; }
+  .student-line .left {
+    font-weight: 700; color: var(--primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .student-line .right {
+    color: var(--muted); text-align: right;
+    white-space: nowrap; flex-shrink: 0;
+  }
 
   .payments-table {
     width: 100%; border-collapse: collapse;
-    margin-bottom: 6px; font-size: 10px;
+    margin-bottom: 4px;
   }
   .payments-table thead th {
     background: #f1f5f9; color: var(--muted);
-    font-size: 8.5px; text-transform: uppercase;
-    letter-spacing: 0.4px; padding: 4px 5px;
-    text-align: left; border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 2px 3px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
   }
   .payments-table thead th.amt, .payments-table thead th.dt { text-align: right; }
   .payments-table tbody td {
-    padding: 4px 5px; border-bottom: 1px solid #eef2f6;
-    font-size: 10px;
+    padding: 2px 3px;
+    border-bottom: 1px solid #eef2f6;
   }
+  .payments-table tbody tr:last-child td { border-bottom: none; }
   .payments-table tbody td.amt {
     text-align: right; font-weight: 700;
     color: #059669; white-space: nowrap;
@@ -317,210 +404,179 @@
   .payments-table tbody td.amt.refund { color: #7c3aed; }
   .payments-table tbody td.dt {
     text-align: right; color: var(--muted);
-    white-space: nowrap; font-size: 9.5px;
+    white-space: nowrap;
   }
   .payments-table tbody td.dt.nodate {
     color: #cbd5e1; font-style: italic;
   }
 
+  /* Totals — pinned to bottom of body area */
   .totals-block {
+    margin-top: auto;
     background: #f1f5f9;
     border-left: 3px solid var(--accent);
-    border-radius: 4px; padding: 6px 8px;
-    margin-top: 6px;
+    border-radius: 3px;
+    padding: 3px 5px;
   }
   .totals-row {
     display: flex; justify-content: space-between;
-    font-size: 10px; padding: 2px 0;
+    padding: 1px 0;
   }
   .totals-row.big {
     border-top: 1px solid var(--border);
-    margin-top: 3px; padding-top: 5px;
-    font-size: 12px; font-weight: 800;
+    margin-top: 2px; padding-top: 2px;
+    font-weight: 800;
     color: var(--primary);
   }
   .totals-row .label { color: var(--muted); }
   .totals-row.big .label { color: var(--primary); }
+  .totals-row .prev-hint {
+    display: block;
+    color: #94a3b8;
+    font-style: italic;
+    margin-top: 1px;
+  }
 
   .balance-note {
-    margin-top: 6px; padding: 5px 8px;
-    border-radius: 4px; font-size: 9.5px; line-height: 1.4;
+    margin-top: 3px; padding: 3px 5px;
+    border-radius: 3px;
+    line-height: 1.3;
   }
   .balance-note.ok { background: #dcfce7; color: #166534; }
   .balance-note.due { background: #fee2e2; color: #991b1b; }
   .balance-note.over { background: #ede9fe; color: #5b21b6; }
 
+  /* Footer — pinned to bottom of receipt */
   .receipt-footer {
-    margin-top: 6px; padding-top: 5px;
+    margin-top: 3px;
+    padding-top: 3px;
     border-top: 1px dashed var(--border);
-    display: flex; justify-content: space-between;
-    align-items: flex-end; gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
   }
   .receipt-footer .left {
-    font-size: 8.5px; color: var(--muted); line-height: 1.4;
+    color: var(--muted);
+    line-height: 1.25;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .receipt-footer .left .office {
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
   }
   .receipt-footer .right {
-    text-align: right; font-size: 8.5px; color: var(--muted);
+    text-align: right;
+    color: var(--muted);
     font-family: 'Courier New', monospace;
-    line-height: 1.4;
+    line-height: 1.25;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .receipt-footer .right .ts-label {
-    font-size: 7.5px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     display: block;
-    margin-bottom: 1px;
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #94a3b8;
   }
 
-  .receipt-number {
-    position: absolute; top: 5mm; right: 5mm;
-    font-family: 'Courier New', monospace;
-    font-size: 8.5px; color: var(--muted); font-weight: 700;
-  }
-
-  .watermark {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-18deg);
-    font-size: 24px; font-weight: 900;
-    letter-spacing: 3px; text-transform: uppercase;
-    pointer-events: none; white-space: nowrap;
-    border: 3px solid; border-radius: 8px;
-    padding: 3px 12px;
-  }
-  .watermark.paid { color: rgba(5, 150, 105, 0.10); border-color: rgba(5, 150, 105, 0.10); }
-  .watermark.over { color: rgba(124, 58, 237, 0.10); border-color: rgba(124, 58, 237, 0.10); }
-  .watermark.due { color: rgba(220, 38, 38, 0.09); border-color: rgba(220, 38, 38, 0.09); }
-
-  .empty-sheet-slot {
-    border: 1.2px dashed #eef2f6;
-    border-radius: 6px;
-  }
-
   /* ============================================
-     COMPACT RECEIPT OVERRIDES (4×3 layout, ~48×93mm cells)
+     FULL LAYOUT TYPOGRAPHY (9 per page)
      ============================================ */
-  .layout-compact .receipt {
-    padding: 2.5mm;
-    border-width: 1px;
+  .layout-full .receipt-number { font-size: 7px; }
+  .layout-full .receipt-header .school { font-size: 8.5px; }
+  .layout-full .receipt-header .doc-type { font-size: 6px; }
+  .layout-full .receipt-header .period { font-size: 6px; }
+  .layout-full .receipt-header .range-badge { font-size: 5.5px; }
+  .layout-full .receipt-body { font-size: 7px; }
+  .layout-full .student-line { padding: 2px 0; margin-bottom: 3px; }
+  .layout-full .student-line .left { font-size: 8.5px; }
+  .layout-full .student-line .right { font-size: 6.5px; }
+  .layout-full .payments-table { font-size: 6.5px; }
+  .layout-full .payments-table thead th {
+    font-size: 5.5px; padding: 1.5px 2.5px;
   }
-  .layout-compact .receipt-number {
-    top: 2mm; right: 2mm;
-    font-size: 6.5px;
+  .layout-full .payments-table tbody td {
+    font-size: 6.5px; padding: 1.5px 2.5px;
   }
-  .layout-compact .receipt-header {
-    gap: 4px;
-    padding-bottom: 2px;
-    margin-bottom: 3px;
-    border-bottom-width: 1px;
-  }
-  .layout-compact .receipt-header img {
-    width: 18px; height: 18px;
-  }
-  .layout-compact .receipt-header .school {
-    font-size: 7.5px;
-    line-height: 1;
-    letter-spacing: 0;
-  }
-  .layout-compact .receipt-header .doc-type {
-    font-size: 6px;
-    letter-spacing: 0.6px;
-    margin-top: 1px;
-  }
-  .layout-compact .receipt-header .period {
-    display: none;
-  }
-  .layout-compact .receipt-header .range-badge {
-    display: none;
-  }
-
-  .layout-compact .receipt-body {
-    font-size: 7px;
-    line-height: 1.3;
-  }
-
-  .layout-compact .student-line {
-    padding: 2px 0;
-    margin-bottom: 2px;
-  }
-  .layout-compact .student-line .left {
-    font-size: 8.5px;
-  }
-  .layout-compact .student-line .right {
-    font-size: 6.5px;
-  }
-
-  .layout-compact .payments-table {
-    margin-bottom: 2px;
-    font-size: 6.5px;
-  }
-  .layout-compact .payments-table thead th {
-    font-size: 5.5px;
-    padding: 1.5px 2px;
-    letter-spacing: 0.3px;
-  }
-  .layout-compact .payments-table tbody td {
-    padding: 1.5px 2px;
-    font-size: 6.5px;
-  }
-  .layout-compact .payments-table tbody td.dt {
-    font-size: 6px;
-  }
-
-  .layout-compact .totals-block {
-    padding: 3px 4px;
-    margin-top: 2px;
-    border-left-width: 2px;
-  }
-  .layout-compact .totals-row {
-    font-size: 6.5px;
-    padding: 1px 0;
-  }
-  .layout-compact .totals-row.big {
-    font-size: 8px;
-    margin-top: 2px;
-    padding-top: 2px;
-  }
-  .layout-compact .totals-row .prev-hint {
-    font-size: 5.5px;
-    color: #94a3b8;
-    font-style: italic;
-    display: block;
-    margin-top: 1px;
-  }
-
-  .layout-compact .balance-note {
-    display: none;
-  }
-
-  .layout-compact .receipt-footer {
-    padding-top: 2px;
-    margin-top: 2px;
-  }
-  .layout-compact .receipt-footer .left {
-    display: none;
-  }
-  .layout-compact .receipt-footer .right {
-    font-size: 6px;
-    width: 100%;
-    text-align: left;
-  }
-  .layout-compact .receipt-footer .right .ts-label {
-    display: inline;
-    font-size: 5.5px;
-    margin-right: 2px;
-    margin-bottom: 0;
-  }
-
-  .layout-compact .watermark {
-    font-size: 14px;
+  .layout-full .payments-table tbody td.dt { font-size: 6px; }
+  .layout-full .totals-block { padding: 3px 4px; margin-top: 3px; }
+  .layout-full .totals-row { font-size: 6.5px; padding: 1px 0; }
+  .layout-full .totals-row.big { font-size: 8.5px; }
+  .layout-full .totals-row .prev-hint { font-size: 5.5px; }
+  .layout-full .balance-note { font-size: 6px; padding: 2px 4px; margin-top: 2px; }
+  .layout-full .receipt-footer { padding-top: 2px; margin-top: 2px; }
+  .layout-full .receipt-footer .left { font-size: 5.5px; }
+  .layout-full .receipt-footer .right { font-size: 6px; }
+  .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
+  .layout-full .watermark {
+    font-size: 22px;
     letter-spacing: 2px;
-    padding: 1px 6px;
+    padding: 3px 10px;
     border-width: 2px;
   }
 
-  /* loading overlay */
+  /* ============================================
+     COMPACT LAYOUT TYPOGRAPHY (16 per page)
+     ============================================ */
+  .layout-compact .receipt {
+    padding: 2mm;
+    border-width: 1px;
+  }
+  .layout-compact .receipt-number {
+    font-size: 6px;
+    top: 1.5mm; right: 1.5mm;
+    padding: 0.5px 3px;
+  }
+  .layout-compact .receipt-header {
+    padding-right: 40px;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+    gap: 3px;
+    min-height: 22px;
+  }
+  .layout-compact .receipt-header img { width: 15px; height: 15px; }
+  .layout-compact .receipt-header .school { font-size: 7px; }
+  .layout-compact .receipt-header .doc-type { font-size: 5px; letter-spacing: 0.4px; }
+  .layout-compact .receipt-header .period { display: none; }
+  .layout-compact .receipt-header .range-badge { display: none; }
+
+  .layout-compact .receipt-body { font-size: 5.5px; }
+  .layout-compact .student-line { padding: 1.5px 0; margin-bottom: 2px; }
+  .layout-compact .student-line .left { font-size: 7px; }
+  .layout-compact .student-line .right { font-size: 5.5px; }
+  .layout-compact .payments-table { font-size: 5.5px; margin-bottom: 2px; }
+  .layout-compact .payments-table thead th {
+    font-size: 4.5px; padding: 1px 2px;
+  }
+  .layout-compact .payments-table tbody td {
+    font-size: 5.5px; padding: 1px 2px;
+  }
+  .layout-compact .payments-table tbody td.dt { font-size: 5px; }
+  .layout-compact .totals-block { padding: 2px 3px; margin-top: 2px; }
+  .layout-compact .totals-row { font-size: 5.5px; padding: 0.5px 0; }
+  .layout-compact .totals-row.big { font-size: 7px; margin-top: 1px; padding-top: 1px; }
+  .layout-compact .totals-row .prev-hint { font-size: 4.5px; }
+  .layout-compact .balance-note { display: none; }
+  .layout-compact .receipt-footer {
+    padding-top: 1.5px; margin-top: 1.5px;
+  }
+  .layout-compact .receipt-footer .left { font-size: 4.5px; }
+  .layout-compact .receipt-footer .left .office { font-size: 5px; }
+  .layout-compact .receipt-footer .right { font-size: 4.5px; }
+  .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
+  .layout-compact .watermark {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    padding: 1px 5px;
+    border-width: 1.5px;
+  }
+
+  /* LOADING OVERLAY */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -547,14 +603,14 @@
   /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
-    .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
+    .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
     .receipt-sheet {
-      box-shadow: none; margin: 0;
-      min-height: 297mm;
+      box-shadow: none;
+      margin: 0;
+      width: 210mm;
+      height: 297mm;
     }
-    .layout-full .receipt-sheet { padding: 6mm; }
-    .layout-compact .receipt-sheet { padding: 4mm; }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
     @page { size: A4 portrait; margin: 0; }
   }
@@ -564,19 +620,19 @@
     .row { grid-template-columns: 1fr; }
     .layout-full .receipt-sheet,
     .layout-compact .receipt-sheet {
-      width: 100%; min-height: auto;
+      width: 100%; height: auto;
       grid-template-columns: 1fr;
       grid-template-rows: auto;
       padding: 8px; box-shadow: none;
       border: 1px dashed var(--border);
     }
+    .receipt { height: auto; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN GATE -->
 <div id="loginGate" class="login-gate">
   <h1>🧾 Fee Receipts</h1>
   <p class="sub">Admin access required. Enter the bursar password to continue.</p>
@@ -585,11 +641,10 @@
   <div id="loginError" class="err">Incorrect password. Please try again.</div>
 </div>
 
-<!-- MAIN -->
 <div id="mainWrapper" class="main-wrapper layout-full">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all their payments.</p>
+    <p class="subtitle">One receipt per student with a unique receipt number. Filter by date range to include only students who paid in that period.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -597,8 +652,8 @@
     </div>
 
     <div class="layout-toggle">
-      <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 4 per page</button>
-      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 12 per page</button>
+      <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 9 per page</button>
+      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
     </div>
 
     <div class="row">
@@ -678,11 +733,13 @@
     </div>
 
     <div id="errorMsg" class="error-msg"></div>
+    <div id="warningMsg" class="warning-msg"></div>
 
     <div class="info">
-      <strong>Layout tips:</strong>
-      <strong>Full</strong> gives you a proper receipt with previous balance, footer, and address — 4 per A4.
-      <strong>Compact</strong> packs 12 per A4 — good for high-volume days. Compact drops the footer text and hides the "previous balance" as a small inline hint next to Balance.
+      <strong>Layouts:</strong>
+      <strong>Full</strong> — 9 slightly larger receipts per A4 (3×3). Good default.
+      <strong>Compact</strong> — 16 receipts per A4 (4×4). Best for bulk printing on busy days.
+      Every receipt is auto-sized to its content. Numbers are unique and never reused.
     </div>
   </div>
 
@@ -716,8 +773,13 @@
   let currentClass = null;
   let receiptData = null;
   let currentMode = 'single';
-  let currentLayout = 'full';  // 'full' | 'compact'
+  let currentLayout = 'full';
   let selectedStudents = new Set();
+
+  let assignedNumbers = new Map();
+  let nextNumberBuffer = [];
+
+  let duplicateHistory = {};
 
   const dataCache = new Map();
   const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -797,7 +859,7 @@
   }
 
   // ============================================================
-  // LOADING OVERLAY
+  // OVERLAY + MESSAGES
   // ============================================================
   function showLoading(msg) {
     document.getElementById('loadingMessage').textContent = msg || 'Loading…';
@@ -805,6 +867,22 @@
   }
   function hideLoading() {
     document.getElementById('loadingOverlay').classList.remove('show');
+  }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 8000);
+  }
+  function showWarning(msg) {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = msg;
+    el.classList.add('show');
+  }
+  function clearWarning() {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = '';
+    el.classList.remove('show');
   }
 
   // ============================================================
@@ -861,9 +939,6 @@
     loadTerms();
   }
 
-  // ============================================================
-  // INIT
-  // ============================================================
   window.onload = function () {
     try {
       if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
@@ -1010,7 +1085,7 @@
   }
 
   // ============================================================
-  // MODE SWITCHING
+  // MODE + LAYOUT
   // ============================================================
   function setMode(mode) {
     currentMode = mode;
@@ -1027,9 +1102,6 @@
     }
   }
 
-  // ============================================================
-  // LAYOUT SWITCHING
-  // ============================================================
   function setLayout(layout) {
     currentLayout = layout;
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
@@ -1038,12 +1110,8 @@
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
-    // Re-render the preview with the new layout
     if (selectedStudents.size > 0 && receiptData) {
-      const students = Array.from(selectedStudents)
-        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
-        .filter(Boolean);
-      renderPreview(students);
+      renderPreview(getSelectedStudents());
     }
   }
 
@@ -1064,6 +1132,10 @@
     receiptData = null;
     currentClass = null;
     selectedStudents.clear();
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    duplicateHistory = {};
+    clearWarning();
   }
 
   async function handleClassChange() {
@@ -1075,9 +1147,14 @@
     const includeUndated = getIncludeUndated();
     const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
 
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    clearWarning();
+
     const cached = cacheGet(key);
     if (cached) {
       receiptData = cached;
+      await loadDuplicateHistory();
       onDataLoaded(true);
       return;
     }
@@ -1100,11 +1177,31 @@
 
       receiptData = res;
       cacheSet(key, res);
+
+      await loadDuplicateHistory();
       onDataLoaded(false);
     } catch (e) {
       showError('Error: ' + e.message);
     } finally {
       hideLoading();
+    }
+  }
+
+  async function loadDuplicateHistory() {
+    duplicateHistory = {};
+    if (!receiptData || !receiptData.students || !receiptData.students.length) return;
+    try {
+      const names = receiptData.students.map(s => s.studentName);
+      const res = await callGAS('checkReceiptHistory', {
+        studentClass: currentClass,
+        term: currentTermKey,
+        studentNames: JSON.stringify(names)
+      });
+      if (res && res.success && res.alreadyIssued) {
+        duplicateHistory = res.alreadyIssued;
+      }
+    } catch (e) {
+      console.warn('Duplicate history check failed:', e);
     }
   }
 
@@ -1116,6 +1213,52 @@
       renderStudentList(receiptData.students);
     }
     if (fromCache) console.log('Loaded from cache.');
+  }
+
+  // ============================================================
+  // RECEIPT NUMBER ALLOCATION
+  // ============================================================
+  async function ensureNumberBuffer(count) {
+    if (nextNumberBuffer.length >= count) return;
+
+    const needed = count - nextNumberBuffer.length;
+    const res = await callGAS('peekReceiptNumber', { term: currentTermKey, count: needed });
+    if (!res || !res.success || !res.numbers) {
+      throw new Error('Could not reserve receipt numbers.');
+    }
+    for (let i = 0; i < res.numbers.length; i++) {
+      nextNumberBuffer.push(res.numbers[i]);
+    }
+  }
+
+  async function assignNumberToStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
+    try {
+      await ensureNumberBuffer(1);
+    } catch (e) {
+      return null;
+    }
+    const num = nextNumberBuffer.shift();
+    assignedNumbers.set(rowNumber, num);
+    return num;
+  }
+
+  function releaseNumberForStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) {
+      const num = assignedNumbers.get(rowNumber);
+      nextNumberBuffer.unshift(num);
+      assignedNumbers.delete(rowNumber);
+    }
+  }
+
+  async function commitAllAssignedNumbers() {
+    const count = assignedNumbers.size;
+    if (count === 0) return;
+    try {
+      await callGAS('commitReceiptNumber', { term: currentTermKey, count: count });
+    } catch (e) {
+      console.warn('Counter commit failed (non-fatal):', e);
+    }
   }
 
   // ============================================================
@@ -1142,24 +1285,48 @@
     sorted.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.rowNumber;
+      const dup = duplicateHistory[s.studentName.toLowerCase()];
+      const dupMark = dup ? ' ⚠' : '';
       opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
-                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
+                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '') +
+                        dupMark;
       sel.appendChild(opt);
     });
     sel.disabled = false;
   }
 
-  function handleSingleStudentChange() {
+  async function handleSingleStudentChange() {
     const rowNumber = parseInt(document.getElementById('rStudentSelect').value, 10);
     if (!rowNumber || !receiptData) return;
 
     const student = receiptData.students.find(s => s.rowNumber === rowNumber);
     if (!student) return;
 
-    selectedStudents.clear();
-    selectedStudents.add(student.rowNumber);
+    clearWarning();
+    const dup = duplicateHistory[student.studentName.toLowerCase()];
+    if (dup) {
+      showWarning(
+        '<strong>⚠ Heads up:</strong> ' + escapeHtml(student.studentName) +
+        ' already has <strong>' + dup.count + '</strong> receipt(s) in this term. ' +
+        'Last issued: <strong>' + escapeHtml(dup.lastReceipt || 'unknown') + '</strong>' +
+        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') +
+        '.'
+      );
+    }
 
-    renderPreview([student]);
+    for (const rn of Array.from(assignedNumbers.keys())) {
+      if (rn !== rowNumber) releaseNumberForStudent(rn);
+    }
+    selectedStudents.clear();
+    selectedStudents.add(rowNumber);
+
+    const num = await assignNumberToStudent(rowNumber);
+    if (!num) {
+      showError('Could not reserve a receipt number. Check your connection and try again.');
+      return;
+    }
+
+    renderPreview(getSelectedStudents());
     document.getElementById('btnPrint').disabled = false;
     document.getElementById('btnPDF').disabled = false;
     updatePreviewHeader();
@@ -1189,12 +1356,18 @@
         const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
                             (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
 
+        const dup = duplicateHistory[s.studentName.toLowerCase()];
+        const dupMark = dup
+          ? '<span class="dup-warn">⚠ Already issued: ' + dup.count + ' (' + escapeHtml(dup.lastReceipt || '?') + ')</span>'
+          : '';
+
         html += '<div class="student-row">'
           + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '">'
           + '<label for="student-' + s.rowNumber + '">'
             + '<strong>' + escapeHtml(s.studentName) + '</strong>'
             + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
             + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
+            + dupMark
           + '</label>'
           + '<span class="status-pill ' + statusClass + '">' + statusText + '</span>'
         + '</div>';
@@ -1208,26 +1381,59 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     selectedStudents.clear();
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
     updateSelectAllLabel();
     updatePreviewHeader();
   }
 
-  function onStudentListChange(e) {
-    if (e.target && e.target.type === 'checkbox') {
-      const rowNum = parseInt(e.target.dataset.row, 10);
-      if (e.target.checked) selectedStudents.add(rowNum);
-      else selectedStudents.delete(rowNum);
-      updateSelectionState();
+  async function onStudentListChange(e) {
+    if (!e.target || e.target.type !== 'checkbox') return;
+    const rowNum = parseInt(e.target.dataset.row, 10);
+
+    if (e.target.checked) {
+      selectedStudents.add(rowNum);
+      const num = await assignNumberToStudent(rowNum);
+      if (!num) {
+        e.target.checked = false;
+        selectedStudents.delete(rowNum);
+        showError('Could not reserve a receipt number. Check your connection.');
+        return;
+      }
+    } else {
+      selectedStudents.delete(rowNum);
+      releaseNumberForStudent(rowNum);
     }
+    updateSelectionState();
   }
 
-  function toggleSelectAll() {
+  async function toggleSelectAll() {
     const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
     const allChecked = Array.from(boxes).every(b => b.checked);
-    boxes.forEach(b => { b.checked = !allChecked; });
-    selectedStudents.clear();
-    if (!allChecked) {
-      boxes.forEach(b => selectedStudents.add(parseInt(b.dataset.row, 10)));
+
+    if (allChecked) {
+      boxes.forEach(b => { b.checked = false; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+    } else {
+      boxes.forEach(b => { b.checked = true; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+
+      try {
+        await ensureNumberBuffer(boxes.length);
+      } catch (err) {
+        showError('Could not reserve receipt numbers: ' + err.message);
+        return;
+      }
+      boxes.forEach(b => {
+        const rowNum = parseInt(b.dataset.row, 10);
+        const num = nextNumberBuffer.shift();
+        assignedNumbers.set(rowNum, num);
+        selectedStudents.add(rowNum);
+      });
     }
     updateSelectionState();
   }
@@ -1240,10 +1446,7 @@
     updatePreviewHeader();
 
     if (count > 0 && currentMode === 'batch') {
-      const students = Array.from(selectedStudents)
-        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
-        .filter(Boolean);
-      renderPreview(students);
+      renderPreview(getSelectedStudents());
     } else if (count === 0) {
       document.getElementById('receiptContainer').innerHTML = '';
     }
@@ -1274,8 +1477,11 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     document.getElementById('receiptContainer').innerHTML = '';
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
     updatePreviewHeader();
     updateSelectAllLabel();
+    clearWarning();
   }
 
   // ============================================================
@@ -1287,8 +1493,7 @@
       return;
     }
 
-    const perSheet = currentLayout === 'compact' ? 12 : 4;
-    const cols = currentLayout === 'compact' ? 4 : 2;
+    const perSheet = currentLayout === 'compact' ? 16 : 9;
 
     const from = getDateFromInput();
     const to = getDateToInput();
@@ -1312,7 +1517,10 @@
     for (let i = 0; i < students.length; i += perSheet) {
       const group = students.slice(i, i + perSheet);
       html += '<div class="receipt-sheet">';
-      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt, currentLayout); });
+      group.forEach(s => {
+        const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
+        html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
+      });
       for (let k = group.length; k < perSheet; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
@@ -1329,10 +1537,10 @@
     const hh = String(d.getHours()).padStart(2, '0');
     const mi = String(d.getMinutes()).padStart(2, '0');
     const ss = String(d.getSeconds()).padStart(2, '0');
-    return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
+    return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
-  function buildReceiptHTML(student, termInfo, printedAt, layout) {
+  function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -1346,10 +1554,9 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
-    // Payments rows
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
-      rowsHTML = '<tr><td colspan="3" style="padding:6px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
+      rowsHTML = '<tr><td colspan="3" style="padding:5px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
     } else {
       student.payments.forEach(p => {
         const sign = p.isRefund ? '−' : '';
@@ -1366,7 +1573,7 @@
 
     const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
     const balanceNoteText = isPaid
-      ? 'This student\'s fees for ' + escapeHtml(termInfo.termDisplay) + ' are fully paid.'
+      ? 'Fees for ' + escapeHtml(termInfo.termDisplay) + ' are fully paid.'
       : isOver
         ? 'Credit of K' + safeMoney(balance) + ' will be applied to future fees.'
         : 'Outstanding balance of K' + safeMoney(Math.abs(balance)) + ' remains payable.';
@@ -1374,97 +1581,80 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
-    // ----- COMPACT layout: minimal receipt -----
-    if (layout === 'compact') {
-      // Previous-balance hint shown inline next to Balance
-      let prevHint = '';
-      if (prevBalance !== 0) {
-        prevHint = '<span class="prev-hint">'
-          + (prevBalance < 0 ? 'incl. prev. K' + safeMoney(Math.abs(prevBalance)) + ' due'
-                             : 'incl. credit K' + safeMoney(prevBalance))
-          + '</span>';
-      }
+    const numText = receiptNumber || '— PENDING —';
+    const numClass = receiptNumber ? '' : ' pending';
 
-      return '<div class="receipt">'
-        + '<div class="receipt-number">[Pending]</div>'
-        + '<div class="receipt-header">'
-          + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
-          + '<div class="title">'
-            + '<div class="school">' + escapeHtml(schoolName) + '</div>'
-            + '<div class="doc-type">' + escapeHtml(termInfo.termDisplay) + ' · FEE RECEIPT</div>'
-          + '</div>'
-        + '</div>'
-        + '<div class="receipt-body">'
-          + '<div class="student-line">'
-            + '<div class="left">' + escapeHtml(student.studentName) + '</div>'
-            + '<div class="right">' + escapeHtml(student.studentClass) + '</div>'
-          + '</div>'
-          + '<table class="payments-table">'
-            + '<thead><tr><th>Payment</th><th class="amt">Amount</th><th class="dt">Date</th></tr></thead>'
-            + '<tbody>' + rowsHTML + '</tbody>'
-          + '</table>'
-          + '<div class="totals-block">'
-            + '<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>'
-            + '<div class="totals-row"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>'
-            + '<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>'
-            + '<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>'
-            + prevHint
-          + '</div>'
-        + '</div>'
-        + '<div class="receipt-footer">'
-          + '<div class="right">'
-            + '<span class="ts-label">Printed</span>' + printedAt
-          + '</div>'
-        + '</div>'
-        + '<div class="watermark ' + wmClass + '">' + wmText + '</div>'
-      + '</div>';
+    // ----- Build the receipt HTML (shared structure) -----
+    let headerExtra = '';
+    if (termInfo.rangeLabel && layout !== 'compact') {
+      headerExtra = '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>';
+    }
+    if (layout !== 'compact') {
+      headerExtra += '<div class="period">' + escapeHtml(termInfo.termConfig.schoolAddress || 'Private Bag 130, Lunzu') + '</div>';
     }
 
-    // ----- FULL layout: rich receipt -----
+    let prevHint = '';
+    if (layout === 'compact' && prevBalance !== 0) {
+      prevHint = '<span class="prev-hint">'
+        + (prevBalance < 0 ? 'incl. prev. K' + safeMoney(Math.abs(prevBalance)) + ' due'
+                           : 'incl. credit K' + safeMoney(prevBalance))
+        + '</span>';
+    }
+
+    const totalsRows = [];
+    if (layout === 'compact') {
+      totalsRows.push('<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
+    } else {
+      totalsRows.push('<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
+      if (prevBalance !== 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">Previous balance</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
+          + (prevBalance < 0 ? '' : '+') + 'K' + safeMoney(Math.abs(prevBalance))
+          + (prevBalance < 0 ? ' (due)' : ' (credit)') + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row big" style="border-top:1px dashed #cbd5e1;margin-top:2px;padding-top:2px;"><span class="label" style="color:#002b54;font-weight:700;">Total payable</span><span style="color:#002b54;font-weight:700;">K' + safeMoney(totalPayable) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      if (student.totalRefunded > 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">Refunded</span><span style="color:#7c3aed;font-weight:700;">−K' + safeMoney(student.totalRefunded) + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
+    }
+
+    const balanceNoteHtml = layout === 'compact'
+      ? ''
+      : '<div class="balance-note ' + balanceNoteClass + '">' + balanceNoteText + '</div>';
+
     return '<div class="receipt">'
-      + '<div class="receipt-number">[Pending]</div>'
+      + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
       + '<div class="receipt-header">'
         + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
         + '<div class="title">'
           + '<div class="school">' + escapeHtml(schoolName) + '</div>'
-          + '<div class="doc-type">Fee Receipt — ' + escapeHtml(termInfo.termDisplay) + '</div>'
-          + (termInfo.rangeLabel
-              ? '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>'
-              : '')
-          + '<div class="period">' + escapeHtml(termInfo.termConfig.schoolAddress || 'Private Bag 130, Lunzu') + '</div>'
+          + '<div class="doc-type">' + escapeHtml(termInfo.termDisplay) + ' · FEE RECEIPT</div>'
+          + headerExtra
         + '</div>'
       + '</div>'
       + '<div class="receipt-body">'
         + '<div class="student-line">'
           + '<div class="left">' + escapeHtml(student.studentName) + '</div>'
-          + '<div class="right">' + escapeHtml(student.studentClass) + '<br>DOB: ' + escapeHtml(student.dateOfBirth || '—') + '</div>'
+          + '<div class="right">' + escapeHtml(student.studentClass) + '</div>'
         + '</div>'
         + '<table class="payments-table">'
           + '<thead><tr><th>Payment</th><th class="amt">Amount</th><th class="dt">Date</th></tr></thead>'
           + '<tbody>' + rowsHTML + '</tbody>'
         + '</table>'
         + '<div class="totals-block">'
-          + '<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>'
-          + (prevBalance !== 0
-              ? '<div class="totals-row"><span class="label">Previous balance</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">' +
-                  (prevBalance < 0 ? '' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) +
-                  (prevBalance < 0 ? ' (due)' : ' (credit)') + '</span></div>'
-              : '')
-          + '<div class="totals-row" style="border-top:1px dashed #cbd5e1;margin-top:3px;padding-top:4px;">'
-            + '<span class="label" style="color:#002b54;font-weight:700;">Total payable</span>'
-            + '<span style="color:#002b54;font-weight:700;">K' + safeMoney(totalPayable) + '</span>'
-          + '</div>'
-          + '<div class="totals-row"><span class="label">Total paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>'
-          + (student.totalRefunded > 0 ? '<div class="totals-row"><span class="label">Refunded</span><span style="color:#7c3aed;font-weight:700;">−K' + safeMoney(student.totalRefunded) + '</span></div>' : '')
-          + '<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>'
+          + totalsRows.join('')
+          + prevHint
         + '</div>'
-        + '<div class="balance-note ' + balanceNoteClass + '">' + balanceNoteText + '</div>'
+        + balanceNoteHtml
       + '</div>'
       + '<div class="receipt-footer">'
         + '<div class="left">'
-          + 'Office of the Bursar<br>'
-          + '☎ ' + escapeHtml(termInfo.termConfig.phone1 || '') + '<br>'
-          + escapeHtml(termInfo.termConfig.schoolAddress || '')
+          + '<span class="office">Office of the Bursar</span>'
+          + '☎ ' + escapeHtml(termInfo.termConfig.phone1 || '')
         + '</div>'
         + '<div class="right">'
           + '<span class="ts-label">Printed</span>'
@@ -1482,22 +1672,21 @@
     const students = getSelectedStudents();
     if (!students.length) return;
 
-    showLoading('Preparing receipts…');
-
-    let numbers = [];
-    try {
-      const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
-      if (peek && peek.success && peek.numbers) numbers = peek.numbers;
-    } catch (e) {
-      console.warn('Peek failed:', e);
+    const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
+    if (missing.length > 0) {
+      showError(
+        'Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. ' +
+        'Clear the selection and re-select.'
+      );
+      return;
     }
 
-    applyReceiptNumbers(numbers);
+    showLoading('Committing receipt numbers…');
 
-    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => console.warn('Commit failed:', e));
+    await commitAllAssignedNumbers();
 
-    const receiptsLog = students.map((s, idx) => ({
-      receiptNumber: numbers[idx] || '',
+    const receiptsLog = students.map(s => ({
+      receiptNumber: assignedNumbers.get(s.rowNumber) || '',
       studentName: s.studentName,
       totalPaid: s.totalPaidThisTerm,
       balanceAfter: s.cumulativeBalance,
@@ -1508,7 +1697,7 @@
       studentClass: currentClass,
       term: currentTermKey,
       receipts: JSON.stringify(receiptsLog)
-    }).catch(e => console.warn('Log failed:', e));
+    }).catch(e => console.warn('Log failed (non-fatal):', e));
 
     hideLoading();
     setTimeout(() => window.print(), 150);
@@ -1523,13 +1712,6 @@
     return Array.from(selectedStudents)
       .map(rn => receiptData.students.find(s => s.rowNumber === rn))
       .filter(Boolean);
-  }
-
-  function applyReceiptNumbers(numbers) {
-    const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
-    receipts.forEach((el, idx) => {
-      if (numbers[idx]) el.textContent = numbers[idx];
-    });
   }
 
   // ============================================================
@@ -1554,12 +1736,6 @@
     const d = document.createElement('div');
     d.textContent = String(s);
     return d.innerHTML;
-  }
-  function showError(msg) {
-    const el = document.getElementById('errorMsg');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 8000);
   }
 </script>
 </body>
