@@ -86,6 +86,9 @@
         .btn-admin.active { background: rgba(124, 58, 237, 0.9); }
         .btn-back { background: rgba(71, 85, 105, 0.7); }
         .btn-back:hover { transform: translateY(-3px); background: rgba(71, 85, 105, 0.9); }
+        .btn-receipts { background: rgba(234, 88, 12, 0.7); display: none; }
+        .btn-receipts.show { display: inline-flex; }
+        .btn-receipts:hover { transform: translateY(-3px); background: rgba(234, 88, 12, 0.95); }
         .progress-container { margin: 16px 0 8px 0; display: none; }
         .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; margin-bottom: 4px; }
         .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; }
@@ -400,6 +403,7 @@
                 <div class="buttons">
                     <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled><span>💰</span> Generate Fee Report</button>
                     <button type="button" class="btn btn-subscribe" onclick="openSubscribeModal()"><span>📧</span> Subscribe to Fee Alerts</button>
+                    <button type="button" class="btn btn-receipts" id="receiptsBtn" onclick="openReceiptsPage()"><span>🧾</span> Generate Receipts</button>
                     <button type="button" class="btn btn-secondary" onclick="resetForm()"><span>🔄</span> Reset Form</button>
                     <button type="button" class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn"><span>🔑</span> <span id="adminModeText">Admin Mode</span></button>
                     <button type="button" class="btn btn-back" onclick="goBackToPortal()"><span>←</span> Back to Home</button>
@@ -499,6 +503,7 @@
 
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
         const ADMIN_PASSWORD = "lss001";
+        const RECEIPTS_PAGE_URL = 'FeeReceipts.html';
 
         let availableTerms = [];
         let currentTermKey = null;
@@ -560,6 +565,7 @@
             const btn = document.getElementById('adminModeBtn');
             const notice = document.getElementById('adminNotice');
             const panel = document.getElementById('adminQueuePanel');
+            const receiptsBtn = document.getElementById('receiptsBtn');
             const dobInput = document.getElementById('dateOfBirth');
             const dobStar = document.getElementById('dobStar');
             const dobAdminLabel = document.getElementById('dobAdminLabel');
@@ -569,6 +575,7 @@
                 btn.classList.add('active');
                 notice.classList.add('show');
                 if (panel) panel.classList.add('show');
+                if (receiptsBtn) receiptsBtn.classList.add('show');
                 dobInput.disabled = true; dobInput.value = '';
                 dobInput.placeholder = 'Not required in Admin Mode';
                 dobStar.style.display = 'none';
@@ -581,12 +588,30 @@
                 btn.classList.remove('active');
                 notice.classList.remove('show');
                 if (panel) panel.classList.remove('show');
+                if (receiptsBtn) receiptsBtn.classList.remove('show');
                 dobInput.disabled = false;
                 dobInput.placeholder = '';
                 dobStar.style.display = 'inline';
                 dobAdminLabel.style.display = 'none';
                 dobRequiredText.classList.remove('hidden');
                 updateButtonState();
+            }
+        }
+
+        function openReceiptsPage() {
+            if (!isAdminMode) {
+                alert('Enable admin mode first.');
+                return;
+            }
+            // Pass the current term and class as URL params so the receipts page preselects them
+            const params = new URLSearchParams();
+            if (currentTermKey) params.set('term', currentTermKey);
+            const cls = document.getElementById('studentClass').value;
+            if (cls) params.set('class', cls);
+            const url = RECEIPTS_PAGE_URL + (params.toString() ? '?' + params.toString() : '');
+            const newTab = window.open(url, '_blank');
+            if (!newTab) {
+                alert('Please allow pop-ups to open the receipts page.');
             }
         }
 
@@ -760,10 +785,8 @@
         }
         function stopProgressAnimation() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
 
-        // ============================================================
-        // API CALLS — fetch-based, CORS-safe, retries on network errors
-        // ============================================================
-                async function callGAS(action, params = {}, attempt = 1) {
+        // ----- API CALLS — fetch-based -----
+        async function callGAS(action, params = {}, attempt = 1) {
             const body = new URLSearchParams();
             body.append('action', action);
             for (const key in params) {
@@ -779,8 +802,6 @@
             try {
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
-                    // This MUST be form-urlencoded so Apps Script parses the body
-                    // into e.parameter. text/plain is NOT parsed.
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
                     body: body.toString(),
                     redirect: 'follow',
@@ -789,18 +810,13 @@
                 });
                 clearTimeout(timeoutId);
                 if (!response.ok) throw new Error('HTTP ' + response.status);
-
                 const text = await response.text();
                 let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (parseErr) {
+                try { data = JSON.parse(text); }
+                catch (parseErr) {
                     const m = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
-                    if (m) {
-                        data = JSON.parse(m[0]);
-                    } else {
-                        throw new Error('Invalid response from server');
-                    }
+                    if (m) data = JSON.parse(m[0]);
+                    else throw new Error('Invalid response from server');
                 }
                 if (data && data.error) throw new Error(data.error);
                 return data;
@@ -821,7 +837,7 @@
             }
         }
 
-        // ----- FORM HANDLING -----
+        // ----- FORM -----
         function setupForm() {
             document.getElementById('studentClass').addEventListener('change', handleClassChange);
             document.getElementById('studentName').addEventListener('change', updateButtonState);
@@ -1151,6 +1167,22 @@
             const term = document.getElementById('subTermSelect').value;
             const consent = document.getElementById('subConsentCheck').checked;
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showSubStatus('error', '❌ Please enter a valid email address.'); return; }
+
+            // Warn if replacing an existing subscription with a different email
+            if (subCurrentStatus && subCurrentStatus.hasSubscription && subCurrentStatus.alertEmail &&
+                subCurrentStatus.alertEmail.toLowerCase() !== email) {
+                const masked = maskEmail(subCurrentStatus.alertEmail);
+                const proceed = confirm(
+                    'This student is already subscribed by ' + masked + '.\n\n' +
+                    'If you continue, that email will STOP receiving fee alerts and will be replaced by ' + email + '.\n\n' +
+                    'They will be notified of the change.\n\nContinue?'
+                );
+                if (!proceed) {
+                    showSubStatus('error', '❌ Cancelled. The existing subscription remains active.');
+                    return;
+                }
+            }
+
             const btn = document.getElementById('subSubscribeBtn');
             const original = btn.innerHTML;
             btn.disabled = true;
@@ -1206,6 +1238,16 @@
             const el = document.getElementById('subStatusInfo');
             el.className = 'status-info';
             el.innerHTML = '';
+        }
+
+        function maskEmail(email) {
+            if (!email) return '';
+            const parts = String(email).split('@');
+            if (parts.length !== 2) return '***';
+            const local = parts[0];
+            const domain = parts[1];
+            if (local.length <= 2) return local[0] + '***@' + domain;
+            return local[0] + '***' + local[local.length - 1] + '@' + domain;
         }
 
         function escapeHtml(s) {
