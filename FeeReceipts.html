@@ -68,22 +68,35 @@
   }
   .controls select:focus, .controls input:focus { outline: none; border-color: var(--primary); }
 
-  .mode-tabs, .layout-toggle {
+  .mode-tabs {
     display: flex; gap: 6px;
-    padding: 4px;
+    background: #f1f5f9; padding: 4px;
     border-radius: 10px; margin-bottom: 14px;
   }
-  .mode-tabs { background: #f1f5f9; }
-  .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
-  .mode-tabs button, .layout-toggle button {
+  .mode-tabs button {
     flex: 1; padding: 10px 14px;
     background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600;
+    font-size: 13px; font-weight: 600; color: var(--muted);
     cursor: pointer; transition: 0.15s;
   }
-  .mode-tabs button { color: var(--muted); }
-  .layout-toggle button { color: #92400e; }
-  .mode-tabs button.active, .layout-toggle button.active {
+  .mode-tabs button.active {
+    background: white; color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .layout-toggle {
+    display: flex; gap: 6px;
+    background: #fffbeb; padding: 4px;
+    border-radius: 10px; margin-bottom: 14px;
+    border: 1px solid #fde68a;
+  }
+  .layout-toggle button {
+    flex: 1; padding: 10px 14px;
+    background: transparent; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #92400e;
+    cursor: pointer; transition: 0.15s;
+  }
+  .layout-toggle button.active {
     background: white; color: var(--primary);
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
@@ -142,16 +155,6 @@
     font-size: 11px; color: var(--muted); display: block;
     margin-top: 2px; font-weight: 400;
   }
-  .student-row .dup-warn {
-    font-size: 10.5px;
-    color: #b45309;
-    background: #fffbeb;
-    padding: 1px 6px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-top: 2px;
-    font-weight: 600;
-  }
   .status-pill {
     font-size: 10px; font-weight: 700;
     padding: 3px 9px; border-radius: 20px;
@@ -200,17 +203,6 @@
   }
   .error-msg.show { display: block; }
 
-  .warning-msg {
-    background: #fffbeb; color: #92400e;
-    padding: 12px 14px; border-radius: 8px;
-    font-size: 13px; margin-top: 12px;
-    border-left: 4px solid #f59e0b;
-    display: none;
-    line-height: 1.5;
-  }
-  .warning-msg.show { display: block; }
-  .warning-msg strong { color: #78350f; }
-
   .preview-header {
     max-width: 1000px; margin: 0 auto 12px;
     justify-content: space-between; align-items: center;
@@ -222,11 +214,12 @@
   .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
   .preview-header .count strong { color: var(--primary); }
 
-  /* RECEIPT SHEET */
+  /* ============================================
+     RECEIPT GRIDS
+     ============================================ */
   .receipt-sheet {
-    width: 210mm;
-    margin: 0 auto 20px;
-    background: white;
+    width: 210mm; min-height: 297mm;
+    margin: 0 auto 20px; background: white;
     padding: 6mm;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     page-break-after: always;
@@ -234,52 +227,34 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
+  /* Full layout: 2 cols × 2 rows */
   .layout-full .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: min-content;
+    grid-template-rows: 1fr 1fr;
     gap: 4mm;
-    align-content: start;
   }
-  .layout-full .receipt { min-height: 130mm; }
 
+  /* Compact layout: 4 cols × 3 rows */
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-auto-rows: min-content;
+    grid-template-rows: 1fr 1fr 1fr;
     gap: 2mm;
     padding: 4mm;
-    align-content: start;
   }
-  .layout-compact .receipt { min-height: 55mm; }
 
   .receipt {
     border: 1.2px dashed #94a3b8;
-    border-radius: 6px;
-    padding: 5mm;
+    border-radius: 6px; padding: 5mm;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    background: white;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden; background: white;
   }
 
-  .receipt-body {
-    flex: 1 1 auto;
-    font-size: 10.5px;
-    line-height: 1.4;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .payments-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 6px;
-    font-size: 10px;
-  }
-
+  /* ============================================
+     FULL RECEIPT STYLES
+     ============================================ */
   .receipt-header {
     display: flex; align-items: center; gap: 8px;
     border-bottom: 1.5px solid var(--primary);
@@ -310,6 +285,8 @@
     letter-spacing: 0.3px;
   }
 
+  .receipt-body { flex: 1; font-size: 10.5px; line-height: 1.4; }
+
   .student-line {
     display: flex; justify-content: space-between;
     padding: 4px 0; border-bottom: 1px dashed #e2e8f0;
@@ -318,6 +295,10 @@
   .student-line .left { font-weight: 700; color: var(--primary); font-size: 12px; }
   .student-line .right { font-size: 10px; color: var(--muted); text-align: right; }
 
+  .payments-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 6px; font-size: 10px;
+  }
   .payments-table thead th {
     background: #f1f5f9; color: var(--muted);
     font-size: 8.5px; text-transform: uppercase;
@@ -345,9 +326,8 @@
   .totals-block {
     background: #f1f5f9;
     border-left: 3px solid var(--accent);
-    border-radius: 4px;
-    padding: 6px 8px;
-    margin-top: auto;
+    border-radius: 4px; padding: 6px 8px;
+    margin-top: 6px;
   }
   .totals-row {
     display: flex; justify-content: space-between;
@@ -397,35 +377,18 @@
   .receipt-number {
     position: absolute; top: 5mm; right: 5mm;
     font-family: 'Courier New', monospace;
-    font-size: 9.5px; color: var(--primary); font-weight: 700;
-    background: #f1f5f9;
-    padding: 2px 6px;
-    border-radius: 4px;
-    border: 1px solid #cbd5e1;
-    letter-spacing: 0.5px;
-  }
-  .receipt-number.pending {
-    color: #b45309;
-    background: #fffbeb;
-    border-color: #fde68a;
+    font-size: 8.5px; color: var(--muted); font-weight: 700;
   }
 
   .watermark {
-    position: absolute;
-    top: 50%; left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%) rotate(-18deg);
-    font-size: 26px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    pointer-events: none;
-    white-space: nowrap;
-    border: 3px solid;
-    border-radius: 10px;
-    padding: 4px 14px;
-    z-index: 0;
+    font-size: 24px; font-weight: 900;
+    letter-spacing: 3px; text-transform: uppercase;
+    pointer-events: none; white-space: nowrap;
+    border: 3px solid; border-radius: 8px;
+    padding: 3px 12px;
   }
-  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
   .watermark.paid { color: rgba(5, 150, 105, 0.10); border-color: rgba(5, 150, 105, 0.10); }
   .watermark.over { color: rgba(124, 58, 237, 0.10); border-color: rgba(124, 58, 237, 0.10); }
   .watermark.due { color: rgba(220, 38, 38, 0.09); border-color: rgba(220, 38, 38, 0.09); }
@@ -435,39 +398,129 @@
     border-radius: 6px;
   }
 
-  /* COMPACT OVERRIDES */
-  .layout-compact .receipt { padding: 2.5mm; border-width: 1px; }
+  /* ============================================
+     COMPACT RECEIPT OVERRIDES (4×3 layout, ~48×93mm cells)
+     ============================================ */
+  .layout-compact .receipt {
+    padding: 2.5mm;
+    border-width: 1px;
+  }
   .layout-compact .receipt-number {
     top: 2mm; right: 2mm;
-    font-size: 7px;
-    padding: 1px 4px;
+    font-size: 6.5px;
   }
-  .layout-compact .receipt-header { gap: 4px; padding-bottom: 2px; margin-bottom: 3px; border-bottom-width: 1px; }
-  .layout-compact .receipt-header img { width: 18px; height: 18px; }
-  .layout-compact .receipt-header .school { font-size: 7.5px; line-height: 1; letter-spacing: 0; }
-  .layout-compact .receipt-header .doc-type { font-size: 6px; letter-spacing: 0.6px; margin-top: 1px; }
-  .layout-compact .receipt-header .period { display: none; }
-  .layout-compact .receipt-header .range-badge { display: none; }
-  .layout-compact .receipt-body { font-size: 7px; line-height: 1.3; }
-  .layout-compact .student-line { padding: 2px 0; margin-bottom: 2px; }
-  .layout-compact .student-line .left { font-size: 8.5px; }
-  .layout-compact .student-line .right { font-size: 6.5px; }
-  .layout-compact .payments-table { margin-bottom: 2px; font-size: 6.5px; }
-  .layout-compact .payments-table thead th { font-size: 5.5px; padding: 1.5px 2px; letter-spacing: 0.3px; }
-  .layout-compact .payments-table tbody td { padding: 1.5px 2px; font-size: 6.5px; }
-  .layout-compact .payments-table tbody td.dt { font-size: 6px; }
-  .layout-compact .totals-block { padding: 3px 4px; margin-top: 2px; border-left-width: 2px; }
-  .layout-compact .totals-row { font-size: 6.5px; padding: 1px 0; }
-  .layout-compact .totals-row.big { font-size: 8px; margin-top: 2px; padding-top: 2px; }
-  .layout-compact .totals-row .prev-hint { font-size: 5.5px; color: #94a3b8; font-style: italic; display: block; margin-top: 1px; }
-  .layout-compact .balance-note { display: none; }
-  .layout-compact .receipt-footer { padding-top: 2px; margin-top: 2px; }
-  .layout-compact .receipt-footer .left { display: none; }
-  .layout-compact .receipt-footer .right { font-size: 6px; width: 100%; text-align: left; }
-  .layout-compact .receipt-footer .right .ts-label { display: inline; font-size: 5.5px; margin-right: 2px; margin-bottom: 0; }
-  .layout-compact .watermark { font-size: 14px; letter-spacing: 2px; padding: 2px 8px; border-width: 2px; }
+  .layout-compact .receipt-header {
+    gap: 4px;
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    border-bottom-width: 1px;
+  }
+  .layout-compact .receipt-header img {
+    width: 18px; height: 18px;
+  }
+  .layout-compact .receipt-header .school {
+    font-size: 7.5px;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .layout-compact .receipt-header .doc-type {
+    font-size: 6px;
+    letter-spacing: 0.6px;
+    margin-top: 1px;
+  }
+  .layout-compact .receipt-header .period {
+    display: none;
+  }
+  .layout-compact .receipt-header .range-badge {
+    display: none;
+  }
 
-  /* LOADING OVERLAY */
+  .layout-compact .receipt-body {
+    font-size: 7px;
+    line-height: 1.3;
+  }
+
+  .layout-compact .student-line {
+    padding: 2px 0;
+    margin-bottom: 2px;
+  }
+  .layout-compact .student-line .left {
+    font-size: 8.5px;
+  }
+  .layout-compact .student-line .right {
+    font-size: 6.5px;
+  }
+
+  .layout-compact .payments-table {
+    margin-bottom: 2px;
+    font-size: 6.5px;
+  }
+  .layout-compact .payments-table thead th {
+    font-size: 5.5px;
+    padding: 1.5px 2px;
+    letter-spacing: 0.3px;
+  }
+  .layout-compact .payments-table tbody td {
+    padding: 1.5px 2px;
+    font-size: 6.5px;
+  }
+  .layout-compact .payments-table tbody td.dt {
+    font-size: 6px;
+  }
+
+  .layout-compact .totals-block {
+    padding: 3px 4px;
+    margin-top: 2px;
+    border-left-width: 2px;
+  }
+  .layout-compact .totals-row {
+    font-size: 6.5px;
+    padding: 1px 0;
+  }
+  .layout-compact .totals-row.big {
+    font-size: 8px;
+    margin-top: 2px;
+    padding-top: 2px;
+  }
+  .layout-compact .totals-row .prev-hint {
+    font-size: 5.5px;
+    color: #94a3b8;
+    font-style: italic;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .layout-compact .balance-note {
+    display: none;
+  }
+
+  .layout-compact .receipt-footer {
+    padding-top: 2px;
+    margin-top: 2px;
+  }
+  .layout-compact .receipt-footer .left {
+    display: none;
+  }
+  .layout-compact .receipt-footer .right {
+    font-size: 6px;
+    width: 100%;
+    text-align: left;
+  }
+  .layout-compact .receipt-footer .right .ts-label {
+    display: inline;
+    font-size: 5.5px;
+    margin-right: 2px;
+    margin-bottom: 0;
+  }
+
+  .layout-compact .watermark {
+    font-size: 14px;
+    letter-spacing: 2px;
+    padding: 1px 6px;
+    border-width: 2px;
+  }
+
+  /* loading overlay */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -494,9 +547,12 @@
   /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
-    .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
+    .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
-    .receipt-sheet { box-shadow: none; margin: 0; }
+    .receipt-sheet {
+      box-shadow: none; margin: 0;
+      min-height: 297mm;
+    }
     .layout-full .receipt-sheet { padding: 6mm; }
     .layout-compact .receipt-sheet { padding: 4mm; }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
@@ -508,19 +564,19 @@
     .row { grid-template-columns: 1fr; }
     .layout-full .receipt-sheet,
     .layout-compact .receipt-sheet {
-      width: 100%;
+      width: 100%; min-height: auto;
       grid-template-columns: 1fr;
+      grid-template-rows: auto;
       padding: 8px; box-shadow: none;
       border: 1px dashed var(--border);
     }
-    .layout-full .receipt { min-height: auto; }
-    .layout-compact .receipt { min-height: auto; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
   }
 </style>
 </head>
 <body>
 
+<!-- LOGIN GATE -->
 <div id="loginGate" class="login-gate">
   <h1>🧾 Fee Receipts</h1>
   <p class="sub">Admin access required. Enter the bursar password to continue.</p>
@@ -529,10 +585,11 @@
   <div id="loginError" class="err">Incorrect password. Please try again.</div>
 </div>
 
+<!-- MAIN -->
 <div id="mainWrapper" class="main-wrapper layout-full">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student with a guaranteed unique receipt number. Filter by date range — students qualify if they made at least one payment within the range.</p>
+    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all their payments.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -541,7 +598,7 @@
 
     <div class="layout-toggle">
       <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 4 per page</button>
-      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — up to 12 per page</button>
+      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 12 per page</button>
     </div>
 
     <div class="row">
@@ -621,10 +678,11 @@
     </div>
 
     <div id="errorMsg" class="error-msg"></div>
-    <div id="warningMsg" class="warning-msg"></div>
 
     <div class="info">
-      <strong>Receipt numbers:</strong> Every receipt gets a unique number (e.g. <code>LSS-2026-TERM1-0001</code>) that is <strong>never reused</strong>. Numbers are reserved when you print and stored in the <code>ReceiptLog</code> sheet for audit. If a student has already received a receipt in this term, you'll see a warning.
+      <strong>Layout tips:</strong>
+      <strong>Full</strong> gives you a proper receipt with previous balance, footer, and address — 4 per A4.
+      <strong>Compact</strong> packs 12 per A4 — good for high-volume days. Compact drops the footer text and hides the "previous balance" as a small inline hint next to Balance.
     </div>
   </div>
 
@@ -658,21 +716,8 @@
   let currentClass = null;
   let receiptData = null;
   let currentMode = 'single';
-  let currentLayout = 'full';
+  let currentLayout = 'full';  // 'full' | 'compact'
   let selectedStudents = new Set();
-
-  // Map: rowNumber → assigned receipt number (e.g. LSS-2026-TERM1-0001)
-  // Numbers are assigned when the student is added to the selection,
-  // and reused as long as the selection is unchanged.
-  let assignedNumbers = new Map();
-
-  // Next sequence number reserved from the server (we grab a batch)
-  let nextNumberBuffer = [];   // queue of unused numbers
-  let nextSequencePeeked = null; // last peeked string for debugging
-
-  // Duplicate-print history for the current class/term
-  // { studentNameLower: { count, lastIssued, lastReceipt } }
-  let duplicateHistory = {};
 
   const dataCache = new Map();
   const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -752,7 +797,7 @@
   }
 
   // ============================================================
-  // OVERLAY + MESSAGES
+  // LOADING OVERLAY
   // ============================================================
   function showLoading(msg) {
     document.getElementById('loadingMessage').textContent = msg || 'Loading…';
@@ -760,22 +805,6 @@
   }
   function hideLoading() {
     document.getElementById('loadingOverlay').classList.remove('show');
-  }
-  function showError(msg) {
-    const el = document.getElementById('errorMsg');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 8000);
-  }
-  function showWarning(msg) {
-    const el = document.getElementById('warningMsg');
-    el.innerHTML = msg;
-    el.classList.add('show');
-  }
-  function clearWarning() {
-    const el = document.getElementById('warningMsg');
-    el.innerHTML = '';
-    el.classList.remove('show');
   }
 
   // ============================================================
@@ -832,6 +861,9 @@
     loadTerms();
   }
 
+  // ============================================================
+  // INIT
+  // ============================================================
   window.onload = function () {
     try {
       if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
@@ -978,7 +1010,7 @@
   }
 
   // ============================================================
-  // MODE + LAYOUT
+  // MODE SWITCHING
   // ============================================================
   function setMode(mode) {
     currentMode = mode;
@@ -995,6 +1027,9 @@
     }
   }
 
+  // ============================================================
+  // LAYOUT SWITCHING
+  // ============================================================
   function setLayout(layout) {
     currentLayout = layout;
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
@@ -1003,8 +1038,12 @@
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
+    // Re-render the preview with the new layout
     if (selectedStudents.size > 0 && receiptData) {
-      renderPreview(getSelectedStudents());
+      const students = Array.from(selectedStudents)
+        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+        .filter(Boolean);
+      renderPreview(students);
     }
   }
 
@@ -1025,10 +1064,6 @@
     receiptData = null;
     currentClass = null;
     selectedStudents.clear();
-    assignedNumbers.clear();
-    nextNumberBuffer = [];
-    duplicateHistory = {};
-    clearWarning();
   }
 
   async function handleClassChange() {
@@ -1040,15 +1075,9 @@
     const includeUndated = getIncludeUndated();
     const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
 
-    // Reset any prior state
-    assignedNumbers.clear();
-    nextNumberBuffer = [];
-    clearWarning();
-
     const cached = cacheGet(key);
     if (cached) {
       receiptData = cached;
-      await loadDuplicateHistory();
       onDataLoaded(true);
       return;
     }
@@ -1071,31 +1100,11 @@
 
       receiptData = res;
       cacheSet(key, res);
-
-      await loadDuplicateHistory();
       onDataLoaded(false);
     } catch (e) {
       showError('Error: ' + e.message);
     } finally {
       hideLoading();
-    }
-  }
-
-  async function loadDuplicateHistory() {
-    duplicateHistory = {};
-    if (!receiptData || !receiptData.students || !receiptData.students.length) return;
-    try {
-      const names = receiptData.students.map(s => s.studentName);
-      const res = await callGAS('checkReceiptHistory', {
-        studentClass: currentClass,
-        term: currentTermKey,
-        studentNames: JSON.stringify(names)
-      });
-      if (res && res.success && res.alreadyIssued) {
-        duplicateHistory = res.alreadyIssued;
-      }
-    } catch (e) {
-      console.warn('Duplicate history check failed:', e);
     }
   }
 
@@ -1107,64 +1116,6 @@
       renderStudentList(receiptData.students);
     }
     if (fromCache) console.log('Loaded from cache.');
-  }
-
-  // ============================================================
-  // RECEIPT NUMBER ALLOCATION
-  // ============================================================
-  // Grab a batch of numbers from the server so we don't have to call
-  // the server for each student. The batch is only "reserved" (i.e.
-  // committed) when the bursar actually prints.
-  async function ensureNumberBuffer(count) {
-    if (nextNumberBuffer.length >= count) return;
-
-    const needed = count - nextNumberBuffer.length;
-    const res = await callGAS('peekReceiptNumber', { term: currentTermKey, count: needed });
-    if (!res || !res.success || !res.numbers) {
-      throw new Error('Could not reserve receipt numbers.');
-    }
-    nextSequencePeeked = res.numbers[0];
-    for (let i = 0; i < res.numbers.length; i++) {
-      nextNumberBuffer.push(res.numbers[i]);
-    }
-  }
-
-  // Called when a student is added to the selection.
-  // Pops one number from the buffer and pins it to the student's rowNumber.
-  async function assignNumberToStudent(rowNumber) {
-    if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
-    try {
-      await ensureNumberBuffer(1);
-    } catch (e) {
-      // Fallback: caller must handle
-      return null;
-    }
-    const num = nextNumberBuffer.shift();
-    assignedNumbers.set(rowNumber, num);
-    return num;
-  }
-
-  // Release a number when a student is removed from the selection.
-  // Returns the number to the buffer so it can be reused by another
-  // student in this session (never committed until print).
-  function releaseNumberForStudent(rowNumber) {
-    if (assignedNumbers.has(rowNumber)) {
-      const num = assignedNumbers.get(rowNumber);
-      nextNumberBuffer.unshift(num);
-      assignedNumbers.delete(rowNumber);
-    }
-  }
-
-  // Commit all assigned numbers to the server's counter. Called only
-  // when the bursar clicks Print/Save-as-PDF.
-  async function commitAllAssignedNumbers() {
-    const count = assignedNumbers.size;
-    if (count === 0) return;
-    try {
-      await callGAS('commitReceiptNumber', { term: currentTermKey, count: count });
-    } catch (e) {
-      console.warn('Counter commit failed (non-fatal):', e);
-    }
   }
 
   // ============================================================
@@ -1191,51 +1142,24 @@
     sorted.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.rowNumber;
-      const dup = duplicateHistory[s.studentName.toLowerCase()];
-      const dupMark = dup ? ' ⚠' : '';
       opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
-                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '') +
-                        dupMark;
+                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
       sel.appendChild(opt);
     });
     sel.disabled = false;
   }
 
-  async function handleSingleStudentChange() {
+  function handleSingleStudentChange() {
     const rowNumber = parseInt(document.getElementById('rStudentSelect').value, 10);
     if (!rowNumber || !receiptData) return;
 
     const student = receiptData.students.find(s => s.rowNumber === rowNumber);
     if (!student) return;
 
-    // Warn if this student already has a receipt in the log
-    clearWarning();
-    const dup = duplicateHistory[student.studentName.toLowerCase()];
-    if (dup) {
-      showWarning(
-        '<strong>⚠ Heads up:</strong> ' + escapeHtml(student.studentName) +
-        ' already has <strong>' + dup.count + '</strong> receipt(s) in this term. ' +
-        'Last issued: <strong>' + escapeHtml(dup.lastReceipt || 'unknown') + '</strong>' +
-        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') +
-        '. Printing again will assign a new unique number — that\'s allowed, but only do it if the parent needs a duplicate.'
-      );
-    }
-
-    // Release any previously assigned numbers (switching students)
-    for (const rn of Array.from(assignedNumbers.keys())) {
-      if (rn !== rowNumber) releaseNumberForStudent(rn);
-    }
     selectedStudents.clear();
-    selectedStudents.add(rowNumber);
+    selectedStudents.add(student.rowNumber);
 
-    // Assign a receipt number
-    const num = await assignNumberToStudent(rowNumber);
-    if (!num) {
-      showError('Could not reserve a receipt number. Check your connection and try again.');
-      return;
-    }
-
-    renderPreview(getSelectedStudents());
+    renderPreview([student]);
     document.getElementById('btnPrint').disabled = false;
     document.getElementById('btnPDF').disabled = false;
     updatePreviewHeader();
@@ -1265,18 +1189,12 @@
         const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
                             (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
 
-        const dup = duplicateHistory[s.studentName.toLowerCase()];
-        const dupMark = dup
-          ? '<span class="dup-warn">⚠ Already issued: ' + dup.count + ' (' + escapeHtml(dup.lastReceipt || '?') + ')</span>'
-          : '';
-
         html += '<div class="student-row">'
           + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '">'
           + '<label for="student-' + s.rowNumber + '">'
             + '<strong>' + escapeHtml(s.studentName) + '</strong>'
             + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
             + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
-            + dupMark
           + '</label>'
           + '<span class="status-pill ' + statusClass + '">' + statusText + '</span>'
         + '</div>';
@@ -1290,63 +1208,26 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     selectedStudents.clear();
-    // Release all assigned numbers
-    assignedNumbers.clear();
-    nextNumberBuffer = [];
     updateSelectAllLabel();
     updatePreviewHeader();
   }
 
-  async function onStudentListChange(e) {
-    if (!e.target || e.target.type !== 'checkbox') return;
-    const rowNum = parseInt(e.target.dataset.row, 10);
-
-    if (e.target.checked) {
-      selectedStudents.add(rowNum);
-      const num = await assignNumberToStudent(rowNum);
-      if (!num) {
-        e.target.checked = false;
-        selectedStudents.delete(rowNum);
-        showError('Could not reserve a receipt number. Check your connection.');
-        return;
-      }
-    } else {
-      selectedStudents.delete(rowNum);
-      releaseNumberForStudent(rowNum);
+  function onStudentListChange(e) {
+    if (e.target && e.target.type === 'checkbox') {
+      const rowNum = parseInt(e.target.dataset.row, 10);
+      if (e.target.checked) selectedStudents.add(rowNum);
+      else selectedStudents.delete(rowNum);
+      updateSelectionState();
     }
-    updateSelectionState();
   }
 
-  async function toggleSelectAll() {
+  function toggleSelectAll() {
     const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
     const allChecked = Array.from(boxes).every(b => b.checked);
-
-    if (allChecked) {
-      // Deselect all
-      boxes.forEach(b => { b.checked = false; });
-      selectedStudents.clear();
-      assignedNumbers.clear();
-      nextNumberBuffer = [];
-    } else {
-      // Select all — assign numbers to each
-      boxes.forEach(b => { b.checked = true; });
-      selectedStudents.clear();
-      assignedNumbers.clear();
-      nextNumberBuffer = [];
-
-      // Reserve one big batch
-      try {
-        await ensureNumberBuffer(boxes.length);
-      } catch (err) {
-        showError('Could not reserve receipt numbers: ' + err.message);
-        return;
-      }
-      boxes.forEach(b => {
-        const rowNum = parseInt(b.dataset.row, 10);
-        const num = nextNumberBuffer.shift();
-        assignedNumbers.set(rowNum, num);
-        selectedStudents.add(rowNum);
-      });
+    boxes.forEach(b => { b.checked = !allChecked; });
+    selectedStudents.clear();
+    if (!allChecked) {
+      boxes.forEach(b => selectedStudents.add(parseInt(b.dataset.row, 10)));
     }
     updateSelectionState();
   }
@@ -1359,7 +1240,10 @@
     updatePreviewHeader();
 
     if (count > 0 && currentMode === 'batch') {
-      renderPreview(getSelectedStudents());
+      const students = Array.from(selectedStudents)
+        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+        .filter(Boolean);
+      renderPreview(students);
     } else if (count === 0) {
       document.getElementById('receiptContainer').innerHTML = '';
     }
@@ -1390,11 +1274,8 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     document.getElementById('receiptContainer').innerHTML = '';
-    assignedNumbers.clear();
-    nextNumberBuffer = [];
     updatePreviewHeader();
     updateSelectAllLabel();
-    clearWarning();
   }
 
   // ============================================================
@@ -1407,6 +1288,7 @@
     }
 
     const perSheet = currentLayout === 'compact' ? 12 : 4;
+    const cols = currentLayout === 'compact' ? 4 : 2;
 
     const from = getDateFromInput();
     const to = getDateToInput();
@@ -1430,10 +1312,7 @@
     for (let i = 0; i < students.length; i += perSheet) {
       const group = students.slice(i, i + perSheet);
       html += '<div class="receipt-sheet">';
-      group.forEach(s => {
-        const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
-        html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
-      });
+      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt, currentLayout); });
       for (let k = group.length; k < perSheet; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
@@ -1453,7 +1332,7 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
   }
 
-  function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
+  function buildReceiptHTML(student, termInfo, printedAt, layout) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -1467,6 +1346,7 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
+    // Payments rows
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
       rowsHTML = '<tr><td colspan="3" style="padding:6px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
@@ -1494,11 +1374,9 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
-    const numText = receiptNumber || '— PENDING —';
-    const numClass = receiptNumber ? '' : ' pending';
-
-    // COMPACT
+    // ----- COMPACT layout: minimal receipt -----
     if (layout === 'compact') {
+      // Previous-balance hint shown inline next to Balance
       let prevHint = '';
       if (prevBalance !== 0) {
         prevHint = '<span class="prev-hint">'
@@ -1508,7 +1386,7 @@
       }
 
       return '<div class="receipt">'
-        + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
+        + '<div class="receipt-number">[Pending]</div>'
         + '<div class="receipt-header">'
           + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
           + '<div class="title">'
@@ -1542,9 +1420,9 @@
       + '</div>';
     }
 
-    // FULL
+    // ----- FULL layout: rich receipt -----
     return '<div class="receipt">'
-      + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
+      + '<div class="receipt-number">[Pending]</div>'
       + '<div class="receipt-header">'
         + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
         + '<div class="title">'
@@ -1604,24 +1482,22 @@
     const students = getSelectedStudents();
     if (!students.length) return;
 
-    // Guard: every selected student must have a receipt number
-    const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
-    if (missing.length > 0) {
-      showError(
-        'Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. ' +
-        'This is unusual — please clear the selection and re-select.'
-      );
-      return;
+    showLoading('Preparing receipts…');
+
+    let numbers = [];
+    try {
+      const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
+      if (peek && peek.success && peek.numbers) numbers = peek.numbers;
+    } catch (e) {
+      console.warn('Peek failed:', e);
     }
 
-    showLoading('Committing receipt numbers…');
+    applyReceiptNumbers(numbers);
 
-    // 1. Commit numbers to the server counter (so they can never be reused)
-    await commitAllAssignedNumbers();
+    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => console.warn('Commit failed:', e));
 
-    // 2. Log receipts for audit
-    const receiptsLog = students.map(s => ({
-      receiptNumber: assignedNumbers.get(s.rowNumber) || '',
+    const receiptsLog = students.map((s, idx) => ({
+      receiptNumber: numbers[idx] || '',
       studentName: s.studentName,
       totalPaid: s.totalPaidThisTerm,
       balanceAfter: s.cumulativeBalance,
@@ -1632,7 +1508,7 @@
       studentClass: currentClass,
       term: currentTermKey,
       receipts: JSON.stringify(receiptsLog)
-    }).catch(e => console.warn('Log failed (non-fatal):', e));
+    }).catch(e => console.warn('Log failed:', e));
 
     hideLoading();
     setTimeout(() => window.print(), 150);
@@ -1647,6 +1523,13 @@
     return Array.from(selectedStudents)
       .map(rn => receiptData.students.find(s => s.rowNumber === rn))
       .filter(Boolean);
+  }
+
+  function applyReceiptNumbers(numbers) {
+    const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
+    receipts.forEach((el, idx) => {
+      if (numbers[idx]) el.textContent = numbers[idx];
+    });
   }
 
   // ============================================================
@@ -1671,6 +1554,12 @@
     const d = document.createElement('div');
     d.textContent = String(s);
     return d.innerHTML;
+  }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 8000);
   }
 </script>
 </body>
