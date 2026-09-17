@@ -20,7 +20,7 @@
     padding: 16px;
   }
 
-  /* ---------- LOGIN GATE ---------- */
+  /* LOGIN GATE */
   .login-gate {
     max-width: 420px; margin: 80px auto;
     background: white; padding: 32px;
@@ -47,25 +47,21 @@
   .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
   .login-gate .err.show { display: block; }
 
-  /* ---------- MAIN ---------- */
+  /* MAIN */
   .main-wrapper { display: none; }
   .controls {
     max-width: 1000px; margin: 0 auto 16px;
     background: white; border-radius: 12px;
     padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
-  .controls h1 {
-    font-size: 20px; color: var(--primary); margin-bottom: 4px;
-  }
-  .controls .subtitle {
-    font-size: 13px; color: var(--muted); margin-bottom: 16px;
-  }
+  .controls h1 { font-size: 20px; color: var(--primary); margin-bottom: 4px; }
+  .controls .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
   .controls label {
     display: block; font-size: 13px; font-weight: 600;
     color: var(--text); margin-bottom: 5px;
   }
-  .controls select, .controls input[type="text"] {
+  .controls select, .controls input[type="text"], .controls input[type="date"] {
     width: 100%; padding: 10px 12px;
     border: 1.5px solid var(--border); border-radius: 8px;
     font-size: 14px; background: white;
@@ -86,6 +82,38 @@
   .mode-tabs button.active {
     background: white; color: var(--primary);
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .quick-ranges {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .quick-ranges button {
+    padding: 6px 12px;
+    background: #f1f5f9; border: 1px solid var(--border);
+    border-radius: 20px; font-size: 12px; font-weight: 600;
+    color: var(--muted); cursor: pointer;
+    transition: 0.15s;
+  }
+  .quick-ranges button:hover { background: #e2e8f0; color: var(--primary); }
+
+  .range-summary {
+    background: #ecfdf5; border-left: 3px solid #10b981;
+    padding: 10px 14px; border-radius: 6px;
+    font-size: 13px; color: #065f46;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .range-summary.show { display: block; }
+  .range-summary strong { color: #166534; }
+
+  .checkbox-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--primary);
   }
 
   .student-list {
@@ -170,7 +198,7 @@
   .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
   .preview-header .count strong { color: var(--primary); }
 
-  /* ---------- RECEIPT GRID ---------- */
+  /* RECEIPT GRID */
   .receipt-sheet {
     width: 210mm; min-height: 297mm;
     margin: 0 auto 20px; background: white;
@@ -214,6 +242,14 @@
     font-size: 9px; color: var(--muted);
     margin-top: 1px; font-weight: 600;
   }
+  .receipt-header .range-badge {
+    display: inline-block;
+    background: #ecfdf5; color: #065f46;
+    font-size: 8.5px; font-weight: 700;
+    padding: 1px 6px; border-radius: 20px;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
 
   .receipt-body { flex: 1; font-size: 10.5px; line-height: 1.4; }
 
@@ -248,6 +284,9 @@
   .payments-table tbody td.dt {
     text-align: right; color: var(--muted);
     white-space: nowrap; font-size: 9.5px;
+  }
+  .payments-table tbody td.dt.nodate {
+    color: #cbd5e1; font-style: italic;
   }
 
   .totals-block {
@@ -287,11 +326,18 @@
     font-size: 8.5px; color: var(--muted); line-height: 1.4;
   }
   .receipt-footer .right {
-    text-align: center; font-size: 8.5px; color: var(--muted);
+    text-align: right; font-size: 8.5px; color: var(--muted);
+    font-family: 'Courier New', monospace;
+    line-height: 1.4;
   }
-  .signature-line {
-    border-top: 1px solid #475569;
-    width: 80px; padding-top: 2px; margin-bottom: 1px;
+  .receipt-footer .right .ts-label {
+    font-size: 7.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 1px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #94a3b8;
   }
 
   .receipt-number {
@@ -342,7 +388,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { font-size: 14px; color: #cbd5e1; }
 
-  /* ---------- PRINT ---------- */
+  /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
     .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
@@ -355,7 +401,7 @@
     @page { size: A4 portrait; margin: 0; }
   }
 
-  /* ---------- MOBILE ---------- */
+  /* MOBILE */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
     .receipt-sheet {
@@ -371,7 +417,7 @@
 </head>
 <body>
 
-<!-- ==================== LOGIN GATE ==================== -->
+<!-- LOGIN GATE -->
 <div id="loginGate" class="login-gate">
   <h1>🧾 Fee Receipts</h1>
   <p class="sub">Admin access required. Enter the bursar password to continue.</p>
@@ -380,12 +426,12 @@
   <div id="loginError" class="err">Incorrect password. Please try again.</div>
 </div>
 
-<!-- ==================== MAIN ==================== -->
+<!-- MAIN -->
 <div id="mainWrapper" class="main-wrapper">
 
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student — shows every payment recorded in the term plus any previous balance. 4 receipts per A4 sheet.</p>
+    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all payments.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -415,6 +461,34 @@
       </div>
     </div>
 
+    <div class="row">
+      <div>
+        <label for="rDateFrom">Payments From:</label>
+        <input type="date" id="rDateFrom" onchange="handleRangeChange()">
+      </div>
+      <div>
+        <label for="rDateTo">Payments To:</label>
+        <input type="date" id="rDateTo" onchange="handleRangeChange()">
+      </div>
+    </div>
+
+    <div class="quick-ranges">
+      <button type="button" onclick="setQuickRange('today')">Today</button>
+      <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
+      <button type="button" onclick="setQuickRange('week')">This Week</button>
+      <button type="button" onclick="setQuickRange('month')">This Month</button>
+      <button type="button" onclick="setQuickRange('all')">All Payments</button>
+    </div>
+
+    <div class="range-summary" id="rangeSummary"></div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="rIncludeUndated" onchange="handleRangeChange()">
+      <label for="rIncludeUndated" style="margin:0;font-weight:500;">
+        Include students whose only payments have no date recorded
+      </label>
+    </div>
+
     <div id="singleMode" class="row">
       <div style="grid-column: 1 / -1;">
         <label for="rStudentSelect">Student:</label>
@@ -425,7 +499,7 @@
     </div>
 
     <div id="batchMode" style="display:none;">
-      <label>Students (only those with payments are selectable):</label>
+      <label>Students (only those with payments in the range are selectable):</label>
       <div id="studentList" class="student-list">
         <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
           Select a term and class to load students.
@@ -443,8 +517,8 @@
     <div id="errorMsg" class="error-msg"></div>
 
     <div class="info">
-      <strong>Speed tips:</strong> data is cached after the first load — switching between classes is instant.
-      Use <strong>Save as PDF</strong> to bulk-generate and print later.
+      <strong>How it works:</strong> A student qualifies for a receipt if at least one of their installment dates falls within the selected range.
+      Their receipt then shows <strong>all</strong> their payments (dated and undated). Data is cached — switching between classes is instant.
     </div>
   </div>
 
@@ -481,12 +555,13 @@
   let currentMode = 'single';
   let selectedStudents = new Set();
 
-  // In-memory cache: key = "term|class", value = server response
   const dataCache = new Map();
-  const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+  const CACHE_TTL_MS = 5 * 60 * 1000;
 
-  function cacheGet(termKey, studentClass) {
-    const key = termKey + '|' + studentClass;
+  function cacheKey(termKey, studentClass, from, to, undated) {
+    return [termKey, studentClass, from || '', to || '', undated ? '1' : '0'].join('|');
+  }
+  function cacheGet(key) {
     const entry = dataCache.get(key);
     if (!entry) return null;
     if (Date.now() - entry.ts > CACHE_TTL_MS) {
@@ -495,8 +570,13 @@
     }
     return entry.data;
   }
-  function cacheSet(termKey, studentClass, data) {
-    dataCache.set(termKey + '|' + studentClass, { data, ts: Date.now() });
+  function cacheSet(key, data) {
+    dataCache.set(key, { data, ts: Date.now() });
+  }
+  function cacheInvalidateClass(termKey, studentClass) {
+    for (const k of Array.from(dataCache.keys())) {
+      if (k.indexOf(termKey + '|' + studentClass + '|') === 0) dataCache.delete(k);
+    }
   }
 
   // ============================================================
@@ -608,14 +688,20 @@
   function showMain() {
     document.getElementById('loginGate').style.display = 'none';
     document.getElementById('mainWrapper').style.display = 'block';
+
+    // Default range to today
+    const today = new Date();
+    document.getElementById('rDateFrom').value = toIsoDate(today);
+    document.getElementById('rDateTo').value = toIsoDate(today);
+    updateRangeSummary();
+
     loadTerms();
   }
 
   // ============================================================
   // INIT
   // ============================================================
-  window.onload = async function () {
-    // Auto-unlock within the same browser session
+  window.onload = function () {
     try {
       if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
         showMain();
@@ -683,6 +769,84 @@
   }
 
   // ============================================================
+  // DATE HELPERS
+  // ============================================================
+  function toIsoDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dd}`;
+  }
+  function formatDateDisplay(iso) {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  function getDateFromInput() { return document.getElementById('rDateFrom').value || null; }
+  function getDateToInput() { return document.getElementById('rDateTo').value || null; }
+  function getIncludeUndated() { return document.getElementById('rIncludeUndated').checked; }
+
+  function setQuickRange(kind) {
+    const from = document.getElementById('rDateFrom');
+    const to = document.getElementById('rDateTo');
+    const today = new Date();
+
+    if (kind === 'today') {
+      from.value = toIsoDate(today);
+      to.value = toIsoDate(today);
+    } else if (kind === 'yesterday') {
+      const y = new Date(today); y.setDate(today.getDate() - 1);
+      from.value = toIsoDate(y);
+      to.value = toIsoDate(y);
+    } else if (kind === 'week') {
+      const day = today.getDay();
+      const diff = day === 0 ? 6 : day - 1;
+      const mon = new Date(today); mon.setDate(today.getDate() - diff);
+      from.value = toIsoDate(mon);
+      to.value = toIsoDate(today);
+    } else if (kind === 'month') {
+      const first = new Date(today.getFullYear(), today.getMonth(), 1);
+      from.value = toIsoDate(first);
+      to.value = toIsoDate(today);
+    } else if (kind === 'all') {
+      from.value = '';
+      to.value = '';
+    }
+    handleRangeChange();
+  }
+
+  function updateRangeSummary() {
+    const el = document.getElementById('rangeSummary');
+    const from = getDateFromInput();
+    const to = getDateToInput();
+    const undated = getIncludeUndated();
+
+    if (!from && !to) {
+      el.innerHTML = '<strong>All Payments mode:</strong> every student with at least one recorded payment.';
+      el.classList.add('show');
+      return;
+    }
+
+    let msg = '<strong>Filter active:</strong> showing students with at least one payment dated ';
+    if (from && to) msg += `<strong>between ${formatDateDisplay(from)} and ${formatDateDisplay(to)}</strong>.`;
+    else if (from) msg += `<strong>on or after ${formatDateDisplay(from)}</strong>.`;
+    else if (to) msg += `<strong>on or before ${formatDateDisplay(to)}</strong>.`;
+    msg += ' Qualifying students will show <em>all</em> their payments (dated and undated) on their receipts.';
+    if (undated) msg += ' <em>Undated payments can also qualify a student when no dated payment matches.</em>';
+
+    el.innerHTML = msg;
+    el.classList.add('show');
+  }
+
+  function handleRangeChange() {
+    if (currentClass && currentTermKey) {
+      cacheInvalidateClass(currentTermKey, currentClass);
+      handleClassChange();
+    }
+    updateRangeSummary();
+  }
+
+  // ============================================================
   // MODE SWITCHING
   // ============================================================
   function setMode(mode) {
@@ -701,7 +865,7 @@
   }
 
   // ============================================================
-  // TERM + CLASS HANDLERS
+  // TERM + CLASS
   // ============================================================
   function handleTermChange() {
     currentTermKey = document.getElementById('rTermSelect').value;
@@ -723,10 +887,14 @@
     currentClass = document.getElementById('rClassSelect').value;
     if (!currentClass || !currentTermKey) return;
 
-    // Try cache first
-    let data = cacheGet(currentTermKey, currentClass);
-    if (data) {
-      receiptData = data;
+    const dateFrom = getDateFromInput();
+    const dateTo = getDateToInput();
+    const includeUndated = getIncludeUndated();
+    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
+
+    const cached = cacheGet(key);
+    if (cached) {
+      receiptData = cached;
       onDataLoaded(true);
       return;
     }
@@ -734,10 +902,15 @@
     showLoading('Loading ' + currentClass + ' records…');
 
     try {
-      const res = await callGAS('getReceiptDataForClass', {
+      const params = {
         studentClass: currentClass,
         term: currentTermKey
-      });
+      };
+      if (dateFrom) params.dateFrom = dateFrom;
+      if (dateTo) params.dateTo = dateTo;
+      if (includeUndated) params.includeUndated = 'true';
+
+      const res = await callGAS('getReceiptDataForClass', params);
 
       if (!res || !res.success) {
         showError(res?.error || 'Failed to load students.');
@@ -746,9 +919,8 @@
       }
 
       receiptData = res;
-      cacheSet(currentTermKey, currentClass, res);
+      cacheSet(key, res);
       onDataLoaded(false);
-
     } catch (e) {
       showError('Error: ' + e.message);
     } finally {
@@ -758,16 +930,12 @@
 
   function onDataLoaded(fromCache) {
     if (!receiptData) return;
-
     if (currentMode === 'single') {
       populateStudentSelect(receiptData.students);
     } else {
       renderStudentList(receiptData.students);
     }
-
-    if (fromCache) {
-      console.log('Loaded from cache — instant.');
-    }
+    if (fromCache) console.log('Loaded from cache.');
   }
 
   // ============================================================
@@ -778,37 +946,26 @@
     sel.innerHTML = '';
     const def = document.createElement('option');
     def.value = ''; def.disabled = true; def.selected = true;
-    def.textContent = '-- Select Student (' + students.length + ' total) --';
+    def.textContent = '-- Select Student (' + students.length + ' matching) --';
     sel.appendChild(def);
 
-    const withPay = students.filter(s => s.hasPayments);
-    const withoutPay = students.filter(s => !s.hasPayments);
-
-    if (withPay.length) {
-      const og = document.createElement('optgroup');
-      og.label = '✓ With payments (' + withPay.length + ')';
-      withPay.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.rowNumber;
-        opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
-                          (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
-        og.appendChild(opt);
-      });
-      sel.appendChild(og);
+    if (!students.length) {
+      const opt = document.createElement('option');
+      opt.value = ''; opt.disabled = true;
+      opt.textContent = '-- No students match the range --';
+      sel.appendChild(opt);
+      sel.disabled = true;
+      return;
     }
 
-    if (withoutPay.length) {
-      const og2 = document.createElement('optgroup');
-      og2.label = '○ No payments (' + withoutPay.length + ')';
-      withoutPay.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.rowNumber;
-        opt.textContent = s.studentName + ' — no payments recorded';
-        og2.appendChild(opt);
-      });
-      sel.appendChild(og2);
-    }
-
+    const sorted = students.slice().sort((a, b) => a.studentName.localeCompare(b.studentName));
+    sorted.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.rowNumber;
+      opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
+                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
+      sel.appendChild(opt);
+    });
     sel.disabled = false;
   }
 
@@ -825,45 +982,36 @@
     renderPreview([student]);
     document.getElementById('btnPrint').disabled = false;
     document.getElementById('btnPDF').disabled = false;
+    updatePreviewHeader();
   }
 
   // ============================================================
-  // BATCH MODE — student list
+  // BATCH MODE
   // ============================================================
   function renderStudentList(students) {
     const list = document.getElementById('studentList');
-    const sorted = students.slice().sort((a, b) => {
-      if (a.hasPayments !== b.hasPayments) return a.hasPayments ? -1 : 1;
-      return a.studentName.localeCompare(b.studentName);
-    });
+    const sorted = students.slice().sort((a, b) => a.studentName.localeCompare(b.studentName));
 
     let html = '';
     if (!sorted.length) {
-      html = '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">No students found.</div>';
+      html = '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">No students match the selected range.</div>';
     } else {
       sorted.forEach(s => {
-        const hasPay = s.hasPayments;
         const balance = safeNum(s.cumulativeBalance);
-        const statusClass = !hasPay ? 'status-nopay' :
-                            balance === 0 ? 'status-ok' :
-                            balance > 0 ? 'status-over' : 'status-due';
-        const statusText = !hasPay ? 'No payment' :
-                           balance === 0 ? 'Paid' :
-                           balance > 0 ? 'Overpaid' : 'Owes';
+        const statusClass = balance === 0 ? 'status-ok' : balance > 0 ? 'status-over' : 'status-due';
+        const statusText = balance === 0 ? 'Paid' : balance > 0 ? 'Overpaid' : 'Owes';
 
-        const metaLine = hasPay
-          ? 'K' + safeMoney(s.totalPaidThisTerm) + ' paid • ' + s.payments.length + ' payment' + (s.payments.length !== 1 ? 's' : '') +
-            (s.latestPaymentDate ? ' • last ' + s.latestPaymentDate : '')
-          : 'No payments recorded for this term';
+        const metaLine = 'K' + safeMoney(s.totalPaidThisTerm) + ' • ' +
+                         s.payments.length + ' payment' + (s.payments.length !== 1 ? 's' : '') +
+                         (s.latestPaymentDate ? ' • last ' + s.latestPaymentDate : '') +
+                         (s.hasUndated ? ' • some undated' : '');
 
         const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
                             (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
 
-        const disabled = hasPay ? '' : ' disabled';
-
         html += '<div class="student-row">'
-          + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '"' + disabled + '>'
-          + '<label for="student-' + s.rowNumber + '"' + (hasPay ? '' : ' style="opacity:0.55;"') + '>'
+          + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '">'
+          + '<label for="student-' + s.rowNumber + '">'
             + '<strong>' + escapeHtml(s.studentName) + '</strong>'
             + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
             + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
@@ -894,10 +1042,9 @@
   }
 
   function toggleSelectAll() {
-    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]:not(:disabled)');
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
     const allChecked = Array.from(boxes).every(b => b.checked);
     boxes.forEach(b => { b.checked = !allChecked; });
-
     selectedStudents.clear();
     if (!allChecked) {
       boxes.forEach(b => selectedStudents.add(parseInt(b.dataset.row, 10)));
@@ -924,7 +1071,7 @@
 
   function updateSelectAllLabel() {
     const btn = document.getElementById('btnSelectAll');
-    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]:not(:disabled)');
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
     if (!boxes.length) { btn.textContent = '✓ Select All With Payments'; return; }
     const allChecked = Array.from(boxes).every(b => b.checked);
     btn.textContent = allChecked ? '✕ Deselect All' : '✓ Select All With Payments';
@@ -960,19 +1107,30 @@
       return;
     }
 
+    const from = getDateFromInput();
+    const to = getDateToInput();
+    let rangeLabel = '';
+    if (from && to && from === to) rangeLabel = 'Payments on ' + formatDateDisplay(from);
+    else if (from && to) rangeLabel = 'Payments ' + formatDateDisplay(from) + ' – ' + formatDateDisplay(to);
+    else if (from) rangeLabel = 'Payments from ' + formatDateDisplay(from);
+    else if (to) rangeLabel = 'Payments up to ' + formatDateDisplay(to);
+
     const termInfo = {
       academicYear: receiptData.academicYear,
       term: receiptData.term,
       termDisplay: receiptData.termDisplay,
+      rangeLabel: rangeLabel,
       termConfig: receiptData.termConfig
     };
 
-    let html = '';
+    const now = new Date();
+    const printedAt = formatTimestamp(now);
 
+    let html = '';
     for (let i = 0; i < students.length; i += 4) {
       const group = students.slice(i, i + 4);
       html += '<div class="receipt-sheet">';
-      group.forEach(s => { html += buildReceiptHTML(s, termInfo); });
+      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt); });
       for (let k = group.length; k < 4; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
@@ -982,7 +1140,17 @@
     document.getElementById('receiptContainer').innerHTML = html;
   }
 
-  function buildReceiptHTML(student, termInfo) {
+  function formatTimestamp(d) {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mi = String(d.getMinutes()).padStart(2, '0');
+    const ss = String(d.getSeconds()).padStart(2, '0');
+    return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
+  }
+
+  function buildReceiptHTML(student, termInfo, printedAt) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -996,7 +1164,7 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
-    // Build payments rows as a single string
+    // Payments rows — installments already sorted by date on server
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
       rowsHTML = '<tr><td colspan="3" style="padding:10px;text-align:center;color:#94a3b8;font-size:10px;font-style:italic;">No payments recorded for this term.</td></tr>';
@@ -1004,10 +1172,12 @@
       student.payments.forEach(p => {
         const sign = p.isRefund ? '−' : '';
         const amtClass = p.isRefund ? 'amt refund' : 'amt';
+        const dtClass = p.hasDate ? 'dt' : 'dt nodate';
+        const dtText = p.hasDate ? p.date : 'no date';
         rowsHTML += '<tr>'
           + '<td>' + escapeHtml(p.displayName) + '</td>'
           + '<td class="' + amtClass + '">' + sign + 'K' + safeMoney(p.displayAmount) + '</td>'
-          + '<td class="dt">' + escapeHtml(p.date || '—') + '</td>'
+          + '<td class="' + dtClass + '">' + escapeHtml(dtText) + '</td>'
           + '</tr>';
       });
     }
@@ -1019,7 +1189,6 @@
         ? 'Credit of K' + safeMoney(balance) + ' will be applied to future fees.'
         : 'Outstanding balance of K' + safeMoney(Math.abs(balance)) + ' remains payable.';
 
-    // Total payable = this term's fees + any outstanding previous balance
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
@@ -1030,6 +1199,9 @@
         + '<div class="title">'
           + '<div class="school">' + escapeHtml(schoolName) + '</div>'
           + '<div class="doc-type">Fee Receipt — ' + escapeHtml(termInfo.termDisplay) + '</div>'
+          + (termInfo.rangeLabel
+              ? '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>'
+              : '')
           + '<div class="period">' + escapeHtml(termInfo.termConfig.schoolAddress || 'Private Bag 130, Lunzu') + '</div>'
         + '</div>'
       + '</div>'
@@ -1066,8 +1238,8 @@
           + escapeHtml(termInfo.termConfig.schoolAddress || '')
         + '</div>'
         + '<div class="right">'
-          + '<div class="signature-line"></div>'
-          + 'Signature / Stamp'
+          + '<span class="ts-label">Printed</span>'
+          + printedAt
         + '</div>'
       + '</div>'
       + '<div class="watermark ' + wmClass + '">' + wmText + '</div>'
@@ -1086,18 +1258,14 @@
     let numbers = [];
     try {
       const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
-      if (peek && peek.success && peek.numbers) {
-        numbers = peek.numbers;
-      }
+      if (peek && peek.success && peek.numbers) numbers = peek.numbers;
     } catch (e) {
-      console.warn('Peek failed, continuing with placeholders:', e);
+      console.warn('Peek failed:', e);
     }
 
-    applyReceiptNumbers(students, numbers);
+    applyReceiptNumbers(numbers);
 
-    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => {
-      console.warn('Counter commit failed:', e);
-    });
+    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => console.warn('Commit failed:', e));
 
     const receiptsLog = students.map((s, idx) => ({
       receiptNumber: numbers[idx] || '',
@@ -1114,7 +1282,6 @@
     }).catch(e => console.warn('Log failed:', e));
 
     hideLoading();
-
     setTimeout(() => window.print(), 150);
   }
 
@@ -1129,7 +1296,7 @@
       .filter(Boolean);
   }
 
-  function applyReceiptNumbers(students, numbers) {
+  function applyReceiptNumbers(numbers) {
     const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
     receipts.forEach((el, idx) => {
       if (numbers[idx]) el.textContent = numbers[idx];
