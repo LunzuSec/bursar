@@ -142,6 +142,16 @@
     font-size: 11px; color: var(--muted); display: block;
     margin-top: 2px; font-weight: 400;
   }
+  .student-row .dup-warn {
+    font-size: 10.5px;
+    color: #b45309;
+    background: #fffbeb;
+    padding: 1px 6px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 2px;
+    font-weight: 600;
+  }
   .status-pill {
     font-size: 10px; font-weight: 700;
     padding: 3px 9px; border-radius: 20px;
@@ -190,6 +200,17 @@
   }
   .error-msg.show { display: block; }
 
+  .warning-msg {
+    background: #fffbeb; color: #92400e;
+    padding: 12px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 12px;
+    border-left: 4px solid #f59e0b;
+    display: none;
+    line-height: 1.5;
+  }
+  .warning-msg.show { display: block; }
+  .warning-msg strong { color: #78350f; }
+
   .preview-header {
     max-width: 1000px; margin: 0 auto 12px;
     justify-content: space-between; align-items: center;
@@ -201,9 +222,7 @@
   .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
   .preview-header .count strong { color: var(--primary); }
 
-  /* ============================================
-     RECEIPT SHEET
-     ============================================ */
+  /* RECEIPT SHEET */
   .receipt-sheet {
     width: 210mm;
     margin: 0 auto 20px;
@@ -215,7 +234,6 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* ---------- FULL layout: 2 × 2, auto-height rows ---------- */
   .layout-full .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -223,11 +241,8 @@
     gap: 4mm;
     align-content: start;
   }
-  .layout-full .receipt {
-    min-height: 130mm; /* so a 1-payment receipt isn't a stub */
-  }
+  .layout-full .receipt { min-height: 130mm; }
 
-  /* ---------- COMPACT layout: 4 × N, auto-height rows ---------- */
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -236,13 +251,8 @@
     padding: 4mm;
     align-content: start;
   }
-  .layout-compact .receipt {
-    min-height: 55mm; /* enough for the header + 1 payment row + totals */
-  }
+  .layout-compact .receipt { min-height: 55mm; }
 
-  /* ============================================
-     RECEIPT BASE
-     ============================================ */
   .receipt {
     border: 1.2px dashed #94a3b8;
     border-radius: 6px;
@@ -255,7 +265,6 @@
     background: white;
   }
 
-  /* Inner flex: header at top, body expands, footer at bottom */
   .receipt-body {
     flex: 1 1 auto;
     font-size: 10.5px;
@@ -264,7 +273,6 @@
     flex-direction: column;
   }
 
-  /* Payments table stretches to fill leftover space */
   .payments-table {
     width: 100%;
     border-collapse: collapse;
@@ -272,9 +280,6 @@
     font-size: 10px;
   }
 
-  /* ============================================
-     FULL RECEIPT TYPOGRAPHY
-     ============================================ */
   .receipt-header {
     display: flex; align-items: center; gap: 8px;
     border-bottom: 1.5px solid var(--primary);
@@ -342,7 +347,7 @@
     border-left: 3px solid var(--accent);
     border-radius: 4px;
     padding: 6px 8px;
-    margin-top: auto; /* push to bottom of body */
+    margin-top: auto;
   }
   .totals-row {
     display: flex; justify-content: space-between;
@@ -392,12 +397,19 @@
   .receipt-number {
     position: absolute; top: 5mm; right: 5mm;
     font-family: 'Courier New', monospace;
-    font-size: 8.5px; color: var(--muted); font-weight: 700;
+    font-size: 9.5px; color: var(--primary); font-weight: 700;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    letter-spacing: 0.5px;
+  }
+  .receipt-number.pending {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fde68a;
   }
 
-  /* ============================================
-     WATERMARK — sits behind content, centered in actual receipt area
-     ============================================ */
   .watermark {
     position: absolute;
     top: 50%; left: 50%;
@@ -423,112 +435,39 @@
     border-radius: 6px;
   }
 
-  /* ============================================
-     COMPACT OVERRIDES
-     ============================================ */
-  .layout-compact .receipt {
-    padding: 2.5mm;
-    border-width: 1px;
-  }
+  /* COMPACT OVERRIDES */
+  .layout-compact .receipt { padding: 2.5mm; border-width: 1px; }
   .layout-compact .receipt-number {
     top: 2mm; right: 2mm;
-    font-size: 6.5px;
+    font-size: 7px;
+    padding: 1px 4px;
   }
-  .layout-compact .receipt-header {
-    gap: 4px;
-    padding-bottom: 2px;
-    margin-bottom: 3px;
-    border-bottom-width: 1px;
-  }
-  .layout-compact .receipt-header img {
-    width: 18px; height: 18px;
-  }
-  .layout-compact .receipt-header .school {
-    font-size: 7.5px;
-    line-height: 1;
-    letter-spacing: 0;
-  }
-  .layout-compact .receipt-header .doc-type {
-    font-size: 6px;
-    letter-spacing: 0.6px;
-    margin-top: 1px;
-  }
+  .layout-compact .receipt-header { gap: 4px; padding-bottom: 2px; margin-bottom: 3px; border-bottom-width: 1px; }
+  .layout-compact .receipt-header img { width: 18px; height: 18px; }
+  .layout-compact .receipt-header .school { font-size: 7.5px; line-height: 1; letter-spacing: 0; }
+  .layout-compact .receipt-header .doc-type { font-size: 6px; letter-spacing: 0.6px; margin-top: 1px; }
   .layout-compact .receipt-header .period { display: none; }
   .layout-compact .receipt-header .range-badge { display: none; }
-
   .layout-compact .receipt-body { font-size: 7px; line-height: 1.3; }
-
-  .layout-compact .student-line {
-    padding: 2px 0;
-    margin-bottom: 2px;
-  }
+  .layout-compact .student-line { padding: 2px 0; margin-bottom: 2px; }
   .layout-compact .student-line .left { font-size: 8.5px; }
   .layout-compact .student-line .right { font-size: 6.5px; }
-
-  .layout-compact .payments-table {
-    margin-bottom: 2px;
-    font-size: 6.5px;
-  }
-  .layout-compact .payments-table thead th {
-    font-size: 5.5px;
-    padding: 1.5px 2px;
-    letter-spacing: 0.3px;
-  }
-  .layout-compact .payments-table tbody td {
-    padding: 1.5px 2px;
-    font-size: 6.5px;
-  }
+  .layout-compact .payments-table { margin-bottom: 2px; font-size: 6.5px; }
+  .layout-compact .payments-table thead th { font-size: 5.5px; padding: 1.5px 2px; letter-spacing: 0.3px; }
+  .layout-compact .payments-table tbody td { padding: 1.5px 2px; font-size: 6.5px; }
   .layout-compact .payments-table tbody td.dt { font-size: 6px; }
-
-  .layout-compact .totals-block {
-    padding: 3px 4px;
-    margin-top: 2px;
-    border-left-width: 2px;
-  }
-  .layout-compact .totals-row {
-    font-size: 6.5px;
-    padding: 1px 0;
-  }
-  .layout-compact .totals-row.big {
-    font-size: 8px;
-    margin-top: 2px;
-    padding-top: 2px;
-  }
-  .layout-compact .totals-row .prev-hint {
-    font-size: 5.5px;
-    color: #94a3b8;
-    font-style: italic;
-    display: block;
-    margin-top: 1px;
-  }
-
+  .layout-compact .totals-block { padding: 3px 4px; margin-top: 2px; border-left-width: 2px; }
+  .layout-compact .totals-row { font-size: 6.5px; padding: 1px 0; }
+  .layout-compact .totals-row.big { font-size: 8px; margin-top: 2px; padding-top: 2px; }
+  .layout-compact .totals-row .prev-hint { font-size: 5.5px; color: #94a3b8; font-style: italic; display: block; margin-top: 1px; }
   .layout-compact .balance-note { display: none; }
-
-  .layout-compact .receipt-footer {
-    padding-top: 2px;
-    margin-top: 2px;
-  }
+  .layout-compact .receipt-footer { padding-top: 2px; margin-top: 2px; }
   .layout-compact .receipt-footer .left { display: none; }
-  .layout-compact .receipt-footer .right {
-    font-size: 6px;
-    width: 100%;
-    text-align: left;
-  }
-  .layout-compact .receipt-footer .right .ts-label {
-    display: inline;
-    font-size: 5.5px;
-    margin-right: 2px;
-    margin-bottom: 0;
-  }
+  .layout-compact .receipt-footer .right { font-size: 6px; width: 100%; text-align: left; }
+  .layout-compact .receipt-footer .right .ts-label { display: inline; font-size: 5.5px; margin-right: 2px; margin-bottom: 0; }
+  .layout-compact .watermark { font-size: 14px; letter-spacing: 2px; padding: 2px 8px; border-width: 2px; }
 
-  .layout-compact .watermark {
-    font-size: 14px;
-    letter-spacing: 2px;
-    padding: 2px 8px;
-    border-width: 2px;
-  }
-
-  /* loading overlay */
+  /* LOADING OVERLAY */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -555,12 +494,9 @@
   /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
-    .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
+    .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
-    .receipt-sheet {
-      box-shadow: none;
-      margin: 0;
-    }
+    .receipt-sheet { box-shadow: none; margin: 0; }
     .layout-full .receipt-sheet { padding: 6mm; }
     .layout-compact .receipt-sheet { padding: 4mm; }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
@@ -585,7 +521,6 @@
 </head>
 <body>
 
-<!-- LOGIN GATE -->
 <div id="loginGate" class="login-gate">
   <h1>🧾 Fee Receipts</h1>
   <p class="sub">Admin access required. Enter the bursar password to continue.</p>
@@ -594,11 +529,10 @@
   <div id="loginError" class="err">Incorrect password. Please try again.</div>
 </div>
 
-<!-- MAIN -->
 <div id="mainWrapper" class="main-wrapper layout-full">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all their payments.</p>
+    <p class="subtitle">One receipt per student with a guaranteed unique receipt number. Filter by date range — students qualify if they made at least one payment within the range.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -687,11 +621,10 @@
     </div>
 
     <div id="errorMsg" class="error-msg"></div>
+    <div id="warningMsg" class="warning-msg"></div>
 
     <div class="info">
-      <strong>Layout tips:</strong>
-      <strong>Full</strong> — 4 large receipts per A4 sheet with all the detail. Use at the end of term.
-      <strong>Compact</strong> — up to 12 smaller slips per A4. Receipts automatically resize to their content — a student with one payment gets a short slip, one with six payments gets a taller slip. The page packs as many rows as will fit.
+      <strong>Receipt numbers:</strong> Every receipt gets a unique number (e.g. <code>LSS-2026-TERM1-0001</code>) that is <strong>never reused</strong>. Numbers are reserved when you print and stored in the <code>ReceiptLog</code> sheet for audit. If a student has already received a receipt in this term, you'll see a warning.
     </div>
   </div>
 
@@ -727,6 +660,19 @@
   let currentMode = 'single';
   let currentLayout = 'full';
   let selectedStudents = new Set();
+
+  // Map: rowNumber → assigned receipt number (e.g. LSS-2026-TERM1-0001)
+  // Numbers are assigned when the student is added to the selection,
+  // and reused as long as the selection is unchanged.
+  let assignedNumbers = new Map();
+
+  // Next sequence number reserved from the server (we grab a batch)
+  let nextNumberBuffer = [];   // queue of unused numbers
+  let nextSequencePeeked = null; // last peeked string for debugging
+
+  // Duplicate-print history for the current class/term
+  // { studentNameLower: { count, lastIssued, lastReceipt } }
+  let duplicateHistory = {};
 
   const dataCache = new Map();
   const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -806,7 +752,7 @@
   }
 
   // ============================================================
-  // LOADING OVERLAY
+  // OVERLAY + MESSAGES
   // ============================================================
   function showLoading(msg) {
     document.getElementById('loadingMessage').textContent = msg || 'Loading…';
@@ -814,6 +760,22 @@
   }
   function hideLoading() {
     document.getElementById('loadingOverlay').classList.remove('show');
+  }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 8000);
+  }
+  function showWarning(msg) {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = msg;
+    el.classList.add('show');
+  }
+  function clearWarning() {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = '';
+    el.classList.remove('show');
   }
 
   // ============================================================
@@ -1016,7 +978,7 @@
   }
 
   // ============================================================
-  // MODE SWITCHING
+  // MODE + LAYOUT
   // ============================================================
   function setMode(mode) {
     currentMode = mode;
@@ -1033,9 +995,6 @@
     }
   }
 
-  // ============================================================
-  // LAYOUT SWITCHING
-  // ============================================================
   function setLayout(layout) {
     currentLayout = layout;
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
@@ -1045,10 +1004,7 @@
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
     if (selectedStudents.size > 0 && receiptData) {
-      const students = Array.from(selectedStudents)
-        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
-        .filter(Boolean);
-      renderPreview(students);
+      renderPreview(getSelectedStudents());
     }
   }
 
@@ -1069,6 +1025,10 @@
     receiptData = null;
     currentClass = null;
     selectedStudents.clear();
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    duplicateHistory = {};
+    clearWarning();
   }
 
   async function handleClassChange() {
@@ -1080,9 +1040,15 @@
     const includeUndated = getIncludeUndated();
     const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
 
+    // Reset any prior state
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    clearWarning();
+
     const cached = cacheGet(key);
     if (cached) {
       receiptData = cached;
+      await loadDuplicateHistory();
       onDataLoaded(true);
       return;
     }
@@ -1105,11 +1071,31 @@
 
       receiptData = res;
       cacheSet(key, res);
+
+      await loadDuplicateHistory();
       onDataLoaded(false);
     } catch (e) {
       showError('Error: ' + e.message);
     } finally {
       hideLoading();
+    }
+  }
+
+  async function loadDuplicateHistory() {
+    duplicateHistory = {};
+    if (!receiptData || !receiptData.students || !receiptData.students.length) return;
+    try {
+      const names = receiptData.students.map(s => s.studentName);
+      const res = await callGAS('checkReceiptHistory', {
+        studentClass: currentClass,
+        term: currentTermKey,
+        studentNames: JSON.stringify(names)
+      });
+      if (res && res.success && res.alreadyIssued) {
+        duplicateHistory = res.alreadyIssued;
+      }
+    } catch (e) {
+      console.warn('Duplicate history check failed:', e);
     }
   }
 
@@ -1121,6 +1107,64 @@
       renderStudentList(receiptData.students);
     }
     if (fromCache) console.log('Loaded from cache.');
+  }
+
+  // ============================================================
+  // RECEIPT NUMBER ALLOCATION
+  // ============================================================
+  // Grab a batch of numbers from the server so we don't have to call
+  // the server for each student. The batch is only "reserved" (i.e.
+  // committed) when the bursar actually prints.
+  async function ensureNumberBuffer(count) {
+    if (nextNumberBuffer.length >= count) return;
+
+    const needed = count - nextNumberBuffer.length;
+    const res = await callGAS('peekReceiptNumber', { term: currentTermKey, count: needed });
+    if (!res || !res.success || !res.numbers) {
+      throw new Error('Could not reserve receipt numbers.');
+    }
+    nextSequencePeeked = res.numbers[0];
+    for (let i = 0; i < res.numbers.length; i++) {
+      nextNumberBuffer.push(res.numbers[i]);
+    }
+  }
+
+  // Called when a student is added to the selection.
+  // Pops one number from the buffer and pins it to the student's rowNumber.
+  async function assignNumberToStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
+    try {
+      await ensureNumberBuffer(1);
+    } catch (e) {
+      // Fallback: caller must handle
+      return null;
+    }
+    const num = nextNumberBuffer.shift();
+    assignedNumbers.set(rowNumber, num);
+    return num;
+  }
+
+  // Release a number when a student is removed from the selection.
+  // Returns the number to the buffer so it can be reused by another
+  // student in this session (never committed until print).
+  function releaseNumberForStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) {
+      const num = assignedNumbers.get(rowNumber);
+      nextNumberBuffer.unshift(num);
+      assignedNumbers.delete(rowNumber);
+    }
+  }
+
+  // Commit all assigned numbers to the server's counter. Called only
+  // when the bursar clicks Print/Save-as-PDF.
+  async function commitAllAssignedNumbers() {
+    const count = assignedNumbers.size;
+    if (count === 0) return;
+    try {
+      await callGAS('commitReceiptNumber', { term: currentTermKey, count: count });
+    } catch (e) {
+      console.warn('Counter commit failed (non-fatal):', e);
+    }
   }
 
   // ============================================================
@@ -1147,24 +1191,51 @@
     sorted.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.rowNumber;
+      const dup = duplicateHistory[s.studentName.toLowerCase()];
+      const dupMark = dup ? ' ⚠' : '';
       opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
-                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
+                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '') +
+                        dupMark;
       sel.appendChild(opt);
     });
     sel.disabled = false;
   }
 
-  function handleSingleStudentChange() {
+  async function handleSingleStudentChange() {
     const rowNumber = parseInt(document.getElementById('rStudentSelect').value, 10);
     if (!rowNumber || !receiptData) return;
 
     const student = receiptData.students.find(s => s.rowNumber === rowNumber);
     if (!student) return;
 
-    selectedStudents.clear();
-    selectedStudents.add(student.rowNumber);
+    // Warn if this student already has a receipt in the log
+    clearWarning();
+    const dup = duplicateHistory[student.studentName.toLowerCase()];
+    if (dup) {
+      showWarning(
+        '<strong>⚠ Heads up:</strong> ' + escapeHtml(student.studentName) +
+        ' already has <strong>' + dup.count + '</strong> receipt(s) in this term. ' +
+        'Last issued: <strong>' + escapeHtml(dup.lastReceipt || 'unknown') + '</strong>' +
+        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') +
+        '. Printing again will assign a new unique number — that\'s allowed, but only do it if the parent needs a duplicate.'
+      );
+    }
 
-    renderPreview([student]);
+    // Release any previously assigned numbers (switching students)
+    for (const rn of Array.from(assignedNumbers.keys())) {
+      if (rn !== rowNumber) releaseNumberForStudent(rn);
+    }
+    selectedStudents.clear();
+    selectedStudents.add(rowNumber);
+
+    // Assign a receipt number
+    const num = await assignNumberToStudent(rowNumber);
+    if (!num) {
+      showError('Could not reserve a receipt number. Check your connection and try again.');
+      return;
+    }
+
+    renderPreview(getSelectedStudents());
     document.getElementById('btnPrint').disabled = false;
     document.getElementById('btnPDF').disabled = false;
     updatePreviewHeader();
@@ -1194,12 +1265,18 @@
         const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
                             (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
 
+        const dup = duplicateHistory[s.studentName.toLowerCase()];
+        const dupMark = dup
+          ? '<span class="dup-warn">⚠ Already issued: ' + dup.count + ' (' + escapeHtml(dup.lastReceipt || '?') + ')</span>'
+          : '';
+
         html += '<div class="student-row">'
           + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '">'
           + '<label for="student-' + s.rowNumber + '">'
             + '<strong>' + escapeHtml(s.studentName) + '</strong>'
             + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
             + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
+            + dupMark
           + '</label>'
           + '<span class="status-pill ' + statusClass + '">' + statusText + '</span>'
         + '</div>';
@@ -1213,26 +1290,63 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     selectedStudents.clear();
+    // Release all assigned numbers
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
     updateSelectAllLabel();
     updatePreviewHeader();
   }
 
-  function onStudentListChange(e) {
-    if (e.target && e.target.type === 'checkbox') {
-      const rowNum = parseInt(e.target.dataset.row, 10);
-      if (e.target.checked) selectedStudents.add(rowNum);
-      else selectedStudents.delete(rowNum);
-      updateSelectionState();
+  async function onStudentListChange(e) {
+    if (!e.target || e.target.type !== 'checkbox') return;
+    const rowNum = parseInt(e.target.dataset.row, 10);
+
+    if (e.target.checked) {
+      selectedStudents.add(rowNum);
+      const num = await assignNumberToStudent(rowNum);
+      if (!num) {
+        e.target.checked = false;
+        selectedStudents.delete(rowNum);
+        showError('Could not reserve a receipt number. Check your connection.');
+        return;
+      }
+    } else {
+      selectedStudents.delete(rowNum);
+      releaseNumberForStudent(rowNum);
     }
+    updateSelectionState();
   }
 
-  function toggleSelectAll() {
+  async function toggleSelectAll() {
     const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
     const allChecked = Array.from(boxes).every(b => b.checked);
-    boxes.forEach(b => { b.checked = !allChecked; });
-    selectedStudents.clear();
-    if (!allChecked) {
-      boxes.forEach(b => selectedStudents.add(parseInt(b.dataset.row, 10)));
+
+    if (allChecked) {
+      // Deselect all
+      boxes.forEach(b => { b.checked = false; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+    } else {
+      // Select all — assign numbers to each
+      boxes.forEach(b => { b.checked = true; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+
+      // Reserve one big batch
+      try {
+        await ensureNumberBuffer(boxes.length);
+      } catch (err) {
+        showError('Could not reserve receipt numbers: ' + err.message);
+        return;
+      }
+      boxes.forEach(b => {
+        const rowNum = parseInt(b.dataset.row, 10);
+        const num = nextNumberBuffer.shift();
+        assignedNumbers.set(rowNum, num);
+        selectedStudents.add(rowNum);
+      });
     }
     updateSelectionState();
   }
@@ -1245,10 +1359,7 @@
     updatePreviewHeader();
 
     if (count > 0 && currentMode === 'batch') {
-      const students = Array.from(selectedStudents)
-        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
-        .filter(Boolean);
-      renderPreview(students);
+      renderPreview(getSelectedStudents());
     } else if (count === 0) {
       document.getElementById('receiptContainer').innerHTML = '';
     }
@@ -1279,18 +1390,16 @@
     document.getElementById('btnPrint').disabled = true;
     document.getElementById('btnPDF').disabled = true;
     document.getElementById('receiptContainer').innerHTML = '';
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
     updatePreviewHeader();
     updateSelectAllLabel();
+    clearWarning();
   }
 
   // ============================================================
   // PREVIEW RENDERING
   // ============================================================
-  // Compact layout: 4 columns, rows auto-size. We pack receipts into
-  // pages by estimating how many will fit at their natural heights.
-  // For simplicity we group by 12 per sheet, but the CSS handles the
-  // actual auto-sizing; if a sheet overflows, the browser wraps it to
-  // the next page cleanly because each receipt is page-break-avoid.
   function renderPreview(students) {
     if (!students || !students.length) {
       document.getElementById('receiptContainer').innerHTML = '';
@@ -1321,7 +1430,10 @@
     for (let i = 0; i < students.length; i += perSheet) {
       const group = students.slice(i, i + perSheet);
       html += '<div class="receipt-sheet">';
-      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt, currentLayout); });
+      group.forEach(s => {
+        const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
+        html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
+      });
       for (let k = group.length; k < perSheet; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
@@ -1341,7 +1453,7 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
   }
 
-  function buildReceiptHTML(student, termInfo, printedAt, layout) {
+  function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -1382,7 +1494,10 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
-    // ----- COMPACT -----
+    const numText = receiptNumber || '— PENDING —';
+    const numClass = receiptNumber ? '' : ' pending';
+
+    // COMPACT
     if (layout === 'compact') {
       let prevHint = '';
       if (prevBalance !== 0) {
@@ -1393,7 +1508,7 @@
       }
 
       return '<div class="receipt">'
-        + '<div class="receipt-number">[Pending]</div>'
+        + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
         + '<div class="receipt-header">'
           + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
           + '<div class="title">'
@@ -1427,9 +1542,9 @@
       + '</div>';
     }
 
-    // ----- FULL -----
+    // FULL
     return '<div class="receipt">'
-      + '<div class="receipt-number">[Pending]</div>'
+      + '<div class="receipt-number' + numClass + '">' + escapeHtml(numText) + '</div>'
       + '<div class="receipt-header">'
         + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
         + '<div class="title">'
@@ -1489,22 +1604,24 @@
     const students = getSelectedStudents();
     if (!students.length) return;
 
-    showLoading('Preparing receipts…');
-
-    let numbers = [];
-    try {
-      const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
-      if (peek && peek.success && peek.numbers) numbers = peek.numbers;
-    } catch (e) {
-      console.warn('Peek failed:', e);
+    // Guard: every selected student must have a receipt number
+    const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
+    if (missing.length > 0) {
+      showError(
+        'Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. ' +
+        'This is unusual — please clear the selection and re-select.'
+      );
+      return;
     }
 
-    applyReceiptNumbers(numbers);
+    showLoading('Committing receipt numbers…');
 
-    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => console.warn('Commit failed:', e));
+    // 1. Commit numbers to the server counter (so they can never be reused)
+    await commitAllAssignedNumbers();
 
-    const receiptsLog = students.map((s, idx) => ({
-      receiptNumber: numbers[idx] || '',
+    // 2. Log receipts for audit
+    const receiptsLog = students.map(s => ({
+      receiptNumber: assignedNumbers.get(s.rowNumber) || '',
       studentName: s.studentName,
       totalPaid: s.totalPaidThisTerm,
       balanceAfter: s.cumulativeBalance,
@@ -1515,7 +1632,7 @@
       studentClass: currentClass,
       term: currentTermKey,
       receipts: JSON.stringify(receiptsLog)
-    }).catch(e => console.warn('Log failed:', e));
+    }).catch(e => console.warn('Log failed (non-fatal):', e));
 
     hideLoading();
     setTimeout(() => window.print(), 150);
@@ -1530,13 +1647,6 @@
     return Array.from(selectedStudents)
       .map(rn => receiptData.students.find(s => s.rowNumber === rn))
       .filter(Boolean);
-  }
-
-  function applyReceiptNumbers(numbers) {
-    const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
-    receipts.forEach((el, idx) => {
-      if (numbers[idx]) el.textContent = numbers[idx];
-    });
   }
 
   // ============================================================
@@ -1561,12 +1671,6 @@
     const d = document.createElement('div');
     d.textContent = String(s);
     return d.innerHTML;
-  }
-  function showError(msg) {
-    const el = document.getElementById('errorMsg');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 8000);
   }
 </script>
 </body>
