@@ -9,7 +9,6 @@
     <title>Lunzu Secondary School - Fee Portal</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', Roboto, Arial, sans-serif;
             min-height: 100vh;
@@ -18,19 +17,8 @@
             position: relative;
             overflow-x: hidden;
         }
-
-        #bg-canvas-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        #bg-canvas-container canvas {
-            display: block; width: 100%; height: 100%;
-            object-fit: cover;
-        }
-
+        #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
         .container {
             position: relative;
             z-index: 1;
@@ -43,190 +31,90 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 215, 0, 0.25);
             overflow: hidden;
-            transition: backdrop-filter 0.3s;
         }
-
         .header {
             background: rgba(10, 30, 50, 0.65);
             backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             color: white;
             padding: 22px 20px 18px;
             text-align: center;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-
         .logo {
-            max-width: 100px;
-            margin-bottom: 10px;
+            max-width: 100px; margin-bottom: 10px;
             background: rgba(255, 255, 255, 0.85);
-            padding: 5px;
-            border-radius: 12px;
+            padding: 5px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(2px);
         }
-
         h1 { font-size: 26px; letter-spacing: 1px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); color: #fff; }
         h2 { font-size: 19px; color: #fcd34d; margin-top: 4px; font-weight: 500; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
         h3 { font-size: 15px; color: #d1e0f0; margin-top: 2px; font-weight: 300; text-shadow: 0 2px 6px rgba(0,0,0,0.3); }
-
-        .content {
-            padding: 28px 26px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-        }
-
+        .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.08); }
         .form-group { margin-bottom: 20px; }
-
-        label {
-            display: block; margin-bottom: 5px;
-            font-weight: 600; color: #f0f4fa; font-size: 15px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        }
-
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #f0f4fa; font-size: 15px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
         .required-star { color: #fbbf24; margin-right: 2px; }
-
         select, input {
-            width: 100%;
-            padding: 13px 15px;
+            width: 100%; padding: 13px 15px;
             border: 1.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 14px;
-            font-size: 15px;
+            border-radius: 14px; font-size: 15px;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            color: #fff;
-            transition: 0.25s ease;
+            color: #fff; transition: 0.25s ease;
             box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
         }
-
-        select option { background: #1e2f3f; color: #fff; text-shadow: none; }
-
-        select:disabled, input:disabled {
-            background: rgba(200, 200, 200, 0.15);
-            color: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #fbbf24;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15), inset 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        select:hover:not(:disabled), input:hover:not(:disabled) {
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-
+        select option { background: #1e2f3f; color: #fff; }
+        select:disabled, input:disabled { background: rgba(200, 200, 200, 0.15); color: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
+        select:focus, input:focus { outline: none; border-color: #fbbf24; background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15); }
         .buttons { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
-
         .btn {
-            flex: 1;
-            min-width: 170px;
-            padding: 15px 18px;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.2s ease;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            flex: 1; min-width: 170px; padding: 15px 18px;
+            border: none; border-radius: 14px; font-size: 16px;
+            font-weight: 600; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.2s ease; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15); color: white;
         }
-
-        .btn-primary { background: rgba(37, 99, 235, 0.7); color: white; }
+        .btn-primary { background: rgba(37, 99, 235, 0.7); }
         .btn-primary:disabled { background: rgba(100, 116, 139, 0.5); cursor: not-allowed; opacity: 0.5; box-shadow: none; }
-        .btn-primary:not(:disabled):hover { transform: translateY(-3px); background: rgba(37, 99, 235, 0.9); box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35); border-color: rgba(255, 215, 0, 0.4); }
-
-        .btn-secondary { background: rgba(22, 163, 74, 0.7); color: white; }
-        .btn-secondary:hover { transform: translateY(-3px); background: rgba(22, 163, 74, 0.9); box-shadow: 0 12px 28px rgba(22, 163, 74, 0.3); }
-
-        .btn-subscribe { background: rgba(6, 182, 212, 0.7); color: white; }
-        .btn-subscribe:hover { transform: translateY(-3px); background: rgba(6, 182, 212, 0.9); box-shadow: 0 12px 28px rgba(6, 182, 212, 0.3); border-color: rgba(255, 215, 0, 0.4); }
-
-        .btn-admin { background: rgba(139, 92, 246, 0.7); color: white; }
-        .btn-admin:hover { transform: translateY(-3px); background: rgba(139, 92, 246, 0.9); box-shadow: 0 12px 28px rgba(139, 92, 246, 0.3); }
-        .btn-admin.active { background: rgba(124, 58, 237, 0.9); border-color: rgba(255, 215, 0, 0.3); }
-
-        .btn-back { background: rgba(71, 85, 105, 0.7); color: white; }
-        .btn-back:hover { transform: translateY(-3px); background: rgba(71, 85, 105, 0.9); box-shadow: 0 12px 28px rgba(71, 85, 105, 0.3); }
-
+        .btn-primary:not(:disabled):hover { transform: translateY(-3px); background: rgba(37, 99, 235, 0.9); }
+        .btn-secondary { background: rgba(22, 163, 74, 0.7); }
+        .btn-secondary:hover { transform: translateY(-3px); background: rgba(22, 163, 74, 0.9); }
+        .btn-subscribe { background: rgba(6, 182, 212, 0.7); }
+        .btn-subscribe:hover { transform: translateY(-3px); background: rgba(6, 182, 212, 0.9); }
+        .btn-admin { background: rgba(139, 92, 246, 0.7); }
+        .btn-admin:hover { transform: translateY(-3px); background: rgba(139, 92, 246, 0.9); }
+        .btn-admin.active { background: rgba(124, 58, 237, 0.9); }
+        .btn-back { background: rgba(71, 85, 105, 0.7); }
+        .btn-back:hover { transform: translateY(-3px); background: rgba(71, 85, 105, 0.9); }
         .progress-container { margin: 16px 0 8px 0; display: none; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; text-shadow: 0 1px 6px rgba(0,0,0,0.4); margin-bottom: 4px; }
-        .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; backdrop-filter: blur(2px); }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #f59e0b); width: 0%; transition: width 0.4s ease; border-radius: 20px; box-shadow: 0 0 12px rgba(251, 191, 36, 0.3); }
-
+        .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; margin-bottom: 4px; }
+        .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #f59e0b); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
         .students-loading, .students-loaded {
-            text-align: center;
-            padding: 14px;
-            border-radius: 14px;
-            margin: 12px 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            text-align: center; padding: 14px; border-radius: 14px; margin: 12px 0;
+            display: none; align-items: center; justify-content: center; gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .students-loading { background: rgba(59, 130, 246, 0.25); color: #dbeafe; }
         .students-loaded { background: rgba(34, 197, 94, 0.2); color: #dcfce7; }
-
         .spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fbbf24; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
         .alert {
-            padding: 16px 20px;
-            border-radius: 14px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            padding: 16px 20px; border-radius: 14px; margin: 20px 0;
+            display: flex; align-items: center; gap: 12px; font-weight: 500;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .alert-error { background: rgba(220, 38, 38, 0.3); color: #fee2e2; border-left: 5px solid #dc2626; }
         .alert-success { background: rgba(22, 163, 74, 0.25); color: #dcfce7; border-left: 5px solid #16a34a; }
         .alert-info { background: rgba(37, 99, 235, 0.25); color: #dbeafe; border-left: 5px solid #3b82f6; }
-        .alert-admin { background: rgba(139, 92, 246, 0.20); color: #e9d5ff; border-left: 5px solid #8b5cf6; }
-
-        .footer {
-            text-align: center;
-            padding: 16px;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: #d1d9e6;
-            font-size: 14px;
-        }
+        .footer { text-align: center; padding: 16px; background: rgba(0, 0, 0, 0.2); color: #d1d9e6; font-size: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
         .footer a { color: #fbbf24; text-decoration: none; font-weight: 500; }
         .footer a:hover { text-decoration: underline; }
-
         .initial-loading {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 31, 46, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white;
         }
         .initial-loading .big-spinner {
             width: 60px; height: 60px;
@@ -236,185 +124,105 @@
             animation: spin 0.9s linear infinite;
             margin-bottom: 20px;
         }
-        .initial-loading p { font-size: 18px; font-weight: 300; letter-spacing: 0.5px; color: #e2e8f0; text-align: center; padding: 0 16px; }
+        .initial-loading p { font-size: 18px; font-weight: 300; color: #e2e8f0; text-align: center; padding: 0 16px; }
         .initial-loading .retry-btn {
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: rgba(251, 191, 36, 0.9);
-            color: #0a1f2e;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
+            margin-top: 20px; padding: 12px 24px;
+            background: rgba(251, 191, 36, 0.9); color: #0a1f2e;
+            border: none; border-radius: 12px;
+            font-weight: 600; font-size: 15px; cursor: pointer;
         }
-        .initial-loading .retry-btn:hover { background: #fbbf24; }
-
         .info-note {
-            margin-top: 24px;
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 14px;
+            margin-top: 24px; padding: 18px;
+            border-radius: 16px; font-size: 14px;
             background: rgba(30, 58, 95, 0.3);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             border: 1px solid rgba(255, 215, 0, 0.15);
             color: #e8edf5;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .info-note strong { color: #fcd34d; }
-
-        #apiStatus { color: #e2e8f0; font-weight: 400; text-shadow: 0 1px 6px rgba(0,0,0,0.3); word-break: break-word; }
-
+        #apiStatus { color: #e2e8f0; font-weight: 400; word-break: break-word; }
         .admin-notice {
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            color: #e9d5ff;
-            display: none;
-            align-items: center;
-            gap: 10px;
+            padding: 12px 16px; margin-bottom: 16px;
+            color: #e9d5ff; display: none; align-items: center; gap: 10px;
         }
         .admin-notice.show { display: flex; }
-
         .dob-required { color: #fbbf24; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8; }
         .dob-required.hidden { display: none; }
-
         .modal-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 16px;
+            display: none; justify-content: center; align-items: center;
+            z-index: 10000; padding: 16px;
         }
         .modal-overlay.show { display: flex; }
-
         .modal-box {
             background: rgba(20, 35, 55, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border-radius: 20px; padding: 30px;
+            max-width: 400px; width: 100%;
         }
         .modal-box h3 { color: #fbbf24; margin-bottom: 10px; text-align: center; }
         .modal-box p { color: #d1d9e6; text-align: center; margin-bottom: 20px; font-size: 14px; }
         .modal-box input {
-            width: 100%;
-            padding: 12px 15px;
+            width: 100%; padding: 12px 15px;
             border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            margin-bottom: 15px;
-            text-align: center;
-            letter-spacing: 2px;
+            border-radius: 12px; font-size: 15px;
+            background: rgba(255, 255, 255, 0.08); color: #fff;
+            margin-bottom: 15px; text-align: center; letter-spacing: 2px;
         }
-        .modal-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255, 255, 255, 0.15); }
+        .modal-box input:focus { outline: none; border-color: #fbbf24; }
         .modal-box .modal-buttons { display: flex; gap: 10px; }
-        .modal-box .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .modal-box .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
         .modal-box .btn-confirm { background: rgba(139, 92, 246, 0.8); color: white; }
-        .modal-box .btn-confirm:hover { background: rgba(139, 92, 246, 1); }
         .modal-box .btn-cancel { background: rgba(100, 116, 139, 0.5); color: white; }
-        .modal-box .btn-cancel:hover { background: rgba(100, 116, 139, 0.7); }
-        .modal-box .error-msg { color: #f87171; font-size: 13px; text-align: center; display: none; margin-top: -10px; margin-bottom: 10px; }
+        .modal-box .error-msg { color: #f87171; font-size: 13px; text-align: center; display: none; margin-bottom: 10px; }
         .modal-box .error-msg.show { display: block; }
-
         .subscribe-modal-box {
             background: rgba(20, 35, 55, 0.97);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(6, 182, 212, 0.35);
-            border-radius: 20px;
-            padding: 26px 24px;
-            max-width: 520px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            border-radius: 20px; padding: 26px 24px;
+            max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto;
         }
         .subscribe-modal-box h3 { color: #67e8f9; margin-bottom: 6px; text-align: center; font-size: 18px; }
-        .subscribe-modal-box .sub-intro { color: #cbd5e1; text-align: center; margin-bottom: 18px; font-size: 13px; line-height: 1.5; }
+        .subscribe-modal-box .sub-intro { color: #cbd5e1; text-align: center; margin-bottom: 18px; font-size: 13px; }
         .subscribe-modal-box .modal-form-group { margin-bottom: 14px; text-align: left; }
         .subscribe-modal-box label { display: block; margin-bottom: 5px; font-weight: 600; color: #e2e8f0; font-size: 13px; }
-        .subscribe-modal-box select,
-        .subscribe-modal-box input[type="email"],
-        .subscribe-modal-box input[type="date"] {
-            width: 100%;
-            padding: 11px 13px;
+        .subscribe-modal-box select, .subscribe-modal-box input[type="email"], .subscribe-modal-box input[type="date"] {
+            width: 100%; padding: 11px 13px;
             border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 11px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            transition: 0.2s;
+            border-radius: 11px; font-size: 14px;
+            background: rgba(255, 255, 255, 0.08); color: #fff;
         }
         .subscribe-modal-box select option { background: #1e2f3f; color: #fff; }
-        .subscribe-modal-box select:focus, .subscribe-modal-box input:focus { outline: none; border-color: #67e8f9; background: rgba(255, 255, 255, 0.13); }
+        .subscribe-modal-box select:focus, .subscribe-modal-box input:focus { outline: none; border-color: #67e8f9; }
         .subscribe-modal-box .consent-row {
             display: flex; align-items: flex-start; gap: 10px;
             background: rgba(139, 92, 246, 0.14);
             border: 1px solid rgba(139, 92, 246, 0.32);
-            border-radius: 11px;
-            padding: 12px;
-            margin: 14px 0;
+            border-radius: 11px; padding: 12px; margin: 14px 0;
         }
         .subscribe-modal-box .consent-row input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #8b5cf6; }
         .subscribe-modal-box .consent-row label { font-weight: 400; font-size: 12px; line-height: 1.5; color: #e9d5ff; margin: 0; }
         .subscribe-modal-box .helper { display: block; color: #94a3b8; font-size: 11px; margin-top: 4px; }
         .subscribe-modal-box .modal-buttons { display: flex; gap: 10px; margin-top: 18px; }
-        .subscribe-modal-box .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .subscribe-modal-box .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .subscribe-modal-box .btn-confirm { background: rgba(6, 182, 212, 0.85); color: #fff; }
-        .subscribe-modal-box .btn-confirm:not(:disabled):hover { background: rgba(6, 182, 212, 1); }
         .subscribe-modal-box .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
         .subscribe-modal-box .btn-cancel { background: rgba(100, 116, 139, 0.55); color: #fff; }
-        .subscribe-modal-box .btn-cancel:hover { background: rgba(100, 116, 139, 0.75); }
-        .subscribe-modal-box .status-info { padding: 10px 12px; border-radius: 10px; font-size: 12px; margin-bottom: 14px; line-height: 1.5; display: none; }
+        .subscribe-modal-box .status-info { padding: 10px 12px; border-radius: 10px; font-size: 12px; margin-bottom: 14px; display: none; }
         .subscribe-modal-box .status-info.show { display: block; }
         .subscribe-modal-box .status-info.active { background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981; color: #a7f3d0; }
         .subscribe-modal-box .status-info.none { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; color: #bfdbfe; }
         .subscribe-modal-box .status-info.error { background: rgba(220, 38, 38, 0.2); border-left: 3px solid #dc2626; color: #fecaca; }
         .subscribe-modal-box .status-info.success { background: rgba(16, 185, 129, 0.2); border-left: 3px solid #10b981; color: #a7f3d0; }
         .subscribe-modal-box .spinner-small {
-            display: inline-block;
-            width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            vertical-align: middle;
-            margin-right: 6px;
+            display: inline-block; width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            vertical-align: middle; margin-right: 6px;
         }
-
         .queue-panel { background: rgba(234, 88, 12, 0.12); border: 1px solid rgba(234, 88, 12, 0.35); border-radius: 14px; padding: 14px 16px; margin: 14px 0 8px 0; display: none; }
         .queue-panel.show { display: block; }
         .queue-panel h4 { color: #fdba74; font-size: 14px; margin-bottom: 8px; font-weight: 600; }
@@ -422,14 +230,10 @@
         .queue-stats .stat { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 5px 10px; }
         .queue-stats .stat strong { color: #fb923c; }
         .queue-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .queue-actions button { padding: 10px 16px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .queue-actions button { padding: 10px 16px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
         .queue-actions .btn-refresh { background: rgba(100, 116, 139, 0.6); color: white; }
-        .queue-actions .btn-refresh:hover { background: rgba(100, 116, 139, 0.85); }
         .queue-actions .btn-send { background: rgba(234, 88, 12, 0.85); color: white; }
-        .queue-actions .btn-send:hover { background: rgba(234, 88, 12, 1); }
-        .queue-actions .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
         .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
-
         @media (max-width: 600px) {
             body { padding: 10px; }
             .container { border-radius: 18px; }
@@ -440,21 +244,18 @@
             h1 { font-size: 21px; }
             h2 { font-size: 16px; }
             .logo { max-width: 80px; }
-            .modal-box { padding: 20px; }
             .subscribe-modal-box { padding: 20px 16px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="bg-canvas-container">
-        <canvas id="banknoteCanvas"></canvas>
-    </div>
+    <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
 
-    <!-- Password Modal -->
+    <!-- Admin Password Modal -->
     <div id="adminModal" class="modal-overlay">
         <div class="modal-box">
-            <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
+            <h3>🔑 Admin Access</h3>
             <p>Enter the admin password to enable administrative mode.<br><small style="color:#94a3b8;">(No DOB required in admin mode)</small></p>
             <input type="password" id="adminPasswordInput" placeholder="Enter password" maxlength="20">
             <div id="modalError" class="error-msg">Incorrect password. Please try again.</div>
@@ -470,16 +271,11 @@
         <div class="subscribe-modal-box">
             <h3>📧 Subscribe to Fee Alert Emails</h3>
             <p class="sub-intro">Receive an email whenever the school updates your child's fee records.</p>
-
             <div id="subStatusInfo" class="status-info"></div>
-
             <div class="modal-form-group">
                 <label for="subTermSelect">Academic Term:</label>
-                <select id="subTermSelect" disabled>
-                    <option value="" disabled selected>Loading terms...</option>
-                </select>
+                <select id="subTermSelect" disabled><option value="" disabled selected>Loading terms...</option></select>
             </div>
-
             <div class="modal-form-group">
                 <label for="subStudentClass">Class:</label>
                 <select id="subStudentClass" disabled>
@@ -494,42 +290,30 @@
                     <option value="Form 4 ODL">Form 4 ODL</option>
                 </select>
             </div>
-
             <div class="modal-form-group">
                 <label for="subStudentName">Student Name:</label>
-                <select id="subStudentName" disabled>
-                    <option value="" disabled selected>-- Select Class First --</option>
-                </select>
+                <select id="subStudentName" disabled><option value="" disabled selected>-- Select Class First --</option></select>
             </div>
-
             <div class="modal-form-group">
                 <label for="subDateOfBirth">Student Date of Birth:</label>
                 <input type="date" id="subDateOfBirth">
                 <span class="helper">Format: YYYY-MM-DD — used to verify the student's identity.</span>
             </div>
-
             <div class="modal-form-group">
                 <label for="subParentEmail">Your Email Address:</label>
                 <input type="email" id="subParentEmail" placeholder="parent@example.com" autocomplete="email">
-                <span class="helper">Fee alerts and statements will be sent to this address. You can change it any time.</span>
+                <span class="helper">Fee alerts and statements will be sent to this address.</span>
             </div>
-
             <div class="consent-row">
                 <input type="checkbox" id="subConsentCheck">
-                <label for="subConsentCheck">
-                    I confirm I am the parent or guardian of the student named above, and I agree
-                    to receive fee statements and payment reminders by email for this student.
-                </label>
+                <label for="subConsentCheck">I confirm I am the parent or guardian of the student named above, and I agree to receive fee statements and payment reminders by email for this student.</label>
             </div>
-
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeSubscribeModal()">Cancel</button>
                 <button class="btn-confirm" id="subSubscribeBtn" onclick="submitSubscribe()" disabled>Subscribe</button>
             </div>
             <div style="text-align:center; margin-top:10px;">
-                <button class="btn-cancel" style="width:100%; background:transparent; border:1px solid rgba(255,255,255,0.15);" id="subUnsubscribeBtn" onclick="submitUnsubscribe()" disabled>
-                    🚫 Remove existing subscription
-                </button>
+                <button class="btn-cancel" style="width:100%; background:transparent; border:1px solid rgba(255,255,255,0.15);" id="subUnsubscribeBtn" onclick="submitUnsubscribe()" disabled>🚫 Remove existing subscription</button>
             </div>
         </div>
     </div>
@@ -549,32 +333,24 @@
             <h2 id="termHeader">Fee Report Portal</h2>
             <h3>Office of the Bursar</h3>
         </div>
-
         <div class="content">
             <div class="form-group">
                 <label for="termSelect"><span class="required-star">*</span> Select Term:</label>
                 <select id="termSelect" required onchange="handleTermChange()">
                     <option value="" disabled selected>Loading terms...</option>
                 </select>
-                <small style="color: #bcc9db; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8;">
-                    Select which term's fee records you want to view
-                </small>
+                <small style="color: #bcc9db; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8;">Select which term's fee records you want to view</small>
             </div>
-
-            <div style="text-align:center; margin:10px 0; padding:10px; border-radius:12px; background:rgba(255,255,255,0.06); backdrop-filter:blur(4px);">
+            <div style="text-align:center; margin:10px 0; padding:10px; border-radius:12px; background:rgba(255,255,255,0.06);">
                 <span id="apiStatus">Checking connection...</span>
             </div>
-
-            <!-- Admin Notice -->
             <div id="adminNotice" class="admin-notice">
                 <span>🔑</span>
                 <span><strong>Admin Mode Active:</strong> Date of Birth is not required.</span>
             </div>
-
-            <!-- Admin Queue Panel -->
             <div id="adminQueuePanel" class="queue-panel">
                 <h4>📬 Fee Alert Queue Manager</h4>
-                <div class="queue-stats" id="queueStats">
+                <div class="queue-stats">
                     <div class="stat">Pending: <strong id="queuePending">–</strong></div>
                     <div class="stat">Sent: <strong id="queueSent">–</strong></div>
                     <div class="stat">Failed: <strong id="queueFailed">–</strong></div>
@@ -585,7 +361,6 @@
                 </div>
                 <div class="queue-last-result" id="queueLastResult"></div>
             </div>
-
             <form id="feeForm" autocomplete="off">
                 <div class="form-group">
                     <label for="studentClass"><span class="required-star">*</span> Class:</label>
@@ -601,34 +376,19 @@
                         <option value="Form 4 ODL">Form 4 ODL</option>
                     </select>
                 </div>
-
                 <div id="progressContainer" class="progress-container">
                     <div class="progress-label">
                         <span id="progressLabel">Loading fee records...</span>
                         <span id="progressText">0%</span>
                     </div>
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill"></div>
-                    </div>
+                    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
                 </div>
-
-                <div id="studentsLoading" class="students-loading">
-                    <div class="spinner"></div>
-                    <span id="studentsLoadingText">Loading fee records...</span>
-                </div>
-
-                <div id="studentsLoaded" class="students-loaded">
-                    <span>✅</span>
-                    <span id="studentsLoadedText">Ready to generate report</span>
-                </div>
-
+                <div id="studentsLoading" class="students-loading"><div class="spinner"></div><span>Loading fee records...</span></div>
+                <div id="studentsLoaded" class="students-loaded"><span>✅</span><span id="studentsLoadedText">Ready to generate report</span></div>
                 <div class="form-group">
                     <label for="studentName"><span class="required-star">*</span> Student Name:</label>
-                    <select id="studentName" required disabled>
-                        <option value="" disabled selected>-- Select Class First --</option>
-                    </select>
+                    <select id="studentName" required disabled><option value="" disabled selected>-- Select Class First --</option></select>
                 </div>
-
                 <div class="form-group">
                     <label for="dateOfBirth">
                         <span class="required-star" id="dobStar">*</span> Date of Birth:
@@ -637,28 +397,15 @@
                     <input type="date" id="dateOfBirth">
                     <small class="dob-required" id="dobRequiredText">Format: YYYY-MM-DD - Used to verify your identity</small>
                 </div>
-
                 <div class="buttons">
-                    <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled>
-                        <span>💰</span> Generate Fee Report
-                    </button>
-                    <button type="button" class="btn btn-subscribe" onclick="openSubscribeModal()">
-                        <span>📧</span> Subscribe to Fee Alerts
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                        <span>🔄</span> Reset Form
-                    </button>
-                    <button type="button" class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn">
-                        <span>🔑</span> <span id="adminModeText">Admin Mode</span>
-                    </button>
-                    <button type="button" class="btn btn-back" onclick="goBackToPortal()">
-                        <span>←</span> Back to Home
-                    </button>
+                    <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled><span>💰</span> Generate Fee Report</button>
+                    <button type="button" class="btn btn-subscribe" onclick="openSubscribeModal()"><span>📧</span> Subscribe to Fee Alerts</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()"><span>🔄</span> Reset Form</button>
+                    <button type="button" class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn"><span>🔑</span> <span id="adminModeText">Admin Mode</span></button>
+                    <button type="button" class="btn btn-back" onclick="goBackToPortal()"><span>←</span> Back to Home</button>
                 </div>
             </form>
-
             <div id="reportContainer"></div>
-
             <div class="info-note">
                 <strong>📌 Important Information:</strong><br>
                 • This report shows your complete fee payment history for the selected term<br>
@@ -668,12 +415,9 @@
                 • Payment receipts should be kept for future reference
             </div>
         </div>
-
         <div class="footer">
             <p>© <span id="currentYear"></span> Lunzu Secondary School - Office of the Bursar</p>
-            <p>For fee inquiries: 
-                <a href="https://wa.me/265888866269" target="_blank">WhatsApp: +265 888 866 269</a>
-            </p>
+            <p>For fee inquiries: <a href="https://wa.me/265888866269" target="_blank">WhatsApp: +265 888 866 269</a></p>
         </div>
     </div>
 
@@ -698,11 +442,9 @@
             }
 
             const symbols = ['💵', '💰', '💶', '💷', '💴', '🪙', '₿', '💳', '🏦', '💹', '🧾', '📈'];
-
             function randomNote() {
                 return {
-                    x: Math.random() * w,
-                    y: Math.random() * h - 20,
+                    x: Math.random() * w, y: Math.random() * h - 20,
                     size: 30 + Math.random() * 40,
                     speedX: (Math.random() - 0.5) * 0.9,
                     speedY: 0.15 + Math.random() * 0.7,
@@ -710,71 +452,44 @@
                     rotSpeed: (Math.random() - 0.5) * 0.025,
                     opacity: 0.2 + Math.random() * 0.35,
                     symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                    phase: Math.random() * 100,
+                    phase: Math.random() * 100
                 };
             }
-
-            function initNotes() {
-                notes = [];
-                for (let i = 0; i < NOTE_COUNT; i++) notes.push(randomNote());
-            }
-
+            function initNotes() { notes = []; for (let i = 0; i < NOTE_COUNT; i++) notes.push(randomNote()); }
             function drawNotes() {
                 ctx.clearRect(0, 0, w, h);
-
-                const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.75);
+                const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.75);
                 grad.addColorStop(0, 'rgba(10, 31, 46, 0.08)');
                 grad.addColorStop(1, 'rgba(10, 31, 46, 0.45)');
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, w, h);
-
                 notes.forEach(n => {
                     ctx.save();
                     ctx.translate(n.x, n.y);
                     ctx.rotate(n.rotation * Math.PI / 180);
                     ctx.globalAlpha = n.opacity;
                     ctx.font = `${n.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.shadowColor = 'rgba(0,0,0,0.4)';
-                    ctx.shadowBlur = 18;
+                    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                    ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 18;
                     ctx.fillStyle = '#fbbf24';
-                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
                     ctx.shadowBlur = 20;
                     ctx.fillText(n.symbol, 0, 0);
-                    ctx.shadowBlur = 0;
-                    ctx.font = `${n.size * 0.35}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-                    ctx.fillStyle = 'rgba(255,215,0,0.15)';
-                    ctx.fillText('§', n.size * 0.25, -n.size * 0.2);
                     ctx.restore();
-
                     n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.00025) * 0.2;
                     n.y += n.speedY * 0.4 + Math.sin(n.phase + performance.now() * 0.0004) * 0.15;
                     n.rotation += n.rotSpeed;
-
                     if (n.x > w + 60) n.x = -60;
                     if (n.x < -60) n.x = w + 60;
                     if (n.y > h + 60) n.y = -60;
                     if (n.y < -60) n.y = h + 60;
                 });
-
                 requestAnimationFrame(drawNotes);
             }
-
-            function startBackground() {
-                resizeCanvas();
-                initNotes();
-                drawNotes();
-            }
-
+            function startBackground() { resizeCanvas(); initNotes(); drawNotes(); }
             window.addEventListener('resize', () => {
                 resizeCanvas();
-                notes.forEach(n => {
-                    n.x = Math.min(Math.max(n.x, 0), w);
-                    n.y = Math.min(Math.max(n.y, 0), h);
-                });
+                notes.forEach(n => { n.x = Math.min(Math.max(n.x, 0), w); n.y = Math.min(Math.max(n.y, 0), h); });
             });
-
             startBackground();
         })();
 
@@ -791,7 +506,6 @@
         let loadingInterval = null;
         let loadingProgress = 0;
         let isAdminMode = false;
-
         let subCurrentTermKey = null;
         let subIsLoadingStudents = false;
         let subCurrentStatus = null;
@@ -799,24 +513,18 @@
         // ----- ADMIN MODE -----
         function openAdminModal() {
             if (isAdminMode) {
-                isAdminMode = false;
-                updateAdminUI();
-                showInfo('🔒 Admin mode disabled');
-                setTimeout(() => clearError(), 2000);
-                return;
+                isAdminMode = false; updateAdminUI(); showInfo('🔒 Admin mode disabled'); setTimeout(() => clearError(), 2000); return;
             }
             document.getElementById('adminModal').classList.add('show');
             document.getElementById('adminPasswordInput').value = '';
             document.getElementById('modalError').classList.remove('show');
             document.getElementById('adminPasswordInput').focus();
         }
-
         function closeAdminModal() {
             document.getElementById('adminModal').classList.remove('show');
             document.getElementById('adminPasswordInput').value = '';
             document.getElementById('modalError').classList.remove('show');
         }
-
         async function confirmAdminPassword() {
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!password) {
@@ -824,19 +532,14 @@
                 document.getElementById('modalError').classList.add('show');
                 return;
             }
-
             try {
                 const result = await callGAS('verifyAdmin', { password: password });
                 if (result && result.success) {
-                    isAdminMode = true;
-                    updateAdminUI();
-                    closeAdminModal();
+                    isAdminMode = true; updateAdminUI(); closeAdminModal();
                     showSuccess('🔑 Admin mode activated successfully!');
                     setTimeout(() => clearError(), 3000);
                     const studentClass = document.getElementById('studentClass').value;
-                    if (studentClass && studentClass !== "" && currentTermKey) {
-                        handleClassChange();
-                    }
+                    if (studentClass && studentClass !== "" && currentTermKey) handleClassChange();
                 } else {
                     document.getElementById('modalError').textContent = 'Incorrect password. Please try again.';
                     document.getElementById('modalError').classList.add('show');
@@ -848,12 +551,10 @@
                 document.getElementById('modalError').classList.add('show');
             }
         }
-
         document.getElementById('adminPasswordInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') confirmAdminPassword();
             if (e.key === 'Escape') closeAdminModal();
         });
-
         function updateAdminUI() {
             const btnText = document.getElementById('adminModeText');
             const btn = document.getElementById('adminModeBtn');
@@ -863,14 +564,12 @@
             const dobStar = document.getElementById('dobStar');
             const dobAdminLabel = document.getElementById('dobAdminLabel');
             const dobRequiredText = document.getElementById('dobRequiredText');
-
             if (isAdminMode) {
                 btnText.textContent = '🔓 Admin ON';
                 btn.classList.add('active');
                 notice.classList.add('show');
                 if (panel) panel.classList.add('show');
-                dobInput.disabled = true;
-                dobInput.value = '';
+                dobInput.disabled = true; dobInput.value = '';
                 dobInput.placeholder = 'Not required in Admin Mode';
                 dobStar.style.display = 'none';
                 dobAdminLabel.style.display = 'inline';
@@ -904,10 +603,8 @@
             } catch (error) {
                 console.error('Initialization error:', error);
                 showInitialLoading(false, 'Failed to initialize: ' + (error.message || 'Unknown error'));
-                showError('Failed to initialize: ' + (error.message || 'Unknown error'));
             }
         };
-
         function showInitialLoading(show, message = 'Loading...') {
             const overlay = document.getElementById('initialLoading');
             const textEl = document.getElementById('initialLoadingText');
@@ -917,7 +614,6 @@
                 if (retryBtn) retryBtn.style.display = 'none';
                 overlay.style.display = 'flex';
             } else {
-                // If message indicates failure, show the retry button
                 if (textEl && message && message.toLowerCase().indexOf('fail') !== -1) {
                     textEl.textContent = message;
                     if (retryBtn) retryBtn.style.display = 'inline-block';
@@ -927,20 +623,15 @@
                 }
             }
         }
-
-        function retryInitialLoad() {
-            window.location.reload();
-        }
+        function retryInitialLoad() { window.location.reload(); }
 
         async function loadAvailableTerms() {
             return new Promise(async (resolve, reject) => {
                 try {
-                    console.log('Loading available terms...');
                     const terms = await callGAS('getAvailableTerms', {});
                     if (terms && Array.isArray(terms) && terms.length > 0) {
                         availableTerms = terms;
                         populateTermDropdown(terms);
-                        console.log('Terms loaded:', terms.length);
                         resolve(terms);
                     } else {
                         reject(new Error('No terms received from server'));
@@ -959,22 +650,18 @@
             const termSelect = document.getElementById('termSelect');
             termSelect.innerHTML = '';
             const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.disabled = true;
+            defaultOption.value = ''; defaultOption.disabled = true;
             defaultOption.textContent = '-- Select Term --';
             termSelect.appendChild(defaultOption);
-
             const grouped = {};
             terms.forEach(term => {
                 if (!grouped[term.academicYear]) grouped[term.academicYear] = [];
                 grouped[term.academicYear].push(term);
             });
-
             let activeTermData = null;
             for (const [year, yearTerms] of Object.entries(grouped)) {
                 const optgroup = document.createElement('optgroup');
                 optgroup.label = year;
-                optgroup.style.background = 'rgba(30, 50, 70, 0.8)';
                 yearTerms.forEach(term => {
                     const option = document.createElement('option');
                     option.value = term.key;
@@ -982,15 +669,12 @@
                     if (term.isActive) {
                         option.selected = true;
                         currentTermKey = term.key;
-                        option.style.fontWeight = 'bold';
-                        option.style.background = 'rgba(251, 191, 36, 0.2)';
                         activeTermData = term;
                     }
                     optgroup.appendChild(option);
                 });
                 termSelect.appendChild(optgroup);
             }
-
             if (activeTermData) {
                 document.getElementById('termHeader').textContent =
                     `${activeTermData.academicYear} ${activeTermData.term} Fee Report`;
@@ -1006,13 +690,11 @@
         }
 
         function handleTermChange() {
-            const termSelect = document.getElementById('termSelect');
-            const selectedValue = termSelect.value;
+            const selectedValue = document.getElementById('termSelect').value;
             if (!selectedValue) {
                 currentTermKey = null;
                 document.getElementById('termHeader').textContent = 'Fee Report Portal';
-                resetAllFields();
-                return;
+                resetAllFields(); return;
             }
             const selectedTerm = availableTerms.find(t => t.key === selectedValue);
             if (selectedTerm) {
@@ -1030,136 +712,111 @@
             const dateOfBirth = document.getElementById('dateOfBirth');
             studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
             studentName.disabled = true;
-            if (!isAdminMode) {
-                dateOfBirth.value = '';
-            }
+            if (!isAdminMode) dateOfBirth.value = '';
             document.getElementById('reportContainer').innerHTML = '';
             document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('studentsLoading').style.display = 'none';
             document.getElementById('studentsLoaded').style.display = 'none';
             document.getElementById('generateReportBtn').disabled = true;
         }
-
         function resetForm() {
             resetAllFields();
-            if (document.getElementById('studentClass').value && currentTermKey) {
-                handleClassChange();
-            }
+            if (document.getElementById('studentClass').value && currentTermKey) handleClassChange();
         }
+        function goBackToPortal() { window.location.href = 'https://lunzusec.github.io/School_results/index.html'; }
 
-        function goBackToPortal() {
-            window.location.href = 'https://lunzusec.github.io/School_results/index.html';
-        }
-
-        // ----- PROGRESS BAR -----
+        // ----- PROGRESS -----
         function startProgressAnimation(message = 'Loading fee records...') {
             loadingProgress = 0;
-            const progressContainer = document.getElementById('progressContainer');
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
-            const progressLabel = document.getElementById('progressLabel');
-            progressContainer.style.display = 'block';
-            progressFill.style.width = '0%';
-            progressText.textContent = '0%';
-            progressLabel.textContent = message;
+            const pc = document.getElementById('progressContainer');
+            const pf = document.getElementById('progressFill');
+            const pt = document.getElementById('progressText');
+            const pl = document.getElementById('progressLabel');
+            pc.style.display = 'block';
+            pf.style.width = '0%'; pt.textContent = '0%';
+            pl.textContent = message;
             stopProgressAnimation();
             loadingInterval = setInterval(() => {
                 if (loadingProgress < 90) {
                     loadingProgress += Math.random() * 8 + 2;
                     if (loadingProgress > 90) loadingProgress = 90;
-                    progressFill.style.width = loadingProgress + '%';
-                    progressText.textContent = Math.round(loadingProgress) + '%';
+                    pf.style.width = loadingProgress + '%';
+                    pt.textContent = Math.round(loadingProgress) + '%';
                 }
             }, 200);
         }
-
         function completeProgressAnimation(success = true, message = '') {
-            if (loadingInterval) {
-                clearInterval(loadingInterval);
-                loadingInterval = null;
-            }
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
-            const progressLabel = document.getElementById('progressLabel');
+            if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+            const pf = document.getElementById('progressFill');
+            const pt = document.getElementById('progressText');
+            const pl = document.getElementById('progressLabel');
             if (success) {
-                progressFill.style.width = '100%';
-                progressText.textContent = '100%';
-                progressLabel.textContent = message || 'Complete!';
-                setTimeout(() => {
-                    document.getElementById('progressContainer').style.display = 'none';
-                }, 1000);
+                pf.style.width = '100%'; pt.textContent = '100%';
+                pl.textContent = message || 'Complete!';
+                setTimeout(() => { document.getElementById('progressContainer').style.display = 'none'; }, 1000);
             } else {
                 document.getElementById('progressContainer').style.display = 'none';
             }
         }
+        function stopProgressAnimation() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
 
-        function stopProgressAnimation() {
-            if (loadingInterval) {
-                clearInterval(loadingInterval);
-                loadingInterval = null;
+        // ============================================================
+        // API CALLS — fetch-based, CORS-safe, retries on network errors
+        // ============================================================
+        async function callGAS(action, params = {}, attempt = 1) {
+            const body = new URLSearchParams();
+            body.append('action', action);
+            for (const key in params) {
+                if (params[key] !== undefined && params[key] !== null) {
+                    body.append(key, params[key]);
+                }
             }
-        }
+            body.append('_cb', Date.now().toString());
 
-        // ----- API CALLS (JSONP with retry) -----
-        function callGAS(action, params = {}, attempt = 1) {
-            return new Promise((resolve, reject) => {
-                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-                params.callback = callbackName;
-                params.action = action;
-                params._cb = Date.now(); // cache-buster
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 25000);
 
-                let url = GAS_URL + '?';
-                const urlParams = [];
-                for (const key in params) {
-                    if (params[key] !== undefined && params[key] !== null) {
-                        urlParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: body.toString(),
+                    redirect: 'follow',
+                    signal: controller.signal,
+                    credentials: 'omit'
+                });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
+                const text = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (parseErr) {
+                    const m = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+                    if (m) {
+                        data = JSON.parse(m[0]);
+                    } else {
+                        throw new Error('Invalid response from server');
                     }
                 }
-                url += urlParams.join('&');
-
-                const script = document.createElement('script');
-                script.src = url;
-
-                const timeoutId = setTimeout(() => {
-                    if (window[callbackName]) {
-                        delete window[callbackName];
-                        if (script.parentNode) script.parentNode.removeChild(script);
-                        // Retry once on timeout
-                        if (attempt < 2) {
-                            console.warn('Timeout, retrying...');
-                            resolve(callGAS(action, params, attempt + 1));
-                        } else {
-                            reject(new Error('Request timeout'));
-                        }
-                    }
-                }, 20000);
-
-                window[callbackName] = function(response) {
-                    clearTimeout(timeoutId);
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    if (response && response.error) {
-                        reject(new Error(response.error));
-                    } else {
-                        resolve(response);
-                    }
-                };
-
-                script.onerror = function() {
-                    clearTimeout(timeoutId);
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    // Retry once on network error
-                    if (attempt < 2) {
-                        console.warn('Connection failed, retrying...');
-                        resolve(callGAS(action, params, attempt + 1));
-                    } else {
-                        reject(new Error('Connection failed'));
-                    }
-                };
-
-                document.head.appendChild(script);
-            });
+                if (data && data.error) throw new Error(data.error);
+                return data;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                const msg = (error && error.message) || '';
+                const retryable =
+                    error.name === 'AbortError' ||
+                    msg.indexOf('Failed to fetch') !== -1 ||
+                    msg.indexOf('NetworkError') !== -1 ||
+                    msg.indexOf('HTTP 5') !== -1;
+                if (retryable && attempt < 2) {
+                    console.warn('Retrying API call (' + action + ') after: ' + msg);
+                    await new Promise(r => setTimeout(r, 800));
+                    return callGAS(action, params, attempt + 1);
+                }
+                throw error;
+            }
         }
 
         // ----- FORM HANDLING -----
@@ -1176,12 +833,9 @@
             const studentName = document.getElementById('studentName');
             studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
             studentName.disabled = true;
-            if (!isAdminMode) {
-                document.getElementById('dateOfBirth').value = '';
-            }
+            if (!isAdminMode) document.getElementById('dateOfBirth').value = '';
             document.getElementById('reportContainer').innerHTML = '';
             document.getElementById('generateReportBtn').disabled = true;
-
             if (studentClass && studentClass !== "" && currentTermKey) {
                 await loadStudentNames(studentClass, currentTermKey);
             } else if (studentClass && !currentTermKey) {
@@ -1195,24 +849,16 @@
             startProgressAnimation(`Loading students from ${studentClass}...`);
             document.getElementById('studentsLoaded').style.display = 'none';
             document.getElementById('studentsLoading').style.display = 'flex';
-
             try {
-                const names = await callGAS('getStudentNames', {
-                    studentClass: studentClass,
-                    term: termKey
-                });
-
+                const names = await callGAS('getStudentNames', { studentClass: studentClass, term: termKey });
                 if (Array.isArray(names) && names.length > 0) {
                     populateStudentDropdown(names);
                     completeProgressAnimation(true, `Loaded ${names.length} student(s) from ${studentClass}`);
                     const loadedDiv = document.getElementById('studentsLoaded');
-                    const loadedText = document.getElementById('studentsLoadedText');
-                    loadedText.innerHTML = `✅ Loaded ${names.length} student(s) from ${studentClass}`;
+                    document.getElementById('studentsLoadedText').innerHTML = `✅ Loaded ${names.length} student(s) from ${studentClass}`;
                     loadedDiv.style.display = 'flex';
                     document.getElementById('studentName').disabled = false;
-                    setTimeout(() => {
-                        if (loadedDiv.style.display === 'flex') loadedDiv.style.display = 'none';
-                    }, 2500);
+                    setTimeout(() => { if (loadedDiv.style.display === 'flex') loadedDiv.style.display = 'none'; }, 2500);
                 } else {
                     populateStudentDropdown([]);
                     completeProgressAnimation(false);
@@ -1236,94 +882,62 @@
             select.innerHTML = '';
             if (names.length === 0) {
                 const option = document.createElement('option');
-                option.value = '';
-                option.disabled = true;
-                option.selected = true;
+                option.value = ''; option.disabled = true; option.selected = true;
                 option.textContent = '-- No students found --';
                 select.appendChild(option);
             } else {
                 const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
+                defaultOption.value = ''; defaultOption.disabled = true; defaultOption.selected = true;
                 defaultOption.textContent = `-- Select Student (${names.length} available) --`;
                 select.appendChild(defaultOption);
                 names.forEach(name => {
                     const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
+                    option.value = name; option.textContent = name;
                     select.appendChild(option);
                 });
             }
         }
 
-        // ----- GENERATE REPORT -----
         function generateFeeReport() {
-            if (!validateForm()) {
-                showError('Please fill in all required fields.');
-                return;
-            }
+            if (!validateForm()) { showError('Please fill in all required fields.'); return; }
             const studentName = document.getElementById('studentName').value.trim();
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const termKey = document.getElementById('termSelect').value;
-
-            if (!isAdminMode && !isValidDate(dateOfBirth)) {
-                showError('Please enter a valid date (YYYY-MM-DD).');
-                return;
-            }
+            if (!isAdminMode && !isValidDate(dateOfBirth)) { showError('Please enter a valid date (YYYY-MM-DD).'); return; }
             clearError();
-
-            let feeReportUrl =
-                `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
-
-            if (isAdminMode) {
-                feeReportUrl += '&admin=true';
-            }
-
+            let feeReportUrl = `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
+            if (isAdminMode) feeReportUrl += '&admin=true';
             const newTab = window.open(feeReportUrl, '_blank');
-            if (!newTab) {
-                showError('Please allow pop-ups to view the fee report.');
-                return;
-            }
+            if (!newTab) { showError('Please allow pop-ups to view the fee report.'); return; }
             newTab.focus();
             showSuccess('Opening fee report in new tab...');
             setTimeout(() => clearError(), 2000);
         }
 
-        // ----- HELPERS -----
         function updateButtonState() {
             const studentName = document.getElementById('studentName').value;
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
-
             let isFormValid;
             if (isAdminMode) {
-                isFormValid = studentName && studentClass && term &&
-                    studentName !== "" && studentClass !== "" && term !== "";
+                isFormValid = studentName && studentClass && term && studentName !== "" && studentClass !== "" && term !== "";
             } else {
-                isFormValid = studentName && studentClass && dateOfBirth && term &&
-                    studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
+                isFormValid = studentName && studentClass && dateOfBirth && term && studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
             }
             document.getElementById('generateReportBtn').disabled = !isFormValid || isLoadingStudents;
         }
-
         function validateForm() {
             const studentName = document.getElementById('studentName').value;
             const studentClass = document.getElementById('studentClass').value;
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
-
             if (isAdminMode) {
-                return studentName && studentClass && term &&
-                    studentName !== "" && studentClass !== "" && term !== "";
-            } else {
-                return studentName && studentClass && dateOfBirth && term &&
-                    studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
+                return studentName && studentClass && term && studentName !== "" && studentClass !== "" && term !== "";
             }
+            return studentName && studentClass && dateOfBirth && term && studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
         }
-
         function isValidDate(dateString) {
             const regex = /^\d{4}-\d{2}-\d{2}$/;
             if (!regex.test(dateString)) return false;
@@ -1333,49 +947,26 @@
 
         function showError(message) {
             const container = document.getElementById('reportContainer');
-            container.innerHTML = `
-                    <div class="alert alert-error" style="margin-top: 20px;">
-                        <span>❌</span>
-                        <div><strong>Error:</strong> ${String(message).replace(/\n/g, '<br>')}</div>
-                    </div>
-                `;
-            setTimeout(() => {
-                const errorDiv = container.querySelector('.alert-error');
-                if (errorDiv) errorDiv.remove();
-            }, 8000);
+            container.innerHTML = `<div class="alert alert-error" style="margin-top: 20px;"><span>❌</span><div><strong>Error:</strong> ${String(message).replace(/\n/g, '<br>')}</div></div>`;
+            setTimeout(() => { const d = container.querySelector('.alert-error'); if (d) d.remove(); }, 8000);
         }
-
         function showSuccess(message) {
             const container = document.getElementById('reportContainer');
-            const successDiv = document.createElement('div');
-            successDiv.className = 'alert alert-success';
-            successDiv.style.marginTop = '20px';
-            successDiv.innerHTML = `<span>✅</span><div>${message}</div>`;
-            container.appendChild(successDiv);
-            setTimeout(() => {
-                if (successDiv.parentNode) successDiv.remove();
-            }, 5000);
+            const s = document.createElement('div');
+            s.className = 'alert alert-success';
+            s.style.marginTop = '20px';
+            s.innerHTML = `<span>✅</span><div>${message}</div>`;
+            container.appendChild(s);
+            setTimeout(() => { if (s.parentNode) s.remove(); }, 5000);
         }
-
         function showInfo(message) {
             const container = document.getElementById('reportContainer');
-            container.innerHTML = `
-                    <div class="alert alert-info" style="margin-top: 20px;">
-                        <span>ℹ️</span>
-                        <div>${message}</div>
-                    </div>
-                `;
-            setTimeout(() => {
-                const infoDiv = container.querySelector('.alert-info');
-                if (infoDiv) infoDiv.remove();
-            }, 5000);
+            container.innerHTML = `<div class="alert alert-info" style="margin-top: 20px;"><span>ℹ️</span><div>${message}</div></div>`;
+            setTimeout(() => { const d = container.querySelector('.alert-info'); if (d) d.remove(); }, 5000);
         }
-
         function clearError() {
             const container = document.getElementById('reportContainer');
-            if (container.innerHTML !== '') {
-                setTimeout(() => { container.innerHTML = ''; }, 3000);
-            }
+            if (container.innerHTML !== '') setTimeout(() => { container.innerHTML = ''; }, 3000);
         }
 
         async function testAPIConnection() {
@@ -1393,33 +984,21 @@
                 document.getElementById('apiStatus').style.color = '#fcd34d';
                 document.getElementById('apiStatus').style.cursor = 'pointer';
                 document.getElementById('apiStatus').onclick = function() {
-                    alert(
-                        'Connection error: ' + msg + '\n\n' +
-                        'GAS URL: ' + GAS_URL + '\n\n' +
-                        'Online: ' + navigator.onLine + '\n' +
-                        'User agent: ' + navigator.userAgent
-                    );
+                    alert('Connection error: ' + msg + '\n\nGAS URL: ' + GAS_URL + '\n\nOnline: ' + navigator.onLine + '\nUser agent: ' + navigator.userAgent);
                 };
             }
         }
 
         // ============================================================
-        // 3. SUBSCRIBE MODAL LOGIC
+        // 3. SUBSCRIBE MODAL
         // ============================================================
-
         function openSubscribeModal() {
             document.getElementById('subscribeModal').classList.add('show');
             resetSubscribeForm();
             loadSubTerms();
         }
-
-        function closeSubscribeModal() {
-            document.getElementById('subscribeModal').classList.remove('show');
-        }
-
-        document.getElementById('subscribeModal').addEventListener('click', function(e) {
-            if (e.target === this) closeSubscribeModal();
-        });
+        function closeSubscribeModal() { document.getElementById('subscribeModal').classList.remove('show'); }
+        document.getElementById('subscribeModal').addEventListener('click', function(e) { if (e.target === this) closeSubscribeModal(); });
 
         async function loadSubTerms() {
             const sel = document.getElementById('subTermSelect');
@@ -1433,41 +1012,28 @@
                     def.value = ''; def.disabled = true; def.selected = true;
                     def.textContent = '-- Select Term --';
                     sel.appendChild(def);
-
                     const grouped = {};
                     terms.forEach(t => {
                         if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
                         grouped[t.academicYear].push(t);
                     });
-
                     let activeTermData = null;
                     Object.keys(grouped).forEach(year => {
                         const og = document.createElement('optgroup');
                         og.label = year;
                         grouped[year].forEach(term => {
                             const opt = document.createElement('option');
-                            opt.value = term.key;
-                            opt.textContent = term.display;
-                            if (term.isActive) {
-                                opt.selected = true;
-                                subCurrentTermKey = term.key;
-                                activeTermData = term;
-                            }
+                            opt.value = term.key; opt.textContent = term.display;
+                            if (term.isActive) { opt.selected = true; subCurrentTermKey = term.key; activeTermData = term; }
                             og.appendChild(opt);
                         });
                         sel.appendChild(og);
                     });
-
-                    if (!activeTermData && terms.length) {
-                        sel.value = terms[0].key;
-                        subCurrentTermKey = terms[0].key;
-                    }
+                    if (!activeTermData && terms.length) { sel.value = terms[0].key; subCurrentTermKey = terms[0].key; }
                     sel.disabled = false;
                     document.getElementById('subStudentClass').disabled = false;
                 }
-            } catch (e) {
-                showSubStatus('error', 'Could not load terms: ' + (e.message || 'Unknown error'));
-            }
+            } catch (e) { showSubStatus('error', 'Could not load terms: ' + (e.message || 'Unknown error')); }
         }
 
         function resetSubscribeForm() {
@@ -1479,11 +1045,9 @@
             document.getElementById('subConsentCheck').checked = false;
             subCurrentStatus = null;
             hideSubStatus();
-
-            var savedEmail = '';
+            let savedEmail = '';
             try { savedEmail = localStorage.getItem('lunzu_parent_email') || ''; } catch (e) {}
             document.getElementById('subParentEmail').value = savedEmail;
-
             updateSubButtons();
         }
 
@@ -1498,18 +1062,12 @@
             nameSel.innerHTML = '<option value="" disabled selected>Loading students...</option>';
             nameSel.disabled = true;
             document.getElementById('subDateOfBirth').value = '';
-            subCurrentStatus = null;
-            hideSubStatus();
-            updateSubButtons();
-
+            subCurrentStatus = null; hideSubStatus(); updateSubButtons();
             if (!cls || !subCurrentTermKey) return;
             if (subIsLoadingStudents) return;
             subIsLoadingStudents = true;
             try {
-                const names = await callGAS('getStudentNames', {
-                    studentClass: cls,
-                    term: subCurrentTermKey
-                });
+                const names = await callGAS('getStudentNames', { studentClass: cls, term: subCurrentTermKey });
                 nameSel.innerHTML = '';
                 if (Array.isArray(names) && names.length) {
                     const def = document.createElement('option');
@@ -1537,10 +1095,7 @@
         });
 
         document.getElementById('subStudentName').addEventListener('change', checkSubStatus);
-        document.getElementById('subDateOfBirth').addEventListener('change', () => {
-            checkSubStatus();
-            updateSubButtons();
-        });
+        document.getElementById('subDateOfBirth').addEventListener('change', () => { checkSubStatus(); updateSubButtons(); });
         document.getElementById('subConsentCheck').addEventListener('change', updateSubButtons);
 
         async function checkSubStatus() {
@@ -1548,26 +1103,18 @@
             const studentClass = document.getElementById('subStudentClass').value;
             const dob = document.getElementById('subDateOfBirth').value;
             const term = document.getElementById('subTermSelect').value;
-
             subCurrentStatus = null;
-            if (!studentName || !studentClass || !dob || !term) {
-                hideSubStatus();
-                return;
-            }
+            if (!studentName || !studentClass || !dob || !term) { hideSubStatus(); return; }
             try {
-                const res = await callGAS('getSubscriptionStatus', {
-                    studentName, studentClass, dateOfBirth: dob, term
-                });
+                const res = await callGAS('getSubscriptionStatus', { studentName, studentClass, dateOfBirth: dob, term });
                 if (res && res.success) {
                     subCurrentStatus = res;
                     if (res.hasSubscription) {
                         const emailField = document.getElementById('subParentEmail');
                         if (!emailField.value && res.alertEmail) emailField.value = res.alertEmail;
-
                         showSubStatus('active',
                             `✅ Fee alerts are already ON for <strong>${escapeHtml(res.studentName)}</strong>. ` +
-                            `Alerts currently go to <strong>${escapeHtml(res.alertEmail)}</strong>. ` +
-                            `You can update this by entering a new email above, or remove the subscription below.`
+                            `Alerts currently go to <strong>${escapeHtml(res.alertEmail)}</strong>.`
                         );
                     } else {
                         showSubStatus('none',
@@ -1576,9 +1123,7 @@
                         );
                     }
                 }
-            } catch (e) {
-                console.warn('Status check failed:', e);
-            }
+            } catch (e) { console.warn('Status check failed:', e); }
             updateSubButtons();
         }
 
@@ -1589,12 +1134,9 @@
             const email = (document.getElementById('subParentEmail').value || '').trim();
             const consent = document.getElementById('subConsentCheck').checked;
             const term = document.getElementById('subTermSelect').value;
-
             const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-
             const canSubscribe = studentName && studentClass && dob && term && emailOk && consent;
             const canUnsubscribe = studentName && studentClass && dob && term;
-
             document.getElementById('subSubscribeBtn').disabled = !canSubscribe;
             document.getElementById('subUnsubscribeBtn').disabled = !canUnsubscribe;
         }
@@ -1606,24 +1148,17 @@
             const email = (document.getElementById('subParentEmail').value || '').trim().toLowerCase();
             const term = document.getElementById('subTermSelect').value;
             const consent = document.getElementById('subConsentCheck').checked;
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-                showSubStatus('error', '❌ Please enter a valid email address.');
-                return;
-            }
-
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showSubStatus('error', '❌ Please enter a valid email address.'); return; }
             const btn = document.getElementById('subSubscribeBtn');
             const original = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-small"></span> Subscribing...';
             hideSubStatus();
-
             try {
                 const res = await callGAS('subscribeFeeEmail', {
                     studentName, studentClass, dateOfBirth: dob,
                     parentEmail: email, term, consent: consent ? 'true' : 'false'
                 });
-
                 if (res && res.success) {
                     showSubStatus('success', '✅ ' + escapeHtml(res.message));
                     document.getElementById('subConsentCheck').checked = false;
@@ -1632,12 +1167,8 @@
                 } else {
                     showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Subscription failed.'));
                 }
-            } catch (e) {
-                showSubStatus('error', '❌ ' + escapeHtml(e.message));
-            } finally {
-                btn.innerHTML = original;
-                updateSubButtons();
-            }
+            } catch (e) { showSubStatus('error', '❌ ' + escapeHtml(e.message)); }
+            finally { btn.innerHTML = original; updateSubButtons(); }
         }
 
         async function submitUnsubscribe() {
@@ -1645,21 +1176,14 @@
             const studentClass = document.getElementById('subStudentClass').value;
             const dob = document.getElementById('subDateOfBirth').value;
             const term = document.getElementById('subTermSelect').value;
-
-            if (!confirm('Are you sure you want to remove the fee alert subscription for ' + studentName + '?')) {
-                return;
-            }
-
+            if (!confirm('Are you sure you want to remove the fee alert subscription for ' + studentName + '?')) return;
             const btn = document.getElementById('subUnsubscribeBtn');
             const original = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-small"></span> Removing...';
             hideSubStatus();
-
             try {
-                const res = await callGAS('unsubscribeFeeEmail', {
-                    studentName, studentClass, dateOfBirth: dob, term
-                });
+                const res = await callGAS('unsubscribeFeeEmail', { studentName, studentClass, dateOfBirth: dob, term });
                 if (res && res.success) {
                     showSubStatus('success', '✅ ' + escapeHtml(res.message));
                     subCurrentStatus = null;
@@ -1667,12 +1191,8 @@
                 } else {
                     showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Unsubscribe failed.'));
                 }
-            } catch (e) {
-                showSubStatus('error', '❌ ' + escapeHtml(e.message));
-            } finally {
-                btn.innerHTML = original;
-                updateSubButtons();
-            }
+            } catch (e) { showSubStatus('error', '❌ ' + escapeHtml(e.message)); }
+            finally { btn.innerHTML = original; updateSubButtons(); }
         }
 
         function showSubStatus(type, html) {
@@ -1696,91 +1216,42 @@
         // ============================================================
         // 4. ADMIN QUEUE MANAGER
         // ============================================================
-
         async function refreshQueueStats() {
             if (!isAdminMode || !currentTermKey) return;
-
             const pendingEl = document.getElementById('queuePending');
             const sentEl = document.getElementById('queueSent');
             const failedEl = document.getElementById('queueFailed');
-
-            pendingEl.textContent = '…';
-            sentEl.textContent = '…';
-            failedEl.textContent = '…';
-
+            pendingEl.textContent = '…'; sentEl.textContent = '…'; failedEl.textContent = '…';
             try {
-                const res = await callGAS('getFeeAlertQueueStats', {
-                    password: ADMIN_PASSWORD,
-                    term: currentTermKey
-                });
+                const res = await callGAS('getFeeAlertQueueStats', { password: ADMIN_PASSWORD, term: currentTermKey });
                 if (res && res.success) {
                     pendingEl.textContent = res.pending;
                     sentEl.textContent = res.sent;
                     failedEl.textContent = res.failed;
-                } else {
-                    pendingEl.textContent = '?';
-                    sentEl.textContent = '?';
-                    failedEl.textContent = '?';
-                }
-            } catch (e) {
-                pendingEl.textContent = '!';
-                sentEl.textContent = '!';
-                failedEl.textContent = '!';
-                console.warn('Queue stats failed:', e);
-            }
+                } else { pendingEl.textContent = '?'; sentEl.textContent = '?'; failedEl.textContent = '?'; }
+            } catch (e) { pendingEl.textContent = '!'; sentEl.textContent = '!'; failedEl.textContent = '!'; }
         }
 
         async function processQueueNow() {
-            if (!isAdminMode) {
-                alert('Enable admin mode first.');
-                return;
-            }
-            if (!currentTermKey) {
-                alert('Select a term first.');
-                return;
-            }
-
-            const pendingEl = document.getElementById('queuePending');
-            const pendingCount = parseInt(pendingEl.textContent, 10);
-            if (!isNaN(pendingCount) && pendingCount === 0) {
-                if (!confirm('There are 0 pending alerts. Send anyway? (Nothing will happen.)')) {
-                    return;
-                }
-            } else {
-                if (!confirm('Send all pending fee alert emails for this term now?')) {
-                    return;
-                }
-            }
-
+            if (!isAdminMode) { alert('Enable admin mode first.'); return; }
+            if (!currentTermKey) { alert('Select a term first.'); return; }
+            if (!confirm('Send all pending fee alert emails for this term now?')) return;
             const btn = document.getElementById('processQueueBtn');
             const original = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '⏳ Sending...';
-
             const resultEl = document.getElementById('queueLastResult');
             resultEl.textContent = 'Processing queue...';
-
             try {
-                const res = await callGAS('processFeeAlertQueueNow', {
-                    password: ADMIN_PASSWORD,
-                    term: currentTermKey
-                });
-
+                const res = await callGAS('processFeeAlertQueueNow', { password: ADMIN_PASSWORD, term: currentTermKey });
                 if (res && res.success) {
-                    resultEl.innerHTML = '✅ ' + escapeHtml(res.message) +
-                        ' <br><small>Term: ' + escapeHtml(res.termDisplay || '') + '</small>';
+                    resultEl.innerHTML = '✅ ' + escapeHtml(res.message) + '<br><small>Term: ' + escapeHtml(res.termDisplay || '') + '</small>';
                 } else {
                     resultEl.innerHTML = '❌ ' + escapeHtml(res?.error || 'Failed to process queue.');
                 }
-
                 await refreshQueueStats();
-
-            } catch (e) {
-                resultEl.innerHTML = '❌ ' + escapeHtml(e.message);
-            } finally {
-                btn.innerHTML = original;
-                btn.disabled = false;
-            }
+            } catch (e) { resultEl.innerHTML = '❌ ' + escapeHtml(e.message); }
+            finally { btn.innerHTML = original; btn.disabled = false; }
         }
     </script>
 </body>
