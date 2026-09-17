@@ -84,6 +84,23 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
 
+  .layout-toggle {
+    display: flex; gap: 6px;
+    background: #fffbeb; padding: 4px;
+    border-radius: 10px; margin-bottom: 14px;
+    border: 1px solid #fde68a;
+  }
+  .layout-toggle button {
+    flex: 1; padding: 10px 14px;
+    background: transparent; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #92400e;
+    cursor: pointer; transition: 0.15s;
+  }
+  .layout-toggle button.active {
+    background: white; color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
   .quick-ranges {
     display: flex; gap: 6px; flex-wrap: wrap;
     margin-bottom: 14px;
@@ -147,7 +164,6 @@
   .status-ok { background: #dcfce7; color: #166534; }
   .status-due { background: #fee2e2; color: #991b1b; }
   .status-over { background: #ede9fe; color: #5b21b6; }
-  .status-nopay { background: #f1f5f9; color: #64748b; }
 
   .actions {
     display: flex; gap: 10px;
@@ -198,20 +214,35 @@
   .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
   .preview-header .count strong { color: var(--primary); }
 
-  /* RECEIPT GRID */
+  /* ============================================
+     RECEIPT GRIDS
+     ============================================ */
   .receipt-sheet {
     width: 210mm; min-height: 297mm;
     margin: 0 auto 20px; background: white;
     padding: 6mm;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 4mm;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     page-break-after: always;
     break-after: page;
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
+
+  /* Full layout: 2 cols × 2 rows */
+  .layout-full .receipt-sheet {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4mm;
+  }
+
+  /* Compact layout: 4 cols × 3 rows */
+  .layout-compact .receipt-sheet {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 2mm;
+    padding: 4mm;
+  }
 
   .receipt {
     border: 1.2px dashed #94a3b8;
@@ -221,6 +252,9 @@
     overflow: hidden; background: white;
   }
 
+  /* ============================================
+     FULL RECEIPT STYLES
+     ============================================ */
   .receipt-header {
     display: flex; align-items: center; gap: 8px;
     border-bottom: 1.5px solid var(--primary);
@@ -364,6 +398,128 @@
     border-radius: 6px;
   }
 
+  /* ============================================
+     COMPACT RECEIPT OVERRIDES (4×3 layout, ~48×93mm cells)
+     ============================================ */
+  .layout-compact .receipt {
+    padding: 2.5mm;
+    border-width: 1px;
+  }
+  .layout-compact .receipt-number {
+    top: 2mm; right: 2mm;
+    font-size: 6.5px;
+  }
+  .layout-compact .receipt-header {
+    gap: 4px;
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    border-bottom-width: 1px;
+  }
+  .layout-compact .receipt-header img {
+    width: 18px; height: 18px;
+  }
+  .layout-compact .receipt-header .school {
+    font-size: 7.5px;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .layout-compact .receipt-header .doc-type {
+    font-size: 6px;
+    letter-spacing: 0.6px;
+    margin-top: 1px;
+  }
+  .layout-compact .receipt-header .period {
+    display: none;
+  }
+  .layout-compact .receipt-header .range-badge {
+    display: none;
+  }
+
+  .layout-compact .receipt-body {
+    font-size: 7px;
+    line-height: 1.3;
+  }
+
+  .layout-compact .student-line {
+    padding: 2px 0;
+    margin-bottom: 2px;
+  }
+  .layout-compact .student-line .left {
+    font-size: 8.5px;
+  }
+  .layout-compact .student-line .right {
+    font-size: 6.5px;
+  }
+
+  .layout-compact .payments-table {
+    margin-bottom: 2px;
+    font-size: 6.5px;
+  }
+  .layout-compact .payments-table thead th {
+    font-size: 5.5px;
+    padding: 1.5px 2px;
+    letter-spacing: 0.3px;
+  }
+  .layout-compact .payments-table tbody td {
+    padding: 1.5px 2px;
+    font-size: 6.5px;
+  }
+  .layout-compact .payments-table tbody td.dt {
+    font-size: 6px;
+  }
+
+  .layout-compact .totals-block {
+    padding: 3px 4px;
+    margin-top: 2px;
+    border-left-width: 2px;
+  }
+  .layout-compact .totals-row {
+    font-size: 6.5px;
+    padding: 1px 0;
+  }
+  .layout-compact .totals-row.big {
+    font-size: 8px;
+    margin-top: 2px;
+    padding-top: 2px;
+  }
+  .layout-compact .totals-row .prev-hint {
+    font-size: 5.5px;
+    color: #94a3b8;
+    font-style: italic;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .layout-compact .balance-note {
+    display: none;
+  }
+
+  .layout-compact .receipt-footer {
+    padding-top: 2px;
+    margin-top: 2px;
+  }
+  .layout-compact .receipt-footer .left {
+    display: none;
+  }
+  .layout-compact .receipt-footer .right {
+    font-size: 6px;
+    width: 100%;
+    text-align: left;
+  }
+  .layout-compact .receipt-footer .right .ts-label {
+    display: inline;
+    font-size: 5.5px;
+    margin-right: 2px;
+    margin-bottom: 0;
+  }
+
+  .layout-compact .watermark {
+    font-size: 14px;
+    letter-spacing: 2px;
+    padding: 1px 6px;
+    border-width: 2px;
+  }
+
   /* loading overlay */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -395,8 +551,10 @@
     .main-wrapper { display: block !important; }
     .receipt-sheet {
       box-shadow: none; margin: 0;
-      padding: 6mm; min-height: 297mm;
+      min-height: 297mm;
     }
+    .layout-full .receipt-sheet { padding: 6mm; }
+    .layout-compact .receipt-sheet { padding: 4mm; }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
     @page { size: A4 portrait; margin: 0; }
   }
@@ -404,7 +562,8 @@
   /* MOBILE */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
-    .receipt-sheet {
+    .layout-full .receipt-sheet,
+    .layout-compact .receipt-sheet {
       width: 100%; min-height: auto;
       grid-template-columns: 1fr;
       grid-template-rows: auto;
@@ -427,15 +586,19 @@
 </div>
 
 <!-- MAIN -->
-<div id="mainWrapper" class="main-wrapper">
-
+<div id="mainWrapper" class="main-wrapper layout-full">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all payments.</p>
+    <p class="subtitle">One receipt per student. Filter by date range — students qualify if they made at least one payment within the range; their receipt shows all their payments.</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
       <button id="tabBatch" onclick="setMode('batch')">👥 Whole Class Batch</button>
+    </div>
+
+    <div class="layout-toggle">
+      <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 4 per page</button>
+      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 12 per page</button>
     </div>
 
     <div class="row">
@@ -517,8 +680,9 @@
     <div id="errorMsg" class="error-msg"></div>
 
     <div class="info">
-      <strong>How it works:</strong> A student qualifies for a receipt if at least one of their installment dates falls within the selected range.
-      Their receipt then shows <strong>all</strong> their payments (dated and undated). Data is cached — switching between classes is instant.
+      <strong>Layout tips:</strong>
+      <strong>Full</strong> gives you a proper receipt with previous balance, footer, and address — 4 per A4.
+      <strong>Compact</strong> packs 12 per A4 — good for high-volume days. Compact drops the footer text and hides the "previous balance" as a small inline hint next to Balance.
     </div>
   </div>
 
@@ -528,7 +692,6 @@
   </div>
 
   <div id="receiptContainer"></div>
-
 </div>
 
 <div id="loadingOverlay" class="loading-overlay">
@@ -546,13 +709,14 @@
   const ADMIN_PASSWORD = 'lss001';
 
   // ============================================================
-  // STATE + CACHE
+  // STATE
   // ============================================================
   let availableTerms = [];
   let currentTermKey = null;
   let currentClass = null;
   let receiptData = null;
   let currentMode = 'single';
+  let currentLayout = 'full';  // 'full' | 'compact'
   let selectedStudents = new Set();
 
   const dataCache = new Map();
@@ -689,7 +853,6 @@
     document.getElementById('loginGate').style.display = 'none';
     document.getElementById('mainWrapper').style.display = 'block';
 
-    // Default range to today
     const today = new Date();
     document.getElementById('rDateFrom').value = toIsoDate(today);
     document.getElementById('rDateTo').value = toIsoDate(today);
@@ -865,6 +1028,26 @@
   }
 
   // ============================================================
+  // LAYOUT SWITCHING
+  // ============================================================
+  function setLayout(layout) {
+    currentLayout = layout;
+    document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
+    document.getElementById('layoutCompact').classList.toggle('active', layout === 'compact');
+    const wrapper = document.getElementById('mainWrapper');
+    wrapper.classList.toggle('layout-full', layout === 'full');
+    wrapper.classList.toggle('layout-compact', layout === 'compact');
+
+    // Re-render the preview with the new layout
+    if (selectedStudents.size > 0 && receiptData) {
+      const students = Array.from(selectedStudents)
+        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+        .filter(Boolean);
+      renderPreview(students);
+    }
+  }
+
+  // ============================================================
   // TERM + CLASS
   // ============================================================
   function handleTermChange() {
@@ -902,10 +1085,7 @@
     showLoading('Loading ' + currentClass + ' records…');
 
     try {
-      const params = {
-        studentClass: currentClass,
-        term: currentTermKey
-      };
+      const params = { studentClass: currentClass, term: currentTermKey };
       if (dateFrom) params.dateFrom = dateFrom;
       if (dateTo) params.dateTo = dateTo;
       if (includeUndated) params.includeUndated = 'true';
@@ -1107,6 +1287,9 @@
       return;
     }
 
+    const perSheet = currentLayout === 'compact' ? 12 : 4;
+    const cols = currentLayout === 'compact' ? 4 : 2;
+
     const from = getDateFromInput();
     const to = getDateToInput();
     let rangeLabel = '';
@@ -1123,15 +1306,14 @@
       termConfig: receiptData.termConfig
     };
 
-    const now = new Date();
-    const printedAt = formatTimestamp(now);
+    const printedAt = formatTimestamp(new Date());
 
     let html = '';
-    for (let i = 0; i < students.length; i += 4) {
-      const group = students.slice(i, i + 4);
+    for (let i = 0; i < students.length; i += perSheet) {
+      const group = students.slice(i, i + perSheet);
       html += '<div class="receipt-sheet">';
-      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt); });
-      for (let k = group.length; k < 4; k++) {
+      group.forEach(s => { html += buildReceiptHTML(s, termInfo, printedAt, currentLayout); });
+      for (let k = group.length; k < perSheet; k++) {
         html += '<div class="empty-sheet-slot"></div>';
       }
       html += '</div>';
@@ -1150,7 +1332,7 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
   }
 
-  function buildReceiptHTML(student, termInfo, printedAt) {
+  function buildReceiptHTML(student, termInfo, printedAt, layout) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -1164,10 +1346,10 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
-    // Payments rows — installments already sorted by date on server
+    // Payments rows
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
-      rowsHTML = '<tr><td colspan="3" style="padding:10px;text-align:center;color:#94a3b8;font-size:10px;font-style:italic;">No payments recorded for this term.</td></tr>';
+      rowsHTML = '<tr><td colspan="3" style="padding:6px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
     } else {
       student.payments.forEach(p => {
         const sign = p.isRefund ? '−' : '';
@@ -1192,6 +1374,53 @@
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
 
+    // ----- COMPACT layout: minimal receipt -----
+    if (layout === 'compact') {
+      // Previous-balance hint shown inline next to Balance
+      let prevHint = '';
+      if (prevBalance !== 0) {
+        prevHint = '<span class="prev-hint">'
+          + (prevBalance < 0 ? 'incl. prev. K' + safeMoney(Math.abs(prevBalance)) + ' due'
+                             : 'incl. credit K' + safeMoney(prevBalance))
+          + '</span>';
+      }
+
+      return '<div class="receipt">'
+        + '<div class="receipt-number">[Pending]</div>'
+        + '<div class="receipt-header">'
+          + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
+          + '<div class="title">'
+            + '<div class="school">' + escapeHtml(schoolName) + '</div>'
+            + '<div class="doc-type">' + escapeHtml(termInfo.termDisplay) + ' · FEE RECEIPT</div>'
+          + '</div>'
+        + '</div>'
+        + '<div class="receipt-body">'
+          + '<div class="student-line">'
+            + '<div class="left">' + escapeHtml(student.studentName) + '</div>'
+            + '<div class="right">' + escapeHtml(student.studentClass) + '</div>'
+          + '</div>'
+          + '<table class="payments-table">'
+            + '<thead><tr><th>Payment</th><th class="amt">Amount</th><th class="dt">Date</th></tr></thead>'
+            + '<tbody>' + rowsHTML + '</tbody>'
+          + '</table>'
+          + '<div class="totals-block">'
+            + '<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>'
+            + '<div class="totals-row"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>'
+            + '<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>'
+            + '<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>'
+            + prevHint
+          + '</div>'
+        + '</div>'
+        + '<div class="receipt-footer">'
+          + '<div class="right">'
+            + '<span class="ts-label">Printed</span>' + printedAt
+          + '</div>'
+        + '</div>'
+        + '<div class="watermark ' + wmClass + '">' + wmText + '</div>'
+      + '</div>';
+    }
+
+    // ----- FULL layout: rich receipt -----
     return '<div class="receipt">'
       + '<div class="receipt-number">[Pending]</div>'
       + '<div class="receipt-header">'
