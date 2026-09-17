@@ -242,7 +242,6 @@
     break-after: page;
     overflow: hidden;
     box-sizing: border-box;
-    /* Default grid: 3×3 */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -250,7 +249,6 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* FULL layout: 3 cols × 3 rows = 9 per page */
   .layout-full .receipt-sheet {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -259,7 +257,6 @@
     padding: 5mm;
   }
 
-  /* COMPACT layout: 4 cols × 4 rows = 16 per page */
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -282,26 +279,38 @@
   }
 
   /* ============================================
-     WATERMARK — clearly visible
+     WATERMARK — flexbox-centered, never clipped
      ============================================ */
   .watermark {
     position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-18deg);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     font-weight: 900;
-    letter-spacing: 4px;
     text-transform: uppercase;
     pointer-events: none;
-    white-space: nowrap;
-    opacity: 0.14;
+    opacity: 0.16;
     color: #dc2626;
     z-index: 0;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    overflow: hidden;
+    line-height: 1.1;
+    padding: 6px;
+    word-break: break-word;
   }
   .watermark.paid { color: #059669; }
   .watermark.over { color: #7c3aed; }
   .watermark.due { color: #dc2626; }
+  .watermark span {
+    display: block;
+    transform: rotate(-18deg);
+    letter-spacing: 3px;
+    white-space: normal;
+  }
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
   /* ============================================
@@ -544,7 +553,7 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
-  .layout-full .watermark { font-size: 26px; letter-spacing: 4px; }
+  .layout-full .watermark span { font-size: 22px; letter-spacing: 3px; }
 
   /* ============================================
      COMPACT LAYOUT TYPOGRAPHY (16 per page)
@@ -570,14 +579,13 @@
   .layout-compact .totals-row { font-size: 5.5px; padding: 0.5px 0; }
   .layout-compact .totals-row.big { font-size: 7px; margin-top: 1px; padding-top: 1px; }
   .layout-compact .totals-row .prev-hint { font-size: 4.5px; }
-  /* CHANGED: compact balance note is now VISIBLE */
   .layout-compact .balance-note { font-size: 5px; padding: 2px 3px; margin-top: 2px; }
   .layout-compact .receipt-footer { padding-top: 1.5px; margin-top: 1.5px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .left .office { font-size: 5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
-  .layout-compact .watermark { font-size: 16px; letter-spacing: 2px; }
+  .layout-compact .watermark span { font-size: 13px; letter-spacing: 2px; }
 
   /* Empty grid slots */
   .empty-sheet-slot {
@@ -624,7 +632,8 @@
       break-after: page;
     }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
-    .watermark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .watermark { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .watermark span { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     .balance-note, .totals-block, .receipt-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     @page { size: A4 portrait; margin: 0; }
   }
@@ -1550,6 +1559,17 @@
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
       : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
+
+    // ---- Pull the correct contact block (regular vs ODL) ----
+    const contacts = termInfo.termConfig.contacts || {};
+    const contact = isODL
+      ? (contacts.odl || contacts.regular || {})
+      : (contacts.regular || {});
+    const bursarPhone = contact.phone1 || '';
+    const bursarPhone2 = contact.phone2 || '';
+    const bursarWhatsapp = contact.whatsapp || '';
+    const accountNumber = contact.accountNumber || '';
+
     const balance = safeNum(student.cumulativeBalance);
     const prevBalance = safeNum(student.previousBalance);
     const isPaid = balance === 0;
@@ -1635,6 +1655,17 @@
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     }
 
+    // Footer left — bursar contact + bank if due
+    const footerLeftHtml = '<div class="left">'
+      + '<span class="office">Office of the Bursar</span>'
+      + (bursarPhone ? '☎ ' + escapeHtml(bursarPhone) : '')
+      + (bursarPhone2 ? ' / ' + escapeHtml(bursarPhone2) : '')
+      + (bursarWhatsapp ? '<br>💬 ' + escapeHtml(bursarWhatsapp) : '')
+      + (balance < 0 && accountNumber
+          ? '<div style="margin-top:2px;color:#7f1d1d;font-weight:700;">A/C: ' + escapeHtml(accountNumber) + '</div>'
+          : '')
+    + '</div>';
+
     return '<div class="receipt">'
       + '<div class="receipt-header">'
         + '<img class="crest" src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
@@ -1664,16 +1695,13 @@
         + balanceNoteHtml
       + '</div>'
       + '<div class="receipt-footer">'
-        + '<div class="left">'
-          + '<span class="office">Office of the Bursar</span>'
-          + '☎ ' + escapeHtml(termInfo.termConfig.phone1 || '')
-        + '</div>'
+        + footerLeftHtml
         + '<div class="right">'
           + '<span class="ts-label">Printed</span>'
           + printedAt
         + '</div>'
       + '</div>'
-      + '<div class="watermark ' + wmClass + '">' + wmText + '</div>'
+      + '<div class="watermark ' + wmClass + '"><span>' + wmText + '</span></div>'
     + '</div>';
   }
 
