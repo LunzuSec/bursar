@@ -763,7 +763,7 @@
         // ============================================================
         // API CALLS — fetch-based, CORS-safe, retries on network errors
         // ============================================================
-        async function callGAS(action, params = {}, attempt = 1) {
+                async function callGAS(action, params = {}, attempt = 1) {
             const body = new URLSearchParams();
             body.append('action', action);
             for (const key in params) {
@@ -779,7 +779,9 @@
             try {
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    // This MUST be form-urlencoded so Apps Script parses the body
+                    // into e.parameter. text/plain is NOT parsed.
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
                     body: body.toString(),
                     redirect: 'follow',
                     signal: controller.signal,
