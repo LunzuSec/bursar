@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fee Receipts - Lunzu Secondary School</title>
+<style>
+  :root {
+    --primary: #002b54;
+    --accent: #fbbf24;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #eef2f6;
+    color: var(--text);
+    padding: 16px;
+  }
+
+  /* ---------- LOGIN GATE ---------- */
+  .login-gate {
+    max-width: 420px; margin: 80px auto;
+    background: white; padding: 32px;
+    border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  .login-gate h1 { color: var(--primary); font-size: 22px; margin-bottom: 6px; }
+  .login-gate .sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+  .login-gate input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 15px; text-align: center;
+    letter-spacing: 2px; margin-bottom: 14px;
+  }
+  .login-gate input:focus { outline: none; border-color: var(--primary); }
+  .login-gate button {
+    width: 100%; padding: 12px;
+    background: var(--primary); color: white;
+    border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .login-gate button:hover { background: #003d75; }
+  .login-gate button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
+  .login-gate .err.show { display: block; }
+
+  /* ---------- MAIN ---------- */
+  .main-wrapper { display: none; }
+  .controls {
+    max-width: 1000px; margin: 0 auto 16px;
+    background: white; border-radius: 12px;
+    padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .controls h1 {
+    font-size: 20px; color: var(--primary); margin-bottom: 4px;
+  }
+  .controls .subtitle {
+    font-size: 13px; color: var(--muted); margin-bottom: 16px;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+  .controls label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--text); margin-bottom: 5px;
+  }
+  .controls select, .controls input[type="text"] {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 14px; background: white;
+  }
+  .controls select:focus, .controls input:focus { outline: none; border-color: var(--primary); }
+
+  .mode-tabs {
+    display: flex; gap: 6px;
+    background: #f1f5f9; padding: 4px;
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .mode-tabs button {
+    flex: 1; padding: 10px 14px;
+    background: transparent; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: 0.15s;
+  }
+  .mode-tabs button.active {
+    background: white; color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .student-list {
+    max-height: 340px; overflow-y: auto;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 4px; background: #f8fafc;
+  }
+  .student-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-bottom: 1px solid #eef2f6;
+    font-size: 13px;
+  }
+  .student-row:last-child { border-bottom: none; }
+  .student-row input[type="checkbox"] {
+    width: 18px; height: 18px; cursor: pointer; flex-shrink: 0;
+  }
+  .student-row label {
+    flex: 1; cursor: pointer; margin: 0;
+    font-weight: 500; font-size: 13px;
+  }
+  .student-row .meta {
+    font-size: 11px; color: var(--muted); display: block;
+    margin-top: 2px; font-weight: 400;
+  }
+  .status-pill {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px;
+    white-space: nowrap; text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .status-ok { background: #dcfce7; color: #166534; }
+  .status-due { background: #fee2e2; color: #991b1b; }
+  .status-over { background: #ede9fe; color: #5b21b6; }
+  .status-nopay { background: #f1f5f9; color: #64748b; }
+
+  .actions {
+    display: flex; gap: 10px;
+    flex-wrap: wrap; margin-top: 14px;
+  }
+  .actions button {
+    flex: 1; min-width: 130px;
+    padding: 12px 18px;
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: 0.15s;
+  }
+  .btn-print { background: var(--primary); color: white; }
+  .btn-print:hover { background: #003d75; }
+  .btn-print:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-pdf { background: #dc2626; color: white; }
+  .btn-pdf:hover { background: #b91c1c; }
+  .btn-pdf:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-secondary { background: var(--accent); color: #422006; }
+  .btn-secondary:hover { background: #f59e0b; }
+  .btn-ghost { background: #f1f5f9; color: var(--muted); }
+  .btn-ghost:hover { background: #e2e8f0; }
+
+  .info {
+    margin-top: 12px; font-size: 12px;
+    color: var(--muted); line-height: 1.6;
+    padding: 10px 14px; background: #f8fafc;
+    border-radius: 8px; border-left: 3px solid var(--accent);
+  }
+  .info strong { color: var(--primary); }
+
+  .error-msg {
+    background: #fee2e2; color: #991b1b;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 12px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .preview-header {
+    max-width: 1000px; margin: 0 auto 12px;
+    justify-content: space-between; align-items: center;
+    padding: 10px 18px; background: white;
+    border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: none;
+  }
+  .preview-header.show { display: flex; }
+  .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
+  .preview-header .count strong { color: var(--primary); }
+
+  /* ---------- RECEIPT GRID ---------- */
+  .receipt-sheet {
+    width: 210mm; min-height: 297mm;
+    margin: 0 auto 20px; background: white;
+    padding: 6mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4mm;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    page-break-after: always;
+    break-after: page;
+  }
+  .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
+
+  .receipt {
+    border: 1.2px dashed #94a3b8;
+    border-radius: 6px; padding: 5mm;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden; background: white;
+  }
+
+  .receipt-header {
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1.5px solid var(--primary);
+    padding-bottom: 5px; margin-bottom: 6px;
+  }
+  .receipt-header img { width: 34px; height: 34px; object-fit: contain; }
+  .receipt-header .title { flex: 1; }
+  .receipt-header .school {
+    font-size: 12px; font-weight: 700;
+    color: var(--primary); letter-spacing: 0.4px;
+    line-height: 1.15;
+  }
+  .receipt-header .doc-type {
+    font-size: 9px; color: var(--accent);
+    font-weight: 700; letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .receipt-header .period {
+    font-size: 9px; color: var(--muted);
+    margin-top: 1px; font-weight: 600;
+  }
+
+  .receipt-body { flex: 1; font-size: 10.5px; line-height: 1.4; }
+
+  .student-line {
+    display: flex; justify-content: space-between;
+    padding: 4px 0; border-bottom: 1px dashed #e2e8f0;
+    margin-bottom: 6px;
+  }
+  .student-line .left { font-weight: 700; color: var(--primary); font-size: 12px; }
+  .student-line .right { font-size: 10px; color: var(--muted); text-align: right; }
+
+  .payments-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 6px; font-size: 10px;
+  }
+  .payments-table thead th {
+    background: #f1f5f9; color: var(--muted);
+    font-size: 8.5px; text-transform: uppercase;
+    letter-spacing: 0.4px; padding: 4px 5px;
+    text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .payments-table thead th.amt, .payments-table thead th.dt { text-align: right; }
+  .payments-table tbody td {
+    padding: 4px 5px; border-bottom: 1px solid #eef2f6;
+    font-size: 10px;
+  }
+  .payments-table tbody td.amt {
+    text-align: right; font-weight: 700;
+    color: #059669; white-space: nowrap;
+  }
+  .payments-table tbody td.amt.refund { color: #7c3aed; }
+  .payments-table tbody td.dt {
+    text-align: right; color: var(--muted);
+    white-space: nowrap; font-size: 9.5px;
+  }
+
+  .totals-block {
+    background: #f1f5f9;
+    border-left: 3px solid var(--accent);
+    border-radius: 4px; padding: 6px 8px;
+    margin-top: 6px;
+  }
+  .totals-row {
+    display: flex; justify-content: space-between;
+    font-size: 10px; padding: 2px 0;
+  }
+  .totals-row.big {
+    border-top: 1px solid var(--border);
+    margin-top: 3px; padding-top: 5px;
+    font-size: 12px; font-weight: 800;
+    color: var(--primary);
+  }
+  .totals-row .label { color: var(--muted); }
+  .totals-row.big .label { color: var(--primary); }
+
+  .balance-note {
+    margin-top: 6px; padding: 5px 8px;
+    border-radius: 4px; font-size: 9.5px; line-height: 1.4;
+  }
+  .balance-note.ok { background: #dcfce7; color: #166534; }
+  .balance-note.due { background: #fee2e2; color: #991b1b; }
+  .balance-note.over { background: #ede9fe; color: #5b21b6; }
+
+  .receipt-footer {
+    margin-top: 6px; padding-top: 5px;
+    border-top: 1px dashed var(--border);
+    display: flex; justify-content: space-between;
+    align-items: flex-end; gap: 8px;
+  }
+  .receipt-footer .left {
+    font-size: 8.5px; color: var(--muted); line-height: 1.4;
+  }
+  .receipt-footer .right {
+    text-align: center; font-size: 8.5px; color: var(--muted);
+  }
+  .signature-line {
+    border-top: 1px solid #475569;
+    width: 80px; padding-top: 2px; margin-bottom: 1px;
+  }
+
+  .receipt-number {
+    position: absolute; top: 5mm; right: 5mm;
+    font-family: 'Courier New', monospace;
+    font-size: 8.5px; color: var(--muted); font-weight: 700;
+  }
+
+  .watermark {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font-size: 24px; font-weight: 900;
+    letter-spacing: 3px; text-transform: uppercase;
+    pointer-events: none; white-space: nowrap;
+    border: 3px solid; border-radius: 8px;
+    padding: 3px 12px;
+  }
+  .watermark.paid { color: rgba(5, 150, 105, 0.10); border-color: rgba(5, 150, 105, 0.10); }
+  .watermark.over { color: rgba(124, 58, 237, 0.10); border-color: rgba(124, 58, 237, 0.10); }
+  .watermark.due { color: rgba(220, 38, 38, 0.09); border-color: rgba(220, 38, 38, 0.09); }
+
+  .empty-sheet-slot {
+    border: 1.2px dashed #eef2f6;
+    border-radius: 6px;
+  }
+
+  /* loading overlay for buttons */
+  .loading-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 31, 46, 0.55);
+    display: none; justify-content: center; align-items: center;
+    z-index: 9999; color: white;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-overlay .box {
+    background: rgba(20, 35, 55, 0.95);
+    padding: 24px 32px; border-radius: 14px;
+    text-align: center; min-width: 220px;
+  }
+  .loading-overlay .spinner {
+    width: 36px; height: 36px;
+    border: 4px solid rgba(255,255,255,0.15);
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay p { font-size: 14px; color: #cbd5e1; }
+
+  /* ---------- PRINT ---------- */
+  @media print {
+    body { background: white; padding: 0; margin: 0; }
+    .login-gate, .controls, .preview-header, .error-msg, .loading-overlay { display: none !important; }
+    .main-wrapper { display: block !important; }
+    .receipt-sheet {
+      box-shadow: none; margin: 0;
+      padding: 6mm; min-height: 297mm;
+    }
+    .receipt { page-break-inside: avoid; break-inside: avoid; }
+    @page { size: A4 portrait; margin: 0; }
+  }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width: 700px) {
+    .row { grid-template-columns: 1fr; }
+    .receipt-sheet {
+      width: 100%; min-height: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      padding: 8px; box-shadow: none;
+      border: 1px dashed var(--border);
+    }
+    .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== LOGIN GATE ==================== -->
+<div id="loginGate" class="login-gate">
+  <h1>🧾 Fee Receipts</h1>
+  <p class="sub">Admin access required. Enter the bursar password to continue.</p>
+  <input type="password" id="adminPasswordInput" placeholder="••••••" maxlength="20" autocomplete="off">
+  <button id="unlockBtn" onclick="unlockReceipts()">Unlock</button>
+  <div id="loginError" class="err">Incorrect password. Please try again.</div>
+</div>
+
+<!-- ==================== MAIN ==================== -->
+<div id="mainWrapper" class="main-wrapper">
+
+  <div class="controls">
+    <h1>🧾 Fee Receipts</h1>
+    <p class="subtitle">One receipt per student — shows every payment recorded in the term. 4 receipts per A4 sheet.</p>
+
+    <div class="mode-tabs">
+      <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
+      <button id="tabBatch" onclick="setMode('batch')">👥 Whole Class Batch</button>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="rTermSelect">Term:</label>
+        <select id="rTermSelect" onchange="handleTermChange()">
+          <option value="" disabled selected>Loading terms...</option>
+        </select>
+      </div>
+      <div>
+        <label for="rClassSelect">Class:</label>
+        <select id="rClassSelect" onchange="handleClassChange()" disabled>
+          <option value="" disabled selected>Select class</option>
+          <option value="Form 1">Form 1</option>
+          <option value="Form 2">Form 2</option>
+          <option value="Form 3">Form 3</option>
+          <option value="Form 4">Form 4</option>
+          <option value="Form 1 ODL">Form 1 ODL</option>
+          <option value="Form 2 ODL">Form 2 ODL</option>
+          <option value="Form 3 ODL">Form 3 ODL</option>
+          <option value="Form 4 ODL">Form 4 ODL</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="singleMode" class="row">
+      <div style="grid-column: 1 / -1;">
+        <label for="rStudentSelect">Student:</label>
+        <select id="rStudentSelect" onchange="handleSingleStudentChange()" disabled>
+          <option value="" disabled selected>Select class first</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="batchMode" style="display:none;">
+      <label>Students (only those with payments are selectable):</label>
+      <div id="studentList" class="student-list">
+        <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
+          Select a term and class to load students.
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All With Payments</button>
+      <button id="btnPrint" class="btn-print" onclick="printReceipts()" disabled>🖨 Print Receipts</button>
+      <button id="btnPDF" class="btn-pdf" onclick="saveAsPDF()" disabled>💾 Save as PDF</button>
+      <button class="btn-ghost" onclick="clearSelection()">↺ Clear</button>
+    </div>
+
+    <div id="errorMsg" class="error-msg"></div>
+
+    <div class="info">
+      <strong>Speed tips:</strong> data is cached after the first load — switching between classes is instant.
+      Use <strong>Save as PDF</strong> to bulk-generate and print later.
+    </div>
+  </div>
+
+  <div id="previewHeader" class="preview-header">
+    <div class="count">Ready to print: <strong id="previewCount">0</strong> receipt(s)</div>
+    <div style="font-size:12px;color:#64748b;">Print dialog opens automatically</div>
+  </div>
+
+  <div id="receiptContainer"></div>
+
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="box">
+    <div class="spinner"></div>
+    <p id="loadingMessage">Loading…</p>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+  const ADMIN_PASSWORD = 'lss001';
+
+  // ============================================================
+  // STATE + CACHE
+  // ============================================================
+  let availableTerms = [];
+  let currentTermKey = null;
+  let currentClass = null;
+  let receiptData = null;
+  let currentMode = 'single';
+  let selectedStudents = new Set();
+
+  // In-memory cache: key = "term|class", value = server response
+  const dataCache = new Map();
+  const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+  function cacheGet(termKey, studentClass) {
+    const key = termKey + '|' + studentClass;
+    const entry = dataCache.get(key);
+    if (!entry) return null;
+    if (Date.now() - entry.ts > CACHE_TTL_MS) {
+      dataCache.delete(key);
+      return null;
+    }
+    return entry.data;
+  }
+  function cacheSet(termKey, studentClass, data) {
+    dataCache.set(termKey + '|' + studentClass, { data, ts: Date.now() });
+  }
+
+  // ============================================================
+  // API CALL
+  // ============================================================
+  async function callGAS(action, params = {}, attempt = 1) {
+    const body = new URLSearchParams();
+    body.append('action', action);
+    for (const key in params) {
+      if (params[key] !== undefined && params[key] !== null) {
+        body.append(key, params[key]);
+      }
+    }
+    body.append('_cb', Date.now().toString());
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const response = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+        body: body.toString(),
+        redirect: 'follow',
+        signal: controller.signal,
+        credentials: 'omit'
+      });
+      clearTimeout(timeoutId);
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const text = await response.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch (p) {
+        const m = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+        if (m) data = JSON.parse(m[0]);
+        else throw new Error('Invalid response');
+      }
+      if (data && data.error) throw new Error(data.error);
+      return data;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      const msg = (error && error.message) || '';
+      const retryable =
+        error.name === 'AbortError' ||
+        msg.indexOf('Failed to fetch') !== -1 ||
+        msg.indexOf('NetworkError') !== -1 ||
+        msg.indexOf('HTTP 5') !== -1;
+      if (retryable && attempt < 2) {
+        await new Promise(r => setTimeout(r, 600));
+        return callGAS(action, params, attempt + 1);
+      }
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // LOADING OVERLAY
+  // ============================================================
+  function showLoading(msg) {
+    document.getElementById('loadingMessage').textContent = msg || 'Loading…';
+    document.getElementById('loadingOverlay').classList.add('show');
+  }
+  function hideLoading() {
+    document.getElementById('loadingOverlay').classList.remove('show');
+  }
+
+  // ============================================================
+  // LOGIN
+  // ============================================================
+  async function unlockReceipts() {
+    const pw = document.getElementById('adminPasswordInput').value.trim();
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('unlockBtn');
+
+    if (!pw) {
+      errEl.textContent = 'Please enter a password.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+    errEl.classList.remove('show');
+
+    try {
+      const res = await callGAS('verifyAdmin', { password: pw });
+      if (res && res.success) {
+        try { sessionStorage.setItem('lunzu_receipts_unlocked', '1'); } catch (e) {}
+        showMain();
+      } else {
+        errEl.textContent = 'Incorrect password. Please try again.';
+        errEl.classList.add('show');
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('adminPasswordInput').focus();
+      }
+    } catch (e) {
+      errEl.textContent = 'Error: ' + (e.message || 'Unknown');
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Unlock';
+    }
+  }
+
+  document.getElementById('adminPasswordInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') unlockReceipts();
+  });
+
+  function showMain() {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('mainWrapper').style.display = 'block';
+    loadTerms();
+  }
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  window.onload = async function () {
+    // Auto-unlock within the same browser session
+    try {
+      if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
+        showMain();
+        return;
+      }
+    } catch (e) {}
+    document.getElementById('adminPasswordInput').focus();
+  };
+
+  async function loadTerms() {
+    showLoading('Loading terms…');
+    try {
+      const terms = await callGAS('getAvailableTerms', {});
+      if (Array.isArray(terms) && terms.length) {
+        availableTerms = terms;
+        populateTerms(terms);
+      } else {
+        showError('No terms available.');
+      }
+    } catch (e) {
+      showError('Failed to load terms: ' + e.message);
+    } finally {
+      hideLoading();
+    }
+  }
+
+  function populateTerms(terms) {
+    const sel = document.getElementById('rTermSelect');
+    sel.innerHTML = '';
+    const def = document.createElement('option');
+    def.value = ''; def.disabled = true; def.selected = true;
+    def.textContent = '-- Select Term --';
+    sel.appendChild(def);
+
+    const grouped = {};
+    terms.forEach(t => {
+      if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
+      grouped[t.academicYear].push(t);
+    });
+
+    let activeTerm = null;
+    Object.keys(grouped).forEach(year => {
+      const og = document.createElement('optgroup');
+      og.label = year;
+      grouped[year].forEach(term => {
+        const opt = document.createElement('option');
+        opt.value = term.key;
+        opt.textContent = term.display;
+        if (term.isActive) {
+          opt.selected = true;
+          currentTermKey = term.key;
+          activeTerm = term;
+        }
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    });
+
+    if (!activeTerm && terms.length) {
+      sel.value = terms[0].key;
+      currentTermKey = terms[0].key;
+    }
+
+    document.getElementById('rClassSelect').disabled = false;
+  }
+
+  // ============================================================
+  // MODE SWITCHING
+  // ============================================================
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('tabSingle').classList.toggle('active', mode === 'single');
+    document.getElementById('tabBatch').classList.toggle('active', mode === 'batch');
+    document.getElementById('singleMode').style.display = mode === 'single' ? 'grid' : 'none';
+    document.getElementById('batchMode').style.display = mode === 'batch' ? 'block' : 'none';
+    document.getElementById('btnSelectAll').style.display = mode === 'batch' ? 'inline-block' : 'none';
+    clearSelection();
+    if (mode === 'single') {
+      if (currentClass) handleClassChange(); // re-populate student select
+    } else {
+      // If we already have data, render list immediately
+      if (receiptData) renderStudentList(receiptData.students);
+    }
+  }
+
+  // ============================================================
+  // TERM + CLASS HANDLERS
+  // ============================================================
+  function handleTermChange() {
+    currentTermKey = document.getElementById('rTermSelect').value;
+    document.getElementById('rClassSelect').value = '';
+    document.getElementById('rClassSelect').disabled = false;
+    document.getElementById('studentList').innerHTML =
+      '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">Select a class to load students.</div>';
+    document.getElementById('rStudentSelect').innerHTML =
+      '<option value="" disabled selected>Select class first</option>';
+    document.getElementById('rStudentSelect').disabled = true;
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    receiptData = null;
+    currentClass = null;
+    selectedStudents.clear();
+  }
+
+  async function handleClassChange() {
+    currentClass = document.getElementById('rClassSelect').value;
+    if (!currentClass || !currentTermKey) return;
+
+    // Try cache first
+    let data = cacheGet(currentTermKey, currentClass);
+    if (data) {
+      receiptData = data;
+      onDataLoaded(true);
+      return;
+    }
+
+    showLoading('Loading ' + currentClass + ' records…');
+
+    try {
+      const res = await callGAS('getReceiptDataForClass', {
+        studentClass: currentClass,
+        term: currentTermKey
+      });
+
+      if (!res || !res.success) {
+        showError(res?.error || 'Failed to load students.');
+        hideLoading();
+        return;
+      }
+
+      receiptData = res;
+      cacheSet(currentTermKey, currentClass, res);
+      onDataLoaded(false);
+
+    } catch (e) {
+      showError('Error: ' + e.message);
+    } finally {
+      hideLoading();
+    }
+  }
+
+  function onDataLoaded(fromCache) {
+    if (!receiptData) return;
+
+    if (currentMode === 'single') {
+      populateStudentSelect(receiptData.students);
+    } else {
+      renderStudentList(receiptData.students);
+    }
+
+    if (fromCache) {
+      // Tiny toast-style note
+      console.log('Loaded from cache — instant.');
+    }
+  }
+
+  // ============================================================
+  // SINGLE MODE
+  // ============================================================
+  function populateStudentSelect(students) {
+    const sel = document.getElementById('rStudentSelect');
+    sel.innerHTML = '';
+    const def = document.createElement('option');
+    def.value = ''; def.disabled = true; def.selected = true;
+    def.textContent = '-- Select Student (' + students.length + ' total) --';
+    sel.appendChild(def);
+
+    // Show students with payments first
+    const withPay = students.filter(s => s.hasPayments);
+    const withoutPay = students.filter(s => !s.hasPayments);
+
+    if (withPay.length) {
+      const og = document.createElement('optgroup');
+      og.label = '✓ With payments (' + withPay.length + ')';
+      withPay.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.rowNumber;
+        opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
+                          (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '');
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    }
+
+    if (withoutPay.length) {
+      const og2 = document.createElement('optgroup');
+      og2.label = '○ No payments (' + withoutPay.length + ')';
+      withoutPay.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.rowNumber;
+        opt.textContent = s.studentName + ' — no payments recorded';
+        og2.appendChild(opt);
+      });
+      sel.appendChild(og2);
+    }
+
+    sel.disabled = false;
+  }
+
+  function handleSingleStudentChange() {
+    const rowNumber = parseInt(document.getElementById('rStudentSelect').value, 10);
+    if (!rowNumber || !receiptData) return;
+
+    const student = receiptData.students.find(s => s.rowNumber === rowNumber);
+    if (!student) return;
+
+    selectedStudents.clear();
+    selectedStudents.add(student.rowNumber);
+
+    // Render single receipt immediately
+    renderPreview([student]);
+    document.getElementById('btnPrint').disabled = false;
+    document.getElementById('btnPDF').disabled = false;
+  }
+
+  // ============================================================
+  // BATCH MODE — student list
+  // ============================================================
+  function renderStudentList(students) {
+    const list = document.getElementById('studentList');
+    // Sort: with payments first, then alphabetical
+    const sorted = students.slice().sort((a, b) => {
+      if (a.hasPayments !== b.hasPayments) return a.hasPayments ? -1 : 1;
+      return a.studentName.localeCompare(b.studentName);
+    });
+
+    // Build the whole HTML as a string for speed
+    let html = '';
+    if (!sorted.length) {
+      html = '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">No students found.</div>';
+    } else {
+      sorted.forEach(s => {
+        const hasPay = s.hasPayments;
+        const balance = safeNum(s.cumulativeBalance);
+        const statusClass = !hasPay ? 'status-nopay' :
+                            balance === 0 ? 'status-ok' :
+                            balance > 0 ? 'status-over' : 'status-due';
+        const statusText = !hasPay ? 'No payment' :
+                           balance === 0 ? 'Paid' :
+                           balance > 0 ? 'Overpaid' : 'Owes';
+
+        const metaLine = hasPay
+          ? 'K' + safeMoney(s.totalPaidThisTerm) + ' paid • ' + s.payments.length + ' payment' + (s.payments.length !== 1 ? 's' : '') +
+            (s.latestPaymentDate ? ' • last ' + s.latestPaymentDate : '')
+          : 'No payments recorded for this term';
+
+        const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
+                            (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
+
+        const disabled = hasPay ? '' : ' disabled';
+
+        html += '<div class="student-row">'
+          + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '"' + disabled + '>'
+          + '<label for="student-' + s.rowNumber + '"' + (hasPay ? '' : ' style="opacity:0.55;"') + '>'
+            + '<strong>' + escapeHtml(s.studentName) + '</strong>'
+            + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
+            + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
+          + '</label>'
+          + '<span class="status-pill ' + statusClass + '">' + statusText + '</span>'
+        + '</div>';
+      });
+    }
+    list.innerHTML = html;
+
+    // Attach a single delegated listener for speed
+    list.removeEventListener('change', onStudentListChange);
+    list.addEventListener('change', onStudentListChange);
+
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    selectedStudents.clear();
+    updateSelectAllLabel();
+    updatePreviewHeader();
+  }
+
+  function onStudentListChange(e) {
+    if (e.target && e.target.type === 'checkbox') {
+      const rowNum = parseInt(e.target.dataset.row, 10);
+      if (e.target.checked) selectedStudents.add(rowNum);
+      else selectedStudents.delete(rowNum);
+      updateSelectionState();
+    }
+  }
+
+  function toggleSelectAll() {
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]:not(:disabled)');
+    const allChecked = Array.from(boxes).every(b => b.checked);
+    boxes.forEach(b => { b.checked = !allChecked; });
+
+    selectedStudents.clear();
+    if (!allChecked) {
+      boxes.forEach(b => selectedStudents.add(parseInt(b.dataset.row, 10)));
+    }
+    updateSelectionState();
+  }
+
+  function updateSelectionState() {
+    const count = selectedStudents.size;
+    document.getElementById('btnPrint').disabled = count === 0;
+    document.getElementById('btnPDF').disabled = count === 0;
+    updateSelectAllLabel();
+    updatePreviewHeader();
+
+    // Render preview live as they tick
+    if (count > 0 && currentMode === 'batch') {
+      const students = Array.from(selectedStudents)
+        .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+        .filter(Boolean);
+      renderPreview(students);
+    } else if (count === 0) {
+      document.getElementById('receiptContainer').innerHTML = '';
+    }
+  }
+
+  function updateSelectAllLabel() {
+    const btn = document.getElementById('btnSelectAll');
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]:not(:disabled)');
+    if (!boxes.length) { btn.textContent = '✓ Select All With Payments'; return; }
+    const allChecked = Array.from(boxes).every(b => b.checked);
+    btn.textContent = allChecked ? '✕ Deselect All' : '✓ Select All With Payments';
+  }
+
+  function updatePreviewHeader() {
+    const hdr = document.getElementById('previewHeader');
+    const count = selectedStudents.size;
+    if (count > 0) {
+      hdr.classList.add('show');
+      document.getElementById('previewCount').textContent = count;
+    } else {
+      hdr.classList.remove('show');
+    }
+  }
+
+  function clearSelection() {
+    selectedStudents.clear();
+    document.querySelectorAll('#studentList input[type="checkbox"]').forEach(b => b.checked = false);
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    document.getElementById('receiptContainer').innerHTML = '';
+    updatePreviewHeader();
+    updateSelectAllLabel();
+  }
+
+  // ============================================================
+  // PREVIEW RENDERING — single string, then innerHTML (very fast)
+  // ============================================================
+  function renderPreview(students) {
+    if (!students || !students.length) {
+      document.getElementById('receiptContainer').innerHTML = '';
+      return;
+    }
+
+    const termInfo = {
+      academicYear: receiptData.academicYear,
+      term: receiptData.term,
+      termDisplay: receiptData.termDisplay,
+      termConfig: receiptData.termConfig
+    };
+
+    let html = '';
+
+    for (let i = 0; i < students.length; i += 4) {
+      const group = students.slice(i, i + 4);
+      html += '<div class="receipt-sheet">';
+      group.forEach(s => { html += buildReceiptHTML(s, termInfo); });
+      // Pad with empty slots so the cut lines look right
+      for (let k = group.length; k < 4; k++) {
+        html += '<div class="empty-sheet-slot"></div>';
+      }
+      html += '</div>';
+    }
+
+    document.getElementById('receiptContainer').innerHTML = html;
+  }
+
+  function buildReceiptHTML(student, termInfo) {
+    const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
+    const schoolName = isODL
+      ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
+      : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
+    const balance = safeNum(student.cumulativeBalance);
+    const isPaid = balance === 0;
+    const isOver = balance > 0;
+
+    let wmClass = 'due', wmText = 'BALANCE DUE';
+    if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
+    else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
+
+    // Build payments rows as a single string
+    let rowsHTML = '';
+    if (!student.payments || !student.payments.length) {
+      rowsHTML = '<tr><td colspan="3" style="padding:10px;text-align:center;color:#94a3b8;font-size:10px;font-style:italic;">No payments recorded for this term.</td></tr>';
+    } else {
+      student.payments.forEach(p => {
+        const sign = p.isRefund ? '−' : '';
+        const amtClass = p.isRefund ? 'amt refund' : 'amt';
+        rowsHTML += '<tr>'
+          + '<td>' + escapeHtml(p.displayName) + '</td>'
+          + '<td class="' + amtClass + '">' + sign + 'K' + safeMoney(p.displayAmount) + '</td>'
+          + '<td class="dt">' + escapeHtml(p.date || '—') + '</td>'
+          + '</tr>';
+      });
+    }
+
+    const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
+    const balanceNoteText = isPaid
+      ? 'This student\'s fees for ' + escapeHtml(termInfo.termDisplay) + ' are fully paid.'
+      : isOver
+        ? 'Credit of K' + safeMoney(balance) + ' will be applied to future fees.'
+        : 'Outstanding balance of K' + safeMoney(Math.abs(balance)) + ' remains payable.';
+
+    return '<div class="receipt">'
+      + '<div class="receipt-number">[Pending]</div>'
+      + '<div class="receipt-header">'
+        + '<img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
+        + '<div class="title">'
+          + '<div class="school">' + escapeHtml(schoolName) + '</div>'
+          + '<div class="doc-type">Fee Receipt — ' + escapeHtml(termInfo.termDisplay) + '</div>'
+          + '<div class="period">' + escapeHtml(termInfo.termConfig.schoolAddress || 'Private Bag 130, Lunzu') + '</div>'
+        + '</div>'
+      + '</div>'
+      + '<div class="receipt-body">'
+        + '<div class="student-line">'
+          + '<div class="left">' + escapeHtml(student.studentName) + '</div>'
+          + '<div class="right">' + escapeHtml(student.studentClass) + '<br>DOB: ' + escapeHtml(student.dateOfBirth || '—') + '</div>'
+        + '</div>'
+        + '<table class="payments-table">'
+          + '<thead><tr><th>Payment</th><th class="amt">Amount</th><th class="dt">Date</th></tr></thead>'
+          + '<tbody>' + rowsHTML + '</tbody>'
+        + '</table>'
+        + '<div class="totals-block">'
+          + '<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>'
+          + '<div class="totals-row"><span class="label">Total paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>'
+          + (student.totalRefunded > 0 ? '<div class="totals-row"><span class="label">Refunded</span><span style="color:#7c3aed;font-weight:700;">−K' + safeMoney(student.totalRefunded) + '</span></div>' : '')
+          + '<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>'
+        + '</div>'
+        + '<div class="balance-note ' + balanceNoteClass + '">' + balanceNoteText + '</div>'
+      + '</div>'
+      + '<div class="receipt-footer">'
+        + '<div class="left">'
+          + 'Office of the Bursar<br>'
+          + '☎ ' + escapeHtml(termInfo.termConfig.phone1 || '') + '<br>'
+          + escapeHtml(termInfo.termConfig.schoolAddress || '')
+        + '</div>'
+        + '<div class="right">'
+          + '<div class="signature-line"></div>'
+          + 'Signature / Stamp'
+        + '</div>'
+      + '</div>'
+      + '<div class="watermark ' + wmClass + '">' + wmText + '</div>'
+    + '</div>';
+  }
+
+  // ============================================================
+  // PRINT / PDF
+  // ============================================================
+  async function printReceipts() {
+    const students = getSelectedStudents();
+    if (!students.length) return;
+
+    showLoading('Preparing receipts…');
+
+    // Assign receipt numbers in one call
+    let numbers = [];
+    try {
+      const peek = await callGAS('peekReceiptNumber', { term: currentTermKey, count: students.length });
+      if (peek && peek.success && peek.numbers) {
+        numbers = peek.numbers;
+      }
+    } catch (e) {
+      console.warn('Peek failed, continuing with placeholders:', e);
+    }
+
+    applyReceiptNumbers(students, numbers);
+
+    // Commit the counter (fire-and-forget, do not block print)
+    callGAS('commitReceiptNumber', { term: currentTermKey, count: students.length }).catch(e => {
+      console.warn('Counter commit failed:', e);
+    });
+
+    // Log receipts (fire-and-forget)
+    const receiptsLog = students.map((s, idx) => ({
+      receiptNumber: numbers[idx] || '',
+      studentName: s.studentName,
+      totalPaid: s.totalPaidThisTerm,
+      balanceAfter: s.cumulativeBalance,
+      paymentCount: s.payments.length,
+      printedBy: 'Bursar'
+    }));
+    callGAS('logReceipts', {
+      studentClass: currentClass,
+      term: currentTermKey,
+      receipts: JSON.stringify(receiptsLog)
+    }).catch(e => console.warn('Log failed:', e));
+
+    hideLoading();
+
+    // Trigger the browser print dialog on next frame
+    setTimeout(() => window.print(), 150);
+  }
+
+  async function saveAsPDF() {
+    // Same flow, just hint at the "Save as PDF" destination
+    await printReceipts();
+    // The user picks "Save as PDF" in the print dialog
+  }
+
+  function getSelectedStudents() {
+    if (!receiptData) return [];
+    return Array.from(selectedStudents)
+      .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+      .filter(Boolean);
+  }
+
+  function applyReceiptNumbers(students, numbers) {
+    // Update the receipt numbers in the DOM directly (fast)
+    const receipts = document.querySelectorAll('#receiptContainer .receipt-number');
+    receipts.forEach((el, idx) => {
+      if (numbers[idx]) el.textContent = numbers[idx];
+    });
+  }
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
+  function safeNum(v) {
+    if (v === undefined || v === null || v === '') return 0;
+    if (typeof v === 'number') return isNaN(v) ? 0 : v;
+    if (typeof v === 'string') {
+      const cleaned = String(v).replace(/[^\d.\-]/g, '');
+      const n = parseFloat(cleaned);
+      return isNaN(n) ? 0 : n;
+    }
+    return 0;
+  }
+  function safeMoney(v) {
+    const n = safeNum(v);
+    return n.toLocaleString('en-US');
+  }
+  function escapeHtml(s) {
+    if (s == null) return '';
+    const d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 8000);
+  }
+</script>
+</body>
+</html>
