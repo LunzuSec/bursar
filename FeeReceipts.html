@@ -265,6 +265,7 @@
     padding: 4mm;
   }
 
+  /* RECEIPT — transparent background so watermark shows through */
   .receipt {
     border: 1.2px dashed #94a3b8;
     border-radius: 6px;
@@ -273,45 +274,50 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: white;
+    background: transparent;
     height: 100%;
     box-sizing: border-box;
   }
 
   /* ============================================
-     WATERMARK — flexbox-centered, never clipped
+     WATERMARK — badge centered, rotated, unclippable
      ============================================ */
   .watermark {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0; left: 0; right: 0; bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .watermark .wm-badge {
+    display: inline-block;
+    transform: rotate(-22deg);
     font-weight: 900;
     text-transform: uppercase;
-    pointer-events: none;
-    opacity: 0.16;
-    color: #dc2626;
-    z-index: 0;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    overflow: hidden;
-    line-height: 1.1;
-    padding: 6px;
-    word-break: break-word;
-  }
-  .watermark.paid { color: #059669; }
-  .watermark.over { color: #7c3aed; }
-  .watermark.due { color: #dc2626; }
-  .watermark span {
-    display: block;
-    transform: rotate(-18deg);
     letter-spacing: 3px;
-    white-space: normal;
+    line-height: 1;
+    border: 2px solid currentColor;
+    border-radius: 8px;
+    padding: 5px 12px;
+    opacity: 0.20;
+    white-space: nowrap;
+    font-family: 'Segoe UI', Arial, sans-serif;
   }
-  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
+  .watermark.paid  { color: #059669; }
+  .watermark.over  { color: #7c3aed; }
+  .watermark.due   { color: #dc2626; }
+
+  /* Content sits above the watermark but has no background, so watermark shows */
+  .receipt > *:not(.watermark) {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
 
   /* ============================================
      HEADER
@@ -324,6 +330,7 @@
     padding-bottom: 3px;
     margin-bottom: 4px;
     min-height: 34px;
+    background: transparent;
   }
   .receipt-header .crest {
     width: 26px; height: 26px;
@@ -372,7 +379,7 @@
     flex-shrink: 0;
     font-family: 'Courier New', monospace;
     font-weight: 700;
-    background: #f1f5f9;
+    background: rgba(241,245,249,0.65);
     color: var(--primary);
     padding: 2px 6px;
     border-radius: 4px;
@@ -384,7 +391,7 @@
   }
   .receipt-number.pending {
     color: #b45309;
-    background: #fffbeb;
+    background: rgba(255,251,235,0.7);
     border-color: #fde68a;
   }
   .receipt-number .num-label {
@@ -405,6 +412,7 @@
     flex-direction: column;
     min-height: 0;
     line-height: 1.3;
+    background: transparent;
   }
 
   .student-line {
@@ -412,6 +420,7 @@
     padding: 3px 0; border-bottom: 1px dashed #e2e8f0;
     margin-bottom: 4px;
     gap: 4px;
+    background: transparent;
   }
   .student-line .left {
     font-weight: 700; color: var(--primary);
@@ -426,9 +435,11 @@
   .payments-table {
     width: 100%; border-collapse: collapse;
     margin-bottom: 4px;
+    background: transparent;
   }
   .payments-table thead th {
-    background: #f1f5f9; color: var(--muted);
+    background: rgba(241,245,249,0.55);
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.3px;
     padding: 2px 3px;
@@ -439,6 +450,7 @@
   .payments-table tbody td {
     padding: 2px 3px;
     border-bottom: 1px solid #eef2f6;
+    background: transparent;
   }
   .payments-table tbody tr:last-child td { border-bottom: none; }
   .payments-table tbody td.amt {
@@ -456,7 +468,7 @@
 
   .totals-block {
     margin-top: auto;
-    background: #f1f5f9;
+    background: rgba(241,245,249,0.55);
     border-left: 3px solid var(--accent);
     border-radius: 3px;
     padding: 3px 5px;
@@ -485,10 +497,11 @@
     border-radius: 3px;
     line-height: 1.3;
     font-weight: 700;
+    background: rgba(255,255,255,0.35);
   }
-  .balance-note.ok { background: #dcfce7; color: #166534; }
-  .balance-note.due { background: #fee2e2; color: #991b1b; }
-  .balance-note.over { background: #ede9fe; color: #5b21b6; }
+  .balance-note.ok { background: rgba(220,252,231,0.55); color: #166534; }
+  .balance-note.due { background: rgba(254,226,226,0.55); color: #991b1b; }
+  .balance-note.over { background: rgba(237,233,254,0.55); color: #5b21b6; }
 
   .receipt-footer {
     margin-top: 3px;
@@ -499,6 +512,7 @@
     align-items: flex-end;
     gap: 4px;
     flex-shrink: 0;
+    background: transparent;
   }
   .receipt-footer .left {
     color: var(--muted);
@@ -510,6 +524,14 @@
     font-weight: 700;
     color: var(--primary);
     display: block;
+  }
+  .receipt-footer .left .acct {
+    margin-top: 1px;
+    color: var(--primary);
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.3px;
+    word-break: break-all;
   }
   .receipt-footer .right {
     text-align: right;
@@ -553,7 +575,7 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
-  .layout-full .watermark span { font-size: 22px; letter-spacing: 3px; }
+  .layout-full .watermark .wm-badge { font-size: 22px; padding: 5px 12px; letter-spacing: 3px; }
 
   /* ============================================
      COMPACT LAYOUT TYPOGRAPHY (16 per page)
@@ -583,9 +605,10 @@
   .layout-compact .receipt-footer { padding-top: 1.5px; margin-top: 1.5px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .left .office { font-size: 5px; }
+  .layout-compact .receipt-footer .left .acct { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
-  .layout-compact .watermark span { font-size: 13px; letter-spacing: 2px; }
+  .layout-compact .watermark .wm-badge { font-size: 13px; padding: 3px 8px; letter-spacing: 2px; border-width: 1.5px; }
 
   /* Empty grid slots */
   .empty-sheet-slot {
@@ -630,11 +653,18 @@
       height: 297mm;
       page-break-after: always;
       break-after: page;
+      background: white;
     }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
-    .watermark { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .watermark span { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .balance-note, .totals-block, .receipt-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .watermark, .watermark .wm-badge {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .watermark .wm-badge { opacity: 0.22 !important; }
+    .receipt-header, .totals-block, .balance-note, .payments-table thead th {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
     @page { size: A4 portrait; margin: 0; }
   }
 
@@ -1554,13 +1584,16 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
+  // ============================================================
+  // BUILD RECEIPT HTML
+  // ============================================================
   function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
       : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
 
-    // ---- Pull the correct contact block (regular vs ODL) ----
+    // ---- Contact block (regular vs ODL) ----
     const contacts = termInfo.termConfig.contacts || {};
     const contact = isODL
       ? (contacts.odl || contacts.regular || {})
@@ -1569,6 +1602,17 @@
     const bursarPhone2 = contact.phone2 || '';
     const bursarWhatsapp = contact.whatsapp || '';
     const accountNumber = contact.accountNumber || '';
+
+    // ---- Account line — always shown, format: 1290000098673|FDH|LUNZU ----
+    const accountCompact = String(accountNumber || '').replace(/\s+/g, '');
+    const bankInfoStr = String(termInfo.termConfig.bankInfo || '').toUpperCase();
+    const bankMatch = bankInfoStr.match(/BANK:\s*([^|]+)/);
+    const branchMatch = bankInfoStr.match(/([A-Z\s]+BRANCH)/);
+    const bankName = bankMatch ? bankMatch[1].trim() : 'FDH';
+    const branchName = branchMatch ? branchMatch[1].replace(/\s*BRANCH\s*/i, '').trim() : 'LUNZU';
+    const accountLine = accountCompact
+      ? accountCompact + '|' + bankName + '|' + branchName
+      : '';
 
     const balance = safeNum(student.cumulativeBalance);
     const prevBalance = safeNum(student.previousBalance);
@@ -1598,7 +1642,6 @@
 
     const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
 
-    // Prominent status banner — shows in BOTH layouts
     let statusBannerText = '';
     if (isPaid) {
       statusBannerText = '✅ FULLY PAID — Thank you';
@@ -1655,14 +1698,13 @@
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     }
 
-    // Footer left — bursar contact + bank if due
     const footerLeftHtml = '<div class="left">'
       + '<span class="office">Office of the Bursar</span>'
       + (bursarPhone ? '☎ ' + escapeHtml(bursarPhone) : '')
       + (bursarPhone2 ? ' / ' + escapeHtml(bursarPhone2) : '')
-      + (bursarWhatsapp ? '<br>💬 ' + escapeHtml(bursarWhatsapp) : '')
-      + (balance < 0 && accountNumber
-          ? '<div style="margin-top:2px;color:#7f1d1d;font-weight:700;">A/C: ' + escapeHtml(accountNumber) + '</div>'
+      + (bursarWhatsapp ? ' • ' + escapeHtml(bursarWhatsapp) : '')
+      + (accountLine
+          ? '<div class="acct">' + escapeHtml(accountLine) + '</div>'
           : '')
     + '</div>';
 
@@ -1701,7 +1743,7 @@
           + printedAt
         + '</div>'
       + '</div>'
-      + '<div class="watermark ' + wmClass + '"><span>' + wmText + '</span></div>'
+      + '<div class="watermark ' + wmClass + '"><div class="wm-badge">' + wmText + '</div></div>'
     + '</div>';
   }
 
