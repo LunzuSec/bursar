@@ -8,248 +8,637 @@
     <meta http-equiv="Expires" content="0">
     <title>Lunzu Secondary School - Fee Portal</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-            background: #0a1f2e;
-            position: relative;
-            overflow-x: hidden;
-        }
-        #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 820px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.13);
-            backdrop-filter: blur(14px) saturate(180%);
-            -webkit-backdrop-filter: blur(14px) saturate(180%);
-            border-radius: 28px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 215, 0, 0.25);
-            overflow: hidden;
-        }
-        .header {
-            background: rgba(10, 30, 50, 0.65);
-            backdrop-filter: blur(6px);
-            color: white;
-            padding: 22px 20px 18px;
-            text-align: center;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        .logo {
-            max-width: 100px; margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 5px; border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        h1 { font-size: 26px; letter-spacing: 1px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); color: #fff; }
-        h2 { font-size: 19px; color: #fcd34d; margin-top: 4px; font-weight: 500; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-        h3 { font-size: 15px; color: #d1e0f0; margin-top: 2px; font-weight: 300; text-shadow: 0 2px 6px rgba(0,0,0,0.3); }
-        .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.08); }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #f0f4fa; font-size: 15px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
-        .required-star { color: #fbbf24; margin-right: 2px; }
-        select, input {
-            width: 100%; padding: 13px 15px;
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 14px; font-size: 15px;
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff; transition: 0.25s ease;
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-        select option { background: #1e2f3f; color: #fff; }
-        select:disabled, input:disabled { background: rgba(200, 200, 200, 0.15); color: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
-        select:focus, input:focus { outline: none; border-color: #fbbf24; background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15); }
-        .buttons { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
-        .btn {
-            flex: 1; min-width: 170px; padding: 15px 18px;
-            border: none; border-radius: 14px; font-size: 16px;
-            font-weight: 600; cursor: pointer;
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.2s ease; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.15); color: white;
-        }
-        .btn-primary { background: rgba(37, 99, 235, 0.7); }
-        .btn-primary:disabled { background: rgba(100, 116, 139, 0.5); cursor: not-allowed; opacity: 0.5; box-shadow: none; }
-        .btn-primary:not(:disabled):hover { transform: translateY(-3px); background: rgba(37, 99, 235, 0.9); }
-        .btn-secondary { background: rgba(22, 163, 74, 0.7); }
-        .btn-secondary:hover { transform: translateY(-3px); background: rgba(22, 163, 74, 0.9); }
-        .btn-subscribe { background: rgba(6, 182, 212, 0.7); }
-        .btn-subscribe:hover { transform: translateY(-3px); background: rgba(6, 182, 212, 0.9); }
-        .btn-admin { background: rgba(139, 92, 246, 0.7); }
-        .btn-admin:hover { transform: translateY(-3px); background: rgba(139, 92, 246, 0.9); }
-        .btn-admin.active { background: rgba(124, 58, 237, 0.9); }
-        .btn-back { background: rgba(71, 85, 105, 0.7); }
-        .btn-back:hover { transform: translateY(-3px); background: rgba(71, 85, 105, 0.9); }
-        .btn-receipts { background: rgba(234, 88, 12, 0.7); display: none; }
-        .btn-receipts.show { display: inline-flex; }
-        .btn-receipts:hover { transform: translateY(-3px); background: rgba(234, 88, 12, 0.95); }
-        .progress-container { margin: 16px 0 8px 0; display: none; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; margin-bottom: 4px; }
-        .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #f59e0b); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
-        .students-loading, .students-loaded {
-            text-align: center; padding: 14px; border-radius: 14px; margin: 12px 0;
-            display: none; align-items: center; justify-content: center; gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .students-loading { background: rgba(59, 130, 246, 0.25); color: #dbeafe; }
-        .students-loaded { background: rgba(34, 197, 94, 0.2); color: #dcfce7; }
-        .spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fbbf24; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-        .alert {
-            padding: 16px 20px; border-radius: 14px; margin: 20px 0;
-            display: flex; align-items: center; gap: 12px; font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .alert-error { background: rgba(220, 38, 38, 0.3); color: #fee2e2; border-left: 5px solid #dc2626; }
-        .alert-success { background: rgba(22, 163, 74, 0.25); color: #dcfce7; border-left: 5px solid #16a34a; }
-        .alert-info { background: rgba(37, 99, 235, 0.25); color: #dbeafe; border-left: 5px solid #3b82f6; }
-        .footer { text-align: center; padding: 16px; background: rgba(0, 0, 0, 0.2); color: #d1d9e6; font-size: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
-        .footer a { color: #fbbf24; text-decoration: none; font-weight: 500; }
-        .footer a:hover { text-decoration: underline; }
-        .initial-loading {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 31, 46, 0.85);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; color: white;
-        }
-        .initial-loading .big-spinner {
-            width: 60px; height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #fbbf24;
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-            margin-bottom: 20px;
-        }
-        .initial-loading p { font-size: 18px; font-weight: 300; color: #e2e8f0; text-align: center; padding: 0 16px; }
-        .initial-loading .retry-btn {
-            margin-top: 20px; padding: 12px 24px;
-            background: rgba(251, 191, 36, 0.9); color: #0a1f2e;
-            border: none; border-radius: 12px;
-            font-weight: 600; font-size: 15px; cursor: pointer;
-        }
-        .info-note {
-            margin-top: 24px; padding: 18px;
-            border-radius: 16px; font-size: 14px;
-            background: rgba(30, 58, 95, 0.3);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            color: #e8edf5;
-        }
-        .info-note strong { color: #fcd34d; }
-        #apiStatus { color: #e2e8f0; font-weight: 400; word-break: break-word; }
-        .admin-notice {
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 12px;
-            padding: 12px 16px; margin-bottom: 16px;
-            color: #e9d5ff; display: none; align-items: center; gap: 10px;
-        }
-        .admin-notice.show { display: flex; }
-        .dob-required { color: #fbbf24; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8; }
-        .dob-required.hidden { display: none; }
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none; justify-content: center; align-items: center;
-            z-index: 10000; padding: 16px;
-        }
-        .modal-overlay.show { display: flex; }
-        .modal-box {
-            background: rgba(20, 35, 55, 0.95);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px; padding: 30px;
-            max-width: 400px; width: 100%;
-        }
-        .modal-box h3 { color: #fbbf24; margin-bottom: 10px; text-align: center; }
-        .modal-box p { color: #d1d9e6; text-align: center; margin-bottom: 20px; font-size: 14px; }
-        .modal-box input {
-            width: 100%; padding: 12px 15px;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px; font-size: 15px;
-            background: rgba(255, 255, 255, 0.08); color: #fff;
-            margin-bottom: 15px; text-align: center; letter-spacing: 2px;
-        }
-        .modal-box input:focus { outline: none; border-color: #fbbf24; }
-        .modal-box .modal-buttons { display: flex; gap: 10px; }
-        .modal-box .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
-        .modal-box .btn-confirm { background: rgba(139, 92, 246, 0.8); color: white; }
-        .modal-box .btn-cancel { background: rgba(100, 116, 139, 0.5); color: white; }
-        .modal-box .error-msg { color: #f87171; font-size: 13px; text-align: center; display: none; margin-bottom: 10px; }
-        .modal-box .error-msg.show { display: block; }
-        .subscribe-modal-box {
-            background: rgba(20, 35, 55, 0.97);
-            border: 1px solid rgba(6, 182, 212, 0.35);
-            border-radius: 20px; padding: 26px 24px;
-            max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto;
-        }
-        .subscribe-modal-box h3 { color: #67e8f9; margin-bottom: 6px; text-align: center; font-size: 18px; }
-        .subscribe-modal-box .sub-intro { color: #cbd5e1; text-align: center; margin-bottom: 18px; font-size: 13px; }
-        .subscribe-modal-box .modal-form-group { margin-bottom: 14px; text-align: left; }
-        .subscribe-modal-box label { display: block; margin-bottom: 5px; font-weight: 600; color: #e2e8f0; font-size: 13px; }
-        .subscribe-modal-box select, .subscribe-modal-box input[type="email"], .subscribe-modal-box input[type="date"] {
-            width: 100%; padding: 11px 13px;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 11px; font-size: 14px;
-            background: rgba(255, 255, 255, 0.08); color: #fff;
-        }
-        .subscribe-modal-box select option { background: #1e2f3f; color: #fff; }
-        .subscribe-modal-box select:focus, .subscribe-modal-box input:focus { outline: none; border-color: #67e8f9; }
-        .subscribe-modal-box .consent-row {
-            display: flex; align-items: flex-start; gap: 10px;
-            background: rgba(139, 92, 246, 0.14);
-            border: 1px solid rgba(139, 92, 246, 0.32);
-            border-radius: 11px; padding: 12px; margin: 14px 0;
-        }
-        .subscribe-modal-box .consent-row input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #8b5cf6; }
-        .subscribe-modal-box .consent-row label { font-weight: 400; font-size: 12px; line-height: 1.5; color: #e9d5ff; margin: 0; }
-        .subscribe-modal-box .helper { display: block; color: #94a3b8; font-size: 11px; margin-top: 4px; }
-        .subscribe-modal-box .modal-buttons { display: flex; gap: 10px; margin-top: 18px; }
-        .subscribe-modal-box .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .subscribe-modal-box .btn-confirm { background: rgba(6, 182, 212, 0.85); color: #fff; }
-        .subscribe-modal-box .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
-        .subscribe-modal-box .btn-cancel { background: rgba(100, 116, 139, 0.55); color: #fff; }
-        .subscribe-modal-box .status-info { padding: 10px 12px; border-radius: 10px; font-size: 12px; margin-bottom: 14px; display: none; }
-        .subscribe-modal-box .status-info.show { display: block; }
-        .subscribe-modal-box .status-info.active { background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981; color: #a7f3d0; }
-        .subscribe-modal-box .status-info.none { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; color: #bfdbfe; }
-        .subscribe-modal-box .status-info.error { background: rgba(220, 38, 38, 0.2); border-left: 3px solid #dc2626; color: #fecaca; }
-        .subscribe-modal-box .status-info.success { background: rgba(16, 185, 129, 0.2); border-left: 3px solid #10b981; color: #a7f3d0; }
-        .subscribe-modal-box .spinner-small {
-            display: inline-block; width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
-            border-radius: 50%; animation: spin 0.8s linear infinite;
-            vertical-align: middle; margin-right: 6px;
-        }
-        .queue-panel { background: rgba(234, 88, 12, 0.12); border: 1px solid rgba(234, 88, 12, 0.35); border-radius: 14px; padding: 14px 16px; margin: 14px 0 8px 0; display: none; }
-        .queue-panel.show { display: block; }
-        .queue-panel h4 { color: #fdba74; font-size: 14px; margin-bottom: 8px; font-weight: 600; }
-        .queue-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; font-size: 13px; color: #fed7aa; }
-        .queue-stats .stat { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 5px 10px; }
-        .queue-stats .stat strong { color: #fb923c; }
-        .queue-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .queue-actions button { padding: 10px 16px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .queue-actions .btn-refresh { background: rgba(100, 116, 139, 0.6); color: white; }
-        .queue-actions .btn-send { background: rgba(234, 88, 12, 0.85); color: white; }
-        .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .container { border-radius: 18px; }
-            .header { padding: 16px 12px; }
-            .content { padding: 18px 14px; }
-            .btn { min-width: 100%; }
-            .buttons { flex-direction: column; }
-            h1 { font-size: 21px; }
-            h2 { font-size: 16px; }
-            .logo { max-width: 80px; }
-            .subscribe-modal-box { padding: 20px 16px; }
-        }
-    </style>
+  :root {
+    --ink: #000000;
+    --ink-soft: #1a1a1a;
+    --muted: #444444;
+    --rule: #000000;
+    --grey-bg: rgba(0,0,0,0.035);
+    --grey-bg-darker: rgba(0,0,0,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #eef2f6;
+    color: var(--ink);
+    padding: 16px;
+  }
+
+  /* LOGIN GATE — controls only, still colored for screen use */
+  .login-gate {
+    max-width: 420px; margin: 80px auto;
+    background: white; padding: 32px;
+    border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  .login-gate h1 { color: #002b54; font-size: 22px; margin-bottom: 6px; }
+  .login-gate .sub { color: #64748b; font-size: 13px; margin-bottom: 22px; }
+  .login-gate input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid #cbd5e1; border-radius: 8px;
+    font-size: 15px; text-align: center;
+    letter-spacing: 2px; margin-bottom: 14px;
+  }
+  .login-gate input:focus { outline: none; border-color: #002b54; }
+  .login-gate button {
+    width: 100%; padding: 12px;
+    background: #002b54; color: white;
+    border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .login-gate button:hover { background: #003d75; }
+  .login-gate button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
+  .login-gate .err.show { display: block; }
+
+  /* MAIN CONTROLS — kept colored for on-screen use */
+  .main-wrapper { display: none; }
+  .controls {
+    max-width: 1000px; margin: 0 auto 16px;
+    background: white; border-radius: 12px;
+    padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .controls h1 { font-size: 20px; color: #002b54; margin-bottom: 4px; }
+  .controls .subtitle { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+  .controls label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--ink); margin-bottom: 5px;
+  }
+  .controls select, .controls input[type="text"], .controls input[type="date"] {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid #cbd5e1; border-radius: 8px;
+    font-size: 14px; background: white;
+  }
+  .controls select:focus, .controls input:focus { outline: none; border-color: #002b54; }
+
+  .mode-tabs, .layout-toggle {
+    display: flex; gap: 6px;
+    padding: 4px;
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .mode-tabs { background: #f1f5f9; }
+  .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
+  .mode-tabs button, .layout-toggle button {
+    flex: 1; padding: 10px 14px;
+    background: transparent; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: 0.15s;
+  }
+  .mode-tabs button { color: #64748b; }
+  .layout-toggle button { color: #92400e; }
+  .mode-tabs button.active, .layout-toggle button.active {
+    background: white; color: #002b54;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .quick-ranges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .quick-ranges button {
+    padding: 6px 12px;
+    background: #f1f5f9; border: 1px solid #cbd5e1;
+    border-radius: 20px; font-size: 12px; font-weight: 600;
+    color: #64748b; cursor: pointer; transition: 0.15s;
+  }
+  .quick-ranges button:hover { background: #e2e8f0; color: #002b54; }
+
+  .range-summary {
+    background: #ecfdf5; border-left: 3px solid #10b981;
+    padding: 10px 14px; border-radius: 6px;
+    font-size: 13px; color: #065f46;
+    margin-bottom: 14px; display: none;
+  }
+  .range-summary.show { display: block; }
+  .range-summary strong { color: #166534; }
+
+  .checkbox-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #64748b; margin-bottom: 12px;
+  }
+  .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #002b54; }
+
+  .student-list {
+    max-height: 340px; overflow-y: auto;
+    border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 4px; background: #f8fafc;
+  }
+  .student-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-bottom: 1px solid #eef2f6;
+    font-size: 13px;
+  }
+  .student-row:last-child { border-bottom: none; }
+  .student-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+  .student-row label { flex: 1; cursor: pointer; margin: 0; font-weight: 500; font-size: 13px; }
+  .student-row .meta { font-size: 11px; color: #64748b; display: block; margin-top: 2px; font-weight: 400; }
+  .student-row .dup-warn {
+    font-size: 10.5px; color: #b45309;
+    background: #fffbeb; padding: 1px 6px;
+    border-radius: 20px; display: inline-block;
+    margin-top: 2px; font-weight: 600;
+  }
+  .status-pill {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px;
+    white-space: nowrap; text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .status-ok { background: #dcfce7; color: #166534; }
+  .status-due { background: #fee2e2; color: #991b1b; }
+  .status-over { background: #ede9fe; color: #5b21b6; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .actions button {
+    flex: 1; min-width: 130px;
+    padding: 12px 18px;
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: 0.15s;
+  }
+  .btn-print { background: #002b54; color: white; }
+  .btn-print:hover { background: #003d75; }
+  .btn-print:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-pdf { background: #dc2626; color: white; }
+  .btn-pdf:hover { background: #b91c1c; }
+  .btn-pdf:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-secondary { background: #fbbf24; color: #422006; }
+  .btn-secondary:hover { background: #f59e0b; }
+  .btn-ghost { background: #f1f5f9; color: #64748b; }
+  .btn-ghost:hover { background: #e2e8f0; }
+
+  .info {
+    margin-top: 12px; font-size: 12px;
+    color: #64748b; line-height: 1.6;
+    padding: 10px 14px; background: #f8fafc;
+    border-radius: 8px; border-left: 3px solid #fbbf24;
+  }
+  .info strong { color: #002b54; }
+
+  .error-msg {
+    background: #fee2e2; color: #991b1b;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 12px; display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .warning-msg {
+    background: #fffbeb; color: #92400e;
+    padding: 12px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 12px;
+    border-left: 4px solid #f59e0b;
+    display: none; line-height: 1.5;
+  }
+  .warning-msg.show { display: block; }
+  .warning-msg strong { color: #78350f; }
+
+  .preview-header {
+    max-width: 1000px; margin: 0 auto 12px;
+    justify-content: space-between; align-items: center;
+    padding: 10px 18px; background: white;
+    border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: none;
+  }
+  .preview-header.show { display: flex; }
+  .preview-header .count { font-size: 14px; color: #64748b; font-weight: 600; }
+  .preview-header .count strong { color: #002b54; }
+
+  /* ============================================
+     RECEIPT SHEET — A4 print layout with grid
+     ============================================ */
+  #receiptContainer { width: 100%; overflow-x: auto; padding-bottom: 12px; }
+
+  .receipt-sheet {
+    width: 210mm; height: 297mm;
+    margin: 0 auto 20px;
+    background: white; padding: 5mm;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    page-break-after: always; break-after: page;
+    overflow: hidden; box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3mm;
+  }
+  .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
+
+  .layout-full .receipt-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3mm; padding: 5mm;
+  }
+
+  .layout-compact .receipt-sheet {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 2mm; padding: 4mm;
+  }
+
+  /* RECEIPT — transparent bg so watermark shows */
+  .receipt {
+    border: 1px solid #000;
+    border-radius: 4px;
+    padding: 3mm;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: transparent;
+    height: 100%;
+    box-sizing: border-box;
+    color: #000;
+  }
+
+  /* ============================================
+     WATERMARK — black outline badge, dashed border
+     ============================================ */
+  .watermark {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .watermark .wm-badge {
+    display: inline-block;
+    transform: rotate(-22deg);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    line-height: 1;
+    border: 2px dashed #000;
+    border-radius: 8px;
+    padding: 6px 14px;
+    opacity: 0.22;
+    white-space: nowrap;
+    color: #000;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .watermark.paid .wm-badge { opacity: 0.20; }
+  .watermark.over .wm-badge { opacity: 0.20; }
+  .watermark.due  .wm-badge { opacity: 0.24; }
+
+  /* Content sits above watermark */
+  .receipt > *:not(.watermark) {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+
+  /* ============================================
+     HEADER
+     ============================================ */
+  .receipt-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 1.2px solid #000;
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+    min-height: 34px;
+    background: transparent;
+  }
+  .receipt-header .crest {
+    width: 26px; height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .receipt-header .title { flex: 1; min-width: 0; }
+  .receipt-header .school {
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.2px;
+    line-height: 1.15;
+  }
+  .receipt-header .doc-type {
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.15;
+    margin-top: 1px;
+  }
+  .receipt-header .period {
+    color: #333;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .receipt-header .range-badge {
+    display: inline-block;
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 20px;
+    margin-top: 1px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .receipt-number {
+    flex-shrink: 0;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    background: transparent;
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #000;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .receipt-number .num-label {
+    display: block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 1px;
+  }
+
+  /* Body */
+  .receipt-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    line-height: 1.3;
+    background: transparent;
+  }
+
+  .student-line {
+    display: flex; justify-content: space-between;
+    padding: 3px 0; border-bottom: 1px dashed #000;
+    margin-bottom: 4px; gap: 4px;
+    background: transparent;
+  }
+  .student-line .left {
+    font-weight: 700; color: #000;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .student-line .right {
+    color: #333; text-align: right;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .payments-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 4px; background: transparent;
+  }
+  .payments-table thead th {
+    background: transparent;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 2px 3px;
+    text-align: left;
+    border-bottom: 1px solid #000;
+    font-weight: 700;
+  }
+  .payments-table thead th.amt, .payments-table thead th.dt { text-align: right; }
+  .payments-table tbody td {
+    padding: 2px 3px;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+    color: #000;
+  }
+  .payments-table tbody tr:last-child td { border-bottom: none; }
+  .payments-table tbody td.amt {
+    text-align: right; font-weight: 700;
+    color: #000; white-space: nowrap;
+  }
+  .payments-table tbody td.amt.refund { color: #000; }
+  .payments-table tbody td.dt {
+    text-align: right; color: #333;
+    white-space: nowrap;
+  }
+  .payments-table tbody td.dt.nodate {
+    color: #777; font-style: italic;
+  }
+
+  .totals-block {
+    margin-top: auto;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 3px;
+    padding: 3px 5px;
+  }
+  .totals-row {
+    display: flex; justify-content: space-between;
+    padding: 1px 0;
+    color: #000;
+  }
+  .totals-row.big {
+    border-top: 1px solid #000;
+    margin-top: 2px; padding-top: 2px;
+    font-weight: 800;
+    color: #000;
+  }
+  .totals-row .label { color: #333; }
+  .totals-row.big .label { color: #000; }
+  .totals-row .prev-hint {
+    display: block; color: #666;
+    font-style: italic; margin-top: 1px;
+  }
+
+  .balance-note {
+    margin-top: 3px; padding: 3px 5px;
+    border-radius: 3px;
+    line-height: 1.3;
+    font-weight: 700;
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+  }
+  .balance-note.ok,
+  .balance-note.due,
+  .balance-note.over {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+  }
+
+  .receipt-footer {
+    margin-top: 3px;
+    padding-top: 3px;
+    border-top: 1px dashed #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+    background: transparent;
+  }
+  .receipt-footer .left {
+    color: #000;
+    line-height: 1.25;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .receipt-footer .left .office {
+    font-weight: 700;
+    color: #000;
+    display: block;
+  }
+  .receipt-footer .left .acct {
+    margin-top: 1px;
+    color: #000;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.3px;
+    word-break: break-all;
+  }
+  .receipt-footer .right {
+    text-align: right;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    line-height: 1.25;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .receipt-footer .right .ts-label {
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    display: block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #666;
+  }
+
+  /* ============================================
+     FULL LAYOUT TYPOGRAPHY (9 per page)
+     ============================================ */
+  .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
+  .layout-full .receipt-number .num-label { font-size: 5px; }
+  .layout-full .receipt-header .school { font-size: 9px; }
+  .layout-full .receipt-header .doc-type { font-size: 6.5px; }
+  .layout-full .receipt-header .period { font-size: 6.5px; }
+  .layout-full .receipt-header .range-badge { font-size: 5.5px; }
+  .layout-full .receipt-body { font-size: 7px; }
+  .layout-full .student-line { padding: 2px 0; margin-bottom: 3px; }
+  .layout-full .student-line .left { font-size: 9px; }
+  .layout-full .student-line .right { font-size: 7px; }
+  .layout-full .payments-table { font-size: 7px; }
+  .layout-full .payments-table thead th { font-size: 5.5px; padding: 1.5px 2.5px; }
+  .layout-full .payments-table tbody td { font-size: 7px; padding: 1.5px 2.5px; }
+  .layout-full .payments-table tbody td.dt { font-size: 6.5px; }
+  .layout-full .totals-block { padding: 3px 4px; margin-top: 3px; }
+  .layout-full .totals-row { font-size: 7px; padding: 1px 0; }
+  .layout-full .totals-row.big { font-size: 9px; }
+  .layout-full .totals-row .prev-hint { font-size: 5.5px; }
+  .layout-full .balance-note { font-size: 6.5px; padding: 2px 4px; margin-top: 2px; }
+  .layout-full .receipt-footer { padding-top: 2px; margin-top: 2px; }
+  .layout-full .receipt-footer .left { font-size: 5.5px; }
+  .layout-full .receipt-footer .right { font-size: 6px; }
+  .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
+  .layout-full .watermark .wm-badge { font-size: 22px; padding: 6px 14px; letter-spacing: 3px; border-width: 2px; }
+
+  /* ============================================
+     COMPACT LAYOUT TYPOGRAPHY (16 per page)
+     ============================================ */
+  .layout-compact .receipt { padding: 2mm; }
+  .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
+  .layout-compact .receipt-number .num-label { font-size: 4px; }
+  .layout-compact .receipt-header { padding-bottom: 2px; margin-bottom: 2px; gap: 3px; min-height: 24px; }
+  .layout-compact .receipt-header .crest { width: 16px; height: 16px; }
+  .layout-compact .receipt-header .school { font-size: 7px; }
+  .layout-compact .receipt-header .doc-type { font-size: 5px; letter-spacing: 0.4px; }
+  .layout-compact .receipt-header .period { display: none; }
+  .layout-compact .receipt-header .range-badge { display: none; }
+  .layout-compact .receipt-body { font-size: 5.5px; }
+  .layout-compact .student-line { padding: 1.5px 0; margin-bottom: 2px; }
+  .layout-compact .student-line .left { font-size: 7px; }
+  .layout-compact .student-line .right { font-size: 5.5px; }
+  .layout-compact .payments-table { font-size: 5.5px; margin-bottom: 2px; }
+  .layout-compact .payments-table thead th { font-size: 4.5px; padding: 1px 2px; }
+  .layout-compact .payments-table tbody td { font-size: 5.5px; padding: 1px 2px; }
+  .layout-compact .payments-table tbody td.dt { font-size: 5px; }
+  .layout-compact .totals-block { padding: 2px 3px; margin-top: 2px; }
+  .layout-compact .totals-row { font-size: 5.5px; padding: 0.5px 0; }
+  .layout-compact .totals-row.big { font-size: 7px; margin-top: 1px; padding-top: 1px; }
+  .layout-compact .totals-row .prev-hint { font-size: 4.5px; }
+  .layout-compact .balance-note { font-size: 5px; padding: 2px 3px; margin-top: 2px; }
+  .layout-compact .receipt-footer { padding-top: 1.5px; margin-top: 1.5px; }
+  .layout-compact .receipt-footer .left { font-size: 4.5px; }
+  .layout-compact .receipt-footer .left .office { font-size: 5px; }
+  .layout-compact .receipt-footer .left .acct { font-size: 4.5px; }
+  .layout-compact .receipt-footer .right { font-size: 4.5px; }
+  .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
+  .layout-compact .watermark .wm-badge { font-size: 13px; padding: 4px 9px; letter-spacing: 2px; border-width: 1.5px; }
+
+  /* Empty grid slots */
+  .empty-sheet-slot {
+    border: 1px dashed #eef2f6;
+    border-radius: 6px;
+  }
+
+  /* LOADING OVERLAY */
+  .loading-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 31, 46, 0.55);
+    display: none; justify-content: center; align-items: center;
+    z-index: 9999; color: white;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-overlay .box {
+    background: rgba(20, 35, 55, 0.95);
+    padding: 24px 32px; border-radius: 14px;
+    text-align: center; min-width: 220px;
+  }
+  .loading-overlay .spinner {
+    width: 36px; height: 36px;
+    border: 4px solid rgba(255,255,255,0.15);
+    border-top: 4px solid #fbbf24;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay p { font-size: 14px; color: #cbd5e1; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; padding: 0; margin: 0; }
+    .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
+    .main-wrapper { display: block !important; }
+    #receiptContainer { overflow: visible !important; }
+    .receipt-sheet {
+      box-shadow: none; margin: 0;
+      width: 210mm; height: 297mm;
+      page-break-after: always; break-after: page;
+      background: white;
+    }
+    .receipt { page-break-inside: avoid; break-inside: avoid; }
+    .watermark, .watermark .wm-badge {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @page { size: A4 portrait; margin: 0; }
+  }
+
+  /* MOBILE */
+  @media (max-width: 700px) {
+    .row { grid-template-columns: 1fr; }
+    .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
+    #receiptContainer { overflow-x: auto; padding-bottom: 12px; }
+  }
+</style>
 </head>
 <body>
 
