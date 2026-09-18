@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>Lunzu Secondary School - Fee Portal</title>
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fee Receipts - Lunzu Secondary School</title>
+<style>
   :root {
     --ink: #000000;
-    --ink-soft: #1a1a1a;
-    --muted: #444444;
-    --rule: #000000;
-    --grey-bg: rgba(0,0,0,0.035);
-    --grey-bg-darker: rgba(0,0,0,0.06);
+    --muted: #333333;
+    --light: #666666;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -24,7 +18,9 @@
     padding: 16px;
   }
 
-  /* LOGIN GATE — controls only, still colored for screen use */
+  /* ============================================================
+     LOGIN GATE — kept colored for on-screen use
+     ============================================================ */
   .login-gate {
     max-width: 420px; margin: 80px auto;
     background: white; padding: 32px;
@@ -51,7 +47,9 @@
   .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
   .login-gate .err.show { display: block; }
 
-  /* MAIN CONTROLS — kept colored for on-screen use */
+  /* ============================================================
+     MAIN CONTROLS — kept colored for on-screen use
+     ============================================================ */
   .main-wrapper { display: none; }
   .controls {
     max-width: 1000px; margin: 0 auto 16px;
@@ -201,9 +199,9 @@
   .preview-header .count { font-size: 14px; color: #64748b; font-weight: 600; }
   .preview-header .count strong { color: #002b54; }
 
-  /* ============================================
+  /* ============================================================
      RECEIPT SHEET — A4 print layout with grid
-     ============================================ */
+     ============================================================ */
   #receiptContainer { width: 100%; overflow-x: auto; padding-bottom: 12px; }
 
   .receipt-sheet {
@@ -234,7 +232,9 @@
     gap: 2mm; padding: 4mm;
   }
 
-  /* RECEIPT — transparent bg so watermark shows */
+  /* ============================================================
+     RECEIPT — B&W, transparent, sharp borders
+     ============================================================ */
   .receipt {
     border: 1px solid #000;
     border-radius: 4px;
@@ -249,9 +249,9 @@
     color: #000;
   }
 
-  /* ============================================
-     WATERMARK — black outline badge, dashed border
-     ============================================ */
+  /* ============================================================
+     WATERMARK — black dashed outline badge
+     ============================================================ */
   .watermark {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -285,16 +285,16 @@
   .watermark.over .wm-badge { opacity: 0.20; }
   .watermark.due  .wm-badge { opacity: 0.24; }
 
-  /* Content sits above watermark */
+  /* Content sits above the watermark */
   .receipt > *:not(.watermark) {
     position: relative;
     z-index: 1;
     background: transparent;
   }
 
-  /* ============================================
+  /* ============================================================
      HEADER
-     ============================================ */
+     ============================================================ */
   .receipt-header {
     display: flex;
     align-items: center;
@@ -521,9 +521,9 @@
     color: #666;
   }
 
-  /* ============================================
+  /* ============================================================
      FULL LAYOUT TYPOGRAPHY (9 per page)
-     ============================================ */
+     ============================================================ */
   .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
@@ -549,9 +549,9 @@
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
   .layout-full .watermark .wm-badge { font-size: 22px; padding: 6px 14px; letter-spacing: 3px; border-width: 2px; }
 
-  /* ============================================
+  /* ============================================================
      COMPACT LAYOUT TYPOGRAPHY (16 per page)
-     ============================================ */
+     ============================================================ */
   .layout-compact .receipt { padding: 2mm; }
   .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
   .layout-compact .receipt-number .num-label { font-size: 4px; }
@@ -588,7 +588,9 @@
     border-radius: 6px;
   }
 
-  /* LOADING OVERLAY */
+  /* ============================================================
+     LOADING OVERLAY
+     ============================================================ */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -612,7 +614,9 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { font-size: 14px; color: #cbd5e1; }
 
-  /* PRINT */
+  /* ============================================================
+     PRINT
+     ============================================================ */
   @media print {
     body { background: white; padding: 0; margin: 0; }
     .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
@@ -632,7 +636,9 @@
     @page { size: A4 portrait; margin: 0; }
   }
 
-  /* MOBILE */
+  /* ============================================================
+     MOBILE
+     ============================================================ */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
@@ -642,1050 +648,1147 @@
 </head>
 <body>
 
-    <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
+<div id="loginGate" class="login-gate">
+  <h1>🧾 Fee Receipts</h1>
+  <p class="sub">Admin access required. Enter the bursar password to continue.</p>
+  <input type="password" id="adminPasswordInput" placeholder="••••••" maxlength="20" autocomplete="off">
+  <button id="unlockBtn" onclick="unlockReceipts()">Unlock</button>
+  <div id="loginError" class="err">Incorrect password. Please try again.</div>
+</div>
 
-    <!-- Admin Password Modal -->
-    <div id="adminModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>🔑 Admin Access</h3>
-            <p>Enter the admin password to enable administrative mode.<br><small style="color:#94a3b8;">(No DOB required in admin mode)</small></p>
-            <input type="password" id="adminPasswordInput" placeholder="Enter password" maxlength="20">
-            <div id="modalError" class="error-msg">Incorrect password. Please try again.</div>
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeAdminModal()">Cancel</button>
-                <button class="btn-confirm" onclick="confirmAdminPassword()">Unlock</button>
-            </div>
-        </div>
+<div id="mainWrapper" class="main-wrapper layout-full">
+  <div class="controls">
+    <h1>🧾 Fee Receipts</h1>
+    <p class="subtitle">One receipt per student with a unique receipt number. Filter by date range to include only students who paid in that period.</p>
+
+    <div class="mode-tabs">
+      <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
+      <button id="tabBatch" onclick="setMode('batch')">👥 Whole Class Batch</button>
     </div>
 
-    <!-- Subscribe Modal -->
-    <div id="subscribeModal" class="modal-overlay">
-        <div class="subscribe-modal-box">
-            <h3>📧 Subscribe to Fee Alert Emails</h3>
-            <p class="sub-intro">Receive an email whenever the school updates your child's fee records.</p>
-            <div id="subStatusInfo" class="status-info"></div>
-            <div class="modal-form-group">
-                <label for="subTermSelect">Academic Term:</label>
-                <select id="subTermSelect" disabled><option value="" disabled selected>Loading terms...</option></select>
-            </div>
-            <div class="modal-form-group">
-                <label for="subStudentClass">Class:</label>
-                <select id="subStudentClass" disabled>
-                    <option value="" disabled selected>Select Class</option>
-                    <option value="Form 1">Form 1</option>
-                    <option value="Form 2">Form 2</option>
-                    <option value="Form 3">Form 3</option>
-                    <option value="Form 4">Form 4</option>
-                    <option value="Form 1 ODL">Form 1 ODL</option>
-                    <option value="Form 2 ODL">Form 2 ODL</option>
-                    <option value="Form 3 ODL">Form 3 ODL</option>
-                    <option value="Form 4 ODL">Form 4 ODL</option>
-                </select>
-            </div>
-            <div class="modal-form-group">
-                <label for="subStudentName">Student Name:</label>
-                <select id="subStudentName" disabled><option value="" disabled selected>-- Select Class First --</option></select>
-            </div>
-            <div class="modal-form-group">
-                <label for="subDateOfBirth">Student Date of Birth:</label>
-                <input type="date" id="subDateOfBirth">
-                <span class="helper">Format: YYYY-MM-DD — used to verify the student's identity.</span>
-            </div>
-            <div class="modal-form-group">
-                <label for="subParentEmail">Your Email Address:</label>
-                <input type="email" id="subParentEmail" placeholder="parent@example.com" autocomplete="email">
-                <span class="helper">Fee alerts and statements will be sent to this address.</span>
-            </div>
-            <div class="consent-row">
-                <input type="checkbox" id="subConsentCheck">
-                <label for="subConsentCheck">I confirm I am the parent or guardian of the student named above, and I agree to receive fee statements and payment reminders by email for this student.</label>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeSubscribeModal()">Cancel</button>
-                <button class="btn-confirm" id="subSubscribeBtn" onclick="submitSubscribe()" disabled>Subscribe</button>
-            </div>
-            <div style="text-align:center; margin-top:10px;">
-                <button class="btn-cancel" style="width:100%; background:transparent; border:1px solid rgba(255,255,255,0.15);" id="subUnsubscribeBtn" onclick="submitUnsubscribe()" disabled>🚫 Remove existing subscription</button>
-            </div>
-        </div>
+    <div class="layout-toggle">
+      <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 9 per page</button>
+      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
     </div>
 
-    <!-- Initial Loading Overlay -->
-    <div id="initialLoading" class="initial-loading">
-        <div class="big-spinner"></div>
-        <p id="initialLoadingText">Loading fee portal configuration...</p>
-        <button class="retry-btn" id="initialRetryBtn" style="display:none;" onclick="retryInitialLoad()">🔄 Retry</button>
+    <div class="row">
+      <div>
+        <label for="rTermSelect">Term:</label>
+        <select id="rTermSelect" onchange="handleTermChange()">
+          <option value="" disabled selected>Loading terms...</option>
+        </select>
+      </div>
+      <div>
+        <label for="rClassSelect">Class:</label>
+        <select id="rClassSelect" onchange="handleClassChange()" disabled>
+          <option value="" disabled selected>Select class</option>
+          <option value="Form 1">Form 1</option>
+          <option value="Form 2">Form 2</option>
+          <option value="Form 3">Form 3</option>
+          <option value="Form 4">Form 4</option>
+          <option value="Form 1 ODL">Form 1 ODL</option>
+          <option value="Form 2 ODL">Form 2 ODL</option>
+          <option value="Form 3 ODL">Form 3 ODL</option>
+          <option value="Form 4 ODL">Form 4 ODL</option>
+        </select>
+      </div>
     </div>
 
-    <!-- Main Card -->
-    <div class="container">
-        <div class="header">
-            <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Malawi Government Logo" class="logo">
-            <h1>LUNZU SECONDARY SCHOOL</h1>
-            <h2 id="termHeader">Fee Report Portal</h2>
-            <h3>Office of the Bursar</h3>
-        </div>
-        <div class="content">
-            <div class="form-group">
-                <label for="termSelect"><span class="required-star">*</span> Select Term:</label>
-                <select id="termSelect" required onchange="handleTermChange()">
-                    <option value="" disabled selected>Loading terms...</option>
-                </select>
-                <small style="color: #bcc9db; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8;">Select which term's fee records you want to view</small>
-            </div>
-            <div style="text-align:center; margin:10px 0; padding:10px; border-radius:12px; background:rgba(255,255,255,0.06);">
-                <span id="apiStatus">Checking connection...</span>
-            </div>
-            <div id="adminNotice" class="admin-notice">
-                <span>🔑</span>
-                <span><strong>Admin Mode Active:</strong> Date of Birth is not required.</span>
-            </div>
-            <div id="adminQueuePanel" class="queue-panel">
-                <h4>📬 Fee Alert Queue Manager</h4>
-                <div class="queue-stats">
-                    <div class="stat">Pending: <strong id="queuePending">–</strong></div>
-                    <div class="stat">Sent: <strong id="queueSent">–</strong></div>
-                    <div class="stat">Failed: <strong id="queueFailed">–</strong></div>
-                </div>
-                <div class="queue-actions">
-                    <button type="button" class="btn-refresh" onclick="refreshQueueStats()">🔄 Refresh Stats</button>
-                    <button type="button" class="btn-send" id="processQueueBtn" onclick="processQueueNow()">📨 Send Pending Alerts Now</button>
-                </div>
-                <div class="queue-last-result" id="queueLastResult"></div>
-            </div>
-            <form id="feeForm" autocomplete="off">
-                <div class="form-group">
-                    <label for="studentClass"><span class="required-star">*</span> Class:</label>
-                    <select id="studentClass" required onchange="handleClassChange()" disabled>
-                        <option value="" disabled selected>Select Class</option>
-                        <option value="Form 1">Form 1</option>
-                        <option value="Form 2">Form 2</option>
-                        <option value="Form 3">Form 3</option>
-                        <option value="Form 4">Form 4</option>
-                        <option value="Form 1 ODL">Form 1 ODL</option>
-                        <option value="Form 2 ODL">Form 2 ODL</option>
-                        <option value="Form 3 ODL">Form 3 ODL</option>
-                        <option value="Form 4 ODL">Form 4 ODL</option>
-                    </select>
-                </div>
-                <div id="progressContainer" class="progress-container">
-                    <div class="progress-label">
-                        <span id="progressLabel">Loading fee records...</span>
-                        <span id="progressText">0%</span>
-                    </div>
-                    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-                </div>
-                <div id="studentsLoading" class="students-loading"><div class="spinner"></div><span>Loading fee records...</span></div>
-                <div id="studentsLoaded" class="students-loaded"><span>✅</span><span id="studentsLoadedText">Ready to generate report</span></div>
-                <div class="form-group">
-                    <label for="studentName"><span class="required-star">*</span> Student Name:</label>
-                    <select id="studentName" required disabled><option value="" disabled selected>-- Select Class First --</option></select>
-                </div>
-                <div class="form-group">
-                    <label for="dateOfBirth">
-                        <span class="required-star" id="dobStar">*</span> Date of Birth:
-                        <span id="dobAdminLabel" style="display:none; color:#8b5cf6; font-weight:400;">(Not required in Admin Mode)</span>
-                    </label>
-                    <input type="date" id="dateOfBirth">
-                    <small class="dob-required" id="dobRequiredText">Format: YYYY-MM-DD - Used to verify your identity</small>
-                </div>
-                <div class="buttons">
-                    <button type="button" class="btn btn-primary" onclick="generateFeeReport()" id="generateReportBtn" disabled><span>💰</span> Generate Fee Report</button>
-                    <button type="button" class="btn btn-subscribe" onclick="openSubscribeModal()"><span>📧</span> Subscribe to Fee Alerts</button>
-                    <button type="button" class="btn btn-receipts" id="receiptsBtn" onclick="openReceiptsPage()"><span>🧾</span> Generate Receipts</button>
-                    <button type="button" class="btn btn-secondary" onclick="resetForm()"><span>🔄</span> Reset Form</button>
-                    <button type="button" class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn"><span>🔑</span> <span id="adminModeText">Admin Mode</span></button>
-                    <button type="button" class="btn btn-back" onclick="goBackToPortal()"><span>←</span> Back to Home</button>
-                </div>
-            </form>
-            <div id="reportContainer"></div>
-            <div class="info-note">
-                <strong>📌 Important Information:</strong><br>
-                • This report shows your complete fee payment history for the selected term<br>
-                • Includes installment breakdown and current balance status<br>
-                • Subscribe to email alerts to be notified when fees are updated<br>
-                • For any discrepancies, please contact the accounts office<br>
-                • Payment receipts should be kept for future reference
-            </div>
-        </div>
-        <div class="footer">
-            <p>© <span id="currentYear"></span> Lunzu Secondary School - Office of the Bursar</p>
-            <p>For fee inquiries: <a href="https://wa.me/265888866269" target="_blank">WhatsApp: +265 888 866 269</a></p>
-        </div>
+    <div class="row">
+      <div>
+        <label for="rDateFrom">Payments From:</label>
+        <input type="date" id="rDateFrom" onchange="handleRangeChange()">
+      </div>
+      <div>
+        <label for="rDateTo">Payments To:</label>
+        <input type="date" id="rDateTo" onchange="handleRangeChange()">
+      </div>
     </div>
 
-    <script>
-        // ============================================================
-        // 1. BANKNOTE BACKGROUND
-        // ============================================================
-        (function initBanknoteBackground() {
-            const canvas = document.getElementById('banknoteCanvas');
-            const container = document.getElementById('bg-canvas-container');
-            const ctx = canvas.getContext('2d');
-            let w, h;
-            let notes = [];
-            const NOTE_COUNT = 32;
+    <div class="quick-ranges">
+      <button type="button" onclick="setQuickRange('today')">Today</button>
+      <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
+      <button type="button" onclick="setQuickRange('week')">This Week</button>
+      <button type="button" onclick="setQuickRange('month')">This Month</button>
+      <button type="button" onclick="setQuickRange('all')">All Payments</button>
+    </div>
 
-            function resizeCanvas() {
-                const rect = container.getBoundingClientRect();
-                canvas.width = rect.width || window.innerWidth;
-                canvas.height = rect.height || window.innerHeight;
-                w = canvas.width;
-                h = canvas.height;
-            }
+    <div class="range-summary" id="rangeSummary"></div>
 
-            const symbols = ['💵', '💰', '💶', '💷', '💴', '🪙', '₿', '💳', '🏦', '💹', '🧾', '📈'];
-            function randomNote() {
-                return {
-                    x: Math.random() * w, y: Math.random() * h - 20,
-                    size: 30 + Math.random() * 40,
-                    speedX: (Math.random() - 0.5) * 0.9,
-                    speedY: 0.15 + Math.random() * 0.7,
-                    rotation: Math.random() * 360,
-                    rotSpeed: (Math.random() - 0.5) * 0.025,
-                    opacity: 0.2 + Math.random() * 0.35,
-                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                    phase: Math.random() * 100
-                };
-            }
-            function initNotes() { notes = []; for (let i = 0; i < NOTE_COUNT; i++) notes.push(randomNote()); }
-            function drawNotes() {
-                ctx.clearRect(0, 0, w, h);
-                const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.75);
-                grad.addColorStop(0, 'rgba(10, 31, 46, 0.08)');
-                grad.addColorStop(1, 'rgba(10, 31, 46, 0.45)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, w, h);
-                notes.forEach(n => {
-                    ctx.save();
-                    ctx.translate(n.x, n.y);
-                    ctx.rotate(n.rotation * Math.PI / 180);
-                    ctx.globalAlpha = n.opacity;
-                    ctx.font = `${n.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-                    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 18;
-                    ctx.fillStyle = '#fbbf24';
-                    ctx.shadowBlur = 20;
-                    ctx.fillText(n.symbol, 0, 0);
-                    ctx.restore();
-                    n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.00025) * 0.2;
-                    n.y += n.speedY * 0.4 + Math.sin(n.phase + performance.now() * 0.0004) * 0.15;
-                    n.rotation += n.rotSpeed;
-                    if (n.x > w + 60) n.x = -60;
-                    if (n.x < -60) n.x = w + 60;
-                    if (n.y > h + 60) n.y = -60;
-                    if (n.y < -60) n.y = h + 60;
-                });
-                requestAnimationFrame(drawNotes);
-            }
-            function startBackground() { resizeCanvas(); initNotes(); drawNotes(); }
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                notes.forEach(n => { n.x = Math.min(Math.max(n.x, 0), w); n.y = Math.min(Math.max(n.y, 0), h); });
-            });
-            startBackground();
-        })();
+    <div class="checkbox-row">
+      <input type="checkbox" id="rIncludeUndated" onchange="handleRangeChange()">
+      <label for="rIncludeUndated" style="margin:0;font-weight:500;">
+        Include students whose only payments have no date recorded
+      </label>
+    </div>
 
-        // ============================================================
-        // 2. MAIN APPLICATION LOGIC
-        // ============================================================
+    <div id="singleMode" class="row">
+      <div style="grid-column: 1 / -1;">
+        <label for="rStudentSelect">Student:</label>
+        <select id="rStudentSelect" onchange="handleSingleStudentChange()" disabled>
+          <option value="" disabled selected>Select class first</option>
+        </select>
+      </div>
+    </div>
 
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
-        const ADMIN_PASSWORD = "lss001";
-        const RECEIPTS_PAGE_URL = 'FeeReceipts.html';
+    <div id="batchMode" style="display:none;">
+      <label>Students (only those with payments in the range are selectable):</label>
+      <div id="studentList" class="student-list">
+        <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
+          Select a term and class to load students.
+        </div>
+      </div>
+    </div>
 
-        let availableTerms = [];
-        let currentTermKey = null;
-        let isLoadingStudents = false;
-        let loadingInterval = null;
-        let loadingProgress = 0;
-        let isAdminMode = false;
-        let subCurrentTermKey = null;
-        let subIsLoadingStudents = false;
-        let subCurrentStatus = null;
+    <div class="actions">
+      <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All With Payments</button>
+      <button id="btnPrint" class="btn-print" onclick="printReceipts()" disabled>🖨 Print Receipts</button>
+      <button id="btnPDF" class="btn-pdf" onclick="saveAsPDF()" disabled>💾 Save as PDF</button>
+      <button class="btn-ghost" onclick="clearSelection()">↺ Clear</button>
+    </div>
 
-        // ----- ADMIN MODE -----
-        function openAdminModal() {
-            if (isAdminMode) {
-                isAdminMode = false; updateAdminUI(); showInfo('🔒 Admin mode disabled'); setTimeout(() => clearError(), 2000); return;
-            }
-            document.getElementById('adminModal').classList.add('show');
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('modalError').classList.remove('show');
-            document.getElementById('adminPasswordInput').focus();
+    <div id="errorMsg" class="error-msg"></div>
+    <div id="warningMsg" class="warning-msg"></div>
+
+    <div class="info">
+      <strong>Layouts:</strong>
+      <strong>Full</strong> — 9 receipts per A4 (3×3).
+      <strong>Compact</strong> — 16 receipts per A4 (4×4).
+      Numbers are unique and never reused.
+    </div>
+  </div>
+
+  <div id="previewHeader" class="preview-header">
+    <div class="count">Ready to print: <strong id="previewCount">0</strong> receipt(s)</div>
+    <div style="font-size:12px;color:#64748b;">Print dialog opens automatically</div>
+  </div>
+
+  <div id="receiptContainer"></div>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="box">
+    <div class="spinner"></div>
+    <p id="loadingMessage">Loading…</p>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+  const ADMIN_PASSWORD = 'lss001';
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  let availableTerms = [];
+  let currentTermKey = null;
+  let currentClass = null;
+  let receiptData = null;
+  let currentMode = 'single';
+  let currentLayout = 'full';
+  let selectedStudents = new Set();
+
+  let assignedNumbers = new Map();
+  let nextNumberBuffer = [];
+
+  let duplicateHistory = {};
+
+  const dataCache = new Map();
+  const CACHE_TTL_MS = 5 * 60 * 1000;
+
+  function cacheKey(termKey, studentClass, from, to, undated) {
+    return [termKey, studentClass, from || '', to || '', undated ? '1' : '0'].join('|');
+  }
+  function cacheGet(key) {
+    const entry = dataCache.get(key);
+    if (!entry) return null;
+    if (Date.now() - entry.ts > CACHE_TTL_MS) {
+      dataCache.delete(key);
+      return null;
+    }
+    return entry.data;
+  }
+  function cacheSet(key, data) {
+    dataCache.set(key, { data, ts: Date.now() });
+  }
+  function cacheInvalidateClass(termKey, studentClass) {
+    for (const k of Array.from(dataCache.keys())) {
+      if (k.indexOf(termKey + '|' + studentClass + '|') === 0) dataCache.delete(k);
+    }
+  }
+
+  // ============================================================
+  // API CALL
+  // ============================================================
+  async function callGAS(action, params = {}, attempt = 1) {
+    const body = new URLSearchParams();
+    body.append('action', action);
+    for (const key in params) {
+      if (params[key] !== undefined && params[key] !== null) {
+        body.append(key, params[key]);
+      }
+    }
+    body.append('_cb', Date.now().toString());
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const response = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+        body: body.toString(),
+        redirect: 'follow',
+        signal: controller.signal,
+        credentials: 'omit'
+      });
+      clearTimeout(timeoutId);
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const text = await response.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch (p) {
+        const m = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+        if (m) data = JSON.parse(m[0]);
+        else throw new Error('Invalid response');
+      }
+      if (data && data.error) throw new Error(data.error);
+      return data;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      const msg = (error && error.message) || '';
+      const retryable =
+        error.name === 'AbortError' ||
+        msg.indexOf('Failed to fetch') !== -1 ||
+        msg.indexOf('NetworkError') !== -1 ||
+        msg.indexOf('HTTP 5') !== -1;
+      if (retryable && attempt < 2) {
+        await new Promise(r => setTimeout(r, 600));
+        return callGAS(action, params, attempt + 1);
+      }
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // OVERLAY + MESSAGES
+  // ============================================================
+  function showLoading(msg) {
+    document.getElementById('loadingMessage').textContent = msg || 'Loading…';
+    document.getElementById('loadingOverlay').classList.add('show');
+  }
+  function hideLoading() {
+    document.getElementById('loadingOverlay').classList.remove('show');
+  }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 8000);
+  }
+  function showWarning(msg) {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = msg;
+    el.classList.add('show');
+  }
+  function clearWarning() {
+    const el = document.getElementById('warningMsg');
+    el.innerHTML = '';
+    el.classList.remove('show');
+  }
+
+  // ============================================================
+  // LOGIN
+  // ============================================================
+  async function unlockReceipts() {
+    const pw = document.getElementById('adminPasswordInput').value.trim();
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('unlockBtn');
+
+    if (!pw) {
+      errEl.textContent = 'Please enter a password.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+    errEl.classList.remove('show');
+
+    try {
+      const res = await callGAS('verifyAdmin', { password: pw });
+      if (res && res.success) {
+        try { sessionStorage.setItem('lunzu_receipts_unlocked', '1'); } catch (e) {}
+        showMain();
+      } else {
+        errEl.textContent = 'Incorrect password. Please try again.';
+        errEl.classList.add('show');
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('adminPasswordInput').focus();
+      }
+    } catch (e) {
+      errEl.textContent = 'Error: ' + (e.message || 'Unknown');
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Unlock';
+    }
+  }
+
+  document.getElementById('adminPasswordInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') unlockReceipts();
+  });
+
+  function showMain() {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('mainWrapper').style.display = 'block';
+
+    const today = new Date();
+    document.getElementById('rDateFrom').value = toIsoDate(today);
+    document.getElementById('rDateTo').value = toIsoDate(today);
+    updateRangeSummary();
+
+    loadTerms();
+  }
+
+  window.onload = function () {
+    try {
+      if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
+        showMain();
+        return;
+      }
+    } catch (e) {}
+    document.getElementById('adminPasswordInput').focus();
+  };
+
+  async function loadTerms() {
+    showLoading('Loading terms…');
+    try {
+      const terms = await callGAS('getAvailableTerms', {});
+      if (Array.isArray(terms) && terms.length) {
+        availableTerms = terms;
+        populateTerms(terms);
+      } else {
+        showError('No terms available.');
+      }
+    } catch (e) {
+      showError('Failed to load terms: ' + e.message);
+    } finally {
+      hideLoading();
+    }
+  }
+
+  function populateTerms(terms) {
+    const sel = document.getElementById('rTermSelect');
+    sel.innerHTML = '';
+    const def = document.createElement('option');
+    def.value = ''; def.disabled = true; def.selected = true;
+    def.textContent = '-- Select Term --';
+    sel.appendChild(def);
+
+    const grouped = {};
+    terms.forEach(t => {
+      if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
+      grouped[t.academicYear].push(t);
+    });
+
+    let activeTerm = null;
+    Object.keys(grouped).forEach(year => {
+      const og = document.createElement('optgroup');
+      og.label = year;
+      grouped[year].forEach(term => {
+        const opt = document.createElement('option');
+        opt.value = term.key;
+        opt.textContent = term.display;
+        if (term.isActive) {
+          opt.selected = true;
+          currentTermKey = term.key;
+          activeTerm = term;
         }
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.remove('show');
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('modalError').classList.remove('show');
-        }
-        async function confirmAdminPassword() {
-            const password = document.getElementById('adminPasswordInput').value.trim();
-            if (!password) {
-                document.getElementById('modalError').textContent = 'Please enter a password.';
-                document.getElementById('modalError').classList.add('show');
-                return;
-            }
-            try {
-                const result = await callGAS('verifyAdmin', { password: password });
-                if (result && result.success) {
-                    isAdminMode = true; updateAdminUI(); closeAdminModal();
-                    showSuccess('🔑 Admin mode activated successfully!');
-                    setTimeout(() => clearError(), 3000);
-                    const studentClass = document.getElementById('studentClass').value;
-                    if (studentClass && studentClass !== "" && currentTermKey) handleClassChange();
-                } else {
-                    document.getElementById('modalError').textContent = 'Incorrect password. Please try again.';
-                    document.getElementById('modalError').classList.add('show');
-                    document.getElementById('adminPasswordInput').value = '';
-                    document.getElementById('adminPasswordInput').focus();
-                }
-            } catch (error) {
-                document.getElementById('modalError').textContent = 'Error verifying password: ' + error.message;
-                document.getElementById('modalError').classList.add('show');
-            }
-        }
-        document.getElementById('adminPasswordInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') confirmAdminPassword();
-            if (e.key === 'Escape') closeAdminModal();
-        });
-        function updateAdminUI() {
-            const btnText = document.getElementById('adminModeText');
-            const btn = document.getElementById('adminModeBtn');
-            const notice = document.getElementById('adminNotice');
-            const panel = document.getElementById('adminQueuePanel');
-            const receiptsBtn = document.getElementById('receiptsBtn');
-            const dobInput = document.getElementById('dateOfBirth');
-            const dobStar = document.getElementById('dobStar');
-            const dobAdminLabel = document.getElementById('dobAdminLabel');
-            const dobRequiredText = document.getElementById('dobRequiredText');
-            if (isAdminMode) {
-                btnText.textContent = '🔓 Admin ON';
-                btn.classList.add('active');
-                notice.classList.add('show');
-                if (panel) panel.classList.add('show');
-                if (receiptsBtn) receiptsBtn.classList.add('show');
-                dobInput.disabled = true; dobInput.value = '';
-                dobInput.placeholder = 'Not required in Admin Mode';
-                dobStar.style.display = 'none';
-                dobAdminLabel.style.display = 'inline';
-                dobRequiredText.classList.add('hidden');
-                updateButtonState();
-                refreshQueueStats();
-            } else {
-                btnText.textContent = '🔒 Admin Mode';
-                btn.classList.remove('active');
-                notice.classList.remove('show');
-                if (panel) panel.classList.remove('show');
-                if (receiptsBtn) receiptsBtn.classList.remove('show');
-                dobInput.disabled = false;
-                dobInput.placeholder = '';
-                dobStar.style.display = 'inline';
-                dobAdminLabel.style.display = 'none';
-                dobRequiredText.classList.remove('hidden');
-                updateButtonState();
-            }
-        }
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    });
 
-        function openReceiptsPage() {
-            if (!isAdminMode) {
-                alert('Enable admin mode first.');
-                return;
-            }
-            // Pass the current term and class as URL params so the receipts page preselects them
-            const params = new URLSearchParams();
-            if (currentTermKey) params.set('term', currentTermKey);
-            const cls = document.getElementById('studentClass').value;
-            if (cls) params.set('class', cls);
-            const url = RECEIPTS_PAGE_URL + (params.toString() ? '?' + params.toString() : '');
-            const newTab = window.open(url, '_blank');
-            if (!newTab) {
-                alert('Please allow pop-ups to open the receipts page.');
-            }
-        }
+    if (!activeTerm && terms.length) {
+      sel.value = terms[0].key;
+      currentTermKey = terms[0].key;
+    }
 
-        // ----- INIT -----
-        window.onload = async function() {
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-            showInitialLoading(true, "Loading fee portal configuration...");
-            try {
-                await loadAvailableTerms();
-                await testAPIConnection();
-                setupForm();
-                showInitialLoading(false);
-                updateAdminUI();
-            } catch (error) {
-                console.error('Initialization error:', error);
-                showInitialLoading(false, 'Failed to initialize: ' + (error.message || 'Unknown error'));
-            }
-        };
-        function showInitialLoading(show, message = 'Loading...') {
-            const overlay = document.getElementById('initialLoading');
-            const textEl = document.getElementById('initialLoadingText');
-            const retryBtn = document.getElementById('initialRetryBtn');
-            if (show) {
-                if (textEl) textEl.textContent = message;
-                if (retryBtn) retryBtn.style.display = 'none';
-                overlay.style.display = 'flex';
-            } else {
-                if (textEl && message && message.toLowerCase().indexOf('fail') !== -1) {
-                    textEl.textContent = message;
-                    if (retryBtn) retryBtn.style.display = 'inline-block';
-                    overlay.style.display = 'flex';
-                } else {
-                    overlay.style.display = 'none';
-                }
-            }
-        }
-        function retryInitialLoad() { window.location.reload(); }
+    document.getElementById('rClassSelect').disabled = false;
+  }
 
-        async function loadAvailableTerms() {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    const terms = await callGAS('getAvailableTerms', {});
-                    if (terms && Array.isArray(terms) && terms.length > 0) {
-                        availableTerms = terms;
-                        populateTermDropdown(terms);
-                        resolve(terms);
-                    } else {
-                        reject(new Error('No terms received from server'));
-                    }
-                } catch (error) {
-                    console.error('Error loading terms:', error);
-                    const msg = (error && error.message) ? error.message : 'Unknown error';
-                    document.getElementById('apiStatus').innerHTML = '❌ ' + msg;
-                    document.getElementById('apiStatus').style.color = '#f87171';
-                    reject(error);
-                }
-            });
-        }
+  // ============================================================
+  // DATE HELPERS
+  // ============================================================
+  function toIsoDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dd}`;
+  }
+  function formatDateDisplay(iso) {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  function getDateFromInput() { return document.getElementById('rDateFrom').value || null; }
+  function getDateToInput() { return document.getElementById('rDateTo').value || null; }
+  function getIncludeUndated() { return document.getElementById('rIncludeUndated').checked; }
 
-        function populateTermDropdown(terms) {
-            const termSelect = document.getElementById('termSelect');
-            termSelect.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = ''; defaultOption.disabled = true;
-            defaultOption.textContent = '-- Select Term --';
-            termSelect.appendChild(defaultOption);
-            const grouped = {};
-            terms.forEach(term => {
-                if (!grouped[term.academicYear]) grouped[term.academicYear] = [];
-                grouped[term.academicYear].push(term);
-            });
-            let activeTermData = null;
-            for (const [year, yearTerms] of Object.entries(grouped)) {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = year;
-                yearTerms.forEach(term => {
-                    const option = document.createElement('option');
-                    option.value = term.key;
-                    option.textContent = term.display;
-                    if (term.isActive) {
-                        option.selected = true;
-                        currentTermKey = term.key;
-                        activeTermData = term;
-                    }
-                    optgroup.appendChild(option);
-                });
-                termSelect.appendChild(optgroup);
-            }
-            if (activeTermData) {
-                document.getElementById('termHeader').textContent =
-                    `${activeTermData.academicYear} ${activeTermData.term} Fee Report`;
-                currentTermKey = activeTermData.key;
-            } else if (terms.length > 0) {
-                const firstTerm = terms[0];
-                termSelect.value = firstTerm.key;
-                currentTermKey = firstTerm.key;
-                document.getElementById('termHeader').textContent =
-                    `${firstTerm.academicYear} ${firstTerm.term} Fee Report`;
-            }
-            document.getElementById('studentClass').disabled = false;
-        }
+  function setQuickRange(kind) {
+    const from = document.getElementById('rDateFrom');
+    const to = document.getElementById('rDateTo');
+    const today = new Date();
 
-        function handleTermChange() {
-            const selectedValue = document.getElementById('termSelect').value;
-            if (!selectedValue) {
-                currentTermKey = null;
-                document.getElementById('termHeader').textContent = 'Fee Report Portal';
-                resetAllFields(); return;
-            }
-            const selectedTerm = availableTerms.find(t => t.key === selectedValue);
-            if (selectedTerm) {
-                currentTermKey = selectedTerm.key;
-                document.getElementById('termHeader').textContent =
-                    `${selectedTerm.academicYear} ${selectedTerm.term} Fee Report`;
-                resetAllFields();
-                if (isAdminMode) refreshQueueStats();
-            }
-        }
+    if (kind === 'today') {
+      from.value = toIsoDate(today);
+      to.value = toIsoDate(today);
+    } else if (kind === 'yesterday') {
+      const y = new Date(today); y.setDate(today.getDate() - 1);
+      from.value = toIsoDate(y);
+      to.value = toIsoDate(y);
+    } else if (kind === 'week') {
+      const day = today.getDay();
+      const diff = day === 0 ? 6 : day - 1;
+      const mon = new Date(today); mon.setDate(today.getDate() - diff);
+      from.value = toIsoDate(mon);
+      to.value = toIsoDate(today);
+    } else if (kind === 'month') {
+      const first = new Date(today.getFullYear(), today.getMonth(), 1);
+      from.value = toIsoDate(first);
+      to.value = toIsoDate(today);
+    } else if (kind === 'all') {
+      from.value = '';
+      to.value = '';
+    }
+    handleRangeChange();
+  }
 
-        function resetAllFields() {
-            document.getElementById('studentClass').value = '';
-            const studentName = document.getElementById('studentName');
-            const dateOfBirth = document.getElementById('dateOfBirth');
-            studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
-            studentName.disabled = true;
-            if (!isAdminMode) dateOfBirth.value = '';
-            document.getElementById('reportContainer').innerHTML = '';
-            document.getElementById('progressContainer').style.display = 'none';
-            document.getElementById('studentsLoading').style.display = 'none';
-            document.getElementById('studentsLoaded').style.display = 'none';
-            document.getElementById('generateReportBtn').disabled = true;
-        }
-        function resetForm() {
-            resetAllFields();
-            if (document.getElementById('studentClass').value && currentTermKey) handleClassChange();
-        }
-        function goBackToPortal() { window.location.href = 'https://lunzusec.github.io/School_results/index.html'; }
+  function updateRangeSummary() {
+    const el = document.getElementById('rangeSummary');
+    const from = getDateFromInput();
+    const to = getDateToInput();
+    const undated = getIncludeUndated();
 
-        // ----- PROGRESS -----
-        function startProgressAnimation(message = 'Loading fee records...') {
-            loadingProgress = 0;
-            const pc = document.getElementById('progressContainer');
-            const pf = document.getElementById('progressFill');
-            const pt = document.getElementById('progressText');
-            const pl = document.getElementById('progressLabel');
-            pc.style.display = 'block';
-            pf.style.width = '0%'; pt.textContent = '0%';
-            pl.textContent = message;
-            stopProgressAnimation();
-            loadingInterval = setInterval(() => {
-                if (loadingProgress < 90) {
-                    loadingProgress += Math.random() * 8 + 2;
-                    if (loadingProgress > 90) loadingProgress = 90;
-                    pf.style.width = loadingProgress + '%';
-                    pt.textContent = Math.round(loadingProgress) + '%';
-                }
-            }, 200);
-        }
-        function completeProgressAnimation(success = true, message = '') {
-            if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
-            const pf = document.getElementById('progressFill');
-            const pt = document.getElementById('progressText');
-            const pl = document.getElementById('progressLabel');
-            if (success) {
-                pf.style.width = '100%'; pt.textContent = '100%';
-                pl.textContent = message || 'Complete!';
-                setTimeout(() => { document.getElementById('progressContainer').style.display = 'none'; }, 1000);
-            } else {
-                document.getElementById('progressContainer').style.display = 'none';
-            }
-        }
-        function stopProgressAnimation() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
+    if (!from && !to) {
+      el.innerHTML = '<strong>All Payments mode:</strong> every student with at least one recorded payment.';
+      el.classList.add('show');
+      return;
+    }
 
-        // ----- API CALLS — fetch-based -----
-        async function callGAS(action, params = {}, attempt = 1) {
-            const body = new URLSearchParams();
-            body.append('action', action);
-            for (const key in params) {
-                if (params[key] !== undefined && params[key] !== null) {
-                    body.append(key, params[key]);
-                }
-            }
-            body.append('_cb', Date.now().toString());
+    let msg = '<strong>Filter active:</strong> showing students with at least one payment dated ';
+    if (from && to) msg += `<strong>between ${formatDateDisplay(from)} and ${formatDateDisplay(to)}</strong>.`;
+    else if (from) msg += `<strong>on or after ${formatDateDisplay(from)}</strong>.`;
+    else if (to) msg += `<strong>on or before ${formatDateDisplay(to)}</strong>.`;
+    msg += ' Qualifying students will show <em>all</em> their payments on their receipts.';
+    if (undated) msg += ' <em>Undated payments can also qualify a student when no dated payment matches.</em>';
 
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 25000);
+    el.innerHTML = msg;
+    el.classList.add('show');
+  }
 
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-                    body: body.toString(),
-                    redirect: 'follow',
-                    signal: controller.signal,
-                    credentials: 'omit'
-                });
-                clearTimeout(timeoutId);
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const text = await response.text();
-                let data;
-                try { data = JSON.parse(text); }
-                catch (parseErr) {
-                    const m = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
-                    if (m) data = JSON.parse(m[0]);
-                    else throw new Error('Invalid response from server');
-                }
-                if (data && data.error) throw new Error(data.error);
-                return data;
-            } catch (error) {
-                clearTimeout(timeoutId);
-                const msg = (error && error.message) || '';
-                const retryable =
-                    error.name === 'AbortError' ||
-                    msg.indexOf('Failed to fetch') !== -1 ||
-                    msg.indexOf('NetworkError') !== -1 ||
-                    msg.indexOf('HTTP 5') !== -1;
-                if (retryable && attempt < 2) {
-                    console.warn('Retrying API call (' + action + ') after: ' + msg);
-                    await new Promise(r => setTimeout(r, 800));
-                    return callGAS(action, params, attempt + 1);
-                }
-                throw error;
-            }
-        }
+  function handleRangeChange() {
+    if (currentClass && currentTermKey) {
+      cacheInvalidateClass(currentTermKey, currentClass);
+      handleClassChange();
+    }
+    updateRangeSummary();
+  }
 
-        // ----- FORM -----
-        function setupForm() {
-            document.getElementById('studentClass').addEventListener('change', handleClassChange);
-            document.getElementById('studentName').addEventListener('change', updateButtonState);
-            document.getElementById('dateOfBirth').addEventListener('change', updateButtonState);
-            document.getElementById('termSelect').addEventListener('change', updateButtonState);
-            document.getElementById('subParentEmail').addEventListener('input', updateSubButtons);
-        }
+  // ============================================================
+  // MODE + LAYOUT
+  // ============================================================
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('tabSingle').classList.toggle('active', mode === 'single');
+    document.getElementById('tabBatch').classList.toggle('active', mode === 'batch');
+    document.getElementById('singleMode').style.display = mode === 'single' ? 'grid' : 'none';
+    document.getElementById('batchMode').style.display = mode === 'batch' ? 'block' : 'none';
+    document.getElementById('btnSelectAll').style.display = mode === 'batch' ? 'inline-block' : 'none';
+    clearSelection();
+    if (mode === 'single') {
+      if (currentClass) handleClassChange();
+    } else {
+      if (receiptData) renderStudentList(receiptData.students);
+    }
+  }
 
-        async function handleClassChange() {
-            const studentClass = document.getElementById('studentClass').value;
-            const studentName = document.getElementById('studentName');
-            studentName.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
-            studentName.disabled = true;
-            if (!isAdminMode) document.getElementById('dateOfBirth').value = '';
-            document.getElementById('reportContainer').innerHTML = '';
-            document.getElementById('generateReportBtn').disabled = true;
-            if (studentClass && studentClass !== "" && currentTermKey) {
-                await loadStudentNames(studentClass, currentTermKey);
-            } else if (studentClass && !currentTermKey) {
-                showError('Please select a term first.');
-            }
-        }
+  function setLayout(layout) {
+    currentLayout = layout;
+    document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
+    document.getElementById('layoutCompact').classList.toggle('active', layout === 'compact');
+    const wrapper = document.getElementById('mainWrapper');
+    wrapper.classList.toggle('layout-full', layout === 'full');
+    wrapper.classList.toggle('layout-compact', layout === 'compact');
 
-        async function loadStudentNames(studentClass, termKey) {
-            if (isLoadingStudents) return;
-            isLoadingStudents = true;
-            startProgressAnimation(`Loading students from ${studentClass}...`);
-            document.getElementById('studentsLoaded').style.display = 'none';
-            document.getElementById('studentsLoading').style.display = 'flex';
-            try {
-                const names = await callGAS('getStudentNames', { studentClass: studentClass, term: termKey });
-                if (Array.isArray(names) && names.length > 0) {
-                    populateStudentDropdown(names);
-                    completeProgressAnimation(true, `Loaded ${names.length} student(s) from ${studentClass}`);
-                    const loadedDiv = document.getElementById('studentsLoaded');
-                    document.getElementById('studentsLoadedText').innerHTML = `✅ Loaded ${names.length} student(s) from ${studentClass}`;
-                    loadedDiv.style.display = 'flex';
-                    document.getElementById('studentName').disabled = false;
-                    setTimeout(() => { if (loadedDiv.style.display === 'flex') loadedDiv.style.display = 'none'; }, 2500);
-                } else {
-                    populateStudentDropdown([]);
-                    completeProgressAnimation(false);
-                    showInfo(`No students found for ${studentClass} in the selected term`);
-                    document.getElementById('studentName').disabled = true;
-                }
-            } catch (error) {
-                console.error('Error loading names:', error);
-                completeProgressAnimation(false);
-                showError('Failed to load students: ' + (error.message || 'Unknown error'));
-                document.getElementById('generateReportBtn').disabled = true;
-            } finally {
-                isLoadingStudents = false;
-                document.getElementById('studentsLoading').style.display = 'none';
-                updateButtonState();
-            }
-        }
+    if (selectedStudents.size > 0 && receiptData) {
+      renderPreview(getSelectedStudents());
+    }
+  }
 
-        function populateStudentDropdown(names) {
-            const select = document.getElementById('studentName');
-            select.innerHTML = '';
-            if (names.length === 0) {
-                const option = document.createElement('option');
-                option.value = ''; option.disabled = true; option.selected = true;
-                option.textContent = '-- No students found --';
-                select.appendChild(option);
-            } else {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = ''; defaultOption.disabled = true; defaultOption.selected = true;
-                defaultOption.textContent = `-- Select Student (${names.length} available) --`;
-                select.appendChild(defaultOption);
-                names.forEach(name => {
-                    const option = document.createElement('option');
-                    option.value = name; option.textContent = name;
-                    select.appendChild(option);
-                });
-            }
-        }
+  // ============================================================
+  // TERM + CLASS
+  // ============================================================
+  function handleTermChange() {
+    currentTermKey = document.getElementById('rTermSelect').value;
+    document.getElementById('rClassSelect').value = '';
+    document.getElementById('rClassSelect').disabled = false;
+    document.getElementById('studentList').innerHTML =
+      '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">Select a class to load students.</div>';
+    document.getElementById('rStudentSelect').innerHTML =
+      '<option value="" disabled selected>Select class first</option>';
+    document.getElementById('rStudentSelect').disabled = true;
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    receiptData = null;
+    currentClass = null;
+    selectedStudents.clear();
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    duplicateHistory = {};
+    clearWarning();
+  }
 
-        function generateFeeReport() {
-            if (!validateForm()) { showError('Please fill in all required fields.'); return; }
-            const studentName = document.getElementById('studentName').value.trim();
-            const studentClass = document.getElementById('studentClass').value;
-            const dateOfBirth = document.getElementById('dateOfBirth').value;
-            const termKey = document.getElementById('termSelect').value;
-            if (!isAdminMode && !isValidDate(dateOfBirth)) { showError('Please enter a valid date (YYYY-MM-DD).'); return; }
-            clearError();
-            let feeReportUrl = `FeeReportWindow.html?name=${encodeURIComponent(studentName)}&class=${encodeURIComponent(studentClass)}&dob=${encodeURIComponent(dateOfBirth)}&term=${encodeURIComponent(termKey)}`;
-            if (isAdminMode) feeReportUrl += '&admin=true';
-            const newTab = window.open(feeReportUrl, '_blank');
-            if (!newTab) { showError('Please allow pop-ups to view the fee report.'); return; }
-            newTab.focus();
-            showSuccess('Opening fee report in new tab...');
-            setTimeout(() => clearError(), 2000);
-        }
+  async function handleClassChange() {
+    currentClass = document.getElementById('rClassSelect').value;
+    if (!currentClass || !currentTermKey) return;
 
-        function updateButtonState() {
-            const studentName = document.getElementById('studentName').value;
-            const studentClass = document.getElementById('studentClass').value;
-            const dateOfBirth = document.getElementById('dateOfBirth').value;
-            const term = document.getElementById('termSelect').value;
-            let isFormValid;
-            if (isAdminMode) {
-                isFormValid = studentName && studentClass && term && studentName !== "" && studentClass !== "" && term !== "";
-            } else {
-                isFormValid = studentName && studentClass && dateOfBirth && term && studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
-            }
-            document.getElementById('generateReportBtn').disabled = !isFormValid || isLoadingStudents;
-        }
-        function validateForm() {
-            const studentName = document.getElementById('studentName').value;
-            const studentClass = document.getElementById('studentClass').value;
-            const dateOfBirth = document.getElementById('dateOfBirth').value;
-            const term = document.getElementById('termSelect').value;
-            if (isAdminMode) {
-                return studentName && studentClass && term && studentName !== "" && studentClass !== "" && term !== "";
-            }
-            return studentName && studentClass && dateOfBirth && term && studentName !== "" && studentClass !== "" && dateOfBirth !== "" && term !== "";
-        }
-        function isValidDate(dateString) {
-            const regex = /^\d{4}-\d{2}-\d{2}$/;
-            if (!regex.test(dateString)) return false;
-            const date = new Date(dateString);
-            return date instanceof Date && !isNaN(date);
-        }
+    const dateFrom = getDateFromInput();
+    const dateTo = getDateToInput();
+    const includeUndated = getIncludeUndated();
+    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
 
-        function showError(message) {
-            const container = document.getElementById('reportContainer');
-            container.innerHTML = `<div class="alert alert-error" style="margin-top: 20px;"><span>❌</span><div><strong>Error:</strong> ${String(message).replace(/\n/g, '<br>')}</div></div>`;
-            setTimeout(() => { const d = container.querySelector('.alert-error'); if (d) d.remove(); }, 8000);
-        }
-        function showSuccess(message) {
-            const container = document.getElementById('reportContainer');
-            const s = document.createElement('div');
-            s.className = 'alert alert-success';
-            s.style.marginTop = '20px';
-            s.innerHTML = `<span>✅</span><div>${message}</div>`;
-            container.appendChild(s);
-            setTimeout(() => { if (s.parentNode) s.remove(); }, 5000);
-        }
-        function showInfo(message) {
-            const container = document.getElementById('reportContainer');
-            container.innerHTML = `<div class="alert alert-info" style="margin-top: 20px;"><span>ℹ️</span><div>${message}</div></div>`;
-            setTimeout(() => { const d = container.querySelector('.alert-info'); if (d) d.remove(); }, 5000);
-        }
-        function clearError() {
-            const container = document.getElementById('reportContainer');
-            if (container.innerHTML !== '') setTimeout(() => { container.innerHTML = ''; }, 3000);
-        }
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    clearWarning();
 
-        async function testAPIConnection() {
-            try {
-                const result = await callGAS('test', {});
-                if (result && result.success) {
-                    document.getElementById('apiStatus').innerHTML = '✅ Connected to Server';
-                    document.getElementById('apiStatus').style.color = '#86efac';
-                }
-            } catch (error) {
-                console.error('API test failed:', error);
-                const msg = (error && error.message) ? error.message : 'Unknown';
-                document.getElementById('apiStatus').innerHTML =
-                    '⚠️ ' + msg + ' — <span style="font-size:11px;text-decoration:underline;">tap for details</span>';
-                document.getElementById('apiStatus').style.color = '#fcd34d';
-                document.getElementById('apiStatus').style.cursor = 'pointer';
-                document.getElementById('apiStatus').onclick = function() {
-                    alert('Connection error: ' + msg + '\n\nGAS URL: ' + GAS_URL + '\n\nOnline: ' + navigator.onLine + '\nUser agent: ' + navigator.userAgent);
-                };
-            }
-        }
+    const cached = cacheGet(key);
+    if (cached) {
+      receiptData = cached;
+      await loadDuplicateHistory();
+      onDataLoaded(true);
+      return;
+    }
 
-        // ============================================================
-        // 3. SUBSCRIBE MODAL
-        // ============================================================
-        function openSubscribeModal() {
-            document.getElementById('subscribeModal').classList.add('show');
-            resetSubscribeForm();
-            loadSubTerms();
-        }
-        function closeSubscribeModal() { document.getElementById('subscribeModal').classList.remove('show'); }
-        document.getElementById('subscribeModal').addEventListener('click', function(e) { if (e.target === this) closeSubscribeModal(); });
+    showLoading('Loading ' + currentClass + ' records…');
 
-        async function loadSubTerms() {
-            const sel = document.getElementById('subTermSelect');
-            sel.innerHTML = '<option value="" disabled selected>Loading terms...</option>';
-            sel.disabled = true;
-            try {
-                const terms = await callGAS('getAvailableTerms', {});
-                if (Array.isArray(terms) && terms.length) {
-                    sel.innerHTML = '';
-                    const def = document.createElement('option');
-                    def.value = ''; def.disabled = true; def.selected = true;
-                    def.textContent = '-- Select Term --';
-                    sel.appendChild(def);
-                    const grouped = {};
-                    terms.forEach(t => {
-                        if (!grouped[t.academicYear]) grouped[t.academicYear] = [];
-                        grouped[t.academicYear].push(t);
-                    });
-                    let activeTermData = null;
-                    Object.keys(grouped).forEach(year => {
-                        const og = document.createElement('optgroup');
-                        og.label = year;
-                        grouped[year].forEach(term => {
-                            const opt = document.createElement('option');
-                            opt.value = term.key; opt.textContent = term.display;
-                            if (term.isActive) { opt.selected = true; subCurrentTermKey = term.key; activeTermData = term; }
-                            og.appendChild(opt);
-                        });
-                        sel.appendChild(og);
-                    });
-                    if (!activeTermData && terms.length) { sel.value = terms[0].key; subCurrentTermKey = terms[0].key; }
-                    sel.disabled = false;
-                    document.getElementById('subStudentClass').disabled = false;
-                }
-            } catch (e) { showSubStatus('error', 'Could not load terms: ' + (e.message || 'Unknown error')); }
-        }
+    try {
+      const params = { studentClass: currentClass, term: currentTermKey };
+      if (dateFrom) params.dateFrom = dateFrom;
+      if (dateTo) params.dateTo = dateTo;
+      if (includeUndated) params.includeUndated = 'true';
 
-        function resetSubscribeForm() {
-            document.getElementById('subStudentClass').value = '';
-            const nameSel = document.getElementById('subStudentName');
-            nameSel.innerHTML = '<option value="" disabled selected>-- Select Class First --</option>';
-            nameSel.disabled = true;
-            document.getElementById('subDateOfBirth').value = '';
-            document.getElementById('subConsentCheck').checked = false;
-            subCurrentStatus = null;
-            hideSubStatus();
-            let savedEmail = '';
-            try { savedEmail = localStorage.getItem('lunzu_parent_email') || ''; } catch (e) {}
-            document.getElementById('subParentEmail').value = savedEmail;
-            updateSubButtons();
-        }
+      const res = await callGAS('getReceiptDataForClass', params);
 
-        document.getElementById('subTermSelect').addEventListener('change', function() {
-            subCurrentTermKey = this.value;
-            resetSubscribeForm();
-        });
+      if (!res || !res.success) {
+        showError(res?.error || 'Failed to load students.');
+        hideLoading();
+        return;
+      }
 
-        document.getElementById('subStudentClass').addEventListener('change', async function() {
-            const cls = this.value;
-            const nameSel = document.getElementById('subStudentName');
-            nameSel.innerHTML = '<option value="" disabled selected>Loading students...</option>';
-            nameSel.disabled = true;
-            document.getElementById('subDateOfBirth').value = '';
-            subCurrentStatus = null; hideSubStatus(); updateSubButtons();
-            if (!cls || !subCurrentTermKey) return;
-            if (subIsLoadingStudents) return;
-            subIsLoadingStudents = true;
-            try {
-                const names = await callGAS('getStudentNames', { studentClass: cls, term: subCurrentTermKey });
-                nameSel.innerHTML = '';
-                if (Array.isArray(names) && names.length) {
-                    const def = document.createElement('option');
-                    def.value = ''; def.disabled = true; def.selected = true;
-                    def.textContent = `-- Select Student (${names.length} available) --`;
-                    nameSel.appendChild(def);
-                    names.forEach(n => {
-                        const opt = document.createElement('option');
-                        opt.value = n; opt.textContent = n;
-                        nameSel.appendChild(opt);
-                    });
-                    nameSel.disabled = false;
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = ''; opt.disabled = true; opt.selected = true;
-                    opt.textContent = '-- No students found --';
-                    nameSel.appendChild(opt);
-                }
-            } catch (e) {
-                showSubStatus('error', 'Failed to load students: ' + (e.message || 'Unknown error'));
-            } finally {
-                subIsLoadingStudents = false;
-                updateSubButtons();
-            }
-        });
+      receiptData = res;
+      cacheSet(key, res);
 
-        document.getElementById('subStudentName').addEventListener('change', checkSubStatus);
-        document.getElementById('subDateOfBirth').addEventListener('change', () => { checkSubStatus(); updateSubButtons(); });
-        document.getElementById('subConsentCheck').addEventListener('change', updateSubButtons);
+      await loadDuplicateHistory();
+      onDataLoaded(false);
+    } catch (e) {
+      showError('Error: ' + e.message);
+    } finally {
+      hideLoading();
+    }
+  }
 
-        async function checkSubStatus() {
-            const studentName = document.getElementById('subStudentName').value;
-            const studentClass = document.getElementById('subStudentClass').value;
-            const dob = document.getElementById('subDateOfBirth').value;
-            const term = document.getElementById('subTermSelect').value;
-            subCurrentStatus = null;
-            if (!studentName || !studentClass || !dob || !term) { hideSubStatus(); return; }
-            try {
-                const res = await callGAS('getSubscriptionStatus', { studentName, studentClass, dateOfBirth: dob, term });
-                if (res && res.success) {
-                    subCurrentStatus = res;
-                    if (res.hasSubscription) {
-                        const emailField = document.getElementById('subParentEmail');
-                        if (!emailField.value && res.alertEmail) emailField.value = res.alertEmail;
-                        showSubStatus('active',
-                            `✅ Fee alerts are already ON for <strong>${escapeHtml(res.studentName)}</strong>. ` +
-                            `Alerts currently go to <strong>${escapeHtml(res.alertEmail)}</strong>.`
-                        );
-                    } else {
-                        showSubStatus('none',
-                            `ℹ️ Fee alerts are OFF for <strong>${escapeHtml(res.studentName)}</strong>. ` +
-                            `Enter your email above, tick the consent box, and click Subscribe.`
-                        );
-                    }
-                }
-            } catch (e) { console.warn('Status check failed:', e); }
-            updateSubButtons();
-        }
+  async function loadDuplicateHistory() {
+    duplicateHistory = {};
+    if (!receiptData || !receiptData.students || !receiptData.students.length) return;
+    try {
+      const names = receiptData.students.map(s => s.studentName);
+      const res = await callGAS('checkReceiptHistory', {
+        studentClass: currentClass,
+        term: currentTermKey,
+        studentNames: JSON.stringify(names)
+      });
+      if (res && res.success && res.alreadyIssued) {
+        duplicateHistory = res.alreadyIssued;
+      }
+    } catch (e) {
+      console.warn('Duplicate history check failed:', e);
+    }
+  }
 
-        function updateSubButtons() {
-            const studentName = document.getElementById('subStudentName').value;
-            const studentClass = document.getElementById('subStudentClass').value;
-            const dob = document.getElementById('subDateOfBirth').value;
-            const email = (document.getElementById('subParentEmail').value || '').trim();
-            const consent = document.getElementById('subConsentCheck').checked;
-            const term = document.getElementById('subTermSelect').value;
-            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-            const canSubscribe = studentName && studentClass && dob && term && emailOk && consent;
-            const canUnsubscribe = studentName && studentClass && dob && term;
-            document.getElementById('subSubscribeBtn').disabled = !canSubscribe;
-            document.getElementById('subUnsubscribeBtn').disabled = !canUnsubscribe;
-        }
+  function onDataLoaded(fromCache) {
+    if (!receiptData) return;
+    if (currentMode === 'single') {
+      populateStudentSelect(receiptData.students);
+    } else {
+      renderStudentList(receiptData.students);
+    }
+    if (fromCache) console.log('Loaded from cache.');
+  }
 
-        async function submitSubscribe() {
-            const studentName = document.getElementById('subStudentName').value;
-            const studentClass = document.getElementById('subStudentClass').value;
-            const dob = document.getElementById('subDateOfBirth').value;
-            const email = (document.getElementById('subParentEmail').value || '').trim().toLowerCase();
-            const term = document.getElementById('subTermSelect').value;
-            const consent = document.getElementById('subConsentCheck').checked;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showSubStatus('error', '❌ Please enter a valid email address.'); return; }
+  // ============================================================
+  // RECEIPT NUMBER ALLOCATION
+  // ============================================================
+  async function ensureNumberBuffer(count) {
+    if (nextNumberBuffer.length >= count) return;
 
-            // Warn if replacing an existing subscription with a different email
-            if (subCurrentStatus && subCurrentStatus.hasSubscription && subCurrentStatus.alertEmail &&
-                subCurrentStatus.alertEmail.toLowerCase() !== email) {
-                const masked = maskEmail(subCurrentStatus.alertEmail);
-                const proceed = confirm(
-                    'This student is already subscribed by ' + masked + '.\n\n' +
-                    'If you continue, that email will STOP receiving fee alerts and will be replaced by ' + email + '.\n\n' +
-                    'They will be notified of the change.\n\nContinue?'
-                );
-                if (!proceed) {
-                    showSubStatus('error', '❌ Cancelled. The existing subscription remains active.');
-                    return;
-                }
-            }
+    const needed = count - nextNumberBuffer.length;
+    const res = await callGAS('peekReceiptNumber', { term: currentTermKey, count: needed });
+    if (!res || !res.success || !res.numbers) {
+      throw new Error('Could not reserve receipt numbers.');
+    }
+    for (let i = 0; i < res.numbers.length; i++) {
+      nextNumberBuffer.push(res.numbers[i]);
+    }
+  }
 
-            const btn = document.getElementById('subSubscribeBtn');
-            const original = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-small"></span> Subscribing...';
-            hideSubStatus();
-            try {
-                const res = await callGAS('subscribeFeeEmail', {
-                    studentName, studentClass, dateOfBirth: dob,
-                    parentEmail: email, term, consent: consent ? 'true' : 'false'
-                });
-                if (res && res.success) {
-                    showSubStatus('success', '✅ ' + escapeHtml(res.message));
-                    document.getElementById('subConsentCheck').checked = false;
-                    try { localStorage.setItem('lunzu_parent_email', email); } catch (e) {}
-                    setTimeout(checkSubStatus, 800);
-                } else {
-                    showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Subscription failed.'));
-                }
-            } catch (e) { showSubStatus('error', '❌ ' + escapeHtml(e.message)); }
-            finally { btn.innerHTML = original; updateSubButtons(); }
-        }
+  async function assignNumberToStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
+    try {
+      await ensureNumberBuffer(1);
+    } catch (e) {
+      return null;
+    }
+    const num = nextNumberBuffer.shift();
+    assignedNumbers.set(rowNumber, num);
+    return num;
+  }
 
-        async function submitUnsubscribe() {
-            const studentName = document.getElementById('subStudentName').value;
-            const studentClass = document.getElementById('subStudentClass').value;
-            const dob = document.getElementById('subDateOfBirth').value;
-            const term = document.getElementById('subTermSelect').value;
-            if (!confirm('Are you sure you want to remove the fee alert subscription for ' + studentName + '?')) return;
-            const btn = document.getElementById('subUnsubscribeBtn');
-            const original = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-small"></span> Removing...';
-            hideSubStatus();
-            try {
-                const res = await callGAS('unsubscribeFeeEmail', { studentName, studentClass, dateOfBirth: dob, term });
-                if (res && res.success) {
-                    showSubStatus('success', '✅ ' + escapeHtml(res.message));
-                    subCurrentStatus = null;
-                    setTimeout(checkSubStatus, 800);
-                } else {
-                    showSubStatus('error', '❌ ' + escapeHtml(res?.error || 'Unsubscribe failed.'));
-                }
-            } catch (e) { showSubStatus('error', '❌ ' + escapeHtml(e.message)); }
-            finally { btn.innerHTML = original; updateSubButtons(); }
-        }
+  function releaseNumberForStudent(rowNumber) {
+    if (assignedNumbers.has(rowNumber)) {
+      const num = assignedNumbers.get(rowNumber);
+      nextNumberBuffer.unshift(num);
+      assignedNumbers.delete(rowNumber);
+    }
+  }
 
-        function showSubStatus(type, html) {
-            const el = document.getElementById('subStatusInfo');
-            el.className = 'status-info show ' + type;
-            el.innerHTML = html;
-        }
-        function hideSubStatus() {
-            const el = document.getElementById('subStatusInfo');
-            el.className = 'status-info';
-            el.innerHTML = '';
-        }
+  async function commitAllAssignedNumbers() {
+    const count = assignedNumbers.size;
+    if (count === 0) return;
+    try {
+      await callGAS('commitReceiptNumber', { term: currentTermKey, count: count });
+    } catch (e) {
+      console.warn('Counter commit failed (non-fatal):', e);
+    }
+  }
 
-        function maskEmail(email) {
-            if (!email) return '';
-            const parts = String(email).split('@');
-            if (parts.length !== 2) return '***';
-            const local = parts[0];
-            const domain = parts[1];
-            if (local.length <= 2) return local[0] + '***@' + domain;
-            return local[0] + '***' + local[local.length - 1] + '@' + domain;
-        }
+  // ============================================================
+  // SINGLE MODE
+  // ============================================================
+  function populateStudentSelect(students) {
+    const sel = document.getElementById('rStudentSelect');
+    sel.innerHTML = '';
+    const def = document.createElement('option');
+    def.value = ''; def.disabled = true; def.selected = true;
+    def.textContent = '-- Select Student (' + students.length + ' matching) --';
+    sel.appendChild(def);
 
-        function escapeHtml(s) {
-            if (s == null) return '';
-            const d = document.createElement('div');
-            d.textContent = String(s);
-            return d.innerHTML;
-        }
+    if (!students.length) {
+      const opt = document.createElement('option');
+      opt.value = ''; opt.disabled = true;
+      opt.textContent = '-- No students match the range --';
+      sel.appendChild(opt);
+      sel.disabled = true;
+      return;
+    }
 
-        // ============================================================
-        // 4. ADMIN QUEUE MANAGER
-        // ============================================================
-        async function refreshQueueStats() {
-            if (!isAdminMode || !currentTermKey) return;
-            const pendingEl = document.getElementById('queuePending');
-            const sentEl = document.getElementById('queueSent');
-            const failedEl = document.getElementById('queueFailed');
-            pendingEl.textContent = '…'; sentEl.textContent = '…'; failedEl.textContent = '…';
-            try {
-                const res = await callGAS('getFeeAlertQueueStats', { password: ADMIN_PASSWORD, term: currentTermKey });
-                if (res && res.success) {
-                    pendingEl.textContent = res.pending;
-                    sentEl.textContent = res.sent;
-                    failedEl.textContent = res.failed;
-                } else { pendingEl.textContent = '?'; sentEl.textContent = '?'; failedEl.textContent = '?'; }
-            } catch (e) { pendingEl.textContent = '!'; sentEl.textContent = '!'; failedEl.textContent = '!'; }
-        }
+    const sorted = students.slice().sort((a, b) => a.studentName.localeCompare(b.studentName));
+    sorted.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.rowNumber;
+      const dup = duplicateHistory[s.studentName.toLowerCase()];
+      const dupMark = dup ? ' ⚠' : '';
+      opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
+                        (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '') +
+                        dupMark;
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+  }
 
-        async function processQueueNow() {
-            if (!isAdminMode) { alert('Enable admin mode first.'); return; }
-            if (!currentTermKey) { alert('Select a term first.'); return; }
-            if (!confirm('Send all pending fee alert emails for this term now?')) return;
-            const btn = document.getElementById('processQueueBtn');
-            const original = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Sending...';
-            const resultEl = document.getElementById('queueLastResult');
-            resultEl.textContent = 'Processing queue...';
-            try {
-                const res = await callGAS('processFeeAlertQueueNow', { password: ADMIN_PASSWORD, term: currentTermKey });
-                if (res && res.success) {
-                    resultEl.innerHTML = '✅ ' + escapeHtml(res.message) + '<br><small>Term: ' + escapeHtml(res.termDisplay || '') + '</small>';
-                } else {
-                    resultEl.innerHTML = '❌ ' + escapeHtml(res?.error || 'Failed to process queue.');
-                }
-                await refreshQueueStats();
-            } catch (e) { resultEl.innerHTML = '❌ ' + escapeHtml(e.message); }
-            finally { btn.innerHTML = original; btn.disabled = false; }
-        }
-    </script>
+  async function handleSingleStudentChange() {
+    const rowNumber = parseInt(document.getElementById('rStudentSelect').value, 10);
+    if (!rowNumber || !receiptData) return;
+
+    const student = receiptData.students.find(s => s.rowNumber === rowNumber);
+    if (!student) return;
+
+    clearWarning();
+    const dup = duplicateHistory[student.studentName.toLowerCase()];
+    if (dup) {
+      showWarning(
+        '<strong>⚠ Heads up:</strong> ' + escapeHtml(student.studentName) +
+        ' already has <strong>' + dup.count + '</strong> receipt(s) in this term. ' +
+        'Last issued: <strong>' + escapeHtml(dup.lastReceipt || 'unknown') + '</strong>' +
+        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') +
+        '.'
+      );
+    }
+
+    for (const rn of Array.from(assignedNumbers.keys())) {
+      if (rn !== rowNumber) releaseNumberForStudent(rn);
+    }
+    selectedStudents.clear();
+    selectedStudents.add(rowNumber);
+
+    const num = await assignNumberToStudent(rowNumber);
+    if (!num) {
+      showError('Could not reserve a receipt number. Check your connection and try again.');
+      return;
+    }
+
+    renderPreview(getSelectedStudents());
+    document.getElementById('btnPrint').disabled = false;
+    document.getElementById('btnPDF').disabled = false;
+    updatePreviewHeader();
+  }
+
+  // ============================================================
+  // BATCH MODE
+  // ============================================================
+  function renderStudentList(students) {
+    const list = document.getElementById('studentList');
+    const sorted = students.slice().sort((a, b) => a.studentName.localeCompare(b.studentName));
+
+    let html = '';
+    if (!sorted.length) {
+      html = '<div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">No students match the selected range.</div>';
+    } else {
+      sorted.forEach(s => {
+        const balance = safeNum(s.cumulativeBalance);
+        const statusClass = balance === 0 ? 'status-ok' : balance > 0 ? 'status-over' : 'status-due';
+        const statusText = balance === 0 ? 'Paid' : balance > 0 ? 'Overpaid' : 'Owes';
+
+        const metaLine = 'K' + safeMoney(s.totalPaidThisTerm) + ' • ' +
+                         s.payments.length + ' payment' + (s.payments.length !== 1 ? 's' : '') +
+                         (s.latestPaymentDate ? ' • last ' + s.latestPaymentDate : '') +
+                         (s.hasUndated ? ' • some undated' : '');
+
+        const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
+                            (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
+
+        const dup = duplicateHistory[s.studentName.toLowerCase()];
+        const dupMark = dup
+          ? '<span class="dup-warn">⚠ Already issued: ' + dup.count + ' (' + escapeHtml(dup.lastReceipt || '?') + ')</span>'
+          : '';
+
+        html += '<div class="student-row">'
+          + '<input type="checkbox" id="student-' + s.rowNumber + '" data-row="' + s.rowNumber + '">'
+          + '<label for="student-' + s.rowNumber + '">'
+            + '<strong>' + escapeHtml(s.studentName) + '</strong>'
+            + '<span class="meta">' + escapeHtml(metaLine) + '</span>'
+            + '<span class="meta">' + escapeHtml(balanceLine) + '</span>'
+            + dupMark
+          + '</label>'
+          + '<span class="status-pill ' + statusClass + '">' + statusText + '</span>'
+        + '</div>';
+      });
+    }
+    list.innerHTML = html;
+
+    list.removeEventListener('change', onStudentListChange);
+    list.addEventListener('change', onStudentListChange);
+
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    selectedStudents.clear();
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    updateSelectAllLabel();
+    updatePreviewHeader();
+  }
+
+  async function onStudentListChange(e) {
+    if (!e.target || e.target.type !== 'checkbox') return;
+    const rowNum = parseInt(e.target.dataset.row, 10);
+
+    if (e.target.checked) {
+      selectedStudents.add(rowNum);
+      const num = await assignNumberToStudent(rowNum);
+      if (!num) {
+        e.target.checked = false;
+        selectedStudents.delete(rowNum);
+        showError('Could not reserve a receipt number. Check your connection.');
+        return;
+      }
+    } else {
+      selectedStudents.delete(rowNum);
+      releaseNumberForStudent(rowNum);
+    }
+    updateSelectionState();
+  }
+
+  async function toggleSelectAll() {
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
+    const allChecked = Array.from(boxes).every(b => b.checked);
+
+    if (allChecked) {
+      boxes.forEach(b => { b.checked = false; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+    } else {
+      boxes.forEach(b => { b.checked = true; });
+      selectedStudents.clear();
+      assignedNumbers.clear();
+      nextNumberBuffer = [];
+
+      try {
+        await ensureNumberBuffer(boxes.length);
+      } catch (err) {
+        showError('Could not reserve receipt numbers: ' + err.message);
+        return;
+      }
+      boxes.forEach(b => {
+        const rowNum = parseInt(b.dataset.row, 10);
+        const num = nextNumberBuffer.shift();
+        assignedNumbers.set(rowNum, num);
+        selectedStudents.add(rowNum);
+      });
+    }
+    updateSelectionState();
+  }
+
+  function updateSelectionState() {
+    const count = selectedStudents.size;
+    document.getElementById('btnPrint').disabled = count === 0;
+    document.getElementById('btnPDF').disabled = count === 0;
+    updateSelectAllLabel();
+    updatePreviewHeader();
+
+    if (count > 0 && currentMode === 'batch') {
+      renderPreview(getSelectedStudents());
+    } else if (count === 0) {
+      document.getElementById('receiptContainer').innerHTML = '';
+    }
+  }
+
+  function updateSelectAllLabel() {
+    const btn = document.getElementById('btnSelectAll');
+    const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
+    if (!boxes.length) { btn.textContent = '✓ Select All With Payments'; return; }
+    const allChecked = Array.from(boxes).every(b => b.checked);
+    btn.textContent = allChecked ? '✕ Deselect All' : '✓ Select All With Payments';
+  }
+
+  function updatePreviewHeader() {
+    const hdr = document.getElementById('previewHeader');
+    const count = selectedStudents.size;
+    if (count > 0) {
+      hdr.classList.add('show');
+      document.getElementById('previewCount').textContent = count;
+    } else {
+      hdr.classList.remove('show');
+    }
+  }
+
+  function clearSelection() {
+    selectedStudents.clear();
+    document.querySelectorAll('#studentList input[type="checkbox"]').forEach(b => b.checked = false);
+    document.getElementById('btnPrint').disabled = true;
+    document.getElementById('btnPDF').disabled = true;
+    document.getElementById('receiptContainer').innerHTML = '';
+    assignedNumbers.clear();
+    nextNumberBuffer = [];
+    updatePreviewHeader();
+    updateSelectAllLabel();
+    clearWarning();
+  }
+
+  // ============================================================
+  // PREVIEW RENDERING
+  // ============================================================
+  function renderPreview(students) {
+    if (!students || !students.length) {
+      document.getElementById('receiptContainer').innerHTML = '';
+      return;
+    }
+
+    const perSheet = currentLayout === 'compact' ? 16 : 9;
+
+    const from = getDateFromInput();
+    const to = getDateToInput();
+    let rangeLabel = '';
+    if (from && to && from === to) rangeLabel = 'Payments on ' + formatDateDisplay(from);
+    else if (from && to) rangeLabel = 'Payments ' + formatDateDisplay(from) + ' – ' + formatDateDisplay(to);
+    else if (from) rangeLabel = 'Payments from ' + formatDateDisplay(from);
+    else if (to) rangeLabel = 'Payments up to ' + formatDateDisplay(to);
+
+    const termInfo = {
+      academicYear: receiptData.academicYear,
+      term: receiptData.term,
+      termDisplay: receiptData.termDisplay,
+      rangeLabel: rangeLabel,
+      termConfig: receiptData.termConfig
+    };
+
+    const printedAt = formatTimestamp(new Date());
+
+    let html = '';
+    for (let i = 0; i < students.length; i += perSheet) {
+      const group = students.slice(i, i + perSheet);
+      html += '<div class="receipt-sheet">';
+      group.forEach(s => {
+        const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
+        html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
+      });
+      for (let k = group.length; k < perSheet; k++) {
+        html += '<div class="empty-sheet-slot"></div>';
+      }
+      html += '</div>';
+    }
+
+    document.getElementById('receiptContainer').innerHTML = html;
+  }
+
+  function formatTimestamp(d) {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mi = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+  }
+
+  // ============================================================
+  // BUILD RECEIPT HTML
+  // ============================================================
+  function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
+    const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
+    const schoolName = isODL
+      ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
+      : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
+
+    // Contact block
+    const contacts = termInfo.termConfig.contacts || {};
+    const contact = isODL
+      ? (contacts.odl || contacts.regular || {})
+      : (contacts.regular || {});
+    const bursarPhone = contact.phone1 || '';
+    const bursarPhone2 = contact.phone2 || '';
+    const bursarWhatsapp = contact.whatsapp || '';
+    const accountNumber = contact.accountNumber || '';
+
+    // Account line — always shown, format: 1290000098673|FDH|LUNZU
+    const accountCompact = String(accountNumber || '').replace(/\s+/g, '');
+    const bankInfoStr = String(termInfo.termConfig.bankInfo || '').toUpperCase();
+    const bankMatch = bankInfoStr.match(/BANK:\s*([^|]+)/);
+    const branchMatch = bankInfoStr.match(/([A-Z\s]+BRANCH)/);
+    const bankName = bankMatch ? bankMatch[1].trim() : 'FDH';
+    const branchName = branchMatch ? branchMatch[1].replace(/\s*BRANCH\s*/i, '').trim() : 'LUNZU';
+    const accountLine = accountCompact
+      ? accountCompact + '|' + bankName + '|' + branchName
+      : '';
+
+    const balance = safeNum(student.cumulativeBalance);
+    const prevBalance = safeNum(student.previousBalance);
+    const isPaid = balance === 0;
+    const isOver = balance > 0;
+
+    let wmClass = 'due', wmText = 'BALANCE DUE';
+    if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
+    else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
+
+    let rowsHTML = '';
+    if (!student.payments || !student.payments.length) {
+      rowsHTML = '<tr><td colspan="3" style="padding:5px;text-align:center;color:#666;font-style:italic;">No payments recorded.</td></tr>';
+    } else {
+      student.payments.forEach(p => {
+        const sign = p.isRefund ? '−' : '';
+        const amtClass = p.isRefund ? 'amt refund' : 'amt';
+        const dtClass = p.hasDate ? 'dt' : 'dt nodate';
+        const dtText = p.hasDate ? p.date : 'no date';
+        rowsHTML += '<tr>'
+          + '<td>' + escapeHtml(p.displayName) + '</td>'
+          + '<td class="' + amtClass + '">' + sign + 'K' + safeMoney(p.displayAmount) + '</td>'
+          + '<td class="' + dtClass + '">' + escapeHtml(dtText) + '</td>'
+          + '</tr>';
+      });
+    }
+
+    const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
+
+    let statusBannerText = '';
+    if (isPaid) {
+      statusBannerText = '✅ FULLY PAID — Thank you';
+    } else if (isOver) {
+      statusBannerText = '💜 Credit: K' + safeMoney(balance) + ' (applied to future fees)';
+    } else {
+      statusBannerText = '⚠️ Outstanding balance: K' + safeMoney(Math.abs(balance));
+    }
+    const balanceNoteHtml = '<div class="balance-note ' + balanceNoteClass + '">'
+      + statusBannerText + '</div>';
+
+    const outstandingPrev = Math.max(0, -prevBalance);
+    const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
+
+    const numText = receiptNumber || 'PENDING';
+    const numClass = receiptNumber ? '' : ' pending';
+
+    let headerExtra = '';
+    if (termInfo.rangeLabel && layout !== 'compact') {
+      headerExtra = '<div class="range-badge">' + escapeHtml(termInfo.rangeLabel) + '</div>';
+    }
+    if (layout !== 'compact') {
+      headerExtra += '<div class="period">' + escapeHtml(termInfo.termConfig.schoolAddress || 'Private Bag 130, Lunzu') + '</div>';
+    }
+
+    let prevHint = '';
+    if (layout === 'compact' && prevBalance !== 0) {
+      prevHint = '<span class="prev-hint">'
+        + (prevBalance < 0 ? 'incl. prev. K' + safeMoney(Math.abs(prevBalance)) + ' due'
+                           : 'incl. credit K' + safeMoney(prevBalance))
+        + '</span>';
+    }
+
+    const totalsRows = [];
+    if (layout === 'compact') {
+      totalsRows.push('<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
+      if (prevBalance !== 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">B/F</span><span>'
+          + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row"><span class="label">Paid</span><span>K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
+    } else {
+      totalsRows.push('<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
+      if (prevBalance !== 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">Balance B/F</span><span>'
+          + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row big"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span>K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      if (student.totalRefunded > 0) {
+        totalsRows.push('<div class="totals-row"><span class="label">Refunded</span><span>−K' + safeMoney(student.totalRefunded) + '</span></div>');
+      }
+      totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
+    }
+
+    const footerLeftHtml = '<div class="left">'
+      + '<span class="office">Office of the Bursar</span>'
+      + (bursarPhone ? '☎ ' + escapeHtml(bursarPhone) : '')
+      + (bursarPhone2 ? ' / ' + escapeHtml(bursarPhone2) : '')
+      + (bursarWhatsapp ? ' • ' + escapeHtml(bursarWhatsapp) : '')
+      + (accountLine
+          ? '<div class="acct">' + escapeHtml(accountLine) + '</div>'
+          : '')
+    + '</div>';
+
+    return '<div class="receipt">'
+      + '<div class="receipt-header">'
+        + '<img class="crest" src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Crest">'
+        + '<div class="title">'
+          + '<div class="school">' + escapeHtml(schoolName) + '</div>'
+          + '<div class="doc-type">' + escapeHtml(termInfo.termDisplay) + ' · FEE RECEIPT</div>'
+          + headerExtra
+        + '</div>'
+        + '<div class="receipt-number' + numClass + '">'
+          + '<span class="num-label">Receipt No.</span>'
+          + escapeHtml(numText)
+        + '</div>'
+      + '</div>'
+      + '<div class="receipt-body">'
+        + '<div class="student-line">'
+          + '<div class="left">' + escapeHtml(student.studentName) + '</div>'
+          + '<div class="right">' + escapeHtml(student.studentClass) + '</div>'
+        + '</div>'
+        + '<table class="payments-table">'
+          + '<thead><tr><th>Payment</th><th class="amt">Amount</th><th class="dt">Date</th></tr></thead>'
+          + '<tbody>' + rowsHTML + '</tbody>'
+        + '</table>'
+        + '<div class="totals-block">'
+          + totalsRows.join('')
+          + prevHint
+        + '</div>'
+        + balanceNoteHtml
+      + '</div>'
+      + '<div class="receipt-footer">'
+        + footerLeftHtml
+        + '<div class="right">'
+          + '<span class="ts-label">Printed</span>'
+          + printedAt
+        + '</div>'
+      + '</div>'
+      + '<div class="watermark ' + wmClass + '"><div class="wm-badge">' + wmText + '</div></div>'
+    + '</div>';
+  }
+
+  // ============================================================
+  // PRINT / PDF
+  // ============================================================
+  async function printReceipts() {
+    const students = getSelectedStudents();
+    if (!students.length) return;
+
+    const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
+    if (missing.length > 0) {
+      showError(
+        'Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. ' +
+        'Clear the selection and re-select.'
+      );
+      return;
+    }
+
+    showLoading('Committing receipt numbers…');
+
+    await commitAllAssignedNumbers();
+
+    const receiptsLog = students.map(s => ({
+      receiptNumber: assignedNumbers.get(s.rowNumber) || '',
+      studentName: s.studentName,
+      totalPaid: s.totalPaidThisTerm,
+      balanceAfter: s.cumulativeBalance,
+      paymentCount: s.payments.length,
+      printedBy: 'Bursar'
+    }));
+    callGAS('logReceipts', {
+      studentClass: currentClass,
+      term: currentTermKey,
+      receipts: JSON.stringify(receiptsLog)
+    }).catch(e => console.warn('Log failed (non-fatal):', e));
+
+    hideLoading();
+    setTimeout(() => window.print(), 150);
+  }
+
+  async function saveAsPDF() {
+    await printReceipts();
+  }
+
+  function getSelectedStudents() {
+    if (!receiptData) return [];
+    return Array.from(selectedStudents)
+      .map(rn => receiptData.students.find(s => s.rowNumber === rn))
+      .filter(Boolean);
+  }
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
+  function safeNum(v) {
+    if (v === undefined || v === null || v === '') return 0;
+    if (typeof v === 'number') return isNaN(v) ? 0 : v;
+    if (typeof v === 'string') {
+      const cleaned = String(v).replace(/[^\d.\-]/g, '');
+      const n = parseFloat(cleaned);
+      return isNaN(n) ? 0 : n;
+    }
+    return 0;
+  }
+  function safeMoney(v) {
+    const n = safeNum(v);
+    return n.toLocaleString('en-US');
+  }
+  function escapeHtml(s) {
+    if (s == null) return '';
+    const d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+</script>
 </body>
 </html>
