@@ -6,39 +6,36 @@
 <title>Fee Receipts - Lunzu Secondary School</title>
 <style>
   :root {
-    --primary: #002b54;
-    --accent: #fbbf24;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #cbd5e1;
+    --ink: #000000;
+    --muted: #333333;
+    --light: #666666;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
     background: #eef2f6;
-    color: var(--text);
+    color: var(--ink);
     padding: 16px;
   }
 
-  /* LOGIN GATE */
   .login-gate {
     max-width: 420px; margin: 80px auto;
     background: white; padding: 32px;
     border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     text-align: center;
   }
-  .login-gate h1 { color: var(--primary); font-size: 22px; margin-bottom: 6px; }
-  .login-gate .sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+  .login-gate h1 { color: #002b54; font-size: 22px; margin-bottom: 6px; }
+  .login-gate .sub { color: #64748b; font-size: 13px; margin-bottom: 22px; }
   .login-gate input {
     width: 100%; padding: 12px 14px;
-    border: 1.5px solid var(--border); border-radius: 8px;
+    border: 1.5px solid #cbd5e1; border-radius: 8px;
     font-size: 15px; text-align: center;
     letter-spacing: 2px; margin-bottom: 14px;
   }
-  .login-gate input:focus { outline: none; border-color: var(--primary); }
+  .login-gate input:focus { outline: none; border-color: #002b54; }
   .login-gate button {
     width: 100%; padding: 12px;
-    background: var(--primary); color: white;
+    background: #002b54; color: white;
     border: none; border-radius: 8px;
     font-size: 15px; font-weight: 600; cursor: pointer;
   }
@@ -47,26 +44,25 @@
   .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
   .login-gate .err.show { display: block; }
 
-  /* MAIN */
   .main-wrapper { display: none; }
   .controls {
     max-width: 1000px; margin: 0 auto 16px;
     background: white; border-radius: 12px;
     padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
-  .controls h1 { font-size: 20px; color: var(--primary); margin-bottom: 4px; }
-  .controls .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .controls h1 { font-size: 20px; color: #002b54; margin-bottom: 4px; }
+  .controls .subtitle { font-size: 13px; color: #64748b; margin-bottom: 16px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
   .controls label {
     display: block; font-size: 13px; font-weight: 600;
-    color: var(--text); margin-bottom: 5px;
+    color: var(--ink); margin-bottom: 5px;
   }
   .controls select, .controls input[type="text"], .controls input[type="date"] {
     width: 100%; padding: 10px 12px;
-    border: 1.5px solid var(--border); border-radius: 8px;
+    border: 1.5px solid #cbd5e1; border-radius: 8px;
     font-size: 14px; background: white;
   }
-  .controls select:focus, .controls input:focus { outline: none; border-color: var(--primary); }
+  .controls select:focus, .controls input:focus { outline: none; border-color: #002b54; }
 
   .mode-tabs, .layout-toggle {
     display: flex; gap: 6px;
@@ -81,48 +77,40 @@
     font-size: 13px; font-weight: 600;
     cursor: pointer; transition: 0.15s;
   }
-  .mode-tabs button { color: var(--muted); }
+  .mode-tabs button { color: #64748b; }
   .layout-toggle button { color: #92400e; }
   .mode-tabs button.active, .layout-toggle button.active {
-    background: white; color: var(--primary);
+    background: white; color: #002b54;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
 
-  .quick-ranges {
-    display: flex; gap: 6px; flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
+  .quick-ranges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
   .quick-ranges button {
     padding: 6px 12px;
-    background: #f1f5f9; border: 1px solid var(--border);
+    background: #f1f5f9; border: 1px solid #cbd5e1;
     border-radius: 20px; font-size: 12px; font-weight: 600;
-    color: var(--muted); cursor: pointer;
-    transition: 0.15s;
+    color: #64748b; cursor: pointer; transition: 0.15s;
   }
-  .quick-ranges button:hover { background: #e2e8f0; color: var(--primary); }
+  .quick-ranges button:hover { background: #e2e8f0; color: #002b54; }
 
   .range-summary {
     background: #ecfdf5; border-left: 3px solid #10b981;
     padding: 10px 14px; border-radius: 6px;
     font-size: 13px; color: #065f46;
-    margin-bottom: 14px;
-    display: none;
+    margin-bottom: 14px; display: none;
   }
   .range-summary.show { display: block; }
   .range-summary strong { color: #166534; }
 
   .checkbox-row {
     display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: var(--muted);
-    margin-bottom: 12px;
+    font-size: 13px; color: #64748b; margin-bottom: 12px;
   }
-  .checkbox-row input[type="checkbox"] {
-    width: 16px; height: 16px; accent-color: var(--primary);
-  }
+  .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #002b54; }
 
   .student-list {
     max-height: 340px; overflow-y: auto;
-    border: 1px solid var(--border); border-radius: 8px;
+    border: 1px solid #cbd5e1; border-radius: 8px;
     padding: 4px; background: #f8fafc;
   }
   .student-row {
@@ -131,26 +119,14 @@
     font-size: 13px;
   }
   .student-row:last-child { border-bottom: none; }
-  .student-row input[type="checkbox"] {
-    width: 18px; height: 18px; cursor: pointer; flex-shrink: 0;
-  }
-  .student-row label {
-    flex: 1; cursor: pointer; margin: 0;
-    font-weight: 500; font-size: 13px;
-  }
-  .student-row .meta {
-    font-size: 11px; color: var(--muted); display: block;
-    margin-top: 2px; font-weight: 400;
-  }
+  .student-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+  .student-row label { flex: 1; cursor: pointer; margin: 0; font-weight: 500; font-size: 13px; }
+  .student-row .meta { font-size: 11px; color: #64748b; display: block; margin-top: 2px; font-weight: 400; }
   .student-row .dup-warn {
-    font-size: 10.5px;
-    color: #b45309;
-    background: #fffbeb;
-    padding: 1px 6px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-top: 2px;
-    font-weight: 600;
+    font-size: 10.5px; color: #b45309;
+    background: #fffbeb; padding: 1px 6px;
+    border-radius: 20px; display: inline-block;
+    margin-top: 2px; font-weight: 600;
   }
   .status-pill {
     font-size: 10px; font-weight: 700;
@@ -162,10 +138,7 @@
   .status-due { background: #fee2e2; color: #991b1b; }
   .status-over { background: #ede9fe; color: #5b21b6; }
 
-  .actions {
-    display: flex; gap: 10px;
-    flex-wrap: wrap; margin-top: 14px;
-  }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   .actions button {
     flex: 1; min-width: 130px;
     padding: 12px 18px;
@@ -173,30 +146,29 @@
     font-size: 14px; font-weight: 600;
     cursor: pointer; transition: 0.15s;
   }
-  .btn-print { background: var(--primary); color: white; }
+  .btn-print { background: #002b54; color: white; }
   .btn-print:hover { background: #003d75; }
   .btn-print:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn-pdf { background: #dc2626; color: white; }
   .btn-pdf:hover { background: #b91c1c; }
   .btn-pdf:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-secondary { background: var(--accent); color: #422006; }
+  .btn-secondary { background: #fbbf24; color: #422006; }
   .btn-secondary:hover { background: #f59e0b; }
-  .btn-ghost { background: #f1f5f9; color: var(--muted); }
+  .btn-ghost { background: #f1f5f9; color: #64748b; }
   .btn-ghost:hover { background: #e2e8f0; }
 
   .info {
     margin-top: 12px; font-size: 12px;
-    color: var(--muted); line-height: 1.6;
+    color: #64748b; line-height: 1.6;
     padding: 10px 14px; background: #f8fafc;
-    border-radius: 8px; border-left: 3px solid var(--accent);
+    border-radius: 8px; border-left: 3px solid #fbbf24;
   }
-  .info strong { color: var(--primary); }
+  .info strong { color: #002b54; }
 
   .error-msg {
     background: #fee2e2; color: #991b1b;
     padding: 10px 14px; border-radius: 8px;
-    font-size: 13px; margin-top: 12px;
-    display: none;
+    font-size: 13px; margin-top: 12px; display: none;
   }
   .error-msg.show { display: block; }
 
@@ -205,8 +177,7 @@
     padding: 12px 14px; border-radius: 8px;
     font-size: 13px; margin-top: 12px;
     border-left: 4px solid #f59e0b;
-    display: none;
-    line-height: 1.5;
+    display: none; line-height: 1.5;
   }
   .warning-msg.show { display: block; }
   .warning-msg strong { color: #78350f; }
@@ -219,29 +190,21 @@
     display: none;
   }
   .preview-header.show { display: flex; }
-  .preview-header .count { font-size: 14px; color: var(--muted); font-weight: 600; }
-  .preview-header .count strong { color: var(--primary); }
+  .preview-header .count { font-size: 14px; color: #64748b; font-weight: 600; }
+  .preview-header .count strong { color: #002b54; }
 
-  /* ============================================
-     RECEIPT SHEET — A4 print layout with grid
-     ============================================ */
-  #receiptContainer {
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 12px;
-  }
+  /* ============================================================
+     RECEIPT SHEET
+     ============================================================ */
+  #receiptContainer { width: 100%; overflow-x: auto; padding-bottom: 12px; }
 
   .receipt-sheet {
-    width: 210mm;
-    height: 297mm;
+    width: 210mm; height: 297mm;
     margin: 0 auto 20px;
-    background: white;
-    padding: 5mm;
+    background: white; padding: 5mm;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    page-break-after: always;
-    break-after: page;
-    overflow: hidden;
-    box-sizing: border-box;
+    page-break-after: always; break-after: page;
+    overflow: hidden; box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -253,22 +216,19 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 3mm;
-    padding: 5mm;
+    gap: 3mm; padding: 5mm;
   }
 
   .layout-compact .receipt-sheet {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 2mm;
-    padding: 4mm;
+    gap: 2mm; padding: 4mm;
   }
 
-  /* RECEIPT — transparent background so watermark shows through */
   .receipt {
-    border: 1.2px dashed #94a3b8;
-    border-radius: 6px;
+    border: 1px solid #000;
+    border-radius: 4px;
     padding: 3mm;
     position: relative;
     display: flex;
@@ -277,11 +237,9 @@
     background: transparent;
     height: 100%;
     box-sizing: border-box;
+    color: #000;
   }
 
-  /* ============================================
-     WATERMARK — badge centered, rotated, unclippable
-     ============================================ */
   .watermark {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -301,32 +259,31 @@
     text-transform: uppercase;
     letter-spacing: 3px;
     line-height: 1;
-    border: 2px solid currentColor;
+    border: 2px dashed #000;
     border-radius: 8px;
-    padding: 5px 12px;
-    opacity: 0.20;
+    padding: 6px 14px;
+    opacity: 0.22;
     white-space: nowrap;
+    color: #000;
     font-family: 'Segoe UI', Arial, sans-serif;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .watermark.paid  { color: #059669; }
-  .watermark.over  { color: #7c3aed; }
-  .watermark.due   { color: #dc2626; }
+  .watermark.paid .wm-badge { opacity: 0.20; }
+  .watermark.over .wm-badge { opacity: 0.20; }
+  .watermark.due  .wm-badge { opacity: 0.24; }
 
-  /* Content sits above the watermark but has no background, so watermark shows */
   .receipt > *:not(.watermark) {
     position: relative;
     z-index: 1;
     background: transparent;
   }
 
-  /* ============================================
-     HEADER
-     ============================================ */
   .receipt-header {
     display: flex;
     align-items: center;
     gap: 5px;
-    border-bottom: 1.2px solid var(--primary);
+    border-bottom: 1.2px solid #000;
     padding-bottom: 3px;
     margin-bottom: 4px;
     min-height: 34px;
@@ -337,18 +294,15 @@
     object-fit: contain;
     flex-shrink: 0;
   }
-  .receipt-header .title {
-    flex: 1;
-    min-width: 0;
-  }
+  .receipt-header .title { flex: 1; min-width: 0; }
   .receipt-header .school {
     font-weight: 700;
-    color: var(--primary);
+    color: #000;
     letter-spacing: 0.2px;
     line-height: 1.15;
   }
   .receipt-header .doc-type {
-    color: #b45309;
+    color: #000;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -356,7 +310,7 @@
     margin-top: 1px;
   }
   .receipt-header .period {
-    color: var(--muted);
+    color: #333;
     font-weight: 600;
     line-height: 1.15;
     margin-top: 1px;
@@ -366,7 +320,9 @@
   }
   .receipt-header .range-badge {
     display: inline-block;
-    background: #ecfdf5; color: #065f46;
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
     font-weight: 700;
     padding: 1px 5px;
     border-radius: 20px;
@@ -379,33 +335,27 @@
     flex-shrink: 0;
     font-family: 'Courier New', monospace;
     font-weight: 700;
-    background: rgba(241,245,249,0.65);
-    color: var(--primary);
+    background: transparent;
+    color: #000;
     padding: 2px 6px;
     border-radius: 4px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #000;
     letter-spacing: 0.4px;
     white-space: nowrap;
     text-align: center;
     line-height: 1.15;
-  }
-  .receipt-number.pending {
-    color: #b45309;
-    background: rgba(255,251,235,0.7);
-    border-color: #fde68a;
   }
   .receipt-number .num-label {
     display: block;
     font-family: 'Segoe UI', Arial, sans-serif;
     font-size: 0.75em;
     font-weight: 600;
-    color: #94a3b8;
+    color: #555;
     text-transform: uppercase;
     letter-spacing: 0.6px;
     margin-bottom: 1px;
   }
 
-  /* Body */
   .receipt-body {
     flex: 1;
     display: flex;
@@ -417,79 +367,78 @@
 
   .student-line {
     display: flex; justify-content: space-between;
-    padding: 3px 0; border-bottom: 1px dashed #e2e8f0;
-    margin-bottom: 4px;
-    gap: 4px;
+    padding: 3px 0; border-bottom: 1px dashed #000;
+    margin-bottom: 4px; gap: 4px;
     background: transparent;
   }
   .student-line .left {
-    font-weight: 700; color: var(--primary);
+    font-weight: 700; color: #000;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     min-width: 0;
   }
   .student-line .right {
-    color: var(--muted); text-align: right;
+    color: #333; text-align: right;
     white-space: nowrap; flex-shrink: 0;
   }
 
   .payments-table {
     width: 100%; border-collapse: collapse;
-    margin-bottom: 4px;
-    background: transparent;
+    margin-bottom: 4px; background: transparent;
   }
   .payments-table thead th {
-    background: rgba(241,245,249,0.55);
-    color: var(--muted);
+    background: transparent;
+    color: #000;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     padding: 2px 3px;
     text-align: left;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #000;
+    font-weight: 700;
   }
   .payments-table thead th.amt, .payments-table thead th.dt { text-align: right; }
   .payments-table tbody td {
     padding: 2px 3px;
-    border-bottom: 1px solid #eef2f6;
+    border-bottom: 1px solid #ccc;
     background: transparent;
+    color: #000;
   }
   .payments-table tbody tr:last-child td { border-bottom: none; }
   .payments-table tbody td.amt {
     text-align: right; font-weight: 700;
-    color: #059669; white-space: nowrap;
+    color: #000; white-space: nowrap;
   }
-  .payments-table tbody td.amt.refund { color: #7c3aed; }
+  .payments-table tbody td.amt.refund { color: #000; }
   .payments-table tbody td.dt {
-    text-align: right; color: var(--muted);
+    text-align: right; color: #333;
     white-space: nowrap;
   }
   .payments-table tbody td.dt.nodate {
-    color: #cbd5e1; font-style: italic;
+    color: #777; font-style: italic;
   }
 
   .totals-block {
     margin-top: auto;
-    background: rgba(241,245,249,0.55);
-    border-left: 3px solid var(--accent);
+    background: transparent;
+    border: 1px solid #000;
     border-radius: 3px;
     padding: 3px 5px;
   }
   .totals-row {
     display: flex; justify-content: space-between;
     padding: 1px 0;
+    color: #000;
   }
   .totals-row.big {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid #000;
     margin-top: 2px; padding-top: 2px;
     font-weight: 800;
-    color: var(--primary);
+    color: #000;
   }
-  .totals-row .label { color: var(--muted); }
-  .totals-row.big .label { color: var(--primary); }
+  .totals-row .label { color: #333; }
+  .totals-row.big .label { color: #000; }
   .totals-row .prev-hint {
-    display: block;
-    color: #94a3b8;
-    font-style: italic;
-    margin-top: 1px;
+    display: block; color: #666;
+    font-style: italic; margin-top: 1px;
   }
 
   .balance-note {
@@ -497,16 +446,22 @@
     border-radius: 3px;
     line-height: 1.3;
     font-weight: 700;
-    background: rgba(255,255,255,0.35);
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
   }
-  .balance-note.ok { background: rgba(220,252,231,0.55); color: #166534; }
-  .balance-note.due { background: rgba(254,226,226,0.55); color: #991b1b; }
-  .balance-note.over { background: rgba(237,233,254,0.55); color: #5b21b6; }
+  .balance-note.ok,
+  .balance-note.due,
+  .balance-note.over {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+  }
 
   .receipt-footer {
     margin-top: 3px;
     padding-top: 3px;
-    border-top: 1px dashed var(--border);
+    border-top: 1px dashed #000;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -515,19 +470,19 @@
     background: transparent;
   }
   .receipt-footer .left {
-    color: var(--muted);
+    color: #000;
     line-height: 1.25;
     min-width: 0;
     overflow: hidden;
   }
   .receipt-footer .left .office {
     font-weight: 700;
-    color: var(--primary);
+    color: #000;
     display: block;
   }
   .receipt-footer .left .acct {
     margin-top: 1px;
-    color: var(--primary);
+    color: #000;
     font-weight: 700;
     font-family: 'Courier New', monospace;
     letter-spacing: 0.3px;
@@ -535,7 +490,7 @@
   }
   .receipt-footer .right {
     text-align: right;
-    color: var(--muted);
+    color: #333;
     font-family: 'Courier New', monospace;
     line-height: 1.25;
     white-space: nowrap;
@@ -546,12 +501,9 @@
     letter-spacing: 0.4px;
     display: block;
     font-family: 'Segoe UI', Arial, sans-serif;
-    color: #94a3b8;
+    color: #666;
   }
 
-  /* ============================================
-     FULL LAYOUT TYPOGRAPHY (9 per page)
-     ============================================ */
   .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
@@ -575,12 +527,9 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
-  .layout-full .watermark .wm-badge { font-size: 22px; padding: 5px 12px; letter-spacing: 3px; }
+  .layout-full .watermark .wm-badge { font-size: 22px; padding: 6px 14px; letter-spacing: 3px; border-width: 2px; }
 
-  /* ============================================
-     COMPACT LAYOUT TYPOGRAPHY (16 per page)
-     ============================================ */
-  .layout-compact .receipt { padding: 2mm; border-width: 1px; }
+  .layout-compact .receipt { padding: 2mm; }
   .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
   .layout-compact .receipt-number .num-label { font-size: 4px; }
   .layout-compact .receipt-header { padding-bottom: 2px; margin-bottom: 2px; gap: 3px; min-height: 24px; }
@@ -608,15 +557,13 @@
   .layout-compact .receipt-footer .left .acct { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
-  .layout-compact .watermark .wm-badge { font-size: 13px; padding: 3px 8px; letter-spacing: 2px; border-width: 1.5px; }
+  .layout-compact .watermark .wm-badge { font-size: 13px; padding: 4px 9px; letter-spacing: 2px; border-width: 1.5px; }
 
-  /* Empty grid slots */
   .empty-sheet-slot {
-    border: 1.2px dashed #eef2f6;
+    border: 1px dashed #eef2f6;
     border-radius: 6px;
   }
 
-  /* LOADING OVERLAY */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -632,7 +579,7 @@
   .loading-overlay .spinner {
     width: 36px; height: 36px;
     border: 4px solid rgba(255,255,255,0.15);
-    border-top: 4px solid var(--accent);
+    border-top: 4px solid #fbbf24;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 12px;
@@ -640,19 +587,15 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { font-size: 14px; color: #cbd5e1; }
 
-  /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
     .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
     #receiptContainer { overflow: visible !important; }
     .receipt-sheet {
-      box-shadow: none;
-      margin: 0;
-      width: 210mm;
-      height: 297mm;
-      page-break-after: always;
-      break-after: page;
+      box-shadow: none; margin: 0;
+      width: 210mm; height: 297mm;
+      page-break-after: always; break-after: page;
       background: white;
     }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
@@ -660,15 +603,9 @@
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
-    .watermark .wm-badge { opacity: 0.22 !important; }
-    .receipt-header, .totals-block, .balance-note, .payments-table thead th {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
     @page { size: A4 portrait; margin: 0; }
   }
 
-  /* MOBILE — keep the A4 grid, allow horizontal scroll */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
@@ -689,7 +626,7 @@
 <div id="mainWrapper" class="main-wrapper layout-full">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student with a unique receipt number. Filter by date range to include only students who paid in that period.</p>
+    <p class="subtitle">One receipt per student with a unique receipt number. Filters by <strong>entry date</strong> (the date the record was last updated in the sheet).</p>
 
     <div class="mode-tabs">
       <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
@@ -726,11 +663,11 @@
 
     <div class="row">
       <div>
-        <label for="rDateFrom">Payments From:</label>
+        <label for="rDateFrom">Entries From:</label>
         <input type="date" id="rDateFrom" onchange="handleRangeChange()">
       </div>
       <div>
-        <label for="rDateTo">Payments To:</label>
+        <label for="rDateTo">Entries To:</label>
         <input type="date" id="rDateTo" onchange="handleRangeChange()">
       </div>
     </div>
@@ -740,17 +677,10 @@
       <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
       <button type="button" onclick="setQuickRange('week')">This Week</button>
       <button type="button" onclick="setQuickRange('month')">This Month</button>
-      <button type="button" onclick="setQuickRange('all')">All Payments</button>
+      <button type="button" onclick="setQuickRange('all')">All Entries</button>
     </div>
 
     <div class="range-summary" id="rangeSummary"></div>
-
-    <div class="checkbox-row">
-      <input type="checkbox" id="rIncludeUndated" onchange="handleRangeChange()">
-      <label for="rIncludeUndated" style="margin:0;font-weight:500;">
-        Include students whose only payments have no date recorded
-      </label>
-    </div>
 
     <div id="singleMode" class="row">
       <div style="grid-column: 1 / -1;">
@@ -762,7 +692,7 @@
     </div>
 
     <div id="batchMode" style="display:none;">
-      <label>Students (only those with payments in the range are selectable):</label>
+      <label>Students (only those entered in the selected range are selectable):</label>
       <div id="studentList" class="student-list">
         <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
           Select a term and class to load students.
@@ -771,7 +701,7 @@
     </div>
 
     <div class="actions">
-      <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All With Payments</button>
+      <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All In Range</button>
       <button id="btnPrint" class="btn-print" onclick="printReceipts()" disabled>🖨 Print Receipts</button>
       <button id="btnPDF" class="btn-pdf" onclick="saveAsPDF()" disabled>💾 Save as PDF</button>
       <button class="btn-ghost" onclick="clearSelection()">↺ Clear</button>
@@ -785,6 +715,7 @@
       <strong>Full</strong> — 9 receipts per A4 (3×3).
       <strong>Compact</strong> — 16 receipts per A4 (4×4).
       Numbers are unique and never reused.
+      <br><strong>How filtering works:</strong> the range applies to the <strong>entry timestamp</strong> in column Z, not the bank slip date. Any student whose fee record was updated within the selected window appears — so late slip submissions are never missed.
     </div>
   </div>
 
@@ -808,7 +739,6 @@
   // CONFIG
   // ============================================================
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
-  const ADMIN_PASSWORD = 'lss001';
 
   // ============================================================
   // STATE
@@ -829,21 +759,16 @@
   const dataCache = new Map();
   const CACHE_TTL_MS = 5 * 60 * 1000;
 
-  function cacheKey(termKey, studentClass, from, to, undated) {
-    return [termKey, studentClass, from || '', to || '', undated ? '1' : '0'].join('|');
+  function cacheKey(termKey, studentClass, from, to) {
+    return [termKey, studentClass, from || '', to || ''].join('|');
   }
   function cacheGet(key) {
     const entry = dataCache.get(key);
     if (!entry) return null;
-    if (Date.now() - entry.ts > CACHE_TTL_MS) {
-      dataCache.delete(key);
-      return null;
-    }
+    if (Date.now() - entry.ts > CACHE_TTL_MS) { dataCache.delete(key); return null; }
     return entry.data;
   }
-  function cacheSet(key, data) {
-    dataCache.set(key, { data, ts: Date.now() });
-  }
+  function cacheSet(key, data) { dataCache.set(key, { data, ts: Date.now() }); }
   function cacheInvalidateClass(termKey, studentClass) {
     for (const k of Array.from(dataCache.keys())) {
       if (k.indexOf(termKey + '|' + studentClass + '|') === 0) dataCache.delete(k);
@@ -857,9 +782,7 @@
     const body = new URLSearchParams();
     body.append('action', action);
     for (const key in params) {
-      if (params[key] !== undefined && params[key] !== null) {
-        body.append(key, params[key]);
-      }
+      if (params[key] !== undefined && params[key] !== null) body.append(key, params[key]);
     }
     body.append('_cb', Date.now().toString());
 
@@ -910,9 +833,7 @@
     document.getElementById('loadingMessage').textContent = msg || 'Loading…';
     document.getElementById('loadingOverlay').classList.add('show');
   }
-  function hideLoading() {
-    document.getElementById('loadingOverlay').classList.remove('show');
-  }
+  function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
   function showError(msg) {
     const el = document.getElementById('errorMsg');
     el.textContent = msg;
@@ -938,11 +859,7 @@
     const errEl = document.getElementById('loginError');
     const btn = document.getElementById('unlockBtn');
 
-    if (!pw) {
-      errEl.textContent = 'Please enter a password.';
-      errEl.classList.add('show');
-      return;
-    }
+    if (!pw) { errEl.textContent = 'Please enter a password.'; errEl.classList.add('show'); return; }
 
     btn.disabled = true;
     btn.textContent = 'Verifying…';
@@ -986,10 +903,7 @@
 
   window.onload = function () {
     try {
-      if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') {
-        showMain();
-        return;
-      }
+      if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') { showMain(); return; }
     } catch (e) {}
     document.getElementById('adminPasswordInput').focus();
   };
@@ -1006,9 +920,7 @@
       }
     } catch (e) {
       showError('Failed to load terms: ' + e.message);
-    } finally {
-      hideLoading();
-    }
+    } finally { hideLoading(); }
   }
 
   function populateTerms(terms) {
@@ -1033,11 +945,7 @@
         const opt = document.createElement('option');
         opt.value = term.key;
         opt.textContent = term.display;
-        if (term.isActive) {
-          opt.selected = true;
-          currentTermKey = term.key;
-          activeTerm = term;
-        }
+        if (term.isActive) { opt.selected = true; currentTermKey = term.key; activeTerm = term; }
         og.appendChild(opt);
       });
       sel.appendChild(og);
@@ -1047,7 +955,6 @@
       sel.value = terms[0].key;
       currentTermKey = terms[0].key;
     }
-
     document.getElementById('rClassSelect').disabled = false;
   }
 
@@ -1067,7 +974,6 @@
   }
   function getDateFromInput() { return document.getElementById('rDateFrom').value || null; }
   function getDateToInput() { return document.getElementById('rDateTo').value || null; }
-  function getIncludeUndated() { return document.getElementById('rIncludeUndated').checked; }
 
   function setQuickRange(kind) {
     const from = document.getElementById('rDateFrom');
@@ -1075,25 +981,20 @@
     const today = new Date();
 
     if (kind === 'today') {
-      from.value = toIsoDate(today);
-      to.value = toIsoDate(today);
+      from.value = toIsoDate(today); to.value = toIsoDate(today);
     } else if (kind === 'yesterday') {
       const y = new Date(today); y.setDate(today.getDate() - 1);
-      from.value = toIsoDate(y);
-      to.value = toIsoDate(y);
+      from.value = toIsoDate(y); to.value = toIsoDate(y);
     } else if (kind === 'week') {
       const day = today.getDay();
       const diff = day === 0 ? 6 : day - 1;
       const mon = new Date(today); mon.setDate(today.getDate() - diff);
-      from.value = toIsoDate(mon);
-      to.value = toIsoDate(today);
+      from.value = toIsoDate(mon); to.value = toIsoDate(today);
     } else if (kind === 'month') {
       const first = new Date(today.getFullYear(), today.getMonth(), 1);
-      from.value = toIsoDate(first);
-      to.value = toIsoDate(today);
+      from.value = toIsoDate(first); to.value = toIsoDate(today);
     } else if (kind === 'all') {
-      from.value = '';
-      to.value = '';
+      from.value = ''; to.value = '';
     }
     handleRangeChange();
   }
@@ -1102,21 +1003,18 @@
     const el = document.getElementById('rangeSummary');
     const from = getDateFromInput();
     const to = getDateToInput();
-    const undated = getIncludeUndated();
 
     if (!from && !to) {
-      el.innerHTML = '<strong>All Payments mode:</strong> every student with at least one recorded payment.';
+      el.innerHTML = '<strong>All Entries mode:</strong> every student whose fee record has been updated at any time.';
       el.classList.add('show');
       return;
     }
 
-    let msg = '<strong>Filter active:</strong> showing students with at least one payment dated ';
-    if (from && to) msg += `<strong>between ${formatDateDisplay(from)} and ${formatDateDisplay(to)}</strong>.`;
-    else if (from) msg += `<strong>on or after ${formatDateDisplay(from)}</strong>.`;
-    else if (to) msg += `<strong>on or before ${formatDateDisplay(to)}</strong>.`;
-    msg += ' Qualifying students will show <em>all</em> their payments on their receipts.';
-    if (undated) msg += ' <em>Undated payments can also qualify a student when no dated payment matches.</em>';
-
+    let msg = '<strong>Filter active:</strong> showing students whose fee records were <strong>updated</strong> ';
+    if (from && to) msg += `between <strong>${formatDateDisplay(from)}</strong> and <strong>${formatDateDisplay(to)}</strong>.`;
+    else if (from) msg += `on or after <strong>${formatDateDisplay(from)}</strong>.`;
+    else if (to) msg += `on or before <strong>${formatDateDisplay(to)}</strong>.`;
+    msg += ' The filter uses the <em>entry timestamp</em> on each row, so late slip submissions are still captured.';
     el.innerHTML = msg;
     el.classList.add('show');
   }
@@ -1140,11 +1038,8 @@
     document.getElementById('batchMode').style.display = mode === 'batch' ? 'block' : 'none';
     document.getElementById('btnSelectAll').style.display = mode === 'batch' ? 'inline-block' : 'none';
     clearSelection();
-    if (mode === 'single') {
-      if (currentClass) handleClassChange();
-    } else {
-      if (receiptData) renderStudentList(receiptData.students);
-    }
+    if (mode === 'single') { if (currentClass) handleClassChange(); }
+    else { if (receiptData) renderStudentList(receiptData.students); }
   }
 
   function setLayout(layout) {
@@ -1155,9 +1050,7 @@
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
-    if (selectedStudents.size > 0 && receiptData) {
-      renderPreview(getSelectedStudents());
-    }
+    if (selectedStudents.size > 0 && receiptData) renderPreview(getSelectedStudents());
   }
 
   // ============================================================
@@ -1189,8 +1082,7 @@
 
     const dateFrom = getDateFromInput();
     const dateTo = getDateToInput();
-    const includeUndated = getIncludeUndated();
-    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndated);
+    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo);
 
     assignedNumbers.clear();
     nextNumberBuffer = [];
@@ -1210,15 +1102,10 @@
       const params = { studentClass: currentClass, term: currentTermKey };
       if (dateFrom) params.dateFrom = dateFrom;
       if (dateTo) params.dateTo = dateTo;
-      if (includeUndated) params.includeUndated = 'true';
 
       const res = await callGAS('getReceiptDataForClass', params);
 
-      if (!res || !res.success) {
-        showError(res?.error || 'Failed to load students.');
-        hideLoading();
-        return;
-      }
+      if (!res || !res.success) { showError(res?.error || 'Failed to load students.'); hideLoading(); return; }
 
       receiptData = res;
       cacheSet(key, res);
@@ -1227,9 +1114,7 @@
       onDataLoaded(false);
     } catch (e) {
       showError('Error: ' + e.message);
-    } finally {
-      hideLoading();
-    }
+    } finally { hideLoading(); }
   }
 
   async function loadDuplicateHistory() {
@@ -1238,25 +1123,16 @@
     try {
       const names = receiptData.students.map(s => s.studentName);
       const res = await callGAS('checkReceiptHistory', {
-        studentClass: currentClass,
-        term: currentTermKey,
-        studentNames: JSON.stringify(names)
+        studentClass: currentClass, term: currentTermKey, studentNames: JSON.stringify(names)
       });
-      if (res && res.success && res.alreadyIssued) {
-        duplicateHistory = res.alreadyIssued;
-      }
-    } catch (e) {
-      console.warn('Duplicate history check failed:', e);
-    }
+      if (res && res.success && res.alreadyIssued) duplicateHistory = res.alreadyIssued;
+    } catch (e) { console.warn('Duplicate history check failed:', e); }
   }
 
   function onDataLoaded(fromCache) {
     if (!receiptData) return;
-    if (currentMode === 'single') {
-      populateStudentSelect(receiptData.students);
-    } else {
-      renderStudentList(receiptData.students);
-    }
+    if (currentMode === 'single') populateStudentSelect(receiptData.students);
+    else renderStudentList(receiptData.students);
     if (fromCache) console.log('Loaded from cache.');
   }
 
@@ -1265,29 +1141,18 @@
   // ============================================================
   async function ensureNumberBuffer(count) {
     if (nextNumberBuffer.length >= count) return;
-
     const needed = count - nextNumberBuffer.length;
     const res = await callGAS('peekReceiptNumber', { term: currentTermKey, count: needed });
-    if (!res || !res.success || !res.numbers) {
-      throw new Error('Could not reserve receipt numbers.');
-    }
-    for (let i = 0; i < res.numbers.length; i++) {
-      nextNumberBuffer.push(res.numbers[i]);
-    }
+    if (!res || !res.success || !res.numbers) throw new Error('Could not reserve receipt numbers.');
+    for (let i = 0; i < res.numbers.length; i++) nextNumberBuffer.push(res.numbers[i]);
   }
-
   async function assignNumberToStudent(rowNumber) {
     if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
-    try {
-      await ensureNumberBuffer(1);
-    } catch (e) {
-      return null;
-    }
+    try { await ensureNumberBuffer(1); } catch (e) { return null; }
     const num = nextNumberBuffer.shift();
     assignedNumbers.set(rowNumber, num);
     return num;
   }
-
   function releaseNumberForStudent(rowNumber) {
     if (assignedNumbers.has(rowNumber)) {
       const num = assignedNumbers.get(rowNumber);
@@ -1295,15 +1160,11 @@
       assignedNumbers.delete(rowNumber);
     }
   }
-
   async function commitAllAssignedNumbers() {
     const count = assignedNumbers.size;
     if (count === 0) return;
-    try {
-      await callGAS('commitReceiptNumber', { term: currentTermKey, count: count });
-    } catch (e) {
-      console.warn('Counter commit failed (non-fatal):', e);
-    }
+    try { await callGAS('commitReceiptNumber', { term: currentTermKey, count: count }); }
+    catch (e) { console.warn('Counter commit failed (non-fatal):', e); }
   }
 
   // ============================================================
@@ -1314,13 +1175,13 @@
     sel.innerHTML = '';
     const def = document.createElement('option');
     def.value = ''; def.disabled = true; def.selected = true;
-    def.textContent = '-- Select Student (' + students.length + ' matching) --';
+    def.textContent = '-- Select Student (' + students.length + ' in range) --';
     sel.appendChild(def);
 
     if (!students.length) {
       const opt = document.createElement('option');
       opt.value = ''; opt.disabled = true;
-      opt.textContent = '-- No students match the range --';
+      opt.textContent = '-- No students in this range --';
       sel.appendChild(opt);
       sel.disabled = true;
       return;
@@ -1332,9 +1193,10 @@
       opt.value = s.rowNumber;
       const dup = duplicateHistory[s.studentName.toLowerCase()];
       const dupMark = dup ? ' ⚠' : '';
+      const entry = s.entryDateDisplay ? ' [entry ' + s.entryDateDisplay + ']' : '';
       opt.textContent = s.studentName + ' — K' + safeMoney(s.totalPaidThisTerm) +
                         (s.cumulativeBalance < 0 ? ' (owes K' + safeMoney(Math.abs(s.cumulativeBalance)) + ')' : '') +
-                        dupMark;
+                        entry + dupMark;
       sel.appendChild(opt);
     });
     sel.disabled = false;
@@ -1354,8 +1216,7 @@
         '<strong>⚠ Heads up:</strong> ' + escapeHtml(student.studentName) +
         ' already has <strong>' + dup.count + '</strong> receipt(s) in this term. ' +
         'Last issued: <strong>' + escapeHtml(dup.lastReceipt || 'unknown') + '</strong>' +
-        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') +
-        '.'
+        (dup.lastIssued ? ' on ' + escapeHtml(dup.lastIssued) : '') + '.'
       );
     }
 
@@ -1395,8 +1256,7 @@
 
         const metaLine = 'K' + safeMoney(s.totalPaidThisTerm) + ' • ' +
                          s.payments.length + ' payment' + (s.payments.length !== 1 ? 's' : '') +
-                         (s.latestPaymentDate ? ' • last ' + s.latestPaymentDate : '') +
-                         (s.hasUndated ? ' • some undated' : '');
+                         (s.entryDateDisplay ? ' • entered ' + s.entryDateDisplay : '');
 
         const balanceLine = 'Balance: K' + safeMoney(Math.abs(balance)) +
                             (balance < 0 ? ' (due)' : balance > 0 ? ' (credit)' : '');
@@ -1467,12 +1327,9 @@
       assignedNumbers.clear();
       nextNumberBuffer = [];
 
-      try {
-        await ensureNumberBuffer(boxes.length);
-      } catch (err) {
-        showError('Could not reserve receipt numbers: ' + err.message);
-        return;
-      }
+      try { await ensureNumberBuffer(boxes.length); }
+      catch (err) { showError('Could not reserve receipt numbers: ' + err.message); return; }
+
       boxes.forEach(b => {
         const rowNum = parseInt(b.dataset.row, 10);
         const num = nextNumberBuffer.shift();
@@ -1490,19 +1347,16 @@
     updateSelectAllLabel();
     updatePreviewHeader();
 
-    if (count > 0 && currentMode === 'batch') {
-      renderPreview(getSelectedStudents());
-    } else if (count === 0) {
-      document.getElementById('receiptContainer').innerHTML = '';
-    }
+    if (count > 0 && currentMode === 'batch') renderPreview(getSelectedStudents());
+    else if (count === 0) document.getElementById('receiptContainer').innerHTML = '';
   }
 
   function updateSelectAllLabel() {
     const btn = document.getElementById('btnSelectAll');
     const boxes = document.querySelectorAll('#studentList input[type="checkbox"]');
-    if (!boxes.length) { btn.textContent = '✓ Select All With Payments'; return; }
+    if (!boxes.length) { btn.textContent = '✓ Select All In Range'; return; }
     const allChecked = Array.from(boxes).every(b => b.checked);
-    btn.textContent = allChecked ? '✕ Deselect All' : '✓ Select All With Payments';
+    btn.textContent = allChecked ? '✕ Deselect All' : '✓ Select All In Range';
   }
 
   function updatePreviewHeader() {
@@ -1511,9 +1365,7 @@
     if (count > 0) {
       hdr.classList.add('show');
       document.getElementById('previewCount').textContent = count;
-    } else {
-      hdr.classList.remove('show');
-    }
+    } else hdr.classList.remove('show');
   }
 
   function clearSelection() {
@@ -1543,10 +1395,10 @@
     const from = getDateFromInput();
     const to = getDateToInput();
     let rangeLabel = '';
-    if (from && to && from === to) rangeLabel = 'Payments on ' + formatDateDisplay(from);
-    else if (from && to) rangeLabel = 'Payments ' + formatDateDisplay(from) + ' – ' + formatDateDisplay(to);
-    else if (from) rangeLabel = 'Payments from ' + formatDateDisplay(from);
-    else if (to) rangeLabel = 'Payments up to ' + formatDateDisplay(to);
+    if (from && to && from === to) rangeLabel = 'Entries on ' + formatDateDisplay(from);
+    else if (from && to) rangeLabel = 'Entries ' + formatDateDisplay(from) + ' – ' + formatDateDisplay(to);
+    else if (from) rangeLabel = 'Entries from ' + formatDateDisplay(from);
+    else if (to) rangeLabel = 'Entries up to ' + formatDateDisplay(to);
 
     const termInfo = {
       academicYear: receiptData.academicYear,
@@ -1566,9 +1418,7 @@
         const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
         html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
       });
-      for (let k = group.length; k < perSheet; k++) {
-        html += '<div class="empty-sheet-slot"></div>';
-      }
+      for (let k = group.length; k < perSheet; k++) html += '<div class="empty-sheet-slot"></div>';
       html += '</div>';
     }
 
@@ -1584,35 +1434,26 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
-  // ============================================================
-  // BUILD RECEIPT HTML
-  // ============================================================
   function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
       : (termInfo.termConfig.schoolName || 'LUNZU SECONDARY SCHOOL');
 
-    // ---- Contact block (regular vs ODL) ----
     const contacts = termInfo.termConfig.contacts || {};
-    const contact = isODL
-      ? (contacts.odl || contacts.regular || {})
-      : (contacts.regular || {});
+    const contact = isODL ? (contacts.odl || contacts.regular || {}) : (contacts.regular || {});
     const bursarPhone = contact.phone1 || '';
     const bursarPhone2 = contact.phone2 || '';
     const bursarWhatsapp = contact.whatsapp || '';
     const accountNumber = contact.accountNumber || '';
 
-    // ---- Account line — always shown, format: 1290000098673|FDH|LUNZU ----
     const accountCompact = String(accountNumber || '').replace(/\s+/g, '');
     const bankInfoStr = String(termInfo.termConfig.bankInfo || '').toUpperCase();
     const bankMatch = bankInfoStr.match(/BANK:\s*([^|]+)/);
     const branchMatch = bankInfoStr.match(/([A-Z\s]+BRANCH)/);
     const bankName = bankMatch ? bankMatch[1].trim() : 'FDH';
     const branchName = branchMatch ? branchMatch[1].replace(/\s*BRANCH\s*/i, '').trim() : 'LUNZU';
-    const accountLine = accountCompact
-      ? accountCompact + '|' + bankName + '|' + branchName
-      : '';
+    const accountLine = accountCompact ? (accountCompact + '|' + bankName + '|' + branchName) : '';
 
     const balance = safeNum(student.cumulativeBalance);
     const prevBalance = safeNum(student.previousBalance);
@@ -1625,7 +1466,7 @@
 
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
-      rowsHTML = '<tr><td colspan="3" style="padding:5px;text-align:center;color:#94a3b8;font-style:italic;">No payments recorded.</td></tr>';
+      rowsHTML = '<tr><td colspan="3" style="padding:5px;text-align:center;color:#666;font-style:italic;">No payments recorded.</td></tr>';
     } else {
       student.payments.forEach(p => {
         const sign = p.isRefund ? '−' : '';
@@ -1643,15 +1484,11 @@
     const balanceNoteClass = isPaid ? 'ok' : isOver ? 'over' : 'due';
 
     let statusBannerText = '';
-    if (isPaid) {
-      statusBannerText = '✅ FULLY PAID — Thank you';
-    } else if (isOver) {
-      statusBannerText = '💜 Credit: K' + safeMoney(balance) + ' (applied to future fees)';
-    } else {
-      statusBannerText = '⚠️ Outstanding balance: K' + safeMoney(Math.abs(balance));
-    }
-    const balanceNoteHtml = '<div class="balance-note ' + balanceNoteClass + '">'
-      + statusBannerText + '</div>';
+    if (isPaid) statusBannerText = '✅ FULLY PAID — Thank you';
+    else if (isOver) statusBannerText = '💜 Credit: K' + safeMoney(balance) + ' (applied to future fees)';
+    else statusBannerText = '⚠️ Outstanding balance: K' + safeMoney(Math.abs(balance));
+
+    const balanceNoteHtml = '<div class="balance-note ' + balanceNoteClass + '">' + statusBannerText + '</div>';
 
     const outstandingPrev = Math.max(0, -prevBalance);
     const totalPayable = safeNum(student.feesPerTerm) + outstandingPrev;
@@ -1679,21 +1516,21 @@
     if (layout === 'compact') {
       totalsRows.push('<div class="totals-row"><span class="label">Fees</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
       if (prevBalance !== 0) {
-        totalsRows.push('<div class="totals-row"><span class="label">B/F</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
+        totalsRows.push('<div class="totals-row"><span class="label">B/F</span><span>'
           + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
       }
-      totalsRows.push('<div class="totals-row"><span class="label">Paid</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Paid</span><span>K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     } else {
       totalsRows.push('<div class="totals-row"><span class="label">Fees per term</span><span>K' + safeMoney(student.feesPerTerm) + '</span></div>');
       if (prevBalance !== 0) {
-        totalsRows.push('<div class="totals-row"><span class="label">Balance B/F</span><span style="color:' + (prevBalance < 0 ? '#dc2626' : '#7c3aed') + ';">'
+        totalsRows.push('<div class="totals-row"><span class="label">Balance B/F</span><span>'
           + (prevBalance < 0 ? '−' : '+') + 'K' + safeMoney(Math.abs(prevBalance)) + '</span></div>');
       }
-      totalsRows.push('<div class="totals-row big" style="border-top:1px dashed #cbd5e1;margin-top:2px;padding-top:2px;"><span class="label" style="color:#002b54;font-weight:700;">Total payable</span><span style="color:#002b54;font-weight:700;">K' + safeMoney(totalPayable) + '</span></div>');
-      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span style="color:#059669;font-weight:700;">K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
+      totalsRows.push('<div class="totals-row big"><span class="label">Total payable</span><span>K' + safeMoney(totalPayable) + '</span></div>');
+      totalsRows.push('<div class="totals-row"><span class="label">Paid this term</span><span>K' + safeMoney(student.totalPaidThisTerm) + '</span></div>');
       if (student.totalRefunded > 0) {
-        totalsRows.push('<div class="totals-row"><span class="label">Refunded</span><span style="color:#7c3aed;font-weight:700;">−K' + safeMoney(student.totalRefunded) + '</span></div>');
+        totalsRows.push('<div class="totals-row"><span class="label">Refunded</span><span>−K' + safeMoney(student.totalRefunded) + '</span></div>');
       }
       totalsRows.push('<div class="totals-row big"><span class="label">Balance</span><span>K' + safeMoney(Math.abs(balance)) + '</span></div>');
     }
@@ -1703,9 +1540,7 @@
       + (bursarPhone ? '☎ ' + escapeHtml(bursarPhone) : '')
       + (bursarPhone2 ? ' / ' + escapeHtml(bursarPhone2) : '')
       + (bursarWhatsapp ? ' • ' + escapeHtml(bursarWhatsapp) : '')
-      + (accountLine
-          ? '<div class="acct">' + escapeHtml(accountLine) + '</div>'
-          : '')
+      + (accountLine ? '<div class="acct">' + escapeHtml(accountLine) + '</div>' : '')
     + '</div>';
 
     return '<div class="receipt">'
@@ -1756,15 +1591,11 @@
 
     const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
     if (missing.length > 0) {
-      showError(
-        'Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. ' +
-        'Clear the selection and re-select.'
-      );
+      showError('Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. Clear the selection and re-select.');
       return;
     }
 
     showLoading('Committing receipt numbers…');
-
     await commitAllAssignedNumbers();
 
     const receiptsLog = students.map(s => ({
@@ -1785,9 +1616,7 @@
     setTimeout(() => window.print(), 150);
   }
 
-  async function saveAsPDF() {
-    await printReceipts();
-  }
+  async function saveAsPDF() { await printReceipts(); }
 
   function getSelectedStudents() {
     if (!receiptData) return [];
