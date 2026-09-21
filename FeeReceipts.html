@@ -18,6 +18,9 @@
     padding: 16px;
   }
 
+  /* ============================================================
+     LOGIN GATE
+     ============================================================ */
   .login-gate {
     max-width: 420px; margin: 80px auto;
     background: white; padding: 32px;
@@ -44,6 +47,9 @@
   .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
   .login-gate .err.show { display: block; }
 
+  /* ============================================================
+     CONTROLS
+     ============================================================ */
   .main-wrapper { display: none; }
   .controls {
     max-width: 1000px; margin: 0 auto 16px;
@@ -72,12 +78,12 @@
   .mode-tabs { background: #f1f5f9; }
   .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
   .mode-tabs button, .layout-toggle button {
-    flex: 1; padding: 10px 14px;
+    flex: 1; padding: 10px 10px;
     background: transparent; border: none; border-radius: 8px;
-    font-size: 13px; font-weight: 600;
+    font-size: 12px; font-weight: 600;
     cursor: pointer; transition: 0.15s;
   }
-  .mode-tabs button { color: #64748b; }
+  .mode-tabs button { color: #64748b; font-size: 13px; padding: 10px 14px; }
   .layout-toggle button { color: #92400e; }
   .mode-tabs button.active, .layout-toggle button.active {
     background: white; color: #002b54;
@@ -181,6 +187,9 @@
   .preview-header .count { font-size: 14px; color: #64748b; font-weight: 600; }
   .preview-header .count strong { color: #002b54; }
 
+  /* ============================================================
+     RECEIPT SHEET — A4 print layout
+     ============================================================ */
   #receiptContainer { width: 100%; overflow-x: auto; padding-bottom: 12px; }
 
   .receipt-sheet {
@@ -211,6 +220,18 @@
     gap: 2mm; padding: 4mm;
   }
 
+  /* SIGNATURE: 2 cols × 2 rows = 4 per page */
+  .layout-signature .receipt-sheet {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 4mm;
+    padding: 6mm;
+  }
+
+  /* ============================================================
+     RECEIPT — B&W, transparent, sharp borders
+     ============================================================ */
   .receipt {
     border: 1px solid #000;
     border-radius: 4px;
@@ -225,6 +246,9 @@
     color: #000;
   }
 
+  /* ============================================================
+     WATERMARK — black dashed outline badge
+     ============================================================ */
   .watermark {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -264,6 +288,9 @@
     background: transparent;
   }
 
+  /* ============================================================
+     HEADER
+     ============================================================ */
   .receipt-header {
     display: flex;
     align-items: center;
@@ -321,6 +348,7 @@
     letter-spacing: 0.6px; margin-bottom: 1px;
   }
 
+  /* Body */
   .receipt-body {
     flex: 1; display: flex; flex-direction: column;
     min-height: 0; line-height: 1.3; background: transparent;
@@ -435,6 +463,41 @@
     color: #666;
   }
 
+  /* ============================================================
+     SIGNATURE / STAMP BLOCK
+     ============================================================ */
+  .signature-block {
+    display: none;
+  }
+  .layout-signature .signature-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 10mm;
+    margin-top: 4mm;
+    padding-top: 3mm;
+    background: transparent;
+    flex-shrink: 0;
+  }
+  .layout-signature .signature-block .sig-box {
+    flex: 1;
+    text-align: center;
+  }
+  .layout-signature .signature-block .sig-line {
+    height: 12mm;
+    border-bottom: 1px solid #000;
+    margin-bottom: 1mm;
+  }
+  .layout-signature .signature-block .sig-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #333;
+  }
+
+  /* ============================================================
+     FULL LAYOUT TYPOGRAPHY (9 per page)
+     ============================================================ */
   .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
@@ -460,6 +523,9 @@
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
   .layout-full .watermark .wm-badge { font-size: 22px; padding: 6px 14px; letter-spacing: 3px; border-width: 2px; }
 
+  /* ============================================================
+     COMPACT LAYOUT TYPOGRAPHY (16 per page)
+     ============================================================ */
   .layout-compact .receipt { padding: 2mm; }
   .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
   .layout-compact .receipt-number .num-label { font-size: 4px; }
@@ -490,11 +556,76 @@
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; padding: 4px 9px; letter-spacing: 2px; border-width: 1.5px; }
 
+  /* ============================================================
+     SIGNATURE LAYOUT TYPOGRAPHY (4 per page)
+     ============================================================ */
+  .layout-signature .receipt {
+    padding: 5mm;
+    border: 1.5px solid #000;
+    border-radius: 6px;
+  }
+
+  .layout-signature .receipt-number { font-size: 11px; padding: 3px 10px; border-width: 1.5px; }
+  .layout-signature .receipt-number .num-label { font-size: 7px; letter-spacing: 0.8px; margin-bottom: 2px; }
+
+  .layout-signature .receipt-header {
+    padding-bottom: 5px;
+    margin-bottom: 6px;
+    gap: 8px;
+    min-height: 50px;
+  }
+  .layout-signature .receipt-header .crest { width: 42px; height: 42px; }
+  .layout-signature .receipt-header .school { font-size: 14px; letter-spacing: 0.4px; }
+  .layout-signature .receipt-header .doc-type { font-size: 10px; letter-spacing: 1.2px; margin-top: 2px; }
+  .layout-signature .receipt-header .period { font-size: 10px; margin-top: 2px; }
+  .layout-signature .receipt-header .range-badge { font-size: 9px; padding: 2px 8px; margin-top: 2px; }
+
+  .layout-signature .receipt-body { font-size: 10px; }
+
+  .layout-signature .student-line { padding: 5px 0; margin-bottom: 6px; border-bottom-width: 1.2px; }
+  .layout-signature .student-line .left { font-size: 13px; }
+  .layout-signature .student-line .right { font-size: 11px; }
+
+  .layout-signature .payments-table { font-size: 10px; margin-bottom: 6px; }
+  .layout-signature .payments-table thead th { font-size: 8px; padding: 3px 5px; letter-spacing: 0.4px; }
+  .layout-signature .payments-table tbody td { font-size: 10px; padding: 3px 5px; }
+  .layout-signature .payments-table tbody td.dt { font-size: 9px; }
+
+  .layout-signature .totals-block { padding: 5px 8px; margin-top: 6px; border-width: 1.2px; }
+  .layout-signature .totals-row { font-size: 10px; padding: 2px 0; }
+  .layout-signature .totals-row.big { font-size: 13px; margin-top: 3px; padding-top: 3px; }
+  .layout-signature .totals-row .prev-hint { font-size: 8px; margin-top: 2px; }
+
+  .layout-signature .balance-note {
+    font-size: 10px;
+    padding: 5px 8px;
+    margin-top: 6px;
+    border-width: 1.2px;
+  }
+
+  .layout-signature .receipt-footer { padding-top: 5px; margin-top: 6px; gap: 8px; }
+  .layout-signature .receipt-footer .left { font-size: 9px; line-height: 1.4; }
+  .layout-signature .receipt-footer .left .office { font-size: 10px; margin-bottom: 2px; }
+  .layout-signature .receipt-footer .left .acct { font-size: 9px; margin-top: 3px; letter-spacing: 0.5px; }
+  .layout-signature .receipt-footer .right { font-size: 9px; line-height: 1.4; }
+  .layout-signature .receipt-footer .right .ts-label { font-size: 7px; margin-bottom: 1px; }
+
+  .layout-signature .watermark .wm-badge {
+    font-size: 32px;
+    padding: 8px 18px;
+    letter-spacing: 4px;
+    border-width: 2.5px;
+    opacity: 0.20;
+  }
+
   .empty-sheet-slot {
     border: 1px dashed #eef2f6;
     border-radius: 6px;
   }
 
+  /* ============================================================
+     LOADING OVERLAY
+     ============================================================ */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 31, 46, 0.55);
@@ -518,6 +649,9 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { font-size: 14px; color: #cbd5e1; }
 
+  /* ============================================================
+     PRINT
+     ============================================================ */
   @media print {
     body { background: white; padding: 0; margin: 0; }
     .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
@@ -537,6 +671,9 @@
     @page { size: A4 portrait; margin: 0; }
   }
 
+  /* ============================================================
+     MOBILE
+     ============================================================ */
   @media (max-width: 700px) {
     .row { grid-template-columns: 1fr; }
     .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
@@ -554,7 +691,7 @@
   <div id="loginError" class="err">Incorrect password. Please try again.</div>
 </div>
 
-<div id="mainWrapper" class="main-wrapper layout-full">
+<div id="mainWrapper" class="main-wrapper layout-signature">
   <div class="controls">
     <h1>🧾 Fee Receipts</h1>
     <p class="subtitle">One receipt per student with a unique receipt number. Filters by <strong>entry date</strong> (the date the record was last updated in the sheet).</p>
@@ -565,7 +702,8 @@
     </div>
 
     <div class="layout-toggle">
-      <button id="layoutFull" class="active" onclick="setLayout('full')">📄 Full — 9 per page</button>
+      <button id="layoutSignature" class="active" onclick="setLayout('signature')">📑 Signature — 4 per page</button>
+      <button id="layoutFull" onclick="setLayout('full')">📄 Full — 9 per page</button>
       <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
     </div>
 
@@ -643,6 +781,7 @@
 
     <div class="info">
       <strong>Layouts:</strong>
+      <strong>Signature</strong> — 4 receipts per A4 (2×2), includes signature & stamp area.
       <strong>Full</strong> — 9 receipts per A4 (3×3).
       <strong>Compact</strong> — 16 receipts per A4 (4×4).
       Numbers are unique and never reused.
@@ -679,7 +818,7 @@
   let currentClass = null;
   let receiptData = null;
   let currentMode = 'single';
-  let currentLayout = 'full';
+  let currentLayout = 'signature';
   let selectedStudents = new Set();
 
   let assignedNumbers = new Map();
@@ -968,9 +1107,11 @@
 
   function setLayout(layout) {
     currentLayout = layout;
+    document.getElementById('layoutSignature').classList.toggle('active', layout === 'signature');
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
     document.getElementById('layoutCompact').classList.toggle('active', layout === 'compact');
     const wrapper = document.getElementById('mainWrapper');
+    wrapper.classList.toggle('layout-signature', layout === 'signature');
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
 
@@ -1282,7 +1423,9 @@
       return;
     }
 
-    const perSheet = currentLayout === 'compact' ? 16 : 9;
+    const perSheet = currentLayout === 'compact' ? 16
+                   : currentLayout === 'signature' ? 4
+                   : 9;
 
     const from = getDateFromInput();
     const to = getDateToInput();
@@ -1326,6 +1469,28 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
+  // ============================================================
+  // SIGNATURE / STAMP BLOCK
+  // ============================================================
+  function signatureBlockHtml(layout) {
+    if (layout !== 'signature') return '';
+
+    return ''
+      + '<div class="signature-block">'
+        + '<div class="sig-box">'
+          + '<div class="sig-line"></div>'
+          + '<div class="sig-label">Bursar\u2019s Signature</div>'
+        + '</div>'
+        + '<div class="sig-box">'
+          + '<div class="sig-line"></div>'
+          + '<div class="sig-label">Official School Stamp</div>'
+        + '</div>'
+      + '</div>';
+  }
+
+  // ============================================================
+  // BUILD RECEIPT HTML
+  // ============================================================
   function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
@@ -1463,6 +1628,7 @@
         + '</div>'
         + balanceNoteHtml
       + '</div>'
+      + signatureBlockHtml(layout)
       + '<div class="receipt-footer">'
         + footerLeftHtml
         + '<div class="right">'
