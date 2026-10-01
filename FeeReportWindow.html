@@ -134,6 +134,29 @@
             overflow-wrap: break-word;
         }
         
+        /* Sponsor strip inside student-info grid */
+        .sponsor-strip {
+            grid-column: 1 / -1;
+            background: #f5f3ff;
+            border-left: 4px solid #8b5cf6;
+            padding: 6px 10px;
+            margin-top: 4px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #5b21b6;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .sponsor-strip i {
+            color: #7c3aed;
+        }
+        .sponsor-strip strong {
+            color: #5b21b6;
+        }
+        
         .status-badge {
             display: inline-block;
             padding: 3px 12px;
@@ -404,7 +427,7 @@
             background: #f8f9fa;
         }
         
-        /* Loading Overlay - Full page but with better positioning */
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -456,7 +479,6 @@
             display: block;
         }
         
-        /* Inline status indicator - positioned near the content */
         .status-indicator {
             padding: 10px 16px;
             border-radius: 8px;
@@ -692,6 +714,7 @@
             .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
             .payment-instructions-box { font-size: 11px; padding: 10px 12px; margin: 8px 5px; }
             .admin-badge { font-size: 7px; padding: 2px 8px; top: 5px; right: 8px; }
+            .sponsor-strip { font-size: 11px; padding: 5px 8px; }
         }
         
         @media (max-width: 480px) {
@@ -709,6 +732,7 @@
             .school-name { font-size: 14px; }
             .report-title { font-size: 11px; }
             .modal-box { padding: 20px; }
+            .sponsor-strip { font-size: 11px; }
         }
         
         @media print {
@@ -755,7 +779,7 @@
             <div class="report-title" id="reportTitle"></div>
         </div>
         
-        <!-- Inline Status Indicator - Positioned right after header -->
+        <!-- Inline Status Indicator -->
         <div id="statusIndicator" class="status-indicator">
             <span id="statusIcon"></span>
             <span id="statusMessage">Loading...</span>
@@ -780,15 +804,23 @@
             <p style="margin-top:4px;">Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
         </div>
         
+        <!-- Overpaid Notice -->
         <div id="overpaidNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>💜 OVERPAYMENT NOTICE</strong>
             <p>You have overpaid by <strong id="overpaidAmount"></strong>.</p>
             <p style="margin-top:4px;">This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
         </div>
         
+        <!-- Fully Paid Notice -->
         <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
             <strong>✅ FULLY PAID</strong>
             <p>Your fees for this term are fully paid. Thank you for your timely payment!</p>
+        </div>
+        
+        <!-- Sponsored Student Notice (NEW) -->
+        <div id="sponsoredNotice" style="display:none;" class="reminder-box reminder-info">
+            <strong>🎓 SPONSORED STUDENT</strong>
+            <p>Fees for this student are covered by <strong id="sponsorName"></strong>. No payment action is required from the guardian.</p>
         </div>
         
         <div class="card">
@@ -956,7 +988,6 @@
                 icon.innerHTML = 'ℹ️';
             }
             
-            // Auto-hide after 5 seconds for non-loading states
             if (type !== 'loading') {
                 clearTimeout(window.statusTimeout);
                 window.statusTimeout = setTimeout(() => {
@@ -1068,11 +1099,9 @@
             document.getElementById('retrySection').classList.remove('show');
             document.querySelector('#loadingOverlay .spinner').style.display = 'block';
             
-            // Show inline status instead of hiding the report
             showInlineStatus('loading', 'Fetching fee records...');
             
             try {
-                // Show loading overlay only for initial load
                 if (!cachedFeeReport) {
                     showLoading(true);
                 }
@@ -1118,7 +1147,6 @@
             } catch (error) {
                 console.error('Error:', error);
                 
-                // Show retry button on network errors
                 if (error.message.includes('timeout') || error.message.includes('Connection failed')) {
                     document.getElementById('retrySection').classList.add('show');
                     updateLoadingMessage('Network error: ' + error.message);
@@ -1144,7 +1172,7 @@
         }
         
         // ============================================
-        // UPDATED INSTALLMENT NAME - SUPPORTS 6 INSTALLMENTS
+        // INSTALLMENT NAME
         // ============================================
         function getInstallmentName(number) {
             if (number === 1) return "1st Installment";
@@ -1175,6 +1203,12 @@
             else if (data.paymentStatus === 'OVERPAID') statusClass = 'overpaid';
             else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
             
+            // ---- Student info grid + optional sponsor strip ----
+            const bursary = (data.bursary || '').trim();
+            const sponsorHtml = bursary
+                ? `<div class="sponsor-strip"><i class="fas fa-graduation-cap"></i><span><strong>Sponsor:</strong> ${escapeHtml(bursary)}</span></div>`
+                : '';
+            
             document.getElementById('studentInfo').innerHTML = `
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-user"></i> STUDENT</span>
@@ -1194,6 +1228,7 @@
                         <span class="status-badge status-${statusClass}">${escapeHtml(data.paymentStatus || 'UNKNOWN')}</span>
                     </span>
                 </div>
+                ${sponsorHtml}
             `;
             
             // Format balances
@@ -1225,7 +1260,7 @@
                 prevBalanceDisplay = 'K0';
             }
             
-            // Build status message box
+            // Status message box
             let statusMessageHtml = '';
             if (data.statusMessage) {
                 let bgColor = '#ffebee';
@@ -1244,7 +1279,7 @@
                 `;
             }
             
-            // Build summary with refunds
+            // Refunds tile
             let refundsHtml = '';
             if (data.totalRefunds && data.totalRefunds > 0) {
                 refundsHtml = `
@@ -1314,7 +1349,7 @@
                     
                     installmentsHtml += `
                         <tr class="${rowClass}">
-                            <td><strong>${installmentName}</strong></td>
+                            <td><strong>${escapeHtml(installmentName)}</strong></td>
                             <td>${amountPrefix}${amount.toLocaleString()}</td>
                             <td>${escapeHtml(dateDisplay)}</td>
                             <td><span class="status-badge ${statusClass}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
@@ -1335,24 +1370,37 @@
                 `;
             }
             
-            // Show notices based on balance
+            // ---- Notices (sponsor-aware) ----
             const outstandingNotice = document.getElementById('outstandingNotice');
             const overpaidNotice = document.getElementById('overpaidNotice');
             const fullyPaidNotice = document.getElementById('fullyPaidNotice');
+            const sponsoredNotice = document.getElementById('sponsoredNotice');
             
-            if (cumulativeBalance < 0) {
+            // Determine "is sponsored" — any non-empty bursary that isn't generic
+            const bursaryUpper = bursary.toUpperCase();
+            const isSponsored = bursary &&
+                bursaryUpper !== 'GOVERNMENT' &&
+                bursaryUpper !== 'NONE' &&
+                bursaryUpper !== 'N/A';
+            
+            // Hide all first
+            outstandingNotice.style.display = 'none';
+            overpaidNotice.style.display = 'none';
+            fullyPaidNotice.style.display = 'none';
+            sponsoredNotice.style.display = 'none';
+            
+            if (isSponsored && cumulativeBalance >= 0) {
+                // Sponsored & not owing → show neutral sponsor notice
+                sponsoredNotice.style.display = 'block';
+                document.getElementById('sponsorName').textContent = bursary;
+            } else if (cumulativeBalance < 0) {
+                // Anything owing (even if sponsored) → show the urgent reminder
                 outstandingNotice.style.display = 'block';
                 document.getElementById('outstandingAmount').textContent = 'K' + Math.abs(cumulativeBalance).toLocaleString();
-                overpaidNotice.style.display = 'none';
-                fullyPaidNotice.style.display = 'none';
             } else if (cumulativeBalance > 0) {
-                outstandingNotice.style.display = 'none';
                 overpaidNotice.style.display = 'block';
                 document.getElementById('overpaidAmount').textContent = 'K' + cumulativeBalance.toLocaleString();
-                fullyPaidNotice.style.display = 'none';
             } else {
-                outstandingNotice.style.display = 'none';
-                overpaidNotice.style.display = 'none';
                 fullyPaidNotice.style.display = 'block';
             }
             
@@ -1378,7 +1426,7 @@
                 </div>
             `;
             
-            // Update Payment Instructions
+            // Update Payment Instructions text
             if (data.paymentInstructions) {
                 if (data.paymentInstructions.english) {
                     document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
@@ -1411,9 +1459,9 @@
         // HELPER FUNCTIONS
         // ============================================
         function escapeHtml(text) {
-            if (!text) return '';
+            if (text === null || text === undefined) return '';
             const div = document.createElement('div');
-            div.textContent = text;
+            div.textContent = String(text);
             return div.innerHTML;
         }
         
@@ -1460,7 +1508,7 @@
         }
         
         // ============================================
-        // DOWNLOAD PDF WITH RETRY
+        // DOWNLOAD PDF
         // ============================================
         async function downloadPDF() {
             if (!cachedFeeReport || isGeneratingPDF) {
@@ -1549,7 +1597,7 @@
                 window.print();
             }
             if (e.key === 'Escape') {
-                closeWindow();
+                closeAdminModal();
             }
         });
     </script>
