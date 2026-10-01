@@ -111,6 +111,48 @@
             color: var(--primary-color);
             font-weight: 600;
         }
+        /* Toggle row for summary options */
+        .toggle-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-top: 6px;
+        }
+        .toggle-row label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+            text-transform: none;
+            font-weight: 500;
+            letter-spacing: 0;
+            margin: 0;
+        }
+        .toggle-row label input {
+            accent-color: var(--secondary-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .toggle-row label span strong {
+            color: var(--primary-color);
+        }
+        .toggle-row .hint {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-left: 26px;
+            font-style: italic;
+        }
+        .toggle-row label.toggle-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .btn-row {
             display: flex;
             gap: 10px;
@@ -383,6 +425,21 @@
                 </label>
             </div>
 
+            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-chart-pie me-2"></i> Report Content</div>
+            <div class="toggle-row">
+                <label>
+                    <input type="checkbox" id="f_showSummary">
+                    <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts</span>
+                </label>
+                <div class="hint">Turn off for form-teacher distribution (list only).</div>
+
+                <label id="byClassRow" class="toggle-disabled">
+                    <input type="checkbox" id="f_showByClass" disabled>
+                    <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
+                </label>
+                <div class="hint">Requires "Include aggregate summary" above.</div>
+            </div>
+
             <div class="section-title" style="margin-top: 20px;"><i class="fas fa-columns me-2"></i> Columns</div>
             <div class="checks" id="columnChecks"></div>
 
@@ -449,12 +506,33 @@ let adminPassword = sessionStorage.getItem('adminPw') || '';
 
 document.addEventListener('DOMContentLoaded', function() {
     renderColumnChecks();
+    wireToggleEvents();
     document.getElementById('pwInput').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') verifyPassword();
         if (e.key === 'Escape') closePasswordModal();
     });
     if (adminPassword) verifyPassword(true);
 });
+
+function wireToggleEvents() {
+    const showSummary = document.getElementById('f_showSummary');
+    const showByClass = document.getElementById('f_showByClass');
+    const byClassRow = document.getElementById('byClassRow');
+    const classSelect = document.getElementById('f_class');
+
+    function updateByClassState() {
+        const summaryOn = showSummary.checked;
+        const allClasses = classSelect.value === '__ALL__';
+        const enable = summaryOn && allClasses;
+        showByClass.disabled = !enable;
+        if (!enable) showByClass.checked = false;
+        byClassRow.classList.toggle('toggle-disabled', !enable);
+    }
+
+    showSummary.addEventListener('change', updateByClassState);
+    classSelect.addEventListener('change', updateByClassState);
+    updateByClassState();
+}
 
 function renderColumnChecks() {
     const container = document.getElementById('columnChecks');
@@ -534,6 +612,8 @@ function collectParams(extra) {
         dateTo: document.getElementById('f_dateTo').value,
         dateBasis: document.getElementById('f_dateBasis').value,
         hasPrevBalance: document.getElementById('f_hasPrevBalance').checked ? 'true' : 'false',
+        showSummary: document.getElementById('f_showSummary').checked ? 'true' : 'false',
+        showByClass: document.getElementById('f_showByClass').checked ? 'true' : 'false',
         columns: selectedColumns.join(',')
     };
     if (extra) Object.assign(p, extra);
@@ -588,7 +668,6 @@ async function downloadCSV() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
     showStatus('info', 'Generating CSV...');
-
     try {
         const res = await callGAS('exportClassFeeCSV', collectParams());
         if (!res.success) throw new Error(res.error || 'Failed');
@@ -608,7 +687,6 @@ async function downloadPDF() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
     showStatus('info', 'Generating PDF... this may take 5–15 seconds.');
-
     try {
         const res = await callGAS('exportClassFeePDF', collectParams());
         if (!res.success) throw new Error(res.error || 'Failed');
@@ -628,7 +706,6 @@ async function downloadXLSX() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
     showStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
-
     try {
         const res = await callGAS('exportClassFeeXLSX', collectParams());
         if (!res.success) throw new Error(res.error || 'Failed');
@@ -697,7 +774,7 @@ function escapeHtml(t) {
 
 function callGAS(action, params, retryAttempt) {
     retryAttempt = retryAttempt || 0;
-    const MAX = 2;  // PDFs/Excels are slow, so fewer retries
+    const MAX = 2;
     return new Promise((resolve, reject) => {
         const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
         const all = Object.assign({}, params, { action, callback: cbName });
@@ -716,7 +793,7 @@ function callGAS(action, params, retryAttempt) {
                 if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
                 else reject(new Error('Request timed out. Try a smaller date range or single class.'));
             }
-        }, 120000);  // 2 minutes for large PDFs/Excels
+        }, 120000);
 
         window[cbName] = function(res) {
             clearTimeout(timer);
