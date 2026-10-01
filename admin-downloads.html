@@ -137,6 +137,12 @@
         .btn-secondary:hover:not(:disabled) { background: #5a6268; }
         .btn-ghost { background: #f1f5f9; color: #334155; }
         .btn-ghost:hover:not(:disabled) { background: #e2e8f0; }
+        .btn-csv { background: #10b981; color: white; }
+        .btn-csv:hover:not(:disabled) { background: #059669; }
+        .btn-pdf { background: #dc2626; color: white; }
+        .btn-pdf:hover:not(:disabled) { background: #b91c1c; }
+        .btn-xlsx { background: #217346; color: white; }
+        .btn-xlsx:hover:not(:disabled) { background: #185c37; }
         .status-box {
             padding: 12px 16px;
             border-radius: 8px;
@@ -384,14 +390,14 @@
                 <button class="btn btn-ghost" onclick="previewStats()" id="btnPreview">
                     <i class="fas fa-chart-bar"></i> Preview Stats
                 </button>
-                <button class="btn btn-secondary" onclick="downloadCSV()" id="btnCSV">
+                <button class="btn btn-csv" onclick="downloadCSV()" id="btnCSV">
                     <i class="fas fa-file-csv"></i> Download CSV
                 </button>
-                <button class="btn btn-primary" disabled title="Coming in Phase 2">
-                    <i class="fas fa-file-pdf"></i> PDF (soon)
+                <button class="btn btn-pdf" onclick="downloadPDF()" id="btnPDF">
+                    <i class="fas fa-file-pdf"></i> Download PDF
                 </button>
-                <button class="btn btn-primary" disabled title="Coming in Phase 3">
-                    <i class="fas fa-file-excel"></i> Excel (soon)
+                <button class="btn btn-xlsx" onclick="downloadXLSX()" id="btnXLSX">
+                    <i class="fas fa-file-excel"></i> Download Excel
                 </button>
             </div>
 
@@ -581,24 +587,12 @@ async function downloadCSV() {
     const orig = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    showStatus('info', 'Generating CSV... this may take a few seconds.');
+    showStatus('info', 'Generating CSV...');
 
     try {
         const res = await callGAS('exportClassFeeCSV', collectParams());
         if (!res.success) throw new Error(res.error || 'Failed');
-
-        const blob = new Blob([res.csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = res.filename || 'fee_data.csv';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
-
+        downloadBlob(res.csv, res.filename || 'fee_data.csv', 'text/csv;charset=utf-8;');
         showStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
     } catch (e) {
         showStatus('error', '❌ ' + e.message);
@@ -606,6 +600,79 @@ async function downloadCSV() {
         btn.disabled = false;
         btn.innerHTML = orig;
     }
+}
+
+async function downloadPDF() {
+    const btn = document.getElementById('btnPDF');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    showStatus('info', 'Generating PDF... this may take 5–15 seconds.');
+
+    try {
+        const res = await callGAS('exportClassFeePDF', collectParams());
+        if (!res.success) throw new Error(res.error || 'Failed');
+        downloadBase64(res.pdfBase64, res.filename || 'fee_data.pdf', 'application/pdf');
+        showStatus('success', '✅ PDF downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
+    } catch (e) {
+        showStatus('error', '❌ ' + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+    }
+}
+
+async function downloadXLSX() {
+    const btn = document.getElementById('btnXLSX');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    showStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
+
+    try {
+        const res = await callGAS('exportClassFeeXLSX', collectParams());
+        if (!res.success) throw new Error(res.error || 'Failed');
+        downloadBase64(res.xlsxBase64, res.filename || 'fee_data.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        showStatus('success', '✅ Excel downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
+    } catch (e) {
+        showStatus('error', '❌ ' + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+    }
+}
+
+function downloadBlob(content, filename, mime) {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+}
+
+function downloadBase64(base64, filename, mime) {
+    const byteChars = atob(base64);
+    const byteNumbers = new Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
 }
 
 function showStatus(type, msg) {
@@ -630,7 +697,7 @@ function escapeHtml(t) {
 
 function callGAS(action, params, retryAttempt) {
     retryAttempt = retryAttempt || 0;
-    const MAX = 3;
+    const MAX = 2;  // PDFs/Excels are slow, so fewer retries
     return new Promise((resolve, reject) => {
         const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
         const all = Object.assign({}, params, { action, callback: cbName });
@@ -647,9 +714,9 @@ function callGAS(action, params, retryAttempt) {
                 delete window[cbName];
                 if (script.parentNode) script.parentNode.removeChild(script);
                 if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
-                else reject(new Error('Request timed out.'));
+                else reject(new Error('Request timed out. Try a smaller date range or single class.'));
             }
-        }, 60000);
+        }, 120000);  // 2 minutes for large PDFs/Excels
 
         window[cbName] = function(res) {
             clearTimeout(timer);
