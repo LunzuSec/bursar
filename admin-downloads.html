@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Downloads — Lunzu Secondary School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #00509e;
+            --accent-color: #ffd700;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: #333;
+            padding: 16px;
+            min-height: 100vh;
+        }
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .head {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .head h1 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 22px;
+            margin: 0 0 4px;
+        }
+        .head p { font-size: 12px; opacity: 0.85; margin: 0; }
+        .body { padding: 20px; }
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .field { margin-bottom: 10px; }
+        .field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .field input[type=text],
+        .field input[type=password],
+        .field input[type=date],
+        .field select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            background: white;
+        }
+        .field input:focus, .field select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        .checks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .checks label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #333;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            text-transform: none;
+            font-weight: 500;
+            letter-spacing: 0;
+            margin: 0;
+        }
+        .checks label:hover { background: #f0f4f8; }
+        .checks input { accent-color: var(--secondary-color); }
+        .checks label.on {
+            background: #e8f0fe;
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: var(--primary-color); color: white; flex: 1; justify-content: center; }
+        .btn-primary:hover:not(:disabled) { background: var(--secondary-color); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover:not(:disabled) { background: #5a6268; }
+        .btn-ghost { background: #f1f5f9; color: #334155; }
+        .btn-ghost:hover:not(:disabled) { background: #e2e8f0; }
+        .status-box {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-box.show { display: flex; }
+        .status-box.info { background: #e8f0fe; border-left: 4px solid #3b82f6; color: #1e293b; }
+        .status-box.success { background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; }
+        .status-box.error { background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; }
+        .status-box .spinner {
+            width: 16px; height: 16px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .stats-preview {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 14px;
+            font-size: 12px;
+        }
+        .stats-preview.show { display: block; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .stat-cell {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .stat-cell .v { font-size: 15px; font-weight: bold; color: var(--primary-color); }
+        .stat-cell .l { font-size: 10px; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: rgba(20,35,55,0.95);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .modal-box h3 { color: #fbbf24; margin-bottom: 10px; text-align: center; font-size: 18px; }
+        .modal-box p { color: #d1d9e6; text-align: center; margin-bottom: 18px; font-size: 13px; }
+        .modal-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            margin-bottom: 14px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-family: inherit;
+        }
+        .modal-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255,255,255,0.15); }
+        .modal-box .mb { display: flex; gap: 10px; }
+        .modal-box .mb button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .modal-box .ok { background: rgba(139,92,246,0.9); color: white; }
+        .modal-box .ok:hover { background: rgb(139,92,246); }
+        .modal-box .cancel { background: rgba(100,116,139,0.5); color: white; }
+        .modal-box .cancel:hover { background: rgba(100,116,139,0.7); }
+        .modal-box .err {
+            color: #f87171;
+            font-size: 12px;
+            text-align: center;
+            display: none;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+        .modal-box .err.show { display: block; }
+        .locked-msg {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+        .locked-msg.show { display: block; }
+        .locked-msg i { font-size: 3rem; color: #94a3b8; margin-bottom: 12px; }
+        .locked-msg h3 { color: #334155; margin-bottom: 8px; }
+        .locked-msg p { color: #64748b; font-size: 13px; margin-bottom: 16px; }
+        #formArea { display: none; }
+        #formArea.show { display: block; }
+        .audit-link {
+            display: block;
+            text-align: center;
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        .audit-link:hover { text-decoration: underline; }
+        @media (max-width: 700px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .checks { grid-template-columns: 1fr; }
+            body { padding: 8px; }
+            .body { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="head">
+        <h1><i class="fas fa-download me-2"></i>Fee Data Downloads</h1>
+        <p>Lunzu Secondary School — Admin Only</p>
+    </div>
+
+    <div class="body">
+        <div id="statusBox" class="status-box"></div>
+
+        <div id="lockedMsg" class="locked-msg show">
+            <i class="fas fa-lock"></i>
+            <h3>Admin Access Required</h3>
+            <p>Enter the admin password to unlock downloads.</p>
+            <button class="btn btn-primary" style="max-width: 220px; margin: 0 auto;" onclick="openPasswordModal()">
+                <i class="fas fa-user-shield"></i> Enter Password
+            </button>
+        </div>
+
+        <div id="formArea">
+            <div class="section-title"><i class="fas fa-filter me-2"></i> Scope</div>
+            <div class="grid-2">
+                <div class="field">
+                    <label>Class / Scope</label>
+                    <select id="f_class">
+                        <option value="__ALL__">★ ALL CLASSES</option>
+                        <option value="Form 1">Form 1</option>
+                        <option value="Form 2">Form 2</option>
+                        <option value="Form 3">Form 3</option>
+                        <option value="Form 4">Form 4</option>
+                        <option value="Form 1 ODL">Form 1 ODL</option>
+                        <option value="Form 2 ODL">Form 2 ODL</option>
+                        <option value="Form 3 ODL">Form 3 ODL</option>
+                        <option value="Form 4 ODL">Form 4 ODL</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Term</label>
+                    <select id="f_term">
+                        <option value="2026-2027_TERM_1" selected>2026-2027 TERM 1</option>
+                        <option value="2026-2027_TERM_2">2026-2027 TERM 2</option>
+                        <option value="2026-2027_TERM_3">2026-2027 TERM 3</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-sliders-h me-2"></i> Filters</div>
+            <div class="grid-3">
+                <div class="field">
+                    <label>Status</label>
+                    <select id="f_status">
+                        <option value="all">All students</option>
+                        <option value="owing">Only owing (balance &lt; 0)</option>
+                        <option value="partial">Only partially paid</option>
+                        <option value="full">Only fully paid</option>
+                        <option value="overpaid">Only overpaid</option>
+                        <option value="sponsored">Only sponsored</option>
+                        <option value="government">Only government-sponsored</option>
+                        <option value="nonsponsored">Only non-sponsored</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Sort by</label>
+                    <select id="f_sort">
+                        <option value="balance_worst">Balance (worst first)</option>
+                        <option value="balance_best">Balance (best first)</option>
+                        <option value="name_asc">Name (A–Z)</option>
+                        <option value="name_desc">Name (Z–A)</option>
+                        <option value="lastpayment_recent">Last payment (recent)</option>
+                        <option value="lastpayment_oldest">Last payment (oldest)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Search by name</label>
+                    <input type="text" id="f_search" placeholder="e.g. BANDA">
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="field">
+                    <label>Date from (optional)</label>
+                    <input type="date" id="f_dateFrom">
+                </div>
+                <div class="field">
+                    <label>Date to (optional)</label>
+                    <input type="date" id="f_dateTo">
+                </div>
+                <div class="field">
+                    <label>Date basis</label>
+                    <select id="f_dateBasis">
+                        <option value="lastPayment">Latest payment date</option>
+                        <option value="entry">Last entry timestamp</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field" style="margin-top: 10px;">
+                <label style="display:flex; align-items:center; gap:8px; text-transform:none; letter-spacing:0; font-size:12px;">
+                    <input type="checkbox" id="f_hasPrevBalance" style="accent-color: var(--secondary-color);">
+                    <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
+                </label>
+            </div>
+
+            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-columns me-2"></i> Columns</div>
+            <div class="checks" id="columnChecks"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-ghost" onclick="previewStats()" id="btnPreview">
+                    <i class="fas fa-chart-bar"></i> Preview Stats
+                </button>
+                <button class="btn btn-secondary" onclick="downloadCSV()" id="btnCSV">
+                    <i class="fas fa-file-csv"></i> Download CSV
+                </button>
+                <button class="btn btn-primary" disabled title="Coming in Phase 2">
+                    <i class="fas fa-file-pdf"></i> PDF (soon)
+                </button>
+                <button class="btn btn-primary" disabled title="Coming in Phase 3">
+                    <i class="fas fa-file-excel"></i> Excel (soon)
+                </button>
+            </div>
+
+            <div id="statsPreview" class="stats-preview"></div>
+
+            <a href="admin-audit.html" class="audit-link">
+                <i class="fas fa-history"></i> View download audit log
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="pwModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
+        <p>Enter the admin password to unlock downloads.</p>
+        <input type="password" id="pwInput" placeholder="Enter password" maxlength="40">
+        <div id="pwError" class="err">Incorrect password. Please try again.</div>
+        <div class="mb">
+            <button class="cancel" onclick="closePasswordModal()">Cancel</button>
+            <button class="ok" onclick="verifyPassword()">Unlock</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+
+const COLUMNS = [
+    { key: 'sn',                label: 'S/N',                 default: true  },
+    { key: 'studentName',       label: 'Student Name',        default: true  },
+    { key: 'studentClass',      label: 'Class',               default: true  },
+    { key: 'dateOfBirth',       label: 'Date of Birth',       default: false },
+    { key: 'bursary',           label: 'Sponsor',             default: true  },
+    { key: 'feesPerTerm',       label: 'Fees Per Term',       default: true  },
+    { key: 'totalPaidThisTerm', label: 'Cumulative Paid',     default: true  },
+    { key: 'currentBalance',    label: 'Current Balance',     default: true  },
+    { key: 'previousBalance',   label: 'Previous Balance',    default: true  },
+    { key: 'cumulativeBalance', label: 'Cumulative Balance',  default: true  },
+    { key: 'paymentStatus',     label: 'Payment Status',      default: true  },
+    { key: 'lastPaymentDate',   label: 'Last Payment Date',   default: true  },
+    { key: 'contactPhone',      label: 'Contact Phone(s)',    default: true  },
+    { key: 'refunds',           label: 'Refunds',             default: false },
+    { key: 'entryTimestamp',    label: 'Last Entry Timestamp',default: false },
+    { key: 'parentEmail',       label: 'Parent Email(s)',     default: false }
+];
+
+let adminPassword = sessionStorage.getItem('adminPw') || '';
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderColumnChecks();
+    document.getElementById('pwInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') verifyPassword();
+        if (e.key === 'Escape') closePasswordModal();
+    });
+    if (adminPassword) verifyPassword(true);
+});
+
+function renderColumnChecks() {
+    const container = document.getElementById('columnChecks');
+    container.innerHTML = COLUMNS.map(c => `
+        <label class="${c.default ? 'on' : ''}" data-key="${c.key}">
+            <input type="checkbox" ${c.default ? 'checked' : ''} data-key="${c.key}">
+            <span>${c.label}</span>
+        </label>
+    `).join('');
+    container.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            this.parentElement.classList.toggle('on', this.checked);
+        });
+    });
+}
+
+function openPasswordModal() {
+    document.getElementById('pwModal').classList.add('show');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwError').classList.remove('show');
+    setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function closePasswordModal() {
+    document.getElementById('pwModal').classList.remove('show');
+}
+
+async function verifyPassword(silent) {
+    const pw = silent ? adminPassword : document.getElementById('pwInput').value.trim();
+    if (!pw) {
+        if (!silent) {
+            document.getElementById('pwError').textContent = 'Please enter a password.';
+            document.getElementById('pwError').classList.add('show');
+        }
+        return;
+    }
+    if (!silent) showStatus('info', 'Verifying...');
+    try {
+        const res = await callGAS('verifyAdmin', { password: pw });
+        if (res && res.success) {
+            adminPassword = pw;
+            sessionStorage.setItem('adminPw', pw);
+            document.getElementById('lockedMsg').classList.remove('show');
+            document.getElementById('formArea').classList.add('show');
+            closePasswordModal();
+            if (!silent) showStatus('success', '✅ Unlocked. Configure your download below.');
+        } else {
+            sessionStorage.removeItem('adminPw');
+            adminPassword = '';
+            if (silent) { showStatus('info', 'Session expired — please re-enter password.'); openPasswordModal(); return; }
+            document.getElementById('pwError').textContent = 'Incorrect password. Please try again.';
+            document.getElementById('pwError').classList.add('show');
+            document.getElementById('pwInput').value = '';
+            document.getElementById('pwInput').focus();
+            hideStatus();
+        }
+    } catch (e) {
+        if (!silent) {
+            document.getElementById('pwError').textContent = 'Error: ' + e.message;
+            document.getElementById('pwError').classList.add('show');
+        }
+        hideStatus();
+    }
+}
+
+function collectParams(extra) {
+    const selectedColumns = Array.from(document.querySelectorAll('#columnChecks input:checked'))
+        .map(cb => cb.dataset.key);
+    const p = {
+        password: adminPassword,
+        studentClass: document.getElementById('f_class').value,
+        term: document.getElementById('f_term').value,
+        statusFilter: document.getElementById('f_status').value,
+        sortBy: document.getElementById('f_sort').value,
+        search: document.getElementById('f_search').value.trim(),
+        dateFrom: document.getElementById('f_dateFrom').value,
+        dateTo: document.getElementById('f_dateTo').value,
+        dateBasis: document.getElementById('f_dateBasis').value,
+        hasPrevBalance: document.getElementById('f_hasPrevBalance').checked ? 'true' : 'false',
+        columns: selectedColumns.join(',')
+    };
+    if (extra) Object.assign(p, extra);
+    return p;
+}
+
+async function previewStats() {
+    const btn = document.getElementById('btnPreview');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
+    showStatus('info', 'Computing preview statistics...');
+
+    try {
+        const res = await callGAS('exportClassFeeStats', collectParams());
+        if (!res.success) throw new Error(res.error || 'Failed');
+        renderStatsPreview(res.stats, res.rowCount);
+        showStatus('success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
+    } catch (e) {
+        showStatus('error', '❌ ' + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+    }
+}
+
+function renderStatsPreview(stats, rowCount) {
+    const el = document.getElementById('statsPreview');
+    el.classList.add('show');
+    el.innerHTML = `
+        <div style="font-weight:bold; color:var(--primary-color); margin-bottom:6px;">
+            Preview — ${rowCount} student(s)
+        </div>
+        <div class="stats-grid">
+            <div class="stat-cell"><div class="v">K${stats.totalBilled.toLocaleString()}</div><div class="l">Billed</div></div>
+            <div class="stat-cell"><div class="v" style="color:#4caf50;">K${stats.totalCollected.toLocaleString()}</div><div class="l">Collected</div></div>
+            <div class="stat-cell"><div class="v" style="color:#f44336;">K${stats.totalOutstanding.toLocaleString()}</div><div class="l">Outstanding</div></div>
+            <div class="stat-cell"><div class="v" style="color:#8b5cf6;">K${stats.totalOverpaid.toLocaleString()}</div><div class="l">Overpaid</div></div>
+            <div class="stat-cell"><div class="v">${stats.collectionRate}%</div><div class="l">Collection</div></div>
+            <div class="stat-cell"><div class="v">${stats.fullyPaid}</div><div class="l">Fully Paid</div></div>
+            <div class="stat-cell"><div class="v">${stats.partiallyPaid}</div><div class="l">Partially</div></div>
+            <div class="stat-cell"><div class="v">${stats.unpaid}</div><div class="l">Unpaid</div></div>
+            <div class="stat-cell"><div class="v">${stats.sponsoredCount}</div><div class="l">Sponsored</div></div>
+            <div class="stat-cell"><div class="v">${stats.withPrevBalance}</div><div class="l">With Prev Bal</div></div>
+        </div>
+    `;
+}
+
+async function downloadCSV() {
+    const btn = document.getElementById('btnCSV');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    showStatus('info', 'Generating CSV... this may take a few seconds.');
+
+    try {
+        const res = await callGAS('exportClassFeeCSV', collectParams());
+        if (!res.success) throw new Error(res.error || 'Failed');
+
+        const blob = new Blob([res.csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = res.filename || 'fee_data.csv';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+
+        showStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
+    } catch (e) {
+        showStatus('error', '❌ ' + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+    }
+}
+
+function showStatus(type, msg) {
+    const el = document.getElementById('statusBox');
+    el.className = 'status-box show ' + type;
+    let icon = '';
+    if (type === 'info') icon = '<div class="spinner"></div>';
+    else if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
+    else if (type === 'error') icon = '<i class="fas fa-exclamation-circle"></i>';
+    el.innerHTML = icon + '<span>' + escapeHtml(msg) + '</span>';
+}
+
+function hideStatus() {
+    document.getElementById('statusBox').classList.remove('show');
+}
+
+function escapeHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = String(t || '');
+    return d.innerHTML;
+}
+
+function callGAS(action, params, retryAttempt) {
+    retryAttempt = retryAttempt || 0;
+    const MAX = 3;
+    return new Promise((resolve, reject) => {
+        const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        const all = Object.assign({}, params, { action, callback: cbName });
+        const qs = Object.keys(all)
+            .filter(k => all[k] !== undefined && all[k] !== null)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(all[k]))
+            .join('&');
+
+        const script = document.createElement('script');
+        script.src = GAS_URL + '?' + qs;
+
+        const timer = setTimeout(() => {
+            if (window[cbName]) {
+                delete window[cbName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+                if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
+                else reject(new Error('Request timed out.'));
+            }
+        }, 60000);
+
+        window[cbName] = function(res) {
+            clearTimeout(timer);
+            delete window[cbName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+            if (res && res.error) {
+                if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
+                else reject(new Error(res.error));
+            } else {
+                resolve(res);
+            }
+        };
+        script.onerror = function() {
+            clearTimeout(timer);
+            delete window[cbName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+            if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
+            else reject(new Error('Connection failed.'));
+        };
+        document.head.appendChild(script);
+    });
+}
+</script>
+
+</body>
+</html>
