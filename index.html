@@ -32,6 +32,7 @@
             border: 1px solid rgba(255, 215, 0, 0.25);
             overflow: hidden;
         }
+        .container-wide { max-width: 1100px; }
         .header {
             background: rgba(10, 30, 50, 0.65);
             backdrop-filter: blur(6px);
@@ -89,6 +90,15 @@
         .btn-receipts { background: rgba(234, 88, 12, 0.7); display: none; }
         .btn-receipts.show { display: inline-flex; }
         .btn-receipts:hover { transform: translateY(-3px); background: rgba(234, 88, 12, 0.95); }
+        .btn-csv { background: rgba(16, 185, 129, 0.85); }
+        .btn-csv:hover:not(:disabled) { transform: translateY(-3px); background: rgba(5, 150, 105, 1); }
+        .btn-pdf { background: rgba(220, 38, 38, 0.85); }
+        .btn-pdf:hover:not(:disabled) { transform: translateY(-3px); background: rgba(185, 28, 28, 1); }
+        .btn-xlsx { background: rgba(33, 115, 70, 0.9); }
+        .btn-xlsx:hover:not(:disabled) { transform: translateY(-3px); background: rgba(24, 92, 55, 1); }
+        .btn-ghost { background: rgba(100, 116, 139, 0.55); }
+        .btn-ghost:hover:not(:disabled) { transform: translateY(-3px); background: rgba(100, 116, 139, 0.85); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
         .progress-container { margin: 16px 0 8px 0; display: none; }
         .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; margin-bottom: 4px; }
         .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; }
@@ -237,6 +247,189 @@
         .queue-actions .btn-refresh { background: rgba(100, 116, 139, 0.6); color: white; }
         .queue-actions .btn-send { background: rgba(234, 88, 12, 0.85); color: white; }
         .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
+
+        /* ============================================================ */
+        /* ADMIN DOWNLOADS PANEL                                        */
+        /* ============================================================ */
+        .admin-downloads-panel {
+            display: none;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin: 20px 0;
+        }
+        .admin-downloads-panel.show { display: block; }
+        .admin-downloads-panel .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ddd6fe;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.4);
+        }
+        .admin-downloads-panel .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #c4b5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 18px 0 10px;
+        }
+        .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .admin-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ddd6fe;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .admin-field select,
+        .admin-field input[type=text],
+        .admin-field input[type=date] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid rgba(139, 92, 246, 0.35);
+            border-radius: 10px;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+        }
+        .admin-field select option { background: #1e2f3f; color: #fff; }
+        .admin-field select:focus,
+        .admin-field input:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background: rgba(255, 255, 255, 0.16);
+        }
+        .admin-toggle {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 12px;
+            color: #ddd6fe;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .admin-toggle input[type=checkbox] {
+            width: 16px; height: 16px;
+            accent-color: #8b5cf6;
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .admin-toggle span { line-height: 1.5; }
+        .admin-toggle.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .admin-toggle.disabled input { cursor: not-allowed; }
+        .admin-columns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 6px;
+        }
+        .admin-columns-grid label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #e9d5ff;
+            padding: 7px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .admin-columns-grid label:hover { background: rgba(139, 92, 246, 0.15); }
+        .admin-columns-grid label.on {
+            background: rgba(139, 92, 246, 0.25);
+            border-color: #a78bfa;
+            color: #f5f3ff;
+            font-weight: 600;
+        }
+        .admin-columns-grid input[type=checkbox] {
+            accent-color: #8b5cf6;
+            cursor: pointer;
+        }
+        .admin-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .admin-actions .btn { min-width: 0; padding: 12px 14px; font-size: 13px; }
+        .admin-stats-preview {
+            display: none;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 14px;
+            font-size: 12px;
+        }
+        .admin-stats-preview.show { display: block; }
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .admin-stat-cell {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .admin-stat-cell .v {
+            font-size: 14px;
+            font-weight: bold;
+            color: #f5f3ff;
+        }
+        .admin-stat-cell .l {
+            font-size: 10px;
+            color: #c4b5fd;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .admin-status-box {
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 13px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-status-box.show { display: flex; }
+        .admin-status-box.info { background: rgba(59, 130, 246, 0.2); border-left: 4px solid #3b82f6; color: #dbeafe; }
+        .admin-status-box.success { background: rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981; color: #a7f3d0; }
+        .admin-status-box.error { background: rgba(220, 38, 38, 0.2); border-left: 4px solid #dc2626; color: #fecaca; }
+        .admin-status-box .spinner-small {
+            display: inline-block; width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        .admin-downloads-panel .helper { font-size: 11px; color: #a5b4fc; margin-top: 4px; display: block; }
+        @media (max-width: 700px) {
+            .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
+            .admin-actions { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 600px) {
             body { padding: 10px; }
             .container { border-radius: 18px; }
@@ -248,6 +441,7 @@
             h2 { font-size: 16px; }
             .logo { max-width: 80px; }
             .subscribe-modal-box { padding: 20px 16px; }
+            .admin-actions { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -329,7 +523,7 @@
     </div>
 
     <!-- Main Card -->
-    <div class="container">
+    <div class="container container-wide">
         <div class="header">
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Malawi Government Logo" class="logo">
             <h1>LUNZU SECONDARY SCHOOL</h1>
@@ -349,7 +543,7 @@
             </div>
             <div id="adminNotice" class="admin-notice">
                 <span>🔑</span>
-                <span><strong>Admin Mode Active:</strong> Date of Birth is not required.</span>
+                <span><strong>Admin Mode Active:</strong> Date of Birth is not required. Administrative tools are available below.</span>
             </div>
             <div id="adminQueuePanel" class="queue-panel">
                 <h4>📬 Fee Alert Queue Manager</h4>
@@ -364,6 +558,7 @@
                 </div>
                 <div class="queue-last-result" id="queueLastResult"></div>
             </div>
+
             <form id="feeForm" autocomplete="off">
                 <div class="form-group">
                     <label for="studentClass"><span class="required-star">*</span> Class:</label>
@@ -409,6 +604,123 @@
                     <button type="button" class="btn btn-back" onclick="goBackToPortal()"><span>←</span> Back to Home</button>
                 </div>
             </form>
+
+            <!-- ============================================================ -->
+            <!-- ADMIN DOWNLOADS PANEL                                        -->
+            <!-- ============================================================ -->
+            <div id="adminDownloadsPanel" class="admin-downloads-panel">
+                <div class="panel-title">
+                    <span>📥</span>
+                    <span>Class Fee Data Downloads</span>
+                </div>
+
+                <div class="section-title">🎯 Scope</div>
+                <div class="admin-grid-2">
+                    <div class="admin-field">
+                        <label>Class / Scope</label>
+                        <select id="dl_class">
+                            <option value="__ALL__">★ ALL CLASSES</option>
+                            <option value="Form 1">Form 1</option>
+                            <option value="Form 2">Form 2</option>
+                            <option value="Form 3">Form 3</option>
+                            <option value="Form 4">Form 4</option>
+                            <option value="Form 1 ODL">Form 1 ODL</option>
+                            <option value="Form 2 ODL">Form 2 ODL</option>
+                            <option value="Form 3 ODL">Form 3 ODL</option>
+                            <option value="Form 4 ODL">Form 4 ODL</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Term</label>
+                        <select id="dl_term">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">🎚️ Filters</div>
+                <div class="admin-grid-3">
+                    <div class="admin-field">
+                        <label>Status</label>
+                        <select id="dl_status">
+                            <option value="all">All students</option>
+                            <option value="owing">Only owing (balance &lt; 0)</option>
+                            <option value="partial">Only partially paid</option>
+                            <option value="full">Only fully paid</option>
+                            <option value="overpaid">Only overpaid</option>
+                            <option value="sponsored">Only sponsored</option>
+                            <option value="government">Only government-sponsored</option>
+                            <option value="nonsponsored">Only non-sponsored</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Sort by</label>
+                        <select id="dl_sort">
+                            <option value="balance_worst">Balance (worst first)</option>
+                            <option value="balance_best">Balance (best first)</option>
+                            <option value="name_asc">Name (A–Z)</option>
+                            <option value="name_desc">Name (Z–A)</option>
+                            <option value="lastpayment_recent">Last payment (recent)</option>
+                            <option value="lastpayment_oldest">Last payment (oldest)</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Search by name</label>
+                        <input type="text" id="dl_search" placeholder="e.g. BANDA">
+                    </div>
+                </div>
+
+                <div class="admin-grid-3" style="margin-top:12px;">
+                    <div class="admin-field">
+                        <label>Date from (optional)</label>
+                        <input type="date" id="dl_dateFrom">
+                    </div>
+                    <div class="admin-field">
+                        <label>Date to (optional)</label>
+                        <input type="date" id="dl_dateTo">
+                    </div>
+                    <div class="admin-field">
+                        <label>Date basis</label>
+                        <select id="dl_dateBasis">
+                            <option value="lastPayment">Latest payment date</option>
+                            <option value="entry">Last entry timestamp</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="admin-toggle" style="margin-top:12px;">
+                    <input type="checkbox" id="dl_hasPrevBalance">
+                    <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
+                </label>
+
+                <div class="section-title">📊 Report Content</div>
+                <label class="admin-toggle">
+                    <input type="checkbox" id="dl_showSummary">
+                    <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts (turn OFF for form teachers)</span>
+                </label>
+                <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
+                    <input type="checkbox" id="dl_showByClass" disabled>
+                    <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
+                </label>
+
+                <div class="section-title">📋 Columns</div>
+                <div class="admin-columns-grid" id="dl_columnsGrid"></div>
+
+                <div class="admin-actions">
+                    <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
+                    <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
+                    <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
+                    <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
+                </div>
+
+                <div id="dl_statusBox" class="admin-status-box"></div>
+                <div id="dl_statsPreview" class="admin-stats-preview"></div>
+
+                <div class="helper" style="margin-top:14px;">
+                    ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.
+                </div>
+            </div>
+
             <div id="reportContainer"></div>
             <div class="info-note">
                 <strong>📌 Important Information:</strong><br>
@@ -518,7 +830,11 @@
         // ----- ADMIN MODE -----
         function openAdminModal() {
             if (isAdminMode) {
-                isAdminMode = false; updateAdminUI(); showInfo('🔒 Admin mode disabled'); setTimeout(() => clearError(), 2000); return;
+                isAdminMode = false;
+                updateAdminUI();
+                showInfo('🔒 Admin mode disabled');
+                setTimeout(() => clearError(), 2000);
+                return;
             }
             document.getElementById('adminModal').classList.add('show');
             document.getElementById('adminPasswordInput').value = '';
@@ -540,7 +856,9 @@
             try {
                 const result = await callGAS('verifyAdmin', { password: password });
                 if (result && result.success) {
-                    isAdminMode = true; updateAdminUI(); closeAdminModal();
+                    isAdminMode = true;
+                    updateAdminUI();
+                    closeAdminModal();
                     showSuccess('🔑 Admin mode activated successfully!');
                     setTimeout(() => clearError(), 3000);
                     const studentClass = document.getElementById('studentClass').value;
@@ -566,16 +884,19 @@
             const notice = document.getElementById('adminNotice');
             const panel = document.getElementById('adminQueuePanel');
             const receiptsBtn = document.getElementById('receiptsBtn');
+            const downloadsPanel = document.getElementById('adminDownloadsPanel');
             const dobInput = document.getElementById('dateOfBirth');
             const dobStar = document.getElementById('dobStar');
             const dobAdminLabel = document.getElementById('dobAdminLabel');
             const dobRequiredText = document.getElementById('dobRequiredText');
+
             if (isAdminMode) {
                 btnText.textContent = '🔓 Admin ON';
                 btn.classList.add('active');
                 notice.classList.add('show');
                 if (panel) panel.classList.add('show');
                 if (receiptsBtn) receiptsBtn.classList.add('show');
+                if (downloadsPanel) downloadsPanel.classList.add('show');
                 dobInput.disabled = true; dobInput.value = '';
                 dobInput.placeholder = 'Not required in Admin Mode';
                 dobStar.style.display = 'none';
@@ -583,12 +904,14 @@
                 dobRequiredText.classList.add('hidden');
                 updateButtonState();
                 refreshQueueStats();
+                dl_init();
             } else {
                 btnText.textContent = '🔒 Admin Mode';
                 btn.classList.remove('active');
                 notice.classList.remove('show');
                 if (panel) panel.classList.remove('show');
                 if (receiptsBtn) receiptsBtn.classList.remove('show');
+                if (downloadsPanel) downloadsPanel.classList.remove('show');
                 dobInput.disabled = false;
                 dobInput.placeholder = '';
                 dobStar.style.display = 'inline';
@@ -603,16 +926,13 @@
                 alert('Enable admin mode first.');
                 return;
             }
-            // Pass the current term and class as URL params so the receipts page preselects them
             const params = new URLSearchParams();
             if (currentTermKey) params.set('term', currentTermKey);
             const cls = document.getElementById('studentClass').value;
             if (cls) params.set('class', cls);
             const url = RECEIPTS_PAGE_URL + (params.toString() ? '?' + params.toString() : '');
             const newTab = window.open(url, '_blank');
-            if (!newTab) {
-                alert('Please allow pop-ups to open the receipts page.');
-            }
+            if (!newTab) alert('Please allow pop-ups to open the receipts page.');
         }
 
         // ----- INIT -----
@@ -785,7 +1105,7 @@
         }
         function stopProgressAnimation() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
 
-        // ----- API CALLS — fetch-based -----
+        // ----- API CALLS -----
         async function callGAS(action, params = {}, attempt = 1) {
             const body = new URLSearchParams();
             body.append('action', action);
@@ -797,7 +1117,7 @@
             body.append('_cb', Date.now().toString());
 
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 25000);
+            const timeoutId = setTimeout(() => controller.abort(), 120000);
 
             try {
                 const response = await fetch(GAS_URL, {
@@ -829,7 +1149,6 @@
                     msg.indexOf('NetworkError') !== -1 ||
                     msg.indexOf('HTTP 5') !== -1;
                 if (retryable && attempt < 2) {
-                    console.warn('Retrying API call (' + action + ') after: ' + msg);
                     await new Promise(r => setTimeout(r, 800));
                     return callGAS(action, params, attempt + 1);
                 }
@@ -1168,7 +1487,6 @@
             const consent = document.getElementById('subConsentCheck').checked;
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showSubStatus('error', '❌ Please enter a valid email address.'); return; }
 
-            // Warn if replacing an existing subscription with a different email
             if (subCurrentStatus && subCurrentStatus.hasSubscription && subCurrentStatus.alertEmail &&
                 subCurrentStatus.alertEmail.toLowerCase() !== email) {
                 const masked = maskEmail(subCurrentStatus.alertEmail);
@@ -1296,6 +1614,259 @@
                 await refreshQueueStats();
             } catch (e) { resultEl.innerHTML = '❌ ' + escapeHtml(e.message); }
             finally { btn.innerHTML = original; btn.disabled = false; }
+        }
+
+        // ============================================================
+        // 5. ADMIN DOWNLOADS PANEL
+        // ============================================================
+        const DL_COLUMNS = [
+            { key: 'sn',                label: 'S/N',                 default: true  },
+            { key: 'studentName',       label: 'Student Name',        default: true  },
+            { key: 'studentClass',      label: 'Class',               default: true  },
+            { key: 'dateOfBirth',       label: 'Date of Birth',       default: false },
+            { key: 'bursary',           label: 'Sponsor',             default: true  },
+            { key: 'feesPerTerm',       label: 'Fees Per Term',       default: true  },
+            { key: 'totalPaidThisTerm', label: 'Cumulative Paid',     default: true  },
+            { key: 'currentBalance',    label: 'Current Balance',     default: true  },
+            { key: 'previousBalance',   label: 'Previous Balance',    default: true  },
+            { key: 'cumulativeBalance', label: 'Cumulative Balance',  default: true  },
+            { key: 'paymentStatus',     label: 'Payment Status',      default: true  },
+            { key: 'lastPaymentDate',   label: 'Last Payment Date',   default: true  },
+            { key: 'contactPhone',      label: 'Contact Phone(s)',    default: true  },
+            { key: 'refunds',           label: 'Refunds',             default: false },
+            { key: 'entryTimestamp',    label: 'Last Entry Timestamp',default: false },
+            { key: 'parentEmail',       label: 'Parent Email(s)',     default: false }
+        ];
+
+        let dl_initialized = false;
+
+        function dl_init() {
+            if (dl_initialized) {
+                // Still refresh term list in case term changed
+                dl_populateTerms();
+                return;
+            }
+            dl_initialized = true;
+            dl_renderColumnChecks();
+            dl_populateTerms();
+            dl_wireToggleEvents();
+        }
+
+        function dl_populateTerms() {
+            const sel = document.getElementById('dl_term');
+            if (!sel) return;
+            sel.innerHTML = '';
+            availableTerms.forEach(function(t) {
+                const opt = document.createElement('option');
+                opt.value = t.key;
+                opt.textContent = t.display;
+                if (t.key === currentTermKey) opt.selected = true;
+                sel.appendChild(opt);
+            });
+            if (!sel.value && currentTermKey) sel.value = currentTermKey;
+        }
+
+        function dl_renderColumnChecks() {
+            const container = document.getElementById('dl_columnsGrid');
+            if (!container) return;
+            container.innerHTML = DL_COLUMNS.map(function(c) {
+                return '<label class="' + (c.default ? 'on' : '') + '" data-key="' + c.key + '">' +
+                    '<input type="checkbox" ' + (c.default ? 'checked' : '') + ' data-key="' + c.key + '">' +
+                    '<span>' + c.label + '</span></label>';
+            }).join('');
+            container.querySelectorAll('input[type=checkbox]').forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    this.parentElement.classList.toggle('on', this.checked);
+                });
+            });
+        }
+
+        function dl_wireToggleEvents() {
+            const showSummary = document.getElementById('dl_showSummary');
+            const showByClass = document.getElementById('dl_showByClass');
+            const byClassRow = document.getElementById('dl_byClassRow');
+            const classSel = document.getElementById('dl_class');
+
+            function updateByClassState() {
+                const summaryOn = showSummary.checked;
+                const allClasses = classSel.value === '__ALL__';
+                const enable = summaryOn && allClasses;
+                showByClass.disabled = !enable;
+                if (!enable) showByClass.checked = false;
+                byClassRow.classList.toggle('disabled', !enable);
+            }
+
+            showSummary.addEventListener('change', updateByClassState);
+            classSel.addEventListener('change', updateByClassState);
+            updateByClassState();
+        }
+
+        function dl_collectParams(extra) {
+            const selected = Array.from(document.querySelectorAll('#dl_columnsGrid input:checked'))
+                .map(function(cb) { return cb.dataset.key; });
+            const p = {
+                password: ADMIN_PASSWORD,
+                studentClass: document.getElementById('dl_class').value,
+                term: document.getElementById('dl_term').value || currentTermKey,
+                statusFilter: document.getElementById('dl_status').value,
+                sortBy: document.getElementById('dl_sort').value,
+                search: document.getElementById('dl_search').value.trim(),
+                dateFrom: document.getElementById('dl_dateFrom').value,
+                dateTo: document.getElementById('dl_dateTo').value,
+                dateBasis: document.getElementById('dl_dateBasis').value,
+                hasPrevBalance: document.getElementById('dl_hasPrevBalance').checked ? 'true' : 'false',
+                showSummary: document.getElementById('dl_showSummary').checked ? 'true' : 'false',
+                showByClass: document.getElementById('dl_showByClass').checked ? 'true' : 'false',
+                columns: selected.join(',')
+            };
+            if (extra) Object.assign(p, extra);
+            return p;
+        }
+
+        function dl_setStatus(type, msg) {
+            const el = document.getElementById('dl_statusBox');
+            if (!el) return;
+            el.className = 'admin-status-box show ' + type;
+            let icon = '';
+            if (type === 'info') icon = '<span class="spinner-small"></span>';
+            else if (type === 'success') icon = '✅';
+            else if (type === 'error') icon = '❌';
+            el.innerHTML = icon + '<span>' + escapeHtml(msg) + '</span>';
+        }
+        function dl_hideStatus() {
+            const el = document.getElementById('dl_statusBox');
+            if (el) el.className = 'admin-status-box';
+        }
+
+        function dl_setButtonBusy(btnId, busy, busyText) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (busy) {
+                btn.dataset.originalHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-small"></span> ' + (busyText || 'Working...');
+            } else {
+                if (btn.dataset.originalHtml) btn.innerHTML = btn.dataset.originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        async function dl_previewStats() {
+            if (!isAdminMode) return;
+            dl_setButtonBusy('dl_btnPreview', true, 'Calculating...');
+            dl_setStatus('info', 'Computing preview statistics...');
+            try {
+                const res = await callGAS('exportClassFeeStats', dl_collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                dl_renderStatsPreview(res.stats, res.rowCount);
+                dl_setStatus('success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
+            } catch (e) {
+                dl_setStatus('error', '❌ ' + e.message);
+            } finally {
+                dl_setButtonBusy('dl_btnPreview', false);
+            }
+        }
+
+        function dl_renderStatsPreview(stats, rowCount) {
+            const el = document.getElementById('dl_statsPreview');
+            if (!el) return;
+            el.classList.add('show');
+            function fmtMoney(v) { return 'K' + Number(v || 0).toLocaleString(); }
+            el.innerHTML =
+                '<div style="font-weight:bold;color:#ddd6fe;margin-bottom:6px;">Preview — ' + rowCount + ' student(s)</div>' +
+                '<div class="admin-stats-grid">' +
+                '<div class="admin-stat-cell"><div class="v">' + fmtMoney(stats.totalBilled) + '</div><div class="l">Billed</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#86efac;">' + fmtMoney(stats.totalCollected) + '</div><div class="l">Collected</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#fca5a5;">' + fmtMoney(stats.totalOutstanding) + '</div><div class="l">Outstanding</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#c4b5fd;">' + fmtMoney(stats.totalOverpaid) + '</div><div class="l">Overpaid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.collectionRate + '%</div><div class="l">Collection</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#86efac;">' + stats.fullyPaid + '</div><div class="l">Fully Paid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.partiallyPaid + '</div><div class="l">Partially</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#fca5a5;">' + stats.unpaid + '</div><div class="l">Unpaid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.sponsoredCount + '</div><div class="l">Sponsored</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.withPrevBalance + '</div><div class="l">With Prev Bal</div></div>' +
+                '</div>';
+        }
+
+        function dl_downloadBlob(content, filename, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        function dl_downloadBase64(base64, filename, mime) {
+            const byteChars = atob(base64);
+            const byteNumbers = new Array(byteChars.length);
+            for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        async function dl_downloadCSV() {
+            if (!isAdminMode) return;
+            dl_setButtonBusy('dl_btnCSV', true, 'CSV...');
+            dl_setStatus('info', 'Generating CSV...');
+            try {
+                const res = await callGAS('exportClassFeeCSV', dl_collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                dl_downloadBlob(res.csv, res.filename || 'fee_data.csv', 'text/csv;charset=utf-8;');
+                dl_setStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                dl_setStatus('error', '❌ ' + e.message);
+            } finally {
+                dl_setButtonBusy('dl_btnCSV', false);
+            }
+        }
+
+        async function dl_downloadPDF() {
+            if (!isAdminMode) return;
+            dl_setButtonBusy('dl_btnPDF', true, 'PDF...');
+            dl_setStatus('info', 'Generating PDF... this may take 5–15 seconds.');
+            try {
+                const res = await callGAS('exportClassFeePDF', dl_collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                dl_downloadBase64(res.pdfBase64, res.filename || 'fee_data.pdf', 'application/pdf');
+                dl_setStatus('success', '✅ PDF downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                dl_setStatus('error', '❌ ' + e.message);
+            } finally {
+                dl_setButtonBusy('dl_btnPDF', false);
+            }
+        }
+
+        async function dl_downloadXLSX() {
+            if (!isAdminMode) return;
+            dl_setButtonBusy('dl_btnXLSX', true, 'Excel...');
+            dl_setStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
+            try {
+                const res = await callGAS('exportClassFeeXLSX', dl_collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                dl_downloadBase64(res.xlsxBase64, res.filename || 'fee_data.xlsx',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                dl_setStatus('success', '✅ Excel downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                dl_setStatus('error', '❌ ' + e.message);
+            } finally {
+                dl_setButtonBusy('dl_btnXLSX', false);
+            }
         }
     </script>
 </body>
