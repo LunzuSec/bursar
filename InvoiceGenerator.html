@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunzu Secondary School — Boarding Fees Invoice</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #002b54 0%, #003d7a 100%);
+            color: white;
+            padding: 28px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; font-weight: 300; }
+        .header .badge {
+            display: inline-block;
+            background: #fbbf24; color: #002b54;
+            padding: 3px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; margin-top: 10px;
+        }
+
+        .net-status {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 8px 16px;
+            background: #f1f5f9; border-bottom: 1px solid #e2e8f0;
+            font-size: 12px; color: #475569;
+        }
+        .net-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; transition: background 0.3s; }
+        .net-dot.offline { background: #ef4444; }
+        .net-dot.slow { background: #f59e0b; }
+
+        .offline-banner {
+            display: none;
+            background: #fef2f2; color: #991b1b;
+            padding: 10px 16px; font-size: 13px; text-align: center;
+            border-bottom: 1px solid #fecaca; font-weight: 500;
+        }
+        .offline-banner.show { display: block; }
+
+        .content { padding: 30px 40px; }
+
+        .alert {
+            padding: 12px 16px; border-radius: 8px;
+            margin-bottom: 20px; font-size: 14px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .alert-error { background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; }
+        .alert-success { background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; }
+        .alert-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+        .alert-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+        .alert.show { display: block; }
+
+        .section-title {
+            font-size: 16px; font-weight: 600;
+            color: #002b54; margin-bottom: 15px;
+            padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block; font-size: 13px; font-weight: 600;
+            color: #1e293b; margin-bottom: 5px;
+        }
+        .form-group label .required { color: #ef4444; margin-left: 2px; }
+
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px;
+            border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: #002b54;
+            box-shadow: 0 0 0 3px rgba(0,43,84,0.1);
+            background: white;
+        }
+        .form-group input:disabled, .form-group select:disabled {
+            opacity: 0.6; cursor: not-allowed;
+        }
+
+        .term-checkboxes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+        .term-checkboxes label {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; background: white;
+            border: 2px solid #e2e8f0; border-radius: 6px;
+            font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: all 0.2s; color: #1e293b;
+        }
+        .term-checkboxes label:hover { border-color: #94a3b8; }
+        .term-checkboxes input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: #002b54; cursor: pointer;
+        }
+        .term-checkboxes label.checked {
+            background: #dbeafe; border-color: #002b54;
+            color: #002b54; font-weight: 600;
+        }
+
+        .student-entry {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 8px; padding: 15px;
+            margin-bottom: 12px; position: relative;
+            animation: fadeIn 0.25s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .student-entry .remove-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: #ef4444; color: white;
+            border: none; border-radius: 50%;
+            width: 28px; height: 28px; cursor: pointer;
+            font-size: 16px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .student-entry .remove-btn:hover { background: #dc2626; transform: scale(1.05); }
+
+        .student-entry .spinner-mini {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border: 2px solid #cbd5e1; border-top: 2px solid #002b54;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+            margin-left: 6px; vertical-align: middle;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 24px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+            font-family: inherit;
+        }
+        .btn-primary { background: #002b54; color: white; }
+        .btn-primary:hover:not(:disabled) { background: #003d7a; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,43,84,0.25); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover:not(:disabled) { background: #059669; }
+        .btn-success:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .btn-outline { background: transparent; color: #002b54; border: 2px solid #002b54; }
+        .btn-outline:hover:not(:disabled) { background: #002b54; color: white; }
+        .btn-outline:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover:not(:disabled) { background: #dc2626; }
+        .btn-danger:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-secondary { background: #64748b; color: white; }
+        .btn-secondary:hover:not(:disabled) { background: #475569; }
+
+        .loading {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 43, 84, 0.82);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center; align-items: center;
+            flex-direction: column; color: white;
+            font-size: 15px;
+            animation: fadeIn 0.25s ease;
+        }
+        .loading.show { display: flex; }
+
+        .spinner {
+            display: inline-block;
+            width: 56px; height: 56px;
+            border: 5px solid rgba(255,255,255,0.25);
+            border-top: 5px solid #fbbf24;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-weight: 600; letter-spacing: 0.4px;
+            text-align: center; max-width: 340px;
+            line-height: 1.5; min-height: 44px;
+        }
+
+        .loading-step {
+            font-size: 11px; opacity: 0.75;
+            margin-top: 8px; letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 260px; height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px; margin-top: 18px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: #fbbf24;
+            width: 0%; transition: width 0.35s ease; border-radius: 4px;
+        }
+
+        .existing-invoices {
+            margin-top: 15px; padding: 15px;
+            background: #f8fafc; border-radius: 8px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        .existing-invoices.show { display: block; }
+        .existing-invoices h4 { font-size: 13px; color: #1e293b; margin-bottom: 8px; }
+
+        .existing-invoices .invoice-item {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 10px 14px;
+            background: white; border-radius: 8px;
+            margin-bottom: 8px; border: 1px solid #e2e8f0;
+            font-size: 13px; flex-wrap: wrap; gap: 6px;
+        }
+        .existing-invoices .invoice-item > span { padding: 2px 0; }
+        .existing-invoices .invoice-item .actions {
+            display: flex; gap: 6px; flex-wrap: wrap;
+        }
+
+        .status-paid { color: #10b981; font-weight: 600; }
+        .status-unpaid { color: #ef4444; font-weight: 600; }
+        .status-partial { color: #f59e0b; font-weight: 600; }
+        .status-credit { color: #3b82f6; font-weight: 600; }
+
+        .divider { border-top: 1px solid #e2e8f0; margin: 25px 0; }
+
+        .footer {
+            text-align: center; padding: 20px 40px;
+            background: #f8fafc; border-top: 1px solid #e2e8f0;
+            font-size: 12px; color: #94a3b8;
+        }
+
+        .help-section {
+            background: #f1f5f9; padding: 15px;
+            border-radius: 8px; font-size: 13px; color: #475569;
+        }
+        .help-section strong { color: #002b54; display: block; margin-bottom: 5px; }
+        .help-section ul { margin-top: 8px; padding-left: 20px; line-height: 1.6; }
+
+        .invoice-count { font-size: 12px; color: #64748b; margin-left: 8px; }
+
+        .bf-preview {
+            font-size: 11px; color: #92400e;
+            background: #fef3c7; padding: 2px 8px;
+            border-radius: 6px; margin-left: 8px; font-weight: 500;
+        }
+
+        /* ============ MODALS ============ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 43, 84, 0.7);
+            backdrop-filter: blur(3px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-overlay.show { display: flex; }
+
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 28px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.25s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Password gate */
+        .pw-gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .pw-box {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .pw-box h2 { color: #002b54; font-size: 22px; margin-bottom: 10px; }
+        .pw-box p { color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .pw-box input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+        .pw-box input:focus { outline: none; border-color: #002b54; }
+        .pw-box .err { color: #ef4444; font-size: 13px; margin-bottom: 10px; display: none; }
+        .pw-box .err.show { display: block; }
+        .pw-box .btn { width: 100%; padding: 14px; }
+
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
+            .btn-group .btn { width: 100%; }
+            .term-checkboxes { flex-direction: column; }
+            .progress-bar { width: 220px; }
+            .existing-invoices .invoice-item { flex-direction: column; align-items: flex-start; }
+            .existing-invoices .invoice-item .actions { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Password Gate -->
+    <div id="pwGate" class="pw-gate">
+        <div class="pw-box">
+            <h2>🔒 Admin Access Required</h2>
+            <p>Enter the admin password to access the invoice generator.</p>
+            <input type="password" id="pwInput" placeholder="Password" maxlength="40" autocomplete="off">
+            <div id="pwErr" class="err">Incorrect password. Please try again.</div>
+            <button class="btn btn-primary" id="pwBtn" onclick="verifyPassword()">Unlock</button>
+        </div>
+    </div>
+
+    <!-- Main App (hidden until unlocked) -->
+    <div id="mainApp" class="container" style="display:none;">
+        <div class="header">
+            <h1>🏫 LUNZU SECONDARY SCHOOL</h1>
+            <div class="subtitle">Boarding Fees Invoice Portal</div>
+            <div class="badge">📄 Multi-Term Invoice with B/F Support</div>
+        </div>
+
+        <div class="net-status">
+            <span class="net-dot" id="netDot"></span>
+            <span class="net-label" id="netLabel">Online</span>
+        </div>
+
+        <div id="offlineBanner" class="offline-banner">
+            ⚠️ You appear to be offline. Please check your internet connection.
+        </div>
+
+        <div class="content">
+            <div id="alert" class="alert"></div>
+
+            <!-- Parent Info -->
+            <div>
+                <h3 class="section-title">👤 Parent/Guardian Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parentName">Parent/Guardian Name <span class="required">*</span></label>
+                        <input type="text" id="parentName" placeholder="Full name of parent/guardian" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentPhone">Phone Number</label>
+                        <input type="text" id="parentPhone" placeholder="e.g., 0888853051">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="parentEmail">Email Address</label>
+                    <input type="email" id="parentEmail" placeholder="email@example.com">
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Academic Year + Terms -->
+            <div>
+                <h3 class="section-title">
+                    📅 Academic Year &amp; Terms
+                    <span class="bf-preview" id="bfPreview" style="display:none;"></span>
+                </h3>
+
+                <div class="form-group">
+                    <label for="academicYear">Select Academic Year <span class="required">*</span></label>
+                    <select id="academicYear" onchange="onAcademicYearChange()">
+                        <option value="2024-2025">2024-2025</option>
+                        <option value="2025-2026">2025-2026</option>
+                        <option value="2026-2027" selected>2026-2027</option>
+                        <option value="2027-2028">2027-2028</option>
+                        <option value="2028-2029">2028-2029</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Terms <span class="required">*</span></label>
+                    <div class="term-checkboxes">
+                        <label class="term-label checked">
+                            <input type="checkbox" class="term-check" value="TERM 1" checked onchange="onTermChange(this)">
+                            TERM 1
+                        </label>
+                        <label class="term-label">
+                            <input type="checkbox" class="term-check" value="TERM 2" onchange="onTermChange(this)">
+                            TERM 2
+                        </label>
+                        <label class="term-label">
+                            <input type="checkbox" class="term-check" value="TERM 3" onchange="onTermChange(this)">
+                            TERM 3
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Students -->
+            <div>
+                <h3 class="section-title">
+                    👨‍🎓 Students
+                    <span class="invoice-count" id="studentCount">(0 students)</span>
+                </h3>
+
+                <div id="studentsContainer"></div>
+
+                <div class="btn-group" style="margin-top:10px;">
+                    <button type="button" class="btn btn-secondary" onclick="addStudent()">
+                        ➕ Add Student
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="clearAllStudents()">
+                        🗑️ Clear All
+                    </button>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Actions -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" onclick="generateAndDownload()" id="generateBtn">
+                    📄 Generate Invoice (PDF)
+                </button>
+                <button type="button" class="btn btn-outline" onclick="checkExisting()" id="checkBtn">
+                    🔍 Check Existing Invoices
+                </button>
+            </div>
+
+            <div id="existingInvoices" class="existing-invoices">
+                <h4>📋 Existing Invoices</h4>
+                <div id="invoiceList"></div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="help-section">
+                <strong>💡 How to Use</strong>
+                <ul>
+                    <li>Select the <strong>Academic Year</strong> first</li>
+                    <li>Choose the <strong>Terms</strong> you want to invoice</li>
+                    <li>Add students — changing Class reloads the correct names</li>
+                    <li>Click <strong>Generate</strong> to create and download the PDF</li>
+                    <li>Use <strong>Check Existing Invoices</strong> to manage past invoices</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Lunzu Secondary School - All Rights Reserved</p>
+            <p style="margin-top:4px;">Private Bag 130, Lunzu, Malawi | 📞 0888853051</p>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Preparing...</div>
+        <div class="loading-step" id="loadingStep">STEP 1 OF 4</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <!-- Mark Paid Modal -->
+    <div id="markPaidModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="color:#002b54;margin-bottom:6px;">💰 Mark Invoice as Paid</h3>
+            <p style="font-size:13px;color:#64748b;margin-bottom:16px;" id="markPaidInvoiceInfo"></p>
+            <div class="form-group">
+                <label>Amount Received (K) <span class="required">*</span></label>
+                <input type="number" id="paidAmountInput" placeholder="e.g., 100000" min="1">
+            </div>
+            <div class="form-group">
+                <label>Admin Password <span class="required">*</span></label>
+                <input type="password" id="paidPasswordInput" placeholder="Enter admin password">
+            </div>
+            <div id="markPaidAlert" class="alert"></div>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="btn btn-success" onclick="submitMarkPaid()" id="markPaidSubmitBtn">✓ Confirm Payment</button>
+                <button class="btn btn-secondary" onclick="closeMarkPaidModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Invoice Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="color:#002b54;margin-bottom:6px;">✏️ Edit Invoice</h3>
+            <p style="font-size:13px;color:#64748b;margin-bottom:16px;" id="editInvoiceInfo"></p>
+            <p style="font-size:11px;color:#92400e;background:#fef3c7;padding:8px 10px;border-radius:6px;margin-bottom:14px;">
+                💡 <strong>Note:</strong> Students, terms, fees and academic year cannot be edited here.
+                To change those, delete this invoice and regenerate.
+            </p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Parent/Guardian Name</label>
+                    <input type="text" id="editParentName">
+                </div>
+                <div class="form-group">
+                    <label>Parent Phone</label>
+                    <input type="text" id="editParentPhone">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Parent Email</label>
+                <input type="email" id="editParentEmail">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="editStatus">
+                    <option value="UNPAID">UNPAID</option>
+                    <option value="PARTIALLY PAID">PARTIALLY PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="CREDIT">CREDIT</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <input type="text" id="editNotes" placeholder="Optional notes">
+            </div>
+            <div class="form-group">
+                <label>Admin Password <span class="required">*</span></label>
+                <input type="password" id="editPasswordInput" placeholder="Enter admin password">
+            </div>
+            <div id="editAlert" class="alert"></div>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="btn btn-primary" onclick="submitEdit()" id="editSubmitBtn">💾 Save Changes</button>
+                <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:420px;">
+            <h3 style="color:#991b1b;margin-bottom:6px;">🗑️ Delete Invoice</h3>
+            <p style="font-size:13px;color:#64748b;margin-bottom:16px;" id="deleteInvoiceInfo"></p>
+            <p style="font-size:12px;color:#ef4444;background:#fef2f2;padding:10px;border-radius:6px;margin-bottom:16px;">
+                ⚠️ This action cannot be undone. The invoice will be permanently removed.
+            </p>
+            <div class="form-group">
+                <label>Admin Password <span class="required">*</span></label>
+                <input type="password" id="deletePasswordInput" placeholder="Enter admin password">
+            </div>
+            <div id="deleteAlert" class="alert"></div>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="btn btn-danger" onclick="submitDeleteInvoice()" id="deleteSubmitBtn">🗑️ Delete Invoice</button>
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+
+        // ============================================
+        // STATE
+        // ============================================
+        let studentCounter = 0;
+        let currentPDFBase64 = null;
+        let currentFileName = null;
+        let isGenerating = false;
+        let classData = [];
+        let classesLoaded = false;
+        let adminPassword = sessionStorage.getItem('invoiceAdminPw') || '';
+
+        let studentNamesCache = {};
+        let progressTimer = null;
+        let progressIndex = 0;
+        let consecutiveFailures = 0;
+
+        let currentPaidInvoiceNumber = null;
+        let currentDeleteInvoiceNumber = null;
+        let currentEditInvoiceNumber = null;
+
+        // ============================================
+        // PASSWORD GATE
+        // ============================================
+        function verifyPassword() {
+            var pw = document.getElementById('pwInput').value.trim();
+            var err = document.getElementById('pwErr');
+            if (!pw) {
+                err.textContent = 'Please enter a password.';
+                err.classList.add('show');
+                return;
+            }
+            var btn = document.getElementById('pwBtn');
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            callApi('verifyAdmin', { password: pw }, function(result) {
+                btn.disabled = false;
+                btn.textContent = 'Unlock';
+                if (result && result.success) {
+                    adminPassword = pw;
+                    sessionStorage.setItem('invoiceAdminPw', pw);
+                    document.getElementById('pwGate').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    initApp();
+                } else {
+                    err.textContent = 'Incorrect password. Please try again.';
+                    err.classList.add('show');
+                    document.getElementById('pwInput').value = '';
+                    document.getElementById('pwInput').focus();
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.textContent = 'Unlock';
+                err.textContent = 'Network error: ' + error;
+                err.classList.add('show');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('pwInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') verifyPassword();
+            });
+            // Auto-verify if we have a stored password
+            if (adminPassword) {
+                document.getElementById('pwInput').value = adminPassword;
+                verifyPassword();
+            }
+        });
+
+        // ============================================
+        // APP INIT (after unlock)
+        // ============================================
+        function initApp() {
+            updateNetworkStatus();
+            updateBFPreview();
+            loadClasses();
+            setTimeout(function() { addStudent(); }, 400);
+
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    var t = e.target;
+                    if (t.tagName === 'INPUT' && t.type !== 'checkbox' && t.id !== 'pwInput') {
+                        e.preventDefault();
+                        generateAndDownload();
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeMarkPaidModal();
+                    closeDeleteModal();
+                    closeEditModal();
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'markPaidModal') closeMarkPaidModal();
+                if (e.target.id === 'deleteConfirmModal') closeDeleteModal();
+                if (e.target.id === 'editModal') closeEditModal();
+            });
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showAlert(message, type) {
+            var alert = document.getElementById('alert');
+            alert.className = 'alert alert-' + type + ' show';
+            alert.textContent = message;
+            clearTimeout(alert._timeout);
+            alert._timeout = setTimeout(function() { alert.className = 'alert'; }, 9000);
+        }
+        function hideAlert() { document.getElementById('alert').className = 'alert'; }
+
+        function updateStudentCount() {
+            var students = document.querySelectorAll('.student-entry');
+            document.getElementById('studentCount').textContent = '(' + students.length + ' students)';
+        }
+
+        function updateNetworkStatus() {
+            var dot = document.getElementById('netDot');
+            var label = document.getElementById('netLabel');
+            var banner = document.getElementById('offlineBanner');
+            if (!navigator.onLine) {
+                dot.className = 'net-dot offline';
+                label.textContent = 'Offline — check your connection';
+                banner.className = 'offline-banner show';
+            } else if (consecutiveFailures >= 2) {
+                dot.className = 'net-dot slow';
+                label.textContent = 'Slow connection detected';
+                banner.className = 'offline-banner';
+            } else {
+                dot.className = 'net-dot';
+                label.textContent = 'Online';
+                banner.className = 'offline-banner';
+            }
+        }
+
+        window.addEventListener('online', function() {
+            consecutiveFailures = 0;
+            updateNetworkStatus();
+            showAlert('✅ Back online', 'success');
+        });
+        window.addEventListener('offline', function() {
+            updateNetworkStatus();
+            showAlert('⚠️ You are offline. Please reconnect.', 'warn');
+        });
+
+        // ============================================
+        // PROGRESS / LOADING
+        // ============================================
+        var PROGRESS_STEPS = [
+            { text: 'Reading fee sheets...', step: 'STEP 1 OF 4' },
+            { text: 'Fetching brought-forward values...', step: 'STEP 2 OF 4' },
+            { text: 'Calculating balances...', step: 'STEP 3 OF 4' },
+            { text: 'Generating PDF...', step: 'STEP 4 OF 4' }
+        ];
+
+        function showLoading(message) {
+            var el = document.getElementById('loading');
+            var text = document.getElementById('loadingText');
+            var stepEl = document.getElementById('loadingStep');
+            var fill = document.getElementById('progressFill');
+            if (message) {
+                text.textContent = message;
+                stepEl.textContent = '';
+                fill.style.width = '25%';
+            } else {
+                progressIndex = 0;
+                text.textContent = PROGRESS_STEPS[0].text;
+                stepEl.textContent = PROGRESS_STEPS[0].step;
+                fill.style.width = '15%';
+                clearInterval(progressTimer);
+                progressTimer = setInterval(function() {
+                    progressIndex++;
+                    if (progressIndex >= PROGRESS_STEPS.length) return;
+                    text.textContent = PROGRESS_STEPS[progressIndex].text;
+                    stepEl.textContent = PROGRESS_STEPS[progressIndex].step;
+                    fill.style.width = (15 + (progressIndex * 25)) + '%';
+                }, 2200);
+            }
+            el.className = 'loading show';
+        }
+
+        function updateLoading(message, step, progressPct) {
+            var text = document.getElementById('loadingText');
+            var stepEl = document.getElementById('loadingStep');
+            var fill = document.getElementById('progressFill');
+            if (message) text.textContent = message;
+            if (step) stepEl.textContent = step;
+            if (progressPct !== undefined) fill.style.width = progressPct + '%';
+        }
+
+        function hideLoading() {
+            clearInterval(progressTimer);
+            progressTimer = null;
+            document.getElementById('loading').className = 'loading';
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        // ============================================
+        // JSONP API CALLER
+        // ============================================
+        function callApi(action, params, onSuccess, onError, retryCount) {
+            retryCount = retryCount || 0;
+            var maxRetries = 3;
+            var callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+            var timeoutMs = 180000;
+
+            var data = { action: action, callback: callbackName };
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) data[key] = params[key];
+            }
+
+            var qs = Object.keys(data).map(function(k) {
+                return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+            }).join('&');
+
+            var script = document.createElement('script');
+            script.src = GAS_WEB_APP_URL + '?' + qs;
+            script.async = true;
+
+            var completed = false;
+            var timeoutId = null;
+
+            function cleanup() {
+                if (script.parentNode) script.parentNode.removeChild(script);
+                try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+                if (timeoutId) clearTimeout(timeoutId);
+            }
+
+            function handleFailure(errMsg) {
+                if (completed) return;
+                completed = true;
+                cleanup();
+                consecutiveFailures++;
+                updateNetworkStatus();
+                if (retryCount < maxRetries && navigator.onLine) {
+                    var delay = 900 * Math.pow(2, retryCount);
+                    setTimeout(function() {
+                        callApi(action, params, onSuccess, onError, retryCount + 1);
+                    }, delay);
+                } else {
+                    if (onError) onError(errMsg);
+                    else showAlert('Request failed: ' + errMsg, 'error');
+                }
+            }
+
+            window[callbackName] = function(result) {
+                if (completed) return;
+                completed = true;
+                cleanup();
+                consecutiveFailures = 0;
+                updateNetworkStatus();
+                if (result && typeof result === 'object') {
+                    if (onSuccess) onSuccess(result);
+                } else {
+                    handleFailure('Invalid response format');
+                }
+            };
+
+            script.onerror = function() { handleFailure('Network error'); };
+            timeoutId = setTimeout(function() { handleFailure('Request timed out'); }, timeoutMs);
+            document.body.appendChild(script);
+        }
+
+        // ============================================
+        // TERMS + B/F PREVIEW
+        // ============================================
+        function onTermChange(checkbox) {
+            var label = checkbox.parentElement;
+            if (checkbox.checked) label.classList.add('checked');
+            else label.classList.remove('checked');
+            var checked = document.querySelectorAll('.term-check:checked');
+            if (checked.length === 0) {
+                checkbox.checked = true;
+                label.classList.add('checked');
+            }
+            updateBFPreview();
+        }
+
+        function updateBFPreview() {
+            var preview = document.getElementById('bfPreview');
+            var checked = document.querySelectorAll('.term-check:checked');
+            var terms = [];
+            for (var i = 0; i < checked.length; i++) terms.push(checked[i].value);
+            if (terms.length === 0) { preview.style.display = 'none'; return; }
+            var firstTerm = terms[0];
+            var bfSource = '';
+            if (firstTerm === 'TERM 1') bfSource = 'prior year TERM 3';
+            else if (firstTerm === 'TERM 2') bfSource = 'TERM 1';
+            else if (firstTerm === 'TERM 3') bfSource = 'TERM 2';
+            preview.style.display = 'inline-block';
+            preview.textContent = 'B/F from ' + bfSource;
+        }
+
+        // ============================================
+        // CLASSES + STUDENTS
+        // ============================================
+        function loadClasses() {
+            if (classesLoaded && classData.length > 0) {
+                var selects = document.querySelectorAll('.student-class-select');
+                for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classData);
+                return;
+            }
+            callApi('getClasses', {}, function(result) {
+                var classes = [];
+                if (Array.isArray(result)) classes = result;
+                else if (result.data && Array.isArray(result.data)) classes = result.data;
+                else if (result.classes && Array.isArray(result.classes)) classes = result.classes;
+                classData = classes;
+                classesLoaded = true;
+                var selects = document.querySelectorAll('.student-class-select');
+                for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classes);
+            }, function(error) {
+                showAlert('Error loading classes: ' + error, 'error');
+            });
+        }
+
+        function populateClassSelect(select, classes) {
+            var currentValue = select.value;
+            select.innerHTML = '<option value="">Select Class...</option>';
+            for (var i = 0; i < classes.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = classes[i].value || classes[i];
+                opt.textContent = classes[i].label || classes[i];
+                select.appendChild(opt);
+            }
+            if (currentValue) select.value = currentValue;
+        }
+
+        function getFirstSelectedTerm() {
+            var checked = document.querySelectorAll('.term-check:checked');
+            if (checked.length === 0) return 'TERM 1';
+            return checked[0].value;
+        }
+
+        function loadStudentNamesForSelect(select, className, force) {
+            if (!className) {
+                select.innerHTML = '<option value="">Select Student...</option>';
+                return;
+            }
+            var academicYear = document.getElementById('academicYear').value;
+            var term = getFirstSelectedTerm();
+            var cacheKey = className + '|' + academicYear + '|' + term;
+            if (!force && studentNamesCache[cacheKey]) {
+                fillNameSelect(select, studentNamesCache[cacheKey]);
+                return;
+            }
+            var entry = select.closest('.student-entry');
+            if (entry) {
+                var existingSpinner = entry.querySelector('.spinner-mini');
+                if (existingSpinner) existingSpinner.remove();
+                var spin = document.createElement('span');
+                spin.className = 'spinner-mini';
+                select.parentNode.appendChild(spin);
+            }
+            select.disabled = true;
+            callApi('getInvoiceStudentNames', {
+                className: className,
+                academicYear: academicYear,
+                term: term
+            }, function(result) {
+                select.disabled = false;
+                var entry = select.closest('.student-entry');
+                if (entry) {
+                    var sp = entry.querySelector('.spinner-mini');
+                    if (sp) sp.remove();
+                }
+                var names = [];
+                if (Array.isArray(result)) names = result;
+                else if (result.data && Array.isArray(result.data)) names = result.data;
+                else if (result.names && Array.isArray(result.names)) names = result.names;
+                studentNamesCache[cacheKey] = names;
+                fillNameSelect(select, names);
+            }, function(error) {
+                select.disabled = false;
+                var entry = select.closest('.student-entry');
+                if (entry) {
+                    var sp = entry.querySelector('.spinner-mini');
+                    if (sp) sp.remove();
+                }
+                select.innerHTML = '<option value="">Error loading — try again</option>';
+                showAlert('Error loading students: ' + error, 'error');
+            });
+        }
+
+        function fillNameSelect(select, names) {
+            var currentValue = select.value;
+            select.innerHTML = '<option value="">Select Student...</option>';
+            if (names && names.length > 0) {
+                for (var i = 0; i < names.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = names[i];
+                    opt.textContent = names[i];
+                    select.appendChild(opt);
+                }
+                if (currentValue && names.indexOf(currentValue) !== -1) select.value = currentValue;
+            } else {
+                select.innerHTML = '<option value="">No students found</option>';
+            }
+        }
+
+        // ============================================
+        // STUDENT MANAGEMENT
+        // ============================================
+        function addStudent() {
+            var container = document.getElementById('studentsContainer');
+            var id = ++studentCounter;
+            var previousClass = '';
+            var entries = document.querySelectorAll('.student-entry');
+            if (entries.length > 0) {
+                var lastClass = entries[entries.length - 1].querySelector('.student-class-select');
+                if (lastClass && lastClass.value) previousClass = lastClass.value;
+            }
+            var div = document.createElement('div');
+            div.className = 'student-entry';
+            div.dataset.id = id;
+            div.innerHTML = '<button type="button" class="remove-btn" onclick="removeStudent(' + id + ')">×</button>' +
+                '<div class="form-row">' +
+                '<div class="form-group" style="margin-bottom:0;">' +
+                '<label>Student Class <span class="required">*</span></label>' +
+                '<select class="student-class-select" data-id="' + id + '"><option value="">Select Class...</option></select>' +
+                '</div>' +
+                '<div class="form-group" style="margin-bottom:0;">' +
+                '<label>Student Name <span class="required">*</span></label>' +
+                '<select class="student-name-select" data-id="' + id + '"><option value="">Select Student...</option></select>' +
+                '</div></div>';
+            container.appendChild(div);
+            var classSelect = div.querySelector('.student-class-select');
+            populateClassSelect(classSelect, classData);
+            classSelect.addEventListener('change', function() {
+                var nameSelect = div.querySelector('.student-name-select');
+                nameSelect.value = '';
+                nameSelect.innerHTML = '<option value="">Loading...</option>';
+                loadStudentNamesForSelect(nameSelect, classSelect.value, false);
+            });
+            if (previousClass) {
+                classSelect.value = previousClass;
+                var nameSelect = div.querySelector('.student-name-select');
+                loadStudentNamesForSelect(nameSelect, previousClass, false);
+            }
+            updateStudentCount();
+        }
+
+        function removeStudent(id) {
+            var entry = document.querySelector('.student-entry[data-id="' + id + '"]');
+            if (entry) {
+                entry.style.opacity = '0';
+                entry.style.transform = 'translateY(-4px)';
+                entry.style.transition = 'all 0.2s';
+                setTimeout(function() {
+                    entry.remove();
+                    updateStudentCount();
+                }, 150);
+            }
+        }
+
+        function clearAllStudents() {
+            document.getElementById('studentsContainer').innerHTML = '';
+            studentCounter = 0;
+            updateStudentCount();
+        }
+
+        function getStudentsData() {
+            var entries = document.querySelectorAll('.student-entry');
+            var students = [];
+            for (var i = 0; i < entries.length; i++) {
+                var classSelect = entries[i].querySelector('.student-class-select');
+                var nameSelect = entries[i].querySelector('.student-name-select');
+                if (classSelect.value && nameSelect.value) {
+                    students.push({ name: nameSelect.value, class: classSelect.value });
+                }
+            }
+            return students;
+        }
+
+        function onAcademicYearChange() {
+            studentNamesCache = {};
+            var entries = document.querySelectorAll('.student-entry');
+            for (var i = 0; i < entries.length; i++) {
+                var classSelect = entries[i].querySelector('.student-class-select');
+                var nameSelect = entries[i].querySelector('.student-name-select');
+                if (classSelect && nameSelect && classSelect.value) {
+                    loadStudentNamesForSelect(nameSelect, classSelect.value, true);
+                }
+            }
+            updateBFPreview();
+        }
+
+        // ============================================
+        // CHECK EXISTING INVOICES
+        // ============================================
+        function checkExisting() {
+            var parentName = document.getElementById('parentName').value.trim();
+            if (!parentName) {
+                showAlert('Please enter parent name to search', 'error');
+                return;
+            }
+            var btn = document.getElementById('checkBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Searching...';
+            callApi('getInvoicesByParent', { parentName: parentName }, function(result) {
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Check Existing Invoices';
+                var container = document.getElementById('existingInvoices');
+                var list = document.getElementById('invoiceList');
+                if (result.success && result.invoices && result.invoices.length > 0) {
+                    list.innerHTML = '';
+                    for (var i = 0; i < result.invoices.length; i++) {
+                        var inv = result.invoices[i];
+                        var statusKey = (inv.status || 'UNPAID').toLowerCase().replace(' ', '');
+                        if (statusKey.indexOf('partial') !== -1) statusKey = 'partial';
+                        if (statusKey.indexOf('credit') !== -1) statusKey = 'credit';
+                        var balance = inv.totalBalance || 0;
+                        var owedAmount = Math.abs(balance);
+                        var div = document.createElement('div');
+                        div.className = 'invoice-item';
+                        div.innerHTML = '<span><strong>' + inv.invoiceNumber + '</strong><br>' + inv.issueDate + '</span>' +
+                            '<span>' + (inv.terms || '') + '<br>(' + (inv.academicYear || '') + ')</span>' +
+                            '<span>' + (inv.studentList || 'N/A') + '</span>' +
+                            '<span>Due: <strong>K' + owedAmount.toLocaleString() + '</strong></span>' +
+                            '<span class="status-' + statusKey + '">' + inv.status + '</span>' +
+                            '<span class="actions">' +
+                            '<button class="btn btn-sm btn-success" onclick="downloadInvoice(\'' + inv.invoiceNumber + '\')">📥 PDF</button>' +
+                            '<button class="btn btn-sm btn-primary" onclick="openMarkPaidModal(\'' + inv.invoiceNumber + '\', ' + balance + ')">💰 Mark Paid</button>' +
+                            '<button class="btn btn-sm btn-outline" onclick="openEditModal(\'' + inv.invoiceNumber + '\')">✏️ Edit</button>' +
+                            '<button class="btn btn-sm btn-danger" onclick="confirmDeleteInvoice(\'' + inv.invoiceNumber + '\')">🗑️ Delete</button>' +
+                            '</span>';
+                        list.appendChild(div);
+                    }
+                    container.className = 'existing-invoices show';
+                    showAlert('Found ' + result.invoices.length + ' invoice(s)', 'info');
+                } else {
+                    container.className = 'existing-invoices';
+                    showAlert('No existing invoices found', 'info');
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Check Existing Invoices';
+                showAlert('Error: ' + error, 'error');
+            });
+        }
+
+        function downloadInvoice(invoiceNumber) {
+            showLoading('Fetching PDF...');
+            callApi('getInvoicePDF', { invoiceNumber: invoiceNumber }, function(result) {
+                hideLoading();
+                if (result.success && result.pdfBase64) {
+                    currentPDFBase64 = result.pdfBase64;
+                    currentFileName = result.fileName || 'invoice.pdf';
+                    downloadPDF();
+                    showAlert('PDF downloaded', 'success');
+                } else {
+                    showAlert('Error: ' + (result.error || 'Unknown'), 'error');
+                }
+            }, function(error) {
+                hideLoading();
+                showAlert('Error: ' + error, 'error');
+            });
+        }
+
+        // ============================================
+        // MARK PAID
+        // ============================================
+        function openMarkPaidModal(invoiceNumber, balance) {
+            currentPaidInvoiceNumber = invoiceNumber;
+            var owedAmount = Math.abs(balance || 0);
+            document.getElementById('markPaidInvoiceInfo').innerHTML =
+                'Invoice: <strong>' + invoiceNumber + '</strong><br>' +
+                'Amount Owed: <strong style="color:#ef4444;">K' + owedAmount.toLocaleString() + '</strong>';
+            document.getElementById('paidAmountInput').value = owedAmount || '';
+            document.getElementById('paidPasswordInput').value = adminPassword;
+            document.getElementById('markPaidAlert').className = 'alert';
+            document.getElementById('markPaidModal').className = 'modal-overlay show';
+            setTimeout(function() { document.getElementById('paidAmountInput').focus(); }, 100);
+        }
+
+        function closeMarkPaidModal() {
+            document.getElementById('markPaidModal').className = 'modal-overlay';
+            currentPaidInvoiceNumber = null;
+        }
+
+        function submitMarkPaid() {
+            var amount = parseFloat(document.getElementById('paidAmountInput').value);
+            var password = document.getElementById('paidPasswordInput').value;
+            var alertEl = document.getElementById('markPaidAlert');
+            var btn = document.getElementById('markPaidSubmitBtn');
+            if (!amount || amount <= 0) {
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Please enter a valid amount';
+                return;
+            }
+            if (!password) {
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Please enter the admin password';
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Processing...';
+            callApi('markInvoicePaidSecure', {
+                invoiceNumber: currentPaidInvoiceNumber,
+                amountPaid: amount,
+                password: password
+            }, function(result) {
+                btn.disabled = false;
+                btn.innerHTML = '✓ Confirm Payment';
+                if (result.success) {
+                    closeMarkPaidModal();
+                    showAlert(result.message || 'Payment recorded', 'success');
+                    setTimeout(checkExisting, 500);
+                } else {
+                    alertEl.className = 'alert alert-error show';
+                    alertEl.textContent = result.error || 'Failed';
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.innerHTML = '✓ Confirm Payment';
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Network error: ' + error;
+            });
+        }
+
+        // ============================================
+        // EDIT MODAL
+        // ============================================
+        function openEditModal(invoiceNumber) {
+            currentEditInvoiceNumber = invoiceNumber;
+            var alertEl = document.getElementById('editAlert');
+            alertEl.className = 'alert';
+            document.getElementById('editInvoiceInfo').innerHTML = 'Loading details for <strong>' + invoiceNumber + '</strong>...';
+            document.getElementById('editModal').className = 'modal-overlay show';
+            callApi('getInvoiceMetadata', { invoiceNumber: invoiceNumber }, function(result) {
+                if (!result.success) {
+                    alertEl.className = 'alert alert-error show';
+                    alertEl.textContent = 'Failed to load: ' + (result.error || 'Unknown');
+                    return;
+                }
+                var inv = result.invoice;
+                document.getElementById('editInvoiceInfo').innerHTML =
+                    'Invoice <strong>' + inv.invoiceNumber + '</strong><br>' +
+                    'Students: ' + (inv.studentList || '') + '<br>' +
+                    'Academic Year: ' + (inv.academicYear || '');
+                document.getElementById('editParentName').value = inv.parentName || '';
+                document.getElementById('editParentPhone').value = inv.parentPhone || '';
+                document.getElementById('editParentEmail').value = inv.parentEmail || '';
+                document.getElementById('editStatus').value = inv.status || 'UNPAID';
+                document.getElementById('editNotes').value = inv.notes || '';
+                document.getElementById('editPasswordInput').value = adminPassword;
+            }, function(error) {
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Network error: ' + error;
+            });
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').className = 'modal-overlay';
+            currentEditInvoiceNumber = null;
+        }
+
+        function submitEdit() {
+            var alertEl = document.getElementById('editAlert');
+            var btn = document.getElementById('editSubmitBtn');
+            var password = document.getElementById('editPasswordInput').value;
+            if (!password) {
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Please enter the admin password';
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Saving...';
+            callApi('editInvoiceMetadata', {
+                invoiceNumber: currentEditInvoiceNumber,
+                parentName: document.getElementById('editParentName').value.trim(),
+                parentPhone: document.getElementById('editParentPhone').value.trim(),
+                parentEmail: document.getElementById('editParentEmail').value.trim(),
+                notes: document.getElementById('editNotes').value.trim(),
+                status: document.getElementById('editStatus').value,
+                password: password
+            }, function(result) {
+                btn.disabled = false;
+                btn.innerHTML = '💾 Save Changes';
+                if (result.success) {
+                    closeEditModal();
+                    showAlert(result.message || 'Invoice updated', 'success');
+                    setTimeout(checkExisting, 500);
+                } else {
+                    alertEl.className = 'alert alert-error show';
+                    alertEl.textContent = result.error || 'Failed';
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.innerHTML = '💾 Save Changes';
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Network error: ' + error;
+            });
+        }
+
+        // ============================================
+        // DELETE MODAL
+        // ============================================
+        function confirmDeleteInvoice(invoiceNumber) {
+            currentDeleteInvoiceNumber = invoiceNumber;
+            document.getElementById('deleteInvoiceInfo').innerHTML =
+                'You are about to delete invoice <strong>' + invoiceNumber + '</strong>.';
+            document.getElementById('deletePasswordInput').value = adminPassword;
+            document.getElementById('deleteAlert').className = 'alert';
+            document.getElementById('deleteConfirmModal').className = 'modal-overlay show';
+            setTimeout(function() { document.getElementById('deletePasswordInput').focus(); }, 100);
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteConfirmModal').className = 'modal-overlay';
+            currentDeleteInvoiceNumber = null;
+        }
+
+        function submitDeleteInvoice() {
+            var password = document.getElementById('deletePasswordInput').value;
+            var alertEl = document.getElementById('deleteAlert');
+            var btn = document.getElementById('deleteSubmitBtn');
+            if (!password) {
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Please enter the admin password';
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Deleting...';
+            callApi('deleteInvoiceSecure', {
+                invoiceNumber: currentDeleteInvoiceNumber,
+                password: password
+            }, function(result) {
+                btn.disabled = false;
+                btn.innerHTML = '🗑️ Delete Invoice';
+                if (result.success) {
+                    closeDeleteModal();
+                    showAlert(result.message || 'Invoice deleted', 'success');
+                    setTimeout(checkExisting, 500);
+                } else {
+                    alertEl.className = 'alert alert-error show';
+                    alertEl.textContent = result.error || 'Failed';
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.innerHTML = '🗑️ Delete Invoice';
+                alertEl.className = 'alert alert-error show';
+                alertEl.textContent = 'Network error: ' + error;
+            });
+        }
+
+        // ============================================
+        // GENERATE
+        // ============================================
+        function generateAndDownload() {
+            if (isGenerating) return;
+            var parentName = document.getElementById('parentName').value.trim();
+            var parentPhone = document.getElementById('parentPhone').value.trim();
+            var parentEmail = document.getElementById('parentEmail').value.trim();
+            var academicYear = document.getElementById('academicYear').value;
+            var terms = getSelectedTerms();
+            var students = getStudentsData();
+            if (!parentName) { showAlert('Please enter parent name', 'error'); return; }
+            if (!academicYear) { showAlert('Please select an academic year', 'error'); return; }
+            if (terms.length === 0) { showAlert('Please select at least one term', 'error'); return; }
+            if (students.length === 0) { showAlert('Please add at least one student', 'error'); return; }
+            for (var i = 0; i < students.length; i++) {
+                if (!students[i].class || !students[i].name) {
+                    showAlert('Please complete all student information', 'error');
+                    return;
+                }
+            }
+            if (!navigator.onLine) {
+                showAlert('You appear to be offline', 'error');
+                return;
+            }
+            hideAlert();
+            isGenerating = true;
+            var btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Generating...';
+            showLoading();
+            var safetyTimeout = setTimeout(function() {
+                if (isGenerating) {
+                    isGenerating = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '📄 Generate Invoice (PDF)';
+                    hideLoading();
+                    showAlert('Request timed out. Please try again.', 'error');
+                }
+            }, 300000);
+            var studentsParam = students.map(function(s) { return s.name + '|' + s.class; }).join(',');
+            var termsParam = terms.join(',');
+            updateLoading('Reading fee sheets...', 'STEP 1 OF 4', 20);
+            callApi('generateInvoice', {
+                password: adminPassword,
+                students: studentsParam,
+                parentName: parentName,
+                parentPhone: parentPhone,
+                parentEmail: parentEmail,
+                terms: termsParam,
+                academicYear: academicYear
+            }, function(result) {
+                if (!result.success) {
+                    clearTimeout(safetyTimeout);
+                    hideLoading();
+                    isGenerating = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '📄 Generate Invoice (PDF)';
+                    showAlert('Failed: ' + (result.error || 'Unknown'), 'error');
+                    return;
+                }
+                updateLoading('Generating PDF...', 'STEP 4 OF 4', 80);
+                callApi('getInvoicePDF', { invoiceNumber: result.invoice.invoiceNumber }, function(pdfResult) {
+                    clearTimeout(safetyTimeout);
+                    hideLoading();
+                    isGenerating = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '📄 Generate Invoice (PDF)';
+                    if (pdfResult.success && pdfResult.pdfBase64) {
+                        currentPDFBase64 = pdfResult.pdfBase64;
+                        currentFileName = pdfResult.fileName || 'invoice.pdf';
+                        downloadPDF();
+                        showAlert('✅ Invoice generated: ' + result.invoice.invoiceNumber, 'success');
+                        document.getElementById('studentsContainer').innerHTML = '';
+                        studentCounter = 0;
+                        updateStudentCount();
+                        document.getElementById('parentName').value = '';
+                        document.getElementById('parentPhone').value = '';
+                        document.getElementById('parentEmail').value = '';
+                        document.getElementById('existingInvoices').className = 'existing-invoices';
+                    } else {
+                        showAlert('PDF failed: ' + (pdfResult.error || 'Unknown'), 'error');
+                    }
+                }, function(err) {
+                    clearTimeout(safetyTimeout);
+                    hideLoading();
+                    isGenerating = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '📄 Generate Invoice (PDF)';
+                    showAlert('PDF failed: ' + err, 'error');
+                });
+            }, function(error) {
+                clearTimeout(safetyTimeout);
+                hideLoading();
+                isGenerating = false;
+                btn.disabled = false;
+                btn.innerHTML = '📄 Generate Invoice (PDF)';
+                showAlert('Failed: ' + error, 'error');
+            });
+        }
+
+        function getSelectedTerms() {
+            var terms = [];
+            var checks = document.querySelectorAll('.term-check:checked');
+            for (var i = 0; i < checks.length; i++) terms.push(checks[i].value);
+            return terms;
+        }
+
+        function downloadPDF() {
+            if (!currentPDFBase64) { showAlert('No PDF available', 'error'); return; }
+            try {
+                var link = document.createElement('a');
+                link.href = 'data:application/pdf;base64,' + currentPDFBase64;
+                link.download = currentFileName || 'invoice.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (e) {
+                showAlert('Failed to download: ' + e.message, 'error');
+            }
+        }
+
+        // ============================================
+        // EXPOSE TO GLOBAL
+        // ============================================
+        window.verifyPassword = verifyPassword;
+        window.addStudent = addStudent;
+        window.removeStudent = removeStudent;
+        window.clearAllStudents = clearAllStudents;
+        window.onAcademicYearChange = onAcademicYearChange;
+        window.onTermChange = onTermChange;
+        window.checkExisting = checkExisting;
+        window.generateAndDownload = generateAndDownload;
+        window.downloadInvoice = downloadInvoice;
+        window.downloadPDF = downloadPDF;
+        window.openMarkPaidModal = openMarkPaidModal;
+        window.closeMarkPaidModal = closeMarkPaidModal;
+        window.submitMarkPaid = submitMarkPaid;
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.submitEdit = submitEdit;
+        window.confirmDeleteInvoice = confirmDeleteInvoice;
+        window.closeDeleteModal = closeDeleteModal;
+        window.submitDeleteInvoice = submitDeleteInvoice;
+    </script>
+</body>
+</html>
