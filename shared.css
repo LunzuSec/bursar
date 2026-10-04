@@ -1,0 +1,126 @@
+/* ============================================================ */
+/* SHARED STYLES — Navigation bar + common shell               */
+/* Load on every page: <link rel="stylesheet" href="shared.css"> */
+/* ============================================================ */
+
+/* ---- Top navigation bar ---- */
+.shared-top-nav {
+    position: relative;
+    z-index: 50;
+    max-width: 1100px;
+    margin: 0 auto 16px;
+    background: rgba(10, 30, 50, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+.shared-top-nav .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+.shared-top-nav .nav-brand i {
+    color: #fbbf24;
+    font-size: 14px;
+}
+.shared-top-nav .nav-links {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.shared-top-nav .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+    background: rgba(255,255,255,0.08);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-family: inherit;
+}
+.shared-top-nav .nav-link:hover {
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+    transform: translateY(-1px);
+}
+.shared-top-nav .nav-link i { font-size: 11px; }
+.shared-top-nav .nav-link.active {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.5);
+    color: #fef3c7;
+}
+.shared-top-nav .nav-link.primary {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(139, 92, 246, 0.5);
+    color: #e9d5ff;
+}
+.shared-top-nav .nav-link.primary:hover {
+    background: rgba(139, 92, 246, 0.45);
+    color: #fff;
+}
+.shared-top-nav .nav-link.logout {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: rgba(220, 38, 38, 0.5);
+    color: #fecaca;
+}
+.shared-top-nav .nav-link.logout:hover {
+    background: rgba(220, 38, 38, 0.4);
+    color: #fff;
+}
+
+/* ---- Session indicator ---- */
+.shared-session-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+    white-space: nowrap;
+}
+.shared-session-pill.locked {
+    background: rgba(100, 116, 139, 0.2);
+    border-color: rgba(100, 116, 139, 0.4);
+    color: #cbd5e1;
+}
+.shared-session-pill i { font-size: 9px; }
+
+/* ---- Mobile ---- */
+@media (max-width: 700px) {
+    .shared-top-nav {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 12px;
+    }
+    .shared-top-nav .nav-links {
+        justify-content: center;
+    }
+    .shared-top-nav .nav-link {
+        flex: 1;
+        justify-content: center;
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+}
