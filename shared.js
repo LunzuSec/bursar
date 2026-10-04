@@ -1,14 +1,6 @@
 /* ============================================================ */
 /* SHARED SCRIPT — Navigation + password session management     */
 /* Load on every page: <script src="shared.js"></script>        */
-/*                                                              */
-/* Provides:                                                    */
-/*   - SharedNav.render({ current: 'home'|'admin'|'invoice'...  */
-/*                        requireLock: false|true })            */
-/*   - SharedSession.getPassword()                              */
-/*   - SharedSession.setPassword(pw)                            */
-/*   - SharedSession.clear()                                    */
-/*   - SharedSession.isUnlocked()                               */
 /* ============================================================ */
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
@@ -23,7 +15,6 @@ const SESSION_REMEMBER_KEY = 'lunzuAdminRemember';
 
 const SharedSession = {
     getPassword: function() {
-        // Prefer sessionStorage (per tab), fallback to localStorage
         let pw = '';
         try { pw = sessionStorage.getItem(SESSION_KEY) || ''; } catch (e) {}
         if (!pw) {
@@ -58,10 +49,6 @@ const SharedSession = {
         } catch (e) {}
     },
 
-    /**
-     * Verify the stored password against the backend.
-     * Returns: { success: true } or { success: false, error: '...' }
-     */
     verify: function(pw) {
         return new Promise((resolve) => {
             const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
@@ -108,13 +95,6 @@ const SharedSession = {
 /* ============================================================ */
 
 const SharedNav = {
-    /**
-     * Render the top navigation bar.
-     * @param {Object} [opts]
-     * @param {string} [opts.current]   which link to mark active: 'home'|'admin'|'invoice'|'receipts'|'downloads'|'subscribe'
-     * @param {boolean} [opts.showAdmin=true]
-     * @param {boolean} [opts.showLogout=true]
-     */
     render: function(opts) {
         opts = opts || {};
         const current = opts.current || '';
@@ -122,7 +102,6 @@ const SharedNav = {
         const showLogout = opts.showLogout !== false;
         const unlocked = SharedSession.isUnlocked();
 
-        // Remove existing nav if any (idempotent)
         const existing = document.querySelector('.shared-top-nav');
         if (existing) existing.remove();
 
@@ -170,57 +149,41 @@ const SharedNav = {
             sessionPill + '</div>' +
             '<div class="nav-links">' + links + '</div>';
 
-        // Insert as first child of body
         document.body.insertBefore(nav, document.body.firstChild);
     }
 };
 
 /* ============================================================ */
-/* UNLOCK GATE — Show a password prompt if session is locked     */
+/* UNLOCK GATE                                                  */
 /* ============================================================ */
 
-/**
- * Ensure the page is unlocked. If a password is stored (sessionStorage
- * or localStorage), verify it silently. Otherwise, show a password modal.
- * Returns a Promise that resolves when unlocked, rejects if user cancels.
- *
- * @param {Object} [opts]
- * @param {string} [opts.title='Admin Access Required']
- * @param {string} [opts.subtitle='Enter the admin password to continue.']
- * @returns {Promise<string>} resolves with the verified password
- */
 function ensureUnlocked(opts) {
     opts = opts || {};
     const title = opts.title || 'Admin Access Required';
     const subtitle = opts.subtitle || 'Enter the admin password to continue.';
 
     return new Promise((resolve, reject) => {
-        // If we have a stored password, verify it in the background
         const stored = SharedSession.getPassword();
         if (stored) {
             SharedSession.verify(stored).then((res) => {
                 if (res.success) {
                     resolve(stored);
                 } else {
-                    // Stored password invalid → clear it and show modal
                     SharedSession.clear();
                     showPasswordModal(title, subtitle, resolve, reject);
                 }
             });
             return;
         }
-
-        // No stored password → show modal
         showPasswordModal(title, subtitle, resolve, reject);
     });
 }
 
 /* ============================================================ */
-/* PASSWORD MODAL — Rendered by ensureUnlocked()                */
+/* PASSWORD MODAL                                               */
 /* ============================================================ */
 
 function showPasswordModal(title, subtitle, resolve, reject) {
-    // Remove existing modal if any
     const existing = document.getElementById('sharedPwModal');
     if (existing) existing.remove();
 
@@ -240,7 +203,7 @@ function showPasswordModal(title, subtitle, resolve, reject) {
             '<input type="password" id="sharedPwInput" placeholder="Password" maxlength="40" ' +
             'autocomplete="off" style="width:100%;padding:14px 16px;border:1.5px solid rgba(255,255,255,0.2);' +
             'border-radius:12px;font-size:16px;text-align:center;letter-spacing:3px;margin-bottom:14px;' +
-            'background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;">' +
+            'background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;box-sizing:border-box;">' +
             '<label style="display:flex;align-items:center;justify-content:center;gap:8px;' +
             'color:#cbd5e1;font-size:12px;margin-bottom:14px;cursor:pointer;">' +
                 '<input type="checkbox" id="sharedPwRemember" style="accent-color:#8b5cf6;"> ' +
@@ -267,9 +230,7 @@ function showPasswordModal(title, subtitle, resolve, reject) {
     const submit = document.getElementById('sharedPwSubmit');
     const cancel = document.getElementById('sharedPwCancel');
 
-    // Prefill "remember me" if already set
     remember.checked = SharedSession.isRemembered();
-
     setTimeout(() => input.focus(), 100);
 
     async function trySubmit() {
@@ -313,7 +274,7 @@ function showPasswordModal(title, subtitle, resolve, reject) {
 }
 
 /* ============================================================ */
-/* READY — Auto-render nav on any page that opts in             */
+/* AUTO-NAV RENDER                                              */
 /* ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
