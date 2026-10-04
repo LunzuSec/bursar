@@ -3,164 +3,281 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="shared.css">
-<!-- Font Awesome for nav + UI icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="shared.js"></script>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Fee Receipts - Lunzu Secondary School</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="shared.css">
+<script src="shared.js"></script>
 <style>
-  :root {
-    --ink: #000000;
-    --muted: #333333;
-    --light: #666666;
-  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #eef2f6;
-    color: var(--ink);
-    padding: 16px;
+    min-height: 100vh;
+    padding: 20px;
+    background: #0a1f2e;
+    position: relative;
+    overflow-x: hidden;
+    color: #fff;
   }
+  #bg-canvas-container {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+  }
+  #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   /* ============================================================
-     CONTROLS
+     GLASS CONTAINER — matches index portal
      ============================================================ */
-  .main-wrapper { display: block; }
-  .controls {
-    max-width: 1000px; margin: 0 auto 16px;
-    background: white; border-radius: 12px;
-    padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
-  .controls h1 { font-size: 20px; color: #002b54; margin-bottom: 4px; }
-  .controls .subtitle { font-size: 13px; color: #64748b; margin-bottom: 16px; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
-  .controls label {
-    display: block; font-size: 13px; font-weight: 600;
-    color: var(--ink); margin-bottom: 5px;
-  }
-  .controls select, .controls input[type="text"], .controls input[type="date"] {
-    width: 100%; padding: 10px 12px;
-    border: 1.5px solid #cbd5e1; border-radius: 8px;
-    font-size: 14px; background: white;
-  }
-  .controls select:focus, .controls input:focus { outline: none; border-color: #002b54; }
 
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    overflow: hidden;
+  }
+
+  .controls {
+    padding: 24px 26px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .controls h1 {
+    font-size: 24px; color: #fff;
+    letter-spacing: 0.5px; font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    margin-bottom: 4px;
+  }
+  .controls .subtitle {
+    font-size: 13px; color: #d1e0f0;
+    margin-bottom: 18px; line-height: 1.5;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .controls .subtitle strong { color: #fcd34d; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .controls label {
+    display: block; font-size: 14px; font-weight: 600;
+    color: #f0f4fa; margin-bottom: 6px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .controls select, .controls input[type="text"], .controls input[type="date"] {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px; font-size: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff; transition: 0.25s ease;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+    font-family: inherit;
+  }
+  .controls select option { background: #1e2f3f; color: #fff; }
+  .controls select:focus, .controls input:focus {
+    outline: none; border-color: #fbbf24;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15);
+  }
+
+  /* mode + layout tabs */
   .mode-tabs, .layout-toggle {
     display: flex; gap: 6px;
-    padding: 4px;
-    border-radius: 10px; margin-bottom: 14px;
+    padding: 5px;
+    border-radius: 14px; margin-bottom: 16px;
   }
-  .mode-tabs { background: #f1f5f9; }
-  .layout-toggle { background: #fffbeb; border: 1px solid #fde68a; }
+  .mode-tabs { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
+  .layout-toggle { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.2); }
   .mode-tabs button, .layout-toggle button {
-    flex: 1; padding: 10px 10px;
-    background: transparent; border: none; border-radius: 8px;
+    flex: 1; padding: 11px 10px;
+    background: transparent; border: none; border-radius: 10px;
     font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: 0.15s;
+    cursor: pointer; transition: 0.2s;
+    font-family: inherit;
   }
-  .mode-tabs button { color: #64748b; font-size: 13px; padding: 10px 14px; }
-  .layout-toggle button { color: #92400e; }
+  .mode-tabs button { color: #cbd5e1; font-size: 13px; padding: 11px 14px; }
+  .layout-toggle button { color: #fcd34d; }
   .mode-tabs button.active, .layout-toggle button.active {
-    background: white; color: #002b54;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.95); color: #002b54;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+  .mode-tabs button:hover:not(.active), .layout-toggle button:hover:not(.active) {
+    background: rgba(255,255,255,0.15); color: #fff;
   }
 
-  .quick-ranges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .quick-ranges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   .quick-ranges button {
-    padding: 6px 12px;
-    background: #f1f5f9; border: 1px solid #cbd5e1;
+    padding: 7px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
     border-radius: 20px; font-size: 12px; font-weight: 600;
-    color: #64748b; cursor: pointer; transition: 0.15s;
+    color: #e2e8f0; cursor: pointer; transition: 0.2s;
+    font-family: inherit;
   }
-  .quick-ranges button:hover { background: #e2e8f0; color: #002b54; }
+  .quick-ranges button:hover {
+    background: rgba(251, 191, 36, 0.22);
+    border-color: rgba(251, 191, 36, 0.5);
+    color: #fef3c7;
+  }
 
   .range-summary {
-    background: #ecfdf5; border-left: 3px solid #10b981;
-    padding: 10px 14px; border-radius: 6px;
-    font-size: 13px; color: #065f46;
-    margin-bottom: 14px; display: none;
+    background: rgba(16, 185, 129, 0.18);
+    border-left: 3px solid #10b981;
+    padding: 12px 16px; border-radius: 10px;
+    font-size: 13px; color: #d1fae5;
+    margin-bottom: 16px; display: none;
+    line-height: 1.5;
   }
   .range-summary.show { display: block; }
-  .range-summary strong { color: #166534; }
+  .range-summary strong { color: #6ee7b7; }
 
   .student-list {
     max-height: 340px; overflow-y: auto;
-    border: 1px solid #cbd5e1; border-radius: 8px;
-    padding: 4px; background: #f8fafc;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 6px; background: rgba(255,255,255,0.06);
   }
   .student-row {
     display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px; border-bottom: 1px solid #eef2f6;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     font-size: 13px;
+    border-radius: 8px;
+    transition: background 0.15s;
   }
+  .student-row:hover { background: rgba(255,255,255,0.06); }
   .student-row:last-child { border-bottom: none; }
-  .student-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
-  .student-row label { flex: 1; cursor: pointer; margin: 0; font-weight: 500; font-size: 13px; }
-  .student-row .meta { font-size: 11px; color: #64748b; display: block; margin-top: 2px; font-weight: 400; }
+  .student-row input[type="checkbox"] {
+    width: 18px; height: 18px; cursor: pointer;
+    flex-shrink: 0; accent-color: #fbbf24;
+  }
+  .student-row label {
+    flex: 1; cursor: pointer; margin: 0;
+    font-weight: 500; font-size: 13px;
+    color: #f0f4fa;
+  }
+  .student-row .meta {
+    font-size: 11px; color: #bcc9db;
+    display: block; margin-top: 2px; font-weight: 400;
+  }
   .status-pill {
     font-size: 10px; font-weight: 700;
-    padding: 3px 9px; border-radius: 20px;
+    padding: 4px 10px; border-radius: 20px;
     white-space: nowrap; text-transform: uppercase;
     letter-spacing: 0.4px;
   }
-  .status-ok { background: #dcfce7; color: #166534; }
-  .status-due { background: #fee2e2; color: #991b1b; }
-  .status-over { background: #ede9fe; color: #5b21b6; }
+  .status-ok { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+  .status-due { background: rgba(220, 38, 38, 0.3); color: #fca5a5; border: 1px solid rgba(220,38,38,0.4); }
+  .status-over { background: rgba(139, 92, 246, 0.3); color: #ddd6fe; border: 1px solid rgba(139,92,246,0.4); }
 
-  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
   .actions button {
-    flex: 1; min-width: 130px;
-    padding: 12px 18px;
-    border: none; border-radius: 8px;
+    flex: 1; min-width: 140px;
+    padding: 14px 20px;
+    border: none; border-radius: 14px;
     font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: 0.15s;
+    cursor: pointer; transition: 0.25s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
-  .btn-print { background: #002b54; color: white; }
-  .btn-print:hover { background: #003d75; }
+  .btn-print {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-print:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.55);
+  }
   .btn-print:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-pdf { background: #dc2626; color: white; }
-  .btn-pdf:hover { background: #b91c1c; }
+
+  .btn-pdf {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-pdf:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.55);
+  }
   .btn-pdf:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-secondary { background: #fbbf24; color: #422006; }
-  .btn-secondary:hover { background: #f59e0b; }
-  .btn-ghost { background: #f1f5f9; color: #64748b; }
-  .btn-ghost:hover { background: #e2e8f0; }
+
+  .btn-secondary {
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: #fef3c7;
+  }
+  .btn-secondary:hover {
+    background: rgba(251, 191, 36, 0.35);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #cbd5e1;
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+  }
 
   .info {
-    margin-top: 12px; font-size: 12px;
-    color: #64748b; line-height: 1.6;
-    padding: 10px 14px; background: #f8fafc;
-    border-radius: 8px; border-left: 3px solid #fbbf24;
+    margin-top: 16px; font-size: 12.5px;
+    color: #d1e0f0; line-height: 1.7;
+    padding: 14px 18px; background: rgba(30, 58, 95, 0.3);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 215, 0, 0.15);
   }
-  .info strong { color: #002b54; }
+  .info strong { color: #fcd34d; }
 
   .error-msg {
-    background: #fee2e2; color: #991b1b;
-    padding: 10px 14px; border-radius: 8px;
-    font-size: 13px; margin-top: 12px; display: none;
+    background: rgba(220, 38, 38, 0.3); color: #fee2e2;
+    padding: 12px 16px; border-radius: 12px;
+    font-size: 13px; margin-top: 14px; display: none;
+    border-left: 5px solid #dc2626;
   }
   .error-msg.show { display: block; }
 
   .warning-msg {
-    background: #fffbeb; color: #92400e;
-    padding: 12px 14px; border-radius: 8px;
-    font-size: 13px; margin-top: 12px;
-    border-left: 4px solid #f59e0b;
-    display: none; line-height: 1.5;
+    background: rgba(245, 158, 11, 0.2); color: #fef3c7;
+    padding: 14px 16px; border-radius: 12px;
+    font-size: 13px; margin-top: 14px;
+    border-left: 5px solid #f59e0b;
+    display: none; line-height: 1.6;
   }
   .warning-msg.show { display: block; }
-  .warning-msg strong { color: #78350f; }
+  .warning-msg strong { color: #fde68a; }
 
   .preview-header {
-    max-width: 1000px; margin: 0 auto 12px;
-    justify-content: space-between; align-items: center;
-    padding: 10px 18px; background: white;
-    border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px;
+    background: rgba(255,255,255,0.13);
+    backdrop-filter: blur(14px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
   }
   .preview-header.show { display: flex; }
-  .preview-header .count { font-size: 14px; color: #64748b; font-weight: 600; }
-  .preview-header .count strong { color: #002b54; }
+  .preview-header .count { font-size: 14px; color: #d1e0f0; font-weight: 600; }
+  .preview-header .count strong { color: #fcd34d; font-size: 16px; }
 
   /* ============================================================
      RECEIPT SHEET — A4 print layout
@@ -171,13 +288,14 @@
     width: 210mm; height: 297mm;
     margin: 0 auto 20px;
     background: white; padding: 5mm;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     page-break-after: always; break-after: page;
     overflow: hidden; box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 3mm;
+    border-radius: 4px;
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
@@ -195,7 +313,6 @@
     gap: 2mm; padding: 4mm;
   }
 
-  /* SIGNATURE: 2 cols × 2 rows = 4 per page */
   .layout-signature .receipt-sheet {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -221,71 +338,42 @@
     color: #000;
   }
 
-  /* ============================================================
-     WATERMARK — black dashed outline badge
-     ============================================================ */
+  /* WATERMARK */
   .watermark {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; z-index: 0; overflow: hidden;
   }
   .watermark .wm-badge {
     display: inline-block;
     transform: rotate(-22deg);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1;
-    border: 2px dashed #000;
-    border-radius: 8px;
-    padding: 6px 14px;
-    opacity: 0.22;
-    white-space: nowrap;
-    color: #000;
+    font-weight: 900; text-transform: uppercase;
+    letter-spacing: 3px; line-height: 1;
+    border: 2px dashed #000; border-radius: 8px;
+    padding: 6px 14px; opacity: 0.22;
+    white-space: nowrap; color: #000;
     font-family: 'Segoe UI', Arial, sans-serif;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
   .watermark.paid .wm-badge { opacity: 0.20; }
   .watermark.over .wm-badge { opacity: 0.20; }
   .watermark.due  .wm-badge { opacity: 0.24; }
 
-  .receipt > *:not(.watermark) {
-    position: relative;
-    z-index: 1;
-    background: transparent;
-  }
+  .receipt > *:not(.watermark) { position: relative; z-index: 1; background: transparent; }
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
+  /* HEADER */
   .receipt-header {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    display: flex; align-items: center; gap: 5px;
     border-bottom: 1.2px solid #000;
-    padding-bottom: 3px;
-    margin-bottom: 4px;
-    min-height: 34px;
-    background: transparent;
+    padding-bottom: 3px; margin-bottom: 4px;
+    min-height: 34px; background: transparent;
   }
   .receipt-header .crest {
     width: 26px; height: 26px;
-    object-fit: contain;
-    flex-shrink: 0;
+    object-fit: contain; flex-shrink: 0;
   }
   .receipt-header .title { flex: 1; min-width: 0; }
-  .receipt-header .school {
-    font-weight: 700; color: #000;
-    letter-spacing: 0.2px; line-height: 1.15;
-  }
+  .receipt-header .school { font-weight: 700; color: #000; letter-spacing: 0.2px; line-height: 1.15; }
   .receipt-header .doc-type {
     color: #000; font-weight: 700;
     letter-spacing: 1px; text-transform: uppercase;
@@ -323,7 +411,6 @@
     letter-spacing: 0.6px; margin-bottom: 1px;
   }
 
-  /* Body */
   .receipt-body {
     flex: 1; display: flex; flex-direction: column;
     min-height: 0; line-height: 1.3; background: transparent;
@@ -339,15 +426,9 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     min-width: 0;
   }
-  .student-line .right {
-    color: #333; text-align: right;
-    white-space: nowrap; flex-shrink: 0;
-  }
+  .student-line .right { color: #333; text-align: right; white-space: nowrap; flex-shrink: 0; }
 
-  .payments-table {
-    width: 100%; border-collapse: collapse;
-    margin-bottom: 4px; background: transparent;
-  }
+  .payments-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
   .payments-table thead th {
     background: transparent; color: #000;
     text-transform: uppercase; letter-spacing: 0.3px;
@@ -364,23 +445,15 @@
     text-align: right; font-weight: 700;
     color: #000; white-space: nowrap;
   }
-  .payments-table tbody td.amt.refund { color: #000; }
-  .payments-table tbody td.dt {
-    text-align: right; color: #333; white-space: nowrap;
-  }
-  .payments-table tbody td.dt.nodate {
-    color: #777; font-style: italic;
-  }
+  .payments-table tbody td.dt { text-align: right; color: #333; white-space: nowrap; }
+  .payments-table tbody td.dt.nodate { color: #777; font-style: italic; }
 
   .totals-block {
-    margin-top: auto; background: transparent;
+    margin-top: auto;
     border: 1px solid #000; border-radius: 3px;
     padding: 3px 5px;
   }
-  .totals-row {
-    display: flex; justify-content: space-between;
-    padding: 1px 0; color: #000;
-  }
+  .totals-row { display: flex; justify-content: space-between; padding: 1px 0; color: #000; }
   .totals-row.big {
     border-top: 1px solid #000;
     margin-top: 2px; padding-top: 2px;
@@ -388,10 +461,7 @@
   }
   .totals-row .label { color: #333; }
   .totals-row.big .label { color: #000; }
-  .totals-row .prev-hint {
-    display: block; color: #666;
-    font-style: italic; margin-top: 1px;
-  }
+  .totals-row .prev-hint { display: block; color: #666; font-style: italic; margin-top: 1px; }
 
   .balance-note {
     margin-top: 3px; padding: 3px 5px;
@@ -399,37 +469,25 @@
     font-weight: 700; background: transparent;
     color: #000; border: 1px solid #000;
   }
-  .balance-note.ok,
-  .balance-note.due,
-  .balance-note.over {
-    background: transparent; color: #000; border: 1px solid #000;
-  }
 
   .receipt-footer {
     margin-top: 3px; padding-top: 3px;
     border-top: 1px dashed #000;
     display: flex; justify-content: space-between;
     align-items: flex-end; gap: 4px;
-    flex-shrink: 0; background: transparent;
+    flex-shrink: 0;
   }
-  .receipt-footer .left {
-    color: #000; line-height: 1.25;
-    min-width: 0; overflow: hidden;
-  }
-  .receipt-footer .left .office {
-    font-weight: 700; color: #000; display: block;
-  }
+  .receipt-footer .left { color: #000; line-height: 1.25; min-width: 0; overflow: hidden; }
+  .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
   .receipt-footer .left .acct {
-    margin-top: 1px; color: #000;
-    font-weight: 700;
+    margin-top: 1px; color: #000; font-weight: 700;
     font-family: 'Courier New', monospace;
     letter-spacing: 0.3px; word-break: break-all;
   }
   .receipt-footer .right {
     text-align: right; color: #333;
     font-family: 'Courier New', monospace;
-    line-height: 1.25; white-space: nowrap;
-    flex-shrink: 0;
+    line-height: 1.25; white-space: nowrap; flex-shrink: 0;
   }
   .receipt-footer .right .ts-label {
     text-transform: uppercase; letter-spacing: 0.4px;
@@ -438,41 +496,24 @@
     color: #666;
   }
 
-  /* ============================================================
-     SIGNATURE / STAMP BLOCK
-     ============================================================ */
-  .signature-block {
-    display: none;
-  }
+  /* SIGNATURE */
+  .signature-block { display: none; }
   .layout-signature .signature-block {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 10mm;
-    margin-top: 4mm;
-    padding-top: 3mm;
-    background: transparent;
+    display: flex; justify-content: space-between;
+    align-items: flex-end; gap: 10mm;
+    margin-top: 4mm; padding-top: 3mm;
     flex-shrink: 0;
   }
-  .layout-signature .signature-block .sig-box {
-    flex: 1;
-    text-align: center;
-  }
+  .layout-signature .signature-block .sig-box { flex: 1; text-align: center; }
   .layout-signature .signature-block .sig-line {
-    height: 12mm;
-    border-bottom: 1px solid #000;
-    margin-bottom: 1mm;
+    height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm;
   }
   .layout-signature .signature-block .sig-label {
-    font-size: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: #333;
+    font-size: 8px; text-transform: uppercase;
+    letter-spacing: 0.6px; color: #333;
   }
 
-  /* ============================================================
-     FULL LAYOUT TYPOGRAPHY (9 per page)
-     ============================================================ */
+  /* FULL */
   .layout-full .receipt-number { font-size: 7px; padding: 1.5px 5px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
@@ -498,9 +539,7 @@
   .layout-full .receipt-footer .right .ts-label { font-size: 5px; margin-bottom: 0.5px; }
   .layout-full .watermark .wm-badge { font-size: 22px; padding: 6px 14px; letter-spacing: 3px; border-width: 2px; }
 
-  /* ============================================================
-     COMPACT LAYOUT TYPOGRAPHY (16 per page)
-     ============================================================ */
+  /* COMPACT */
   .layout-compact .receipt { padding: 2mm; }
   .layout-compact .receipt-number { font-size: 5.5px; padding: 1px 3px; }
   .layout-compact .receipt-number .num-label { font-size: 4px; }
@@ -531,238 +570,214 @@
   .layout-compact .receipt-footer .right .ts-label { font-size: 4px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; padding: 4px 9px; letter-spacing: 2px; border-width: 1.5px; }
 
-  /* ============================================================
-     SIGNATURE LAYOUT TYPOGRAPHY (4 per page)
-     ============================================================ */
-  .layout-signature .receipt {
-    padding: 5mm;
-    border: 1.5px solid #000;
-    border-radius: 6px;
-  }
-
+  /* SIGNATURE LAYOUT */
+  .layout-signature .receipt { padding: 5mm; border: 1.5px solid #000; border-radius: 6px; }
   .layout-signature .receipt-number { font-size: 11px; padding: 3px 10px; border-width: 1.5px; }
   .layout-signature .receipt-number .num-label { font-size: 7px; letter-spacing: 0.8px; margin-bottom: 2px; }
-
-  .layout-signature .receipt-header {
-    padding-bottom: 5px;
-    margin-bottom: 6px;
-    gap: 8px;
-    min-height: 50px;
-  }
+  .layout-signature .receipt-header { padding-bottom: 5px; margin-bottom: 6px; gap: 8px; min-height: 50px; }
   .layout-signature .receipt-header .crest { width: 42px; height: 42px; }
   .layout-signature .receipt-header .school { font-size: 14px; letter-spacing: 0.4px; }
   .layout-signature .receipt-header .doc-type { font-size: 10px; letter-spacing: 1.2px; margin-top: 2px; }
   .layout-signature .receipt-header .period { font-size: 10px; margin-top: 2px; }
   .layout-signature .receipt-header .range-badge { font-size: 9px; padding: 2px 8px; margin-top: 2px; }
-
   .layout-signature .receipt-body { font-size: 10px; }
-
   .layout-signature .student-line { padding: 5px 0; margin-bottom: 6px; border-bottom-width: 1.2px; }
   .layout-signature .student-line .left { font-size: 13px; }
   .layout-signature .student-line .right { font-size: 11px; }
-
   .layout-signature .payments-table { font-size: 10px; margin-bottom: 6px; }
   .layout-signature .payments-table thead th { font-size: 8px; padding: 3px 5px; letter-spacing: 0.4px; }
   .layout-signature .payments-table tbody td { font-size: 10px; padding: 3px 5px; }
   .layout-signature .payments-table tbody td.dt { font-size: 9px; }
-
   .layout-signature .totals-block { padding: 5px 8px; margin-top: 6px; border-width: 1.2px; }
   .layout-signature .totals-row { font-size: 10px; padding: 2px 0; }
   .layout-signature .totals-row.big { font-size: 13px; margin-top: 3px; padding-top: 3px; }
   .layout-signature .totals-row .prev-hint { font-size: 8px; margin-top: 2px; }
-
-  .layout-signature .balance-note {
-    font-size: 10px;
-    padding: 5px 8px;
-    margin-top: 6px;
-    border-width: 1.2px;
-  }
-
+  .layout-signature .balance-note { font-size: 10px; padding: 5px 8px; margin-top: 6px; border-width: 1.2px; }
   .layout-signature .receipt-footer { padding-top: 5px; margin-top: 6px; gap: 8px; }
   .layout-signature .receipt-footer .left { font-size: 9px; line-height: 1.4; }
   .layout-signature .receipt-footer .left .office { font-size: 10px; margin-bottom: 2px; }
   .layout-signature .receipt-footer .left .acct { font-size: 9px; margin-top: 3px; letter-spacing: 0.5px; }
   .layout-signature .receipt-footer .right { font-size: 9px; line-height: 1.4; }
   .layout-signature .receipt-footer .right .ts-label { font-size: 7px; margin-bottom: 1px; }
-
   .layout-signature .watermark .wm-badge {
-    font-size: 32px;
-    padding: 8px 18px;
-    letter-spacing: 4px;
-    border-width: 2.5px;
-    opacity: 0.20;
+    font-size: 32px; padding: 8px 18px;
+    letter-spacing: 4px; border-width: 2.5px; opacity: 0.20;
   }
 
-  .empty-sheet-slot {
-    border: 1px dashed #eef2f6;
-    border-radius: 6px;
-  }
+  .empty-sheet-slot { border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; }
 
-  /* ============================================================
-     LOADING OVERLAY
-     ============================================================ */
+  /* LOADING OVERLAY */
   .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 31, 46, 0.55);
+    background: rgba(10, 31, 46, 0.85);
     display: none; justify-content: center; align-items: center;
     z-index: 9999; color: white;
   }
   .loading-overlay.show { display: flex; }
   .loading-overlay .box {
     background: rgba(20, 35, 55, 0.95);
-    padding: 24px 32px; border-radius: 14px;
-    text-align: center; min-width: 220px;
+    padding: 28px 36px; border-radius: 20px;
+    text-align: center; min-width: 240px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
   }
   .loading-overlay .spinner {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     border: 4px solid rgba(255,255,255,0.15);
     border-top: 4px solid #fbbf24;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
+    margin: 0 auto 14px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { font-size: 14px; color: #cbd5e1; }
 
-  /* ============================================================
-     PRINT
-     ============================================================ */
+  /* PRINT */
   @media print {
     body { background: white; padding: 0; margin: 0; }
+    #bg-canvas-container,
     .shared-top-nav,
-    .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
-    .main-wrapper { display: block !important; }
+    .glass-panel,
+    .controls,
+    .preview-header,
+    .error-msg,
+    .warning-msg,
+    .loading-overlay { display: none !important; }
+    .page-shell { display: block !important; }
     #receiptContainer { overflow: visible !important; }
     .receipt-sheet {
       box-shadow: none; margin: 0;
       width: 210mm; height: 297mm;
       page-break-after: always; break-after: page;
-      background: white;
+      background: white; border-radius: 0;
     }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
-    .watermark, .watermark .wm-badge {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
     @page { size: A4 portrait; margin: 0; }
   }
 
-  /* ============================================================
-     MOBILE
-     ============================================================ */
+  /* MOBILE */
   @media (max-width: 700px) {
+    body { padding: 10px; }
     .row { grid-template-columns: 1fr; }
-    .preview-header { flex-direction: column; gap: 8px; align-items: stretch; }
+    .preview-header { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
     #receiptContainer { overflow-x: auto; padding-bottom: 12px; }
+    .controls { padding: 18px 16px; }
+    .actions button { min-width: 100%; }
   }
 </style>
 </head>
 <body data-nav="true" data-page="receipts">
 
-<div id="mainWrapper" class="main-wrapper layout-signature">
-  <div class="controls">
-    <h1>🧾 Fee Receipts</h1>
-    <p class="subtitle">One receipt per student with a unique receipt number. Filters by <strong>entry date</strong> (the date the record was last updated in the sheet).</p>
+<div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
 
-    <div class="mode-tabs">
-      <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
-      <button id="tabBatch" onclick="setMode('batch')">👥 Whole Class Batch</button>
-    </div>
+<div class="page-shell">
 
-    <div class="layout-toggle">
-      <button id="layoutSignature" class="active" onclick="setLayout('signature')">📑 Signature — 4 per page</button>
-      <button id="layoutFull" onclick="setLayout('full')">📄 Full — 9 per page</button>
-      <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
-    </div>
+  <div class="glass-panel">
+    <div class="controls">
+      <h1>🧾 Fee Receipts</h1>
+      <p class="subtitle">One receipt per student with a unique receipt number. Filters by <strong>entry date</strong> (the date the record was last updated in the sheet).</p>
 
-    <div class="row">
-      <div>
-        <label for="rTermSelect">Term:</label>
-        <select id="rTermSelect" onchange="handleTermChange()">
-          <option value="" disabled selected>Loading terms...</option>
-        </select>
+      <div class="mode-tabs">
+        <button id="tabSingle" class="active" onclick="setMode('single')">👤 Single Student</button>
+        <button id="tabBatch" onclick="setMode('batch')">👥 Whole Class Batch</button>
       </div>
-      <div>
-        <label for="rClassSelect">Class:</label>
-        <select id="rClassSelect" onchange="handleClassChange()" disabled>
-          <option value="" disabled selected>Select class</option>
-          <option value="Form 1">Form 1</option>
-          <option value="Form 2">Form 2</option>
-          <option value="Form 3">Form 3</option>
-          <option value="Form 4">Form 4</option>
-          <option value="Form 1 ODL">Form 1 ODL</option>
-          <option value="Form 2 ODL">Form 2 ODL</option>
-          <option value="Form 3 ODL">Form 3 ODL</option>
-          <option value="Form 4 ODL">Form 4 ODL</option>
-        </select>
+
+      <div class="layout-toggle">
+        <button id="layoutSignature" class="active" onclick="setLayout('signature')">📑 Signature — 4 per page</button>
+        <button id="layoutFull" onclick="setLayout('full')">📄 Full — 9 per page</button>
+        <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
       </div>
-    </div>
 
-    <div class="row">
-      <div>
-        <label for="rDateFrom">Entries From:</label>
-        <input type="date" id="rDateFrom" onchange="handleRangeChange()">
-      </div>
-      <div>
-        <label for="rDateTo">Entries To:</label>
-        <input type="date" id="rDateTo" onchange="handleRangeChange()">
-      </div>
-    </div>
-
-    <div class="quick-ranges">
-      <button type="button" onclick="setQuickRange('today')">Today</button>
-      <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
-      <button type="button" onclick="setQuickRange('week')">This Week</button>
-      <button type="button" onclick="setQuickRange('month')">This Month</button>
-      <button type="button" onclick="setQuickRange('all')">All Entries</button>
-    </div>
-
-    <div class="range-summary" id="rangeSummary"></div>
-
-    <div id="singleMode" class="row">
-      <div style="grid-column: 1 / -1;">
-        <label for="rStudentSelect">Student:</label>
-        <select id="rStudentSelect" onchange="handleSingleStudentChange()" disabled>
-          <option value="" disabled selected>Select class first</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="batchMode" style="display:none;">
-      <label>Students (only those entered in the selected range are selectable):</label>
-      <div id="studentList" class="student-list">
-        <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
-          Select a term and class to load students.
+      <div class="row">
+        <div>
+          <label for="rTermSelect">Term:</label>
+          <select id="rTermSelect" onchange="handleTermChange()">
+            <option value="" disabled selected>Loading terms...</option>
+          </select>
+        </div>
+        <div>
+          <label for="rClassSelect">Class:</label>
+          <select id="rClassSelect" onchange="handleClassChange()" disabled>
+            <option value="" disabled selected>Select class</option>
+            <option value="Form 1">Form 1</option>
+            <option value="Form 2">Form 2</option>
+            <option value="Form 3">Form 3</option>
+            <option value="Form 4">Form 4</option>
+            <option value="Form 1 ODL">Form 1 ODL</option>
+            <option value="Form 2 ODL">Form 2 ODL</option>
+            <option value="Form 3 ODL">Form 3 ODL</option>
+            <option value="Form 4 ODL">Form 4 ODL</option>
+          </select>
         </div>
       </div>
-    </div>
 
-    <div class="actions">
-      <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All In Range</button>
-      <button id="btnPrint" class="btn-print" onclick="printReceipts()" disabled>🖨 Print Receipts</button>
-      <button id="btnPDF" class="btn-pdf" onclick="saveAsPDF()" disabled>💾 Save as PDF</button>
-      <button class="btn-ghost" onclick="clearSelection()">↺ Clear</button>
-    </div>
+      <div class="row">
+        <div>
+          <label for="rDateFrom">Entries From:</label>
+          <input type="date" id="rDateFrom" onchange="handleRangeChange()">
+        </div>
+        <div>
+          <label for="rDateTo">Entries To:</label>
+          <input type="date" id="rDateTo" onchange="handleRangeChange()">
+        </div>
+      </div>
 
-    <div id="errorMsg" class="error-msg"></div>
-    <div id="warningMsg" class="warning-msg"></div>
+      <div class="quick-ranges">
+        <button type="button" onclick="setQuickRange('today')">Today</button>
+        <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
+        <button type="button" onclick="setQuickRange('week')">This Week</button>
+        <button type="button" onclick="setQuickRange('month')">This Month</button>
+        <button type="button" onclick="setQuickRange('all')">All Entries</button>
+      </div>
 
-    <div class="info">
-      <strong>Layouts:</strong>
-      <strong>Signature</strong> — 4 receipts per A4 (2×2), includes signature & stamp area.
-      <strong>Full</strong> — 9 receipts per A4 (3×3).
-      <strong>Compact</strong> — 16 receipts per A4 (4×4).
-      Numbers are unique and never reused.
-      <br><strong>How filtering works:</strong> the range applies to the <strong>entry timestamp</strong> in column Z, not the bank slip date. Every student whose fee record was updated within the selected window will appear here — whether or not a receipt has been issued before. Reprints are allowed at any time.
+      <div class="range-summary" id="rangeSummary"></div>
+
+      <div id="singleMode" class="row">
+        <div style="grid-column: 1 / -1;">
+          <label for="rStudentSelect">Student:</label>
+          <select id="rStudentSelect" onchange="handleSingleStudentChange()" disabled>
+            <option value="" disabled selected>Select class first</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="batchMode" style="display:none;">
+        <label>Students (only those entered in the selected range are selectable):</label>
+        <div id="studentList" class="student-list">
+          <div style="padding:20px; text-align:center; color:#94a3b8; font-size:13px;">
+            Select a term and class to load students.
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnSelectAll" class="btn-secondary" onclick="toggleSelectAll()" style="display:none;">✓ Select All In Range</button>
+        <button id="btnPrint" class="btn-print" onclick="printReceipts()" disabled>🖨 Print Receipts</button>
+        <button id="btnPDF" class="btn-pdf" onclick="saveAsPDF()" disabled>💾 Save as PDF</button>
+        <button class="btn-ghost" onclick="clearSelection()">↺ Clear</button>
+      </div>
+
+      <div id="errorMsg" class="error-msg"></div>
+      <div id="warningMsg" class="warning-msg"></div>
+
+      <div class="info">
+        <strong>Layouts:</strong>
+        <strong>Signature</strong> — 4 receipts per A4 (2×2), includes signature & stamp area.
+        <strong>Full</strong> — 9 receipts per A4 (3×3).
+        <strong>Compact</strong> — 16 receipts per A4 (4×4).
+        Numbers are unique and never reused.
+        <br><strong>How filtering works:</strong> the range applies to the <strong>entry timestamp</strong> in column Z, not the bank slip date. Every student whose fee record was updated within the selected window will appear here — whether or not a receipt has been issued before. Reprints are allowed at any time.
+      </div>
     </div>
   </div>
 
   <div id="previewHeader" class="preview-header">
     <div class="count">Ready to print: <strong id="previewCount">0</strong> receipt(s)</div>
-    <div style="font-size:12px;color:#64748b;">Print dialog opens automatically</div>
+    <div style="font-size:12px;color:#bcc9db;">Print dialog opens automatically</div>
   </div>
 
   <div id="receiptContainer"></div>
+
 </div>
 
 <div id="loadingOverlay" class="loading-overlay">
@@ -774,8 +789,72 @@
 
 <script>
   // ============================================================
-  // CONFIG
-  // GAS_URL is provided globally by shared.js — do NOT redeclare it.
+  // ANIMATED BANKNOTE BACKGROUND (matches index portal)
+  // ============================================================
+  (function initBanknoteBackground() {
+    const canvas = document.getElementById('banknoteCanvas');
+    const container = document.getElementById('bg-canvas-container');
+    const ctx = canvas.getContext('2d');
+    let w, h, notes = [];
+    const NOTE_COUNT = 32;
+    function resizeCanvas() {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width || window.innerWidth;
+      canvas.height = rect.height || window.innerHeight;
+      w = canvas.width; h = canvas.height;
+    }
+    const symbols = ['💵', '💰', '💶', '💷', '💴', '🪙', '₿', '💳', '🏦', '💹', '🧾', '📈'];
+    function randomNote() {
+      return {
+        x: Math.random() * w, y: Math.random() * h - 20,
+        size: 30 + Math.random() * 40,
+        speedX: (Math.random() - 0.5) * 0.9,
+        speedY: 0.15 + Math.random() * 0.7,
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 0.025,
+        opacity: 0.2 + Math.random() * 0.35,
+        symbol: symbols[Math.floor(Math.random() * symbols.length)],
+        phase: Math.random() * 100
+      };
+    }
+    function initNotes() { notes = []; for (let i = 0; i < NOTE_COUNT; i++) notes.push(randomNote()); }
+    function drawNotes() {
+      ctx.clearRect(0, 0, w, h);
+      const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.75);
+      grad.addColorStop(0, 'rgba(10, 31, 46, 0.08)');
+      grad.addColorStop(1, 'rgba(10, 31, 46, 0.45)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+      notes.forEach(n => {
+        ctx.save();
+        ctx.translate(n.x, n.y);
+        ctx.rotate(n.rotation * Math.PI / 180);
+        ctx.globalAlpha = n.opacity;
+        ctx.font = `${n.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 18;
+        ctx.fillStyle = '#fbbf24'; ctx.shadowBlur = 20;
+        ctx.fillText(n.symbol, 0, 0);
+        ctx.restore();
+        n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.00025) * 0.2;
+        n.y += n.speedY * 0.4 + Math.sin(n.phase + performance.now() * 0.0004) * 0.15;
+        n.rotation += n.rotSpeed;
+        if (n.x > w + 60) n.x = -60;
+        if (n.x < -60) n.x = w + 60;
+        if (n.y > h + 60) n.y = -60;
+        if (n.y < -60) n.y = h + 60;
+      });
+      requestAnimationFrame(drawNotes);
+    }
+    function startBackground() { resizeCanvas(); initNotes(); drawNotes(); }
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      notes.forEach(n => { n.x = Math.min(Math.max(n.x, 0), w); n.y = Math.min(Math.max(n.y, 0), h); });
+    });
+    startBackground();
+  })();
+
+  // ============================================================
+  // GAS_URL is provided globally by shared.js — do NOT redeclare.
   // ============================================================
 
   // ============================================================
@@ -1032,7 +1111,7 @@
     document.getElementById('layoutSignature').classList.toggle('active', layout === 'signature');
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
     document.getElementById('layoutCompact').classList.toggle('active', layout === 'compact');
-    const wrapper = document.getElementById('mainWrapper');
+    const wrapper = document.body;
     wrapper.classList.toggle('layout-signature', layout === 'signature');
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
