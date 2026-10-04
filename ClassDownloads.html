@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Class Fee Downloads - Lunzu Secondary School</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="shared.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +24,7 @@
             backdrop-filter: blur(14px) saturate(180%);
             -webkit-backdrop-filter: blur(14px) saturate(180%);
             border-radius: 28px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 215, 0, 0.25);
             overflow: hidden;
         }
@@ -32,71 +34,47 @@
             text-align: center;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
         }
-        .header h1 { font-size: 24px; letter-spacing: 1px; font-weight: 700; color: #fff; }
-        .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; font-weight: 500; }
+        .header h1 { font-size: 24px; font-weight: 700; color: #fff; }
+        .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; }
         .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 2px; font-weight: 300; }
         .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.06); }
-
         .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #c4b5fd;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 18px 0 10px;
-            padding-bottom: 4px;
+            font-size: 12px; font-weight: 700; color: #c4b5fd;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin: 18px 0 10px; padding-bottom: 4px;
             border-bottom: 1px solid rgba(139, 92, 246, 0.25);
         }
         .section-title:first-child { margin-top: 0; }
         .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
         .admin-field label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #ddd6fe;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+            display: block; font-size: 11px; font-weight: 600;
+            color: #ddd6fe; margin-bottom: 5px;
+            text-transform: uppercase; letter-spacing: 0.4px;
         }
-        .admin-field select,
-        .admin-field input[type=text],
-        .admin-field input[type=date] {
-            width: 100%;
-            padding: 10px 12px;
+        .admin-field select, .admin-field input[type=text], .admin-field input[type=date] {
+            width: 100%; padding: 10px 12px;
             border: 1.5px solid rgba(139, 92, 246, 0.35);
-            border-radius: 10px;
-            font-size: 13px;
+            border-radius: 10px; font-size: 13px;
             background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-family: inherit;
+            color: #fff; font-family: inherit;
         }
         .admin-field select option { background: #1e2f3f; color: #fff; }
-        .admin-field select:focus,
-        .admin-field input:focus {
-            outline: none;
-            border-color: #a78bfa;
+        .admin-field select:focus, .admin-field input:focus {
+            outline: none; border-color: #a78bfa;
             background: rgba(255, 255, 255, 0.16);
         }
         .admin-toggle {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            font-size: 12px;
-            color: #ddd6fe;
+            display: flex; align-items: flex-start; gap: 8px;
+            font-size: 12px; color: #ddd6fe;
             background: rgba(139, 92, 246, 0.1);
             border: 1px solid rgba(139, 92, 246, 0.25);
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-top: 8px;
-            cursor: pointer;
+            border-radius: 10px; padding: 10px 12px;
+            margin-top: 8px; cursor: pointer;
         }
         .admin-toggle input[type=checkbox] {
-            width: 16px; height: 16px;
-            accent-color: #8b5cf6;
-            margin-top: 2px;
-            flex-shrink: 0;
-            cursor: pointer;
+            width: 16px; height: 16px; accent-color: #8b5cf6;
+            margin-top: 2px; flex-shrink: 0; cursor: pointer;
         }
         .admin-toggle span { line-height: 1.5; }
         .admin-toggle.disabled { opacity: 0.45; cursor: not-allowed; }
@@ -107,67 +85,41 @@
             gap: 6px;
         }
         .admin-columns-grid label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #e9d5ff;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 12px; color: #e9d5ff;
             padding: 7px 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.15s;
+            border-radius: 8px; cursor: pointer; transition: 0.15s;
         }
         .admin-columns-grid label:hover { background: rgba(139, 92, 246, 0.15); }
         .admin-columns-grid label.on {
             background: rgba(139, 92, 246, 0.25);
-            border-color: #a78bfa;
-            color: #f5f3ff;
-            font-weight: 600;
+            border-color: #a78bfa; color: #f5f3ff; font-weight: 600;
         }
         .admin-columns-grid input[type=checkbox] { accent-color: #8b5cf6; cursor: pointer; }
         .admin-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 18px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px; margin-top: 18px;
         }
         .btn {
-            padding: 12px 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #fff;
-            transition: 0.2s;
-            font-family: inherit;
+            padding: 12px 14px; border: none; border-radius: 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; color: #fff; transition: 0.2s; font-family: inherit;
         }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-ghost { background: rgba(100, 116, 139, 0.55); }
         .btn-ghost:hover:not(:disabled) { background: rgba(100, 116, 139, 0.85); transform: translateY(-2px); }
-        .btn-csv { background: rgba(16, 185, 129, 0.85); }
-        .btn-csv:hover:not(:disabled) { background: rgba(5, 150, 105, 1); transform: translateY(-2px); }
-        .btn-pdf { background: rgba(220, 38, 38, 0.85); }
-        .btn-pdf:hover:not(:disabled) { background: rgba(185, 28, 28, 1); transform: translateY(-2px); }
-        .btn-xlsx { background: rgba(33, 115, 70, 0.9); }
-        .btn-xlsx:hover:not(:disabled) { background: rgba(24, 92, 55, 1); transform: translateY(-2px); }
-        .btn-back { background: rgba(71, 85, 105, 0.7); }
-        .btn-back:hover { background: rgba(71, 85, 105, 0.9); transform: translateY(-2px); }
-
+        .btn-csv { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); }
+        .btn-csv:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5); }
+        .btn-pdf { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3); }
+        .btn-pdf:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5); }
+        .btn-xlsx { background: linear-gradient(135deg, #217346 0%, #185c37 100%); box-shadow: 0 4px 14px rgba(33, 115, 70, 0.3); }
+        .btn-xlsx:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(33, 115, 70, 0.5); }
         .admin-status-box {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-top: 12px;
-            font-size: 13px;
-            display: none;
-            align-items: center;
-            gap: 10px;
+            padding: 12px 16px; border-radius: 10px; margin-top: 12px;
+            font-size: 13px; display: none; align-items: center; gap: 10px;
         }
         .admin-status-box.show { display: flex; }
         .admin-status-box.info { background: rgba(59, 130, 246, 0.2); border-left: 4px solid #3b82f6; color: #dbeafe; }
@@ -176,86 +128,34 @@
         .admin-status-box .spinner-small {
             display: inline-block; width: 14px; height: 14px;
             border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
-            border-radius: 50%; animation: spin 0.8s linear infinite;
-            flex-shrink: 0;
+            border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .admin-stats-preview {
-            display: none;
-            background: rgba(0, 0, 0, 0.25);
+            display: none; background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 12px;
-            padding: 14px;
-            margin-top: 14px;
-            font-size: 12px;
+            border-radius: 12px; padding: 14px; margin-top: 14px; font-size: 12px;
         }
         .admin-stats-preview.show { display: block; }
         .admin-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 8px;
-            margin-top: 8px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px; margin-top: 8px;
         }
         .admin-stat-cell {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 8px;
-            padding: 10px 8px;
-            text-align: center;
+            border-radius: 8px; padding: 10px 8px; text-align: center;
         }
         .admin-stat-cell .v { font-size: 14px; font-weight: bold; color: #f5f3ff; }
         .admin-stat-cell .l { font-size: 10px; color: #c4b5fd; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
-
         .helper { font-size: 11px; color: #a5b4fc; margin-top: 14px; display: block; line-height: 1.5; }
-
-        .pw-gate {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .pw-box {
-            background: rgba(20, 35, 55, 0.95);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-        .pw-box h2 { color: #fbbf24; font-size: 22px; margin-bottom: 10px; }
-        .pw-box p { color: #cbd5e1; font-size: 13px; margin-bottom: 20px; }
-        .pw-box input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-            font-family: inherit;
-        }
-        .pw-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255,255,255,0.15); }
-        .pw-box .err { color: #f87171; font-size: 13px; margin-bottom: 10px; display: none; }
-        .pw-box .err.show { display: block; }
-        .pw-box .btn { width: 100%; padding: 14px; font-size: 15px; background: rgba(139, 92, 246, 0.85); }
-        .pw-box .btn:hover { background: rgba(139, 92, 246, 1); }
-
         .footer {
             text-align: center; padding: 16px;
-            background: rgba(0, 0, 0, 0.25);
-            color: #b8c4d4; font-size: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.25); color: #b8c4d4;
+            font-size: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
         .footer a { color: #fbbf24; text-decoration: none; }
-
+        #mainApp { display: none; }
         @media (max-width: 700px) {
             .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
             .admin-actions { grid-template-columns: 1fr 1fr; }
@@ -264,21 +164,9 @@
         }
     </style>
 </head>
-<body>
+<body data-nav="true" data-page="downloads">
 
-    <!-- Password Gate -->
-    <div id="pwGate" class="pw-gate">
-        <div class="pw-box">
-            <h2>🔒 Admin Access Required</h2>
-            <p>Enter the admin password to access class fee downloads.</p>
-            <input type="password" id="pwInput" placeholder="Password" maxlength="40" autocomplete="off">
-            <div id="pwErr" class="err">Incorrect password. Please try again.</div>
-            <button class="btn" id="pwBtn" onclick="verifyPassword()">Unlock</button>
-        </div>
-    </div>
-
-    <!-- Main App (hidden until unlocked) -->
-    <div id="mainApp" class="container" style="display:none;">
+    <div id="mainApp" class="container">
         <div class="header">
             <h1>📥 Class Fee Data Downloads</h1>
             <h2>LUNZU SECONDARY SCHOOL</h2>
@@ -368,7 +256,7 @@
             <div class="section-title">📊 Report Content</div>
             <label class="admin-toggle">
                 <input type="checkbox" id="dl_showSummary">
-                <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts (turn OFF for form teachers)</span>
+                <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts</span>
             </label>
             <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
                 <input type="checkbox" id="dl_showByClass" disabled>
@@ -401,9 +289,6 @@
     </div>
 
     <script>
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
-        const ADMIN_PASSWORD = "lss001";
-
         const DL_COLUMNS = [
             { key: 'sn',                label: 'S/N',                 default: true  },
             { key: 'studentName',       label: 'Student Name',        default: true  },
@@ -428,49 +313,22 @@
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // ---- Password gate ----
-        function verifyPassword() {
-            var pw = document.getElementById('pwInput').value.trim();
-            var err = document.getElementById('pwErr');
-            if (!pw) {
-                err.textContent = 'Please enter a password.';
-                err.classList.add('show');
-                return;
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await ensureUnlocked({
+                    title: 'Class Downloads Access',
+                    subtitle: 'Enter the admin password to access class downloads.'
+                });
+                document.getElementById('mainApp').style.display = 'block';
+                SharedNav.render({ current: 'downloads', showAdmin: true, showLogout: true });
+
+                await loadTerms();
+                renderColumnChecks();
+                wireToggleEvents();
+            } catch (e) {
+                window.location.href = 'admin.html';
             }
-            var btn = document.getElementById('pwBtn');
-            btn.disabled = true;
-            btn.textContent = 'Verifying...';
-            callGAS('verifyAdmin', { password: pw }, function(result) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock';
-                if (result && result.success) {
-                    document.getElementById('pwGate').style.display = 'none';
-                    document.getElementById('mainApp').style.display = 'block';
-                    initApp();
-                } else {
-                    err.textContent = 'Incorrect password. Please try again.';
-                    err.classList.add('show');
-                    document.getElementById('pwInput').value = '';
-                    document.getElementById('pwInput').focus();
-                }
-            }, function(error) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock';
-                err.textContent = 'Network error: ' + error;
-                err.classList.add('show');
-            });
-        }
-
-        document.getElementById('pwInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') verifyPassword();
         });
-
-        // ---- Init after unlock ----
-        async function initApp() {
-            await loadTerms();
-            renderColumnChecks();
-            wireToggleEvents();
-        }
 
         async function loadTerms() {
             try {
@@ -544,12 +402,11 @@
             updateByClassState();
         }
 
-        // ---- Params ----
         function collectParams(extra) {
             const selected = Array.from(document.querySelectorAll('#dl_columnsGrid input:checked'))
                 .map(function(cb) { return cb.dataset.key; });
             const p = {
-                password: ADMIN_PASSWORD,
+                password: SharedSession.getPassword(),
                 studentClass: document.getElementById('dl_class').value,
                 term: document.getElementById('dl_term').value || currentTermKey,
                 statusFilter: document.getElementById('dl_status').value,
@@ -567,7 +424,6 @@
             return p;
         }
 
-        // ---- Status helpers ----
         function setStatus(type, msg) {
             const el = document.getElementById('dl_statusBox');
             el.className = 'admin-status-box show ' + type;
@@ -591,7 +447,6 @@
             }
         }
 
-        // ---- Preview Stats ----
         async function dl_previewStats() {
             setButtonBusy('dl_btnPreview', true, 'Calculating...');
             setStatus('info', 'Computing preview statistics...');
@@ -627,7 +482,6 @@
                 '</div>';
         }
 
-        // ---- Downloads ----
         function downloadBlob(content, filename, mime) {
             const blob = new Blob([content], { type: mime });
             const url = URL.createObjectURL(blob);
@@ -702,39 +556,37 @@
             }
         }
 
-        // ---- API helpers ----
-        function callGAS(action, params, onSuccess, onError) {
-            const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-            params = Object.assign({}, params, { callback: callbackName, action: action });
-            const qs = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
-            const script = document.createElement('script');
-            script.src = GAS_URL + '?' + qs;
-            const timeoutId = setTimeout(() => {
-                if (window[callbackName]) {
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    if (onError) onError('Request timeout');
-                }
-            }, 120000);
-            window[callbackName] = function(response) {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (response && response.error) { if (onError) onError(response.error); }
-                else if (onSuccess) onSuccess(response);
-            };
-            script.onerror = function() {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (onError) onError('Connection failed');
-            };
-            document.head.appendChild(script);
-        }
-
         function callGASPromise(action, params) {
             return new Promise((resolve, reject) => {
-                callGAS(action, params, resolve, reject);
+                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                params = Object.assign({}, params, { callback: callbackName, action: action });
+                const qs = Object.keys(params)
+                    .filter(k => params[k] !== undefined && params[k] !== null)
+                    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                    .join('&');
+                const script = document.createElement('script');
+                script.src = GAS_URL + '?' + qs;
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) script.parentNode.removeChild(script);
+                        reject(new Error('Request timeout'));
+                    }
+                }, 120000);
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    if (response && response.error) reject(new Error(response.error));
+                    else resolve(response);
+                };
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Connection failed'));
+                };
+                document.head.appendChild(script);
             });
         }
 
