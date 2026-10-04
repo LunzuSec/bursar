@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="shared.css">
+<!-- Font Awesome for nav + UI icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="shared.js"></script>
 <title>Fee Receipts - Lunzu Secondary School</title>
 <style>
@@ -627,6 +629,7 @@
      ============================================================ */
   @media print {
     body { background: white; padding: 0; margin: 0; }
+    .shared-top-nav,
     .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
     #receiptContainer { overflow: visible !important; }
@@ -771,7 +774,8 @@
 
 <script>
   // ============================================================
-  // CONFIG — GAS_URL comes from shared.js (already declared there)
+  // CONFIG
+  // GAS_URL is provided globally by shared.js — do NOT redeclare it.
   // ============================================================
 
   // ============================================================
