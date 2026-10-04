@@ -3,350 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Downloads — Lunzu Secondary School</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Class Fee Downloads - Lunzu Secondary School</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #003366;
-            --secondary-color: #00509e;
-            --accent-color: #ffd700;
-            --light-bg: #f8f9fa;
-            --border-color: #dee2e6;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--light-bg);
-            color: #333;
-            padding: 16px;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
             min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a1f2e 0%, #003d5c 100%);
+            color: #fff;
         }
-        .wrap {
+        .container {
             max-width: 1100px;
             margin: 0 auto;
-            background: white;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.25);
             overflow: hidden;
         }
-        .head {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px;
+        .header {
+            background: rgba(10, 30, 50, 0.65);
+            padding: 22px 20px 18px;
             text-align: center;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
         }
-        .head h1 {
-            font-family: 'Roboto Slab', serif;
-            font-size: 22px;
-            margin: 0 0 4px;
-        }
-        .head p { font-size: 12px; opacity: 0.85; margin: 0; }
-        .body { padding: 20px; }
+        .header h1 { font-size: 24px; letter-spacing: 1px; font-weight: 700; color: #fff; }
+        .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; font-weight: 500; }
+        .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 2px; font-weight: 300; }
+        .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.06); }
+
         .section-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--primary-color);
+            color: #c4b5fd;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 6px;
-            margin-bottom: 12px;
+            margin: 18px 0 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.25);
         }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-        .field { margin-bottom: 10px; }
-        .field label {
+        .section-title:first-child { margin-top: 0; }
+        .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .admin-field label {
             display: block;
             font-size: 11px;
             font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 4px;
+            color: #ddd6fe;
+            margin-bottom: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
         }
-        .field input[type=text],
-        .field input[type=password],
-        .field input[type=date],
-        .field select {
+        .admin-field select,
+        .admin-field input[type=text],
+        .admin-field input[type=date] {
             width: 100%;
-            padding: 9px 12px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
+            padding: 10px 12px;
+            border: 1.5px solid rgba(139, 92, 246, 0.35);
+            border-radius: 10px;
             font-size: 13px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
             font-family: inherit;
-            background: white;
         }
-        .field input:focus, .field select:focus {
+        .admin-field select option { background: #1e2f3f; color: #fff; }
+        .admin-field select:focus,
+        .admin-field input:focus {
             outline: none;
-            border-color: var(--secondary-color);
+            border-color: #a78bfa;
+            background: rgba(255, 255, 255, 0.16);
         }
-        .checks {
+        .admin-toggle {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 12px;
+            color: #ddd6fe;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .admin-toggle input[type=checkbox] {
+            width: 16px; height: 16px;
+            accent-color: #8b5cf6;
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .admin-toggle span { line-height: 1.5; }
+        .admin-toggle.disabled { opacity: 0.45; cursor: not-allowed; }
+        .admin-toggle.disabled input { cursor: not-allowed; }
+        .admin-columns-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 6px;
         }
-        .checks label {
+        .admin-columns-grid label {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 12px;
-            color: #333;
-            padding: 6px 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            color: #e9d5ff;
+            padding: 7px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
             cursor: pointer;
-            background: white;
-            text-transform: none;
-            font-weight: 500;
-            letter-spacing: 0;
-            margin: 0;
+            transition: 0.15s;
         }
-        .checks label:hover { background: #f0f4f8; }
-        .checks input { accent-color: var(--secondary-color); }
-        .checks label.on {
-            background: #e8f0fe;
-            border-color: var(--secondary-color);
-            color: var(--primary-color);
+        .admin-columns-grid label:hover { background: rgba(139, 92, 246, 0.15); }
+        .admin-columns-grid label.on {
+            background: rgba(139, 92, 246, 0.25);
+            border-color: #a78bfa;
+            color: #f5f3ff;
             font-weight: 600;
         }
-        /* Toggle row for summary options */
-        .toggle-row {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-top: 6px;
-        }
-        .toggle-row label {
-            display: flex;
-            align-items: center;
+        .admin-columns-grid input[type=checkbox] { accent-color: #8b5cf6; cursor: pointer; }
+        .admin-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 10px;
-            font-size: 12px;
-            color: #333;
-            cursor: pointer;
-            text-transform: none;
-            font-weight: 500;
-            letter-spacing: 0;
-            margin: 0;
-        }
-        .toggle-row label input {
-            accent-color: var(--secondary-color);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-        .toggle-row label span strong {
-            color: var(--primary-color);
-        }
-        .toggle-row .hint {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-left: 26px;
-            font-style: italic;
-        }
-        .toggle-row label.toggle-disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .btn-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-            flex-wrap: wrap;
+            margin-top: 18px;
         }
         .btn {
-            padding: 11px 20px;
+            padding: 12px 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 13px;
-            cursor: pointer;
             font-weight: 600;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            transition: all 0.2s;
+            color: #fff;
+            transition: 0.2s;
             font-family: inherit;
         }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-primary { background: var(--primary-color); color: white; flex: 1; justify-content: center; }
-        .btn-primary:hover:not(:disabled) { background: var(--secondary-color); }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn-secondary:hover:not(:disabled) { background: #5a6268; }
-        .btn-ghost { background: #f1f5f9; color: #334155; }
-        .btn-ghost:hover:not(:disabled) { background: #e2e8f0; }
-        .btn-csv { background: #10b981; color: white; }
-        .btn-csv:hover:not(:disabled) { background: #059669; }
-        .btn-pdf { background: #dc2626; color: white; }
-        .btn-pdf:hover:not(:disabled) { background: #b91c1c; }
-        .btn-xlsx { background: #217346; color: white; }
-        .btn-xlsx:hover:not(:disabled) { background: #185c37; }
-        .status-box {
+        .btn-ghost { background: rgba(100, 116, 139, 0.55); }
+        .btn-ghost:hover:not(:disabled) { background: rgba(100, 116, 139, 0.85); transform: translateY(-2px); }
+        .btn-csv { background: rgba(16, 185, 129, 0.85); }
+        .btn-csv:hover:not(:disabled) { background: rgba(5, 150, 105, 1); transform: translateY(-2px); }
+        .btn-pdf { background: rgba(220, 38, 38, 0.85); }
+        .btn-pdf:hover:not(:disabled) { background: rgba(185, 28, 28, 1); transform: translateY(-2px); }
+        .btn-xlsx { background: rgba(33, 115, 70, 0.9); }
+        .btn-xlsx:hover:not(:disabled) { background: rgba(24, 92, 55, 1); transform: translateY(-2px); }
+        .btn-back { background: rgba(71, 85, 105, 0.7); }
+        .btn-back:hover { background: rgba(71, 85, 105, 0.9); transform: translateY(-2px); }
+
+        .admin-status-box {
             padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 14px;
+            border-radius: 10px;
+            margin-top: 12px;
             font-size: 13px;
             display: none;
             align-items: center;
             gap: 10px;
         }
-        .status-box.show { display: flex; }
-        .status-box.info { background: #e8f0fe; border-left: 4px solid #3b82f6; color: #1e293b; }
-        .status-box.success { background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; }
-        .status-box.error { background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; }
-        .status-box .spinner {
-            width: 16px; height: 16px;
-            border: 3px solid #e2e8f0;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .admin-status-box.show { display: flex; }
+        .admin-status-box.info { background: rgba(59, 130, 246, 0.2); border-left: 4px solid #3b82f6; color: #dbeafe; }
+        .admin-status-box.success { background: rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981; color: #a7f3d0; }
+        .admin-status-box.error { background: rgba(220, 38, 38, 0.2); border-left: 4px solid #dc2626; color: #fecaca; }
+        .admin-status-box .spinner-small {
+            display: inline-block; width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
             flex-shrink: 0;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .stats-preview {
+
+        .admin-stats-preview {
             display: none;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
             padding: 14px;
             margin-top: 14px;
             font-size: 12px;
         }
-        .stats-preview.show { display: block; }
-        .stats-grid {
+        .admin-stats-preview.show { display: block; }
+        .admin-stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
             margin-top: 8px;
         }
-        .stat-cell {
-            background: white;
-            border: 1px solid #e2e8f0;
+        .admin-stat-cell {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.2);
             border-radius: 8px;
-            padding: 10px;
+            padding: 10px 8px;
             text-align: center;
         }
-        .stat-cell .v { font-size: 15px; font-weight: bold; color: var(--primary-color); }
-        .stat-cell .l { font-size: 10px; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
+        .admin-stat-cell .v { font-size: 14px; font-weight: bold; color: #f5f3ff; }
+        .admin-stat-cell .l { font-size: 10px; color: #c4b5fd; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+        .helper { font-size: 11px; color: #a5b4fc; margin-top: 14px; display: block; line-height: 1.5; }
+
+        .pw-gate {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            z-index: 10000;
+            justify-content: center;
+            min-height: 100vh;
             padding: 20px;
         }
-        .modal-overlay.show { display: flex; }
-        .modal-box {
-            background: rgba(20,35,55,0.95);
-            border: 1px solid rgba(255,215,0,0.2);
+        .pw-box {
+            background: rgba(20, 35, 55, 0.95);
+            border: 1px solid rgba(255, 215, 0, 0.2);
             border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
+            padding: 40px;
+            max-width: 420px;
             width: 100%;
+            text-align: center;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
-        .modal-box h3 { color: #fbbf24; margin-bottom: 10px; text-align: center; font-size: 18px; }
-        .modal-box p { color: #d1d9e6; text-align: center; margin-bottom: 18px; font-size: 13px; }
-        .modal-box input {
+        .pw-box h2 { color: #fbbf24; font-size: 22px; margin-bottom: 10px; }
+        .pw-box p { color: #cbd5e1; font-size: 13px; margin-bottom: 20px; }
+        .pw-box input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 14px 16px;
             border: 1.5px solid rgba(255,255,255,0.2);
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
             background: rgba(255,255,255,0.08);
             color: #fff;
-            margin-bottom: 14px;
-            text-align: center;
-            letter-spacing: 2px;
             font-family: inherit;
         }
-        .modal-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255,255,255,0.15); }
-        .modal-box .mb { display: flex; gap: 10px; }
-        .modal-box .mb button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
+        .pw-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255,255,255,0.15); }
+        .pw-box .err { color: #f87171; font-size: 13px; margin-bottom: 10px; display: none; }
+        .pw-box .err.show { display: block; }
+        .pw-box .btn { width: 100%; padding: 14px; font-size: 15px; background: rgba(139, 92, 246, 0.85); }
+        .pw-box .btn:hover { background: rgba(139, 92, 246, 1); }
+
+        .footer {
+            text-align: center; padding: 16px;
+            background: rgba(0, 0, 0, 0.25);
+            color: #b8c4d4; font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .modal-box .ok { background: rgba(139,92,246,0.9); color: white; }
-        .modal-box .ok:hover { background: rgb(139,92,246); }
-        .modal-box .cancel { background: rgba(100,116,139,0.5); color: white; }
-        .modal-box .cancel:hover { background: rgba(100,116,139,0.7); }
-        .modal-box .err {
-            color: #f87171;
-            font-size: 12px;
-            text-align: center;
-            display: none;
-            margin-top: -8px;
-            margin-bottom: 8px;
-        }
-        .modal-box .err.show { display: block; }
-        .locked-msg {
-            text-align: center;
-            padding: 40px 20px;
-            display: none;
-        }
-        .locked-msg.show { display: block; }
-        .locked-msg i { font-size: 3rem; color: #94a3b8; margin-bottom: 12px; }
-        .locked-msg h3 { color: #334155; margin-bottom: 8px; }
-        .locked-msg p { color: #64748b; font-size: 13px; margin-bottom: 16px; }
-        #formArea { display: none; }
-        #formArea.show { display: block; }
-        .audit-link {
-            display: block;
-            text-align: center;
-            margin-top: 14px;
-            font-size: 12px;
-            color: var(--secondary-color);
-            text-decoration: none;
-        }
-        .audit-link:hover { text-decoration: underline; }
+        .footer a { color: #fbbf24; text-decoration: none; }
+
         @media (max-width: 700px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .checks { grid-template-columns: 1fr; }
-            body { padding: 8px; }
-            .body { padding: 14px; }
+            .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
+            .admin-actions { grid-template-columns: 1fr 1fr; }
+            .content { padding: 18px 14px; }
+            .header h1 { font-size: 18px; }
         }
     </style>
 </head>
 <body>
 
-<div class="wrap">
-    <div class="head">
-        <h1><i class="fas fa-download me-2"></i>Fee Data Downloads</h1>
-        <p>Lunzu Secondary School — Admin Only</p>
+    <!-- Password Gate -->
+    <div id="pwGate" class="pw-gate">
+        <div class="pw-box">
+            <h2>🔒 Admin Access Required</h2>
+            <p>Enter the admin password to access class fee downloads.</p>
+            <input type="password" id="pwInput" placeholder="Password" maxlength="40" autocomplete="off">
+            <div id="pwErr" class="err">Incorrect password. Please try again.</div>
+            <button class="btn" id="pwBtn" onclick="verifyPassword()">Unlock</button>
+        </div>
     </div>
 
-    <div class="body">
-        <div id="statusBox" class="status-box"></div>
-
-        <div id="lockedMsg" class="locked-msg show">
-            <i class="fas fa-lock"></i>
-            <h3>Admin Access Required</h3>
-            <p>Enter the admin password to unlock downloads.</p>
-            <button class="btn btn-primary" style="max-width: 220px; margin: 0 auto;" onclick="openPasswordModal()">
-                <i class="fas fa-user-shield"></i> Enter Password
-            </button>
+    <!-- Main App (hidden until unlocked) -->
+    <div id="mainApp" class="container" style="display:none;">
+        <div class="header">
+            <h1>📥 Class Fee Data Downloads</h1>
+            <h2>LUNZU SECONDARY SCHOOL</h2>
+            <h3>Office of the Bursar</h3>
         </div>
 
-        <div id="formArea">
-            <div class="section-title"><i class="fas fa-filter me-2"></i> Scope</div>
-            <div class="grid-2">
-                <div class="field">
+        <div class="content">
+            <div class="section-title">🎯 Scope</div>
+            <div class="admin-grid-2">
+                <div class="admin-field">
                     <label>Class / Scope</label>
-                    <select id="f_class">
+                    <select id="dl_class">
                         <option value="__ALL__">★ ALL CLASSES</option>
                         <option value="Form 1">Form 1</option>
                         <option value="Form 2">Form 2</option>
@@ -358,21 +302,19 @@
                         <option value="Form 4 ODL">Form 4 ODL</option>
                     </select>
                 </div>
-                <div class="field">
+                <div class="admin-field">
                     <label>Term</label>
-                    <select id="f_term">
-                        <option value="2026-2027_TERM_1" selected>2026-2027 TERM 1</option>
-                        <option value="2026-2027_TERM_2">2026-2027 TERM 2</option>
-                        <option value="2026-2027_TERM_3">2026-2027 TERM 3</option>
+                    <select id="dl_term">
+                        <option value="">Loading...</option>
                     </select>
                 </div>
             </div>
 
-            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-sliders-h me-2"></i> Filters</div>
-            <div class="grid-3">
-                <div class="field">
+            <div class="section-title">🎚️ Filters</div>
+            <div class="admin-grid-3">
+                <div class="admin-field">
                     <label>Status</label>
-                    <select id="f_status">
+                    <select id="dl_status">
                         <option value="all">All students</option>
                         <option value="owing">Only owing (balance &lt; 0)</option>
                         <option value="partial">Only partially paid</option>
@@ -383,9 +325,9 @@
                         <option value="nonsponsored">Only non-sponsored</option>
                     </select>
                 </div>
-                <div class="field">
+                <div class="admin-field">
                     <label>Sort by</label>
-                    <select id="f_sort">
+                    <select id="dl_sort">
                         <option value="balance_worst">Balance (worst first)</option>
                         <option value="balance_best">Balance (best first)</option>
                         <option value="name_asc">Name (A–Z)</option>
@@ -394,429 +336,414 @@
                         <option value="lastpayment_oldest">Last payment (oldest)</option>
                     </select>
                 </div>
-                <div class="field">
+                <div class="admin-field">
                     <label>Search by name</label>
-                    <input type="text" id="f_search" placeholder="e.g. BANDA">
+                    <input type="text" id="dl_search" placeholder="e.g. BANDA">
                 </div>
             </div>
 
-            <div class="grid-3">
-                <div class="field">
+            <div class="admin-grid-3" style="margin-top:12px;">
+                <div class="admin-field">
                     <label>Date from (optional)</label>
-                    <input type="date" id="f_dateFrom">
+                    <input type="date" id="dl_dateFrom">
                 </div>
-                <div class="field">
+                <div class="admin-field">
                     <label>Date to (optional)</label>
-                    <input type="date" id="f_dateTo">
+                    <input type="date" id="dl_dateTo">
                 </div>
-                <div class="field">
+                <div class="admin-field">
                     <label>Date basis</label>
-                    <select id="f_dateBasis">
+                    <select id="dl_dateBasis">
                         <option value="lastPayment">Latest payment date</option>
                         <option value="entry">Last entry timestamp</option>
                     </select>
                 </div>
             </div>
 
-            <div class="field" style="margin-top: 10px;">
-                <label style="display:flex; align-items:center; gap:8px; text-transform:none; letter-spacing:0; font-size:12px;">
-                    <input type="checkbox" id="f_hasPrevBalance" style="accent-color: var(--secondary-color);">
-                    <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
-                </label>
+            <label class="admin-toggle" style="margin-top:12px;">
+                <input type="checkbox" id="dl_hasPrevBalance">
+                <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
+            </label>
+
+            <div class="section-title">📊 Report Content</div>
+            <label class="admin-toggle">
+                <input type="checkbox" id="dl_showSummary">
+                <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts (turn OFF for form teachers)</span>
+            </label>
+            <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
+                <input type="checkbox" id="dl_showByClass" disabled>
+                <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
+            </label>
+
+            <div class="section-title">📋 Columns</div>
+            <div class="admin-columns-grid" id="dl_columnsGrid"></div>
+
+            <div class="admin-actions">
+                <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
+                <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
+                <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
+                <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
             </div>
 
-            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-chart-pie me-2"></i> Report Content</div>
-            <div class="toggle-row">
-                <label>
-                    <input type="checkbox" id="f_showSummary">
-                    <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts</span>
-                </label>
-                <div class="hint">Turn off for form-teacher distribution (list only).</div>
+            <div id="dl_statusBox" class="admin-status-box"></div>
+            <div id="dl_statsPreview" class="admin-stats-preview"></div>
 
-                <label id="byClassRow" class="toggle-disabled">
-                    <input type="checkbox" id="f_showByClass" disabled>
-                    <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
-                </label>
-                <div class="hint">Requires "Include aggregate summary" above.</div>
+            <div class="helper">
+                ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.<br>
+                💡 Tip: turn OFF the aggregate summary when exporting for form teachers or parents.
             </div>
+        </div>
 
-            <div class="section-title" style="margin-top: 20px;"><i class="fas fa-columns me-2"></i> Columns</div>
-            <div class="checks" id="columnChecks"></div>
-
-            <div class="btn-row">
-                <button class="btn btn-ghost" onclick="previewStats()" id="btnPreview">
-                    <i class="fas fa-chart-bar"></i> Preview Stats
-                </button>
-                <button class="btn btn-csv" onclick="downloadCSV()" id="btnCSV">
-                    <i class="fas fa-file-csv"></i> Download CSV
-                </button>
-                <button class="btn btn-pdf" onclick="downloadPDF()" id="btnPDF">
-                    <i class="fas fa-file-pdf"></i> Download PDF
-                </button>
-                <button class="btn btn-xlsx" onclick="downloadXLSX()" id="btnXLSX">
-                    <i class="fas fa-file-excel"></i> Download Excel
-                </button>
-            </div>
-
-            <div id="statsPreview" class="stats-preview"></div>
-
-            <a href="admin-audit.html" class="audit-link">
-                <i class="fas fa-history"></i> View download audit log
-            </a>
+        <div class="footer">
+            © <span id="year"></span> Lunzu Secondary School — Office of the Bursar<br>
+            For help: <a href="https://wa.me/265888866269" target="_blank">WhatsApp +265 888 866 269</a>
         </div>
     </div>
-</div>
 
-<div id="pwModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
-        <p>Enter the admin password to unlock downloads.</p>
-        <input type="password" id="pwInput" placeholder="Enter password" maxlength="40">
-        <div id="pwError" class="err">Incorrect password. Please try again.</div>
-        <div class="mb">
-            <button class="cancel" onclick="closePasswordModal()">Cancel</button>
-            <button class="ok" onclick="verifyPassword()">Unlock</button>
-        </div>
-    </div>
-</div>
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+        const ADMIN_PASSWORD = "lss001";
 
-<script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+        const DL_COLUMNS = [
+            { key: 'sn',                label: 'S/N',                 default: true  },
+            { key: 'studentName',       label: 'Student Name',        default: true  },
+            { key: 'studentClass',      label: 'Class',               default: true  },
+            { key: 'dateOfBirth',       label: 'Date of Birth',       default: false },
+            { key: 'bursary',           label: 'Sponsor',             default: true  },
+            { key: 'feesPerTerm',       label: 'Fees Per Term',       default: true  },
+            { key: 'totalPaidThisTerm', label: 'Cumulative Paid',     default: true  },
+            { key: 'currentBalance',    label: 'Current Balance',     default: true  },
+            { key: 'previousBalance',   label: 'Previous Balance',    default: true  },
+            { key: 'cumulativeBalance', label: 'Cumulative Balance',  default: true  },
+            { key: 'paymentStatus',     label: 'Payment Status',      default: true  },
+            { key: 'lastPaymentDate',   label: 'Last Payment Date',   default: true  },
+            { key: 'contactPhone',      label: 'Contact Phone(s)',    default: true  },
+            { key: 'refunds',           label: 'Refunds',             default: false },
+            { key: 'entryTimestamp',    label: 'Last Entry Timestamp',default: false },
+            { key: 'parentEmail',       label: 'Parent Email(s)',     default: false }
+        ];
 
-const COLUMNS = [
-    { key: 'sn',                label: 'S/N',                 default: true  },
-    { key: 'studentName',       label: 'Student Name',        default: true  },
-    { key: 'studentClass',      label: 'Class',               default: true  },
-    { key: 'dateOfBirth',       label: 'Date of Birth',       default: false },
-    { key: 'bursary',           label: 'Sponsor',             default: true  },
-    { key: 'feesPerTerm',       label: 'Fees Per Term',       default: true  },
-    { key: 'totalPaidThisTerm', label: 'Cumulative Paid',     default: true  },
-    { key: 'currentBalance',    label: 'Current Balance',     default: true  },
-    { key: 'previousBalance',   label: 'Previous Balance',    default: true  },
-    { key: 'cumulativeBalance', label: 'Cumulative Balance',  default: true  },
-    { key: 'paymentStatus',     label: 'Payment Status',      default: true  },
-    { key: 'lastPaymentDate',   label: 'Last Payment Date',   default: true  },
-    { key: 'contactPhone',      label: 'Contact Phone(s)',    default: true  },
-    { key: 'refunds',           label: 'Refunds',             default: false },
-    { key: 'entryTimestamp',    label: 'Last Entry Timestamp',default: false },
-    { key: 'parentEmail',       label: 'Parent Email(s)',     default: false }
-];
+        let availableTerms = [];
+        let currentTermKey = null;
 
-let adminPassword = sessionStorage.getItem('adminPw') || '';
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-document.addEventListener('DOMContentLoaded', function() {
-    renderColumnChecks();
-    wireToggleEvents();
-    document.getElementById('pwInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') verifyPassword();
-        if (e.key === 'Escape') closePasswordModal();
-    });
-    if (adminPassword) verifyPassword(true);
-});
+        // ---- Password gate ----
+        function verifyPassword() {
+            var pw = document.getElementById('pwInput').value.trim();
+            var err = document.getElementById('pwErr');
+            if (!pw) {
+                err.textContent = 'Please enter a password.';
+                err.classList.add('show');
+                return;
+            }
+            var btn = document.getElementById('pwBtn');
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            callGAS('verifyAdmin', { password: pw }, function(result) {
+                btn.disabled = false;
+                btn.textContent = 'Unlock';
+                if (result && result.success) {
+                    document.getElementById('pwGate').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    initApp();
+                } else {
+                    err.textContent = 'Incorrect password. Please try again.';
+                    err.classList.add('show');
+                    document.getElementById('pwInput').value = '';
+                    document.getElementById('pwInput').focus();
+                }
+            }, function(error) {
+                btn.disabled = false;
+                btn.textContent = 'Unlock';
+                err.textContent = 'Network error: ' + error;
+                err.classList.add('show');
+            });
+        }
 
-function wireToggleEvents() {
-    const showSummary = document.getElementById('f_showSummary');
-    const showByClass = document.getElementById('f_showByClass');
-    const byClassRow = document.getElementById('byClassRow');
-    const classSelect = document.getElementById('f_class');
-
-    function updateByClassState() {
-        const summaryOn = showSummary.checked;
-        const allClasses = classSelect.value === '__ALL__';
-        const enable = summaryOn && allClasses;
-        showByClass.disabled = !enable;
-        if (!enable) showByClass.checked = false;
-        byClassRow.classList.toggle('toggle-disabled', !enable);
-    }
-
-    showSummary.addEventListener('change', updateByClassState);
-    classSelect.addEventListener('change', updateByClassState);
-    updateByClassState();
-}
-
-function renderColumnChecks() {
-    const container = document.getElementById('columnChecks');
-    container.innerHTML = COLUMNS.map(c => `
-        <label class="${c.default ? 'on' : ''}" data-key="${c.key}">
-            <input type="checkbox" ${c.default ? 'checked' : ''} data-key="${c.key}">
-            <span>${c.label}</span>
-        </label>
-    `).join('');
-    container.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.addEventListener('change', function() {
-            this.parentElement.classList.toggle('on', this.checked);
+        document.getElementById('pwInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') verifyPassword();
         });
-    });
-}
 
-function openPasswordModal() {
-    document.getElementById('pwModal').classList.add('show');
-    document.getElementById('pwInput').value = '';
-    document.getElementById('pwError').classList.remove('show');
-    setTimeout(() => document.getElementById('pwInput').focus(), 100);
-}
-
-function closePasswordModal() {
-    document.getElementById('pwModal').classList.remove('show');
-}
-
-async function verifyPassword(silent) {
-    const pw = silent ? adminPassword : document.getElementById('pwInput').value.trim();
-    if (!pw) {
-        if (!silent) {
-            document.getElementById('pwError').textContent = 'Please enter a password.';
-            document.getElementById('pwError').classList.add('show');
+        // ---- Init after unlock ----
+        async function initApp() {
+            await loadTerms();
+            renderColumnChecks();
+            wireToggleEvents();
         }
-        return;
-    }
-    if (!silent) showStatus('info', 'Verifying...');
-    try {
-        const res = await callGAS('verifyAdmin', { password: pw });
-        if (res && res.success) {
-            adminPassword = pw;
-            sessionStorage.setItem('adminPw', pw);
-            document.getElementById('lockedMsg').classList.remove('show');
-            document.getElementById('formArea').classList.add('show');
-            closePasswordModal();
-            if (!silent) showStatus('success', '✅ Unlocked. Configure your download below.');
-        } else {
-            sessionStorage.removeItem('adminPw');
-            adminPassword = '';
-            if (silent) { showStatus('info', 'Session expired — please re-enter password.'); openPasswordModal(); return; }
-            document.getElementById('pwError').textContent = 'Incorrect password. Please try again.';
-            document.getElementById('pwError').classList.add('show');
-            document.getElementById('pwInput').value = '';
-            document.getElementById('pwInput').focus();
-            hideStatus();
-        }
-    } catch (e) {
-        if (!silent) {
-            document.getElementById('pwError').textContent = 'Error: ' + e.message;
-            document.getElementById('pwError').classList.add('show');
-        }
-        hideStatus();
-    }
-}
 
-function collectParams(extra) {
-    const selectedColumns = Array.from(document.querySelectorAll('#columnChecks input:checked'))
-        .map(cb => cb.dataset.key);
-    const p = {
-        password: adminPassword,
-        studentClass: document.getElementById('f_class').value,
-        term: document.getElementById('f_term').value,
-        statusFilter: document.getElementById('f_status').value,
-        sortBy: document.getElementById('f_sort').value,
-        search: document.getElementById('f_search').value.trim(),
-        dateFrom: document.getElementById('f_dateFrom').value,
-        dateTo: document.getElementById('f_dateTo').value,
-        dateBasis: document.getElementById('f_dateBasis').value,
-        hasPrevBalance: document.getElementById('f_hasPrevBalance').checked ? 'true' : 'false',
-        showSummary: document.getElementById('f_showSummary').checked ? 'true' : 'false',
-        showByClass: document.getElementById('f_showByClass').checked ? 'true' : 'false',
-        columns: selectedColumns.join(',')
-    };
-    if (extra) Object.assign(p, extra);
-    return p;
-}
-
-async function previewStats() {
-    const btn = document.getElementById('btnPreview');
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
-    showStatus('info', 'Computing preview statistics...');
-
-    try {
-        const res = await callGAS('exportClassFeeStats', collectParams());
-        if (!res.success) throw new Error(res.error || 'Failed');
-        renderStatsPreview(res.stats, res.rowCount);
-        showStatus('success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
-    } catch (e) {
-        showStatus('error', '❌ ' + e.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = orig;
-    }
-}
-
-function renderStatsPreview(stats, rowCount) {
-    const el = document.getElementById('statsPreview');
-    el.classList.add('show');
-    el.innerHTML = `
-        <div style="font-weight:bold; color:var(--primary-color); margin-bottom:6px;">
-            Preview — ${rowCount} student(s)
-        </div>
-        <div class="stats-grid">
-            <div class="stat-cell"><div class="v">K${stats.totalBilled.toLocaleString()}</div><div class="l">Billed</div></div>
-            <div class="stat-cell"><div class="v" style="color:#4caf50;">K${stats.totalCollected.toLocaleString()}</div><div class="l">Collected</div></div>
-            <div class="stat-cell"><div class="v" style="color:#f44336;">K${stats.totalOutstanding.toLocaleString()}</div><div class="l">Outstanding</div></div>
-            <div class="stat-cell"><div class="v" style="color:#8b5cf6;">K${stats.totalOverpaid.toLocaleString()}</div><div class="l">Overpaid</div></div>
-            <div class="stat-cell"><div class="v">${stats.collectionRate}%</div><div class="l">Collection</div></div>
-            <div class="stat-cell"><div class="v">${stats.fullyPaid}</div><div class="l">Fully Paid</div></div>
-            <div class="stat-cell"><div class="v">${stats.partiallyPaid}</div><div class="l">Partially</div></div>
-            <div class="stat-cell"><div class="v">${stats.unpaid}</div><div class="l">Unpaid</div></div>
-            <div class="stat-cell"><div class="v">${stats.sponsoredCount}</div><div class="l">Sponsored</div></div>
-            <div class="stat-cell"><div class="v">${stats.withPrevBalance}</div><div class="l">With Prev Bal</div></div>
-        </div>
-    `;
-}
-
-async function downloadCSV() {
-    const btn = document.getElementById('btnCSV');
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    showStatus('info', 'Generating CSV...');
-    try {
-        const res = await callGAS('exportClassFeeCSV', collectParams());
-        if (!res.success) throw new Error(res.error || 'Failed');
-        downloadBlob(res.csv, res.filename || 'fee_data.csv', 'text/csv;charset=utf-8;');
-        showStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
-    } catch (e) {
-        showStatus('error', '❌ ' + e.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = orig;
-    }
-}
-
-async function downloadPDF() {
-    const btn = document.getElementById('btnPDF');
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    showStatus('info', 'Generating PDF... this may take 5–15 seconds.');
-    try {
-        const res = await callGAS('exportClassFeePDF', collectParams());
-        if (!res.success) throw new Error(res.error || 'Failed');
-        downloadBase64(res.pdfBase64, res.filename || 'fee_data.pdf', 'application/pdf');
-        showStatus('success', '✅ PDF downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
-    } catch (e) {
-        showStatus('error', '❌ ' + e.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = orig;
-    }
-}
-
-async function downloadXLSX() {
-    const btn = document.getElementById('btnXLSX');
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    showStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
-    try {
-        const res = await callGAS('exportClassFeeXLSX', collectParams());
-        if (!res.success) throw new Error(res.error || 'Failed');
-        downloadBase64(res.xlsxBase64, res.filename || 'fee_data.xlsx',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        showStatus('success', '✅ Excel downloaded — ' + res.rowCount + ' student(s). Contains sensitive data — handle with care.');
-    } catch (e) {
-        showStatus('error', '❌ ' + e.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = orig;
-    }
-}
-
-function downloadBlob(content, filename, mime) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, 100);
-}
-
-function downloadBase64(base64, filename, mime) {
-    const byteChars = atob(base64);
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, 100);
-}
-
-function showStatus(type, msg) {
-    const el = document.getElementById('statusBox');
-    el.className = 'status-box show ' + type;
-    let icon = '';
-    if (type === 'info') icon = '<div class="spinner"></div>';
-    else if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
-    else if (type === 'error') icon = '<i class="fas fa-exclamation-circle"></i>';
-    el.innerHTML = icon + '<span>' + escapeHtml(msg) + '</span>';
-}
-
-function hideStatus() {
-    document.getElementById('statusBox').classList.remove('show');
-}
-
-function escapeHtml(t) {
-    const d = document.createElement('div');
-    d.textContent = String(t || '');
-    return d.innerHTML;
-}
-
-function callGAS(action, params, retryAttempt) {
-    retryAttempt = retryAttempt || 0;
-    const MAX = 2;
-    return new Promise((resolve, reject) => {
-        const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-        const all = Object.assign({}, params, { action, callback: cbName });
-        const qs = Object.keys(all)
-            .filter(k => all[k] !== undefined && all[k] !== null)
-            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(all[k]))
-            .join('&');
-
-        const script = document.createElement('script');
-        script.src = GAS_URL + '?' + qs;
-
-        const timer = setTimeout(() => {
-            if (window[cbName]) {
-                delete window[cbName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
-                else reject(new Error('Request timed out. Try a smaller date range or single class.'));
+        async function loadTerms() {
+            try {
+                const terms = await callGASPromise('getAvailableTerms', { admin: 'true' });
+                if (Array.isArray(terms) && terms.length) {
+                    availableTerms = terms;
+                    populateTerms(terms);
+                } else {
+                    document.getElementById('dl_term').innerHTML = '<option value="2026-2027_TERM_1">2026-2027 TERM 1</option>';
+                    currentTermKey = '2026-2027_TERM_1';
+                }
+            } catch (e) {
+                console.error('Failed to load terms:', e);
+                document.getElementById('dl_term').innerHTML = '<option value="2026-2027_TERM_1">2026-2027 TERM 1</option>';
+                currentTermKey = '2026-2027_TERM_1';
             }
-        }, 120000);
+        }
 
-        window[cbName] = function(res) {
-            clearTimeout(timer);
-            delete window[cbName];
-            if (script.parentNode) script.parentNode.removeChild(script);
-            if (res && res.error) {
-                if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
-                else reject(new Error(res.error));
+        function populateTerms(terms) {
+            const sel = document.getElementById('dl_term');
+            sel.innerHTML = '';
+            let activeTerm = null;
+            terms.forEach(function(t) {
+                const opt = document.createElement('option');
+                opt.value = t.key;
+                opt.textContent = t.display;
+                if (t.isActive) {
+                    opt.selected = true;
+                    currentTermKey = t.key;
+                    activeTerm = t;
+                }
+                sel.appendChild(opt);
+            });
+            if (!activeTerm && terms.length) {
+                sel.value = terms[0].key;
+                currentTermKey = terms[0].key;
+            }
+        }
+
+        function renderColumnChecks() {
+            const container = document.getElementById('dl_columnsGrid');
+            container.innerHTML = DL_COLUMNS.map(function(c) {
+                return '<label class="' + (c.default ? 'on' : '') + '" data-key="' + c.key + '">' +
+                    '<input type="checkbox" ' + (c.default ? 'checked' : '') + ' data-key="' + c.key + '">' +
+                    '<span>' + c.label + '</span></label>';
+            }).join('');
+            container.querySelectorAll('input[type=checkbox]').forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    this.parentElement.classList.toggle('on', this.checked);
+                });
+            });
+        }
+
+        function wireToggleEvents() {
+            const showSummary = document.getElementById('dl_showSummary');
+            const showByClass = document.getElementById('dl_showByClass');
+            const byClassRow = document.getElementById('dl_byClassRow');
+            const classSel = document.getElementById('dl_class');
+
+            function updateByClassState() {
+                const summaryOn = showSummary.checked;
+                const allClasses = classSel.value === '__ALL__';
+                const enable = summaryOn && allClasses;
+                showByClass.disabled = !enable;
+                if (!enable) showByClass.checked = false;
+                byClassRow.classList.toggle('disabled', !enable);
+            }
+
+            showSummary.addEventListener('change', updateByClassState);
+            classSel.addEventListener('change', updateByClassState);
+            updateByClassState();
+        }
+
+        // ---- Params ----
+        function collectParams(extra) {
+            const selected = Array.from(document.querySelectorAll('#dl_columnsGrid input:checked'))
+                .map(function(cb) { return cb.dataset.key; });
+            const p = {
+                password: ADMIN_PASSWORD,
+                studentClass: document.getElementById('dl_class').value,
+                term: document.getElementById('dl_term').value || currentTermKey,
+                statusFilter: document.getElementById('dl_status').value,
+                sortBy: document.getElementById('dl_sort').value,
+                search: document.getElementById('dl_search').value.trim(),
+                dateFrom: document.getElementById('dl_dateFrom').value,
+                dateTo: document.getElementById('dl_dateTo').value,
+                dateBasis: document.getElementById('dl_dateBasis').value,
+                hasPrevBalance: document.getElementById('dl_hasPrevBalance').checked ? 'true' : 'false',
+                showSummary: document.getElementById('dl_showSummary').checked ? 'true' : 'false',
+                showByClass: document.getElementById('dl_showByClass').checked ? 'true' : 'false',
+                columns: selected.join(',')
+            };
+            if (extra) Object.assign(p, extra);
+            return p;
+        }
+
+        // ---- Status helpers ----
+        function setStatus(type, msg) {
+            const el = document.getElementById('dl_statusBox');
+            el.className = 'admin-status-box show ' + type;
+            let icon = '';
+            if (type === 'info') icon = '<span class="spinner-small"></span>';
+            else if (type === 'success') icon = '✅';
+            else if (type === 'error') icon = '❌';
+            el.innerHTML = icon + '<span>' + escapeHtml(msg) + '</span>';
+        }
+
+        function setButtonBusy(btnId, busy, busyText) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (busy) {
+                btn.dataset.originalHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-small"></span> ' + (busyText || 'Working...');
             } else {
-                resolve(res);
+                if (btn.dataset.originalHtml) btn.innerHTML = btn.dataset.originalHtml;
+                btn.disabled = false;
             }
-        };
-        script.onerror = function() {
-            clearTimeout(timer);
-            delete window[cbName];
-            if (script.parentNode) script.parentNode.removeChild(script);
-            if (retryAttempt < MAX) resolve(callGAS(action, params, retryAttempt + 1));
-            else reject(new Error('Connection failed.'));
-        };
-        document.head.appendChild(script);
-    });
-}
-</script>
+        }
 
+        // ---- Preview Stats ----
+        async function dl_previewStats() {
+            setButtonBusy('dl_btnPreview', true, 'Calculating...');
+            setStatus('info', 'Computing preview statistics...');
+            try {
+                const res = await callGASPromise('exportClassFeeStats', collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                renderStatsPreview(res.stats, res.rowCount);
+                setStatus('success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
+            } catch (e) {
+                setStatus('error', '❌ ' + e.message);
+            } finally {
+                setButtonBusy('dl_btnPreview', false);
+            }
+        }
+
+        function renderStatsPreview(stats, rowCount) {
+            const el = document.getElementById('dl_statsPreview');
+            el.classList.add('show');
+            function fmtMoney(v) { return 'K' + Number(v || 0).toLocaleString(); }
+            el.innerHTML =
+                '<div style="font-weight:bold;color:#ddd6fe;margin-bottom:6px;">Preview — ' + rowCount + ' student(s)</div>' +
+                '<div class="admin-stats-grid">' +
+                '<div class="admin-stat-cell"><div class="v">' + fmtMoney(stats.totalBilled) + '</div><div class="l">Billed</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#86efac;">' + fmtMoney(stats.totalCollected) + '</div><div class="l">Collected</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#fca5a5;">' + fmtMoney(stats.totalOutstanding) + '</div><div class="l">Outstanding</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#c4b5fd;">' + fmtMoney(stats.totalOverpaid) + '</div><div class="l">Overpaid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.collectionRate + '%</div><div class="l">Collection</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#86efac;">' + stats.fullyPaid + '</div><div class="l">Fully Paid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.partiallyPaid + '</div><div class="l">Partially</div></div>' +
+                '<div class="admin-stat-cell"><div class="v" style="color:#fca5a5;">' + stats.unpaid + '</div><div class="l">Unpaid</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.sponsoredCount + '</div><div class="l">Sponsored</div></div>' +
+                '<div class="admin-stat-cell"><div class="v">' + stats.withPrevBalance + '</div><div class="l">With Prev Bal</div></div>' +
+                '</div>';
+        }
+
+        // ---- Downloads ----
+        function downloadBlob(content, filename, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        function downloadBase64(base64, filename, mime) {
+            const byteChars = atob(base64);
+            const byteNumbers = new Array(byteChars.length);
+            for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        async function dl_downloadCSV() {
+            setButtonBusy('dl_btnCSV', true, 'CSV...');
+            setStatus('info', 'Generating CSV...');
+            try {
+                const res = await callGASPromise('exportClassFeeCSV', collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                downloadBlob(res.csv, res.filename || 'fee_data.csv', 'text/csv;charset=utf-8;');
+                setStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                setStatus('error', '❌ ' + e.message);
+            } finally {
+                setButtonBusy('dl_btnCSV', false);
+            }
+        }
+
+        async function dl_downloadPDF() {
+            setButtonBusy('dl_btnPDF', true, 'PDF...');
+            setStatus('info', 'Generating PDF... this may take 5–15 seconds.');
+            try {
+                const res = await callGASPromise('exportClassFeePDF', collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                downloadBase64(res.pdfBase64, res.filename || 'fee_data.pdf', 'application/pdf');
+                setStatus('success', '✅ PDF downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                setStatus('error', '❌ ' + e.message);
+            } finally {
+                setButtonBusy('dl_btnPDF', false);
+            }
+        }
+
+        async function dl_downloadXLSX() {
+            setButtonBusy('dl_btnXLSX', true, 'Excel...');
+            setStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
+            try {
+                const res = await callGASPromise('exportClassFeeXLSX', collectParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                downloadBase64(res.xlsxBase64, res.filename || 'fee_data.xlsx',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                setStatus('success', '✅ Excel downloaded — ' + res.rowCount + ' student(s).');
+            } catch (e) {
+                setStatus('error', '❌ ' + e.message);
+            } finally {
+                setButtonBusy('dl_btnXLSX', false);
+            }
+        }
+
+        // ---- API helpers ----
+        function callGAS(action, params, onSuccess, onError) {
+            const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+            params = Object.assign({}, params, { callback: callbackName, action: action });
+            const qs = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+            const script = document.createElement('script');
+            script.src = GAS_URL + '?' + qs;
+            const timeoutId = setTimeout(() => {
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    if (onError) onError('Request timeout');
+                }
+            }, 120000);
+            window[callbackName] = function(response) {
+                clearTimeout(timeoutId);
+                delete window[callbackName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+                if (response && response.error) { if (onError) onError(response.error); }
+                else if (onSuccess) onSuccess(response);
+            };
+            script.onerror = function() {
+                clearTimeout(timeoutId);
+                delete window[callbackName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+                if (onError) onError('Connection failed');
+            };
+            document.head.appendChild(script);
+        }
+
+        function callGASPromise(action, params) {
+            return new Promise((resolve, reject) => {
+                callGAS(action, params, resolve, reject);
+            });
+        }
+
+        function escapeHtml(s) {
+            if (s == null) return '';
+            const d = document.createElement('div');
+            d.textContent = String(s);
+            return d.innerHTML;
+        }
+    </script>
 </body>
 </html>
