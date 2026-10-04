@@ -87,17 +87,6 @@
         .btn-admin.active { background: rgba(124, 58, 237, 0.9); }
         .btn-back { background: rgba(71, 85, 105, 0.7); }
         .btn-back:hover { transform: translateY(-3px); background: rgba(71, 85, 105, 0.9); }
-
-        /* Admin-only buttons — hidden by default, shown only in admin mode */
-        .btn-receipts, .btn-invoice {
-            background: rgba(234, 88, 12, 0.7);
-            display: none;
-        }
-        .btn-receipts.show, .btn-invoice.show { display: inline-flex; }
-        .btn-invoice { background: rgba(220, 38, 38, 0.75); }
-        .btn-receipts:hover { transform: translateY(-3px); background: rgba(234, 88, 12, 0.95); }
-        .btn-invoice:hover { transform: translateY(-3px); background: rgba(185, 28, 28, 1); }
-
         .btn-csv { background: rgba(16, 185, 129, 0.85); }
         .btn-csv:hover:not(:disabled) { transform: translateY(-3px); background: rgba(5, 150, 105, 1); }
         .btn-pdf { background: rgba(220, 38, 38, 0.85); }
@@ -213,27 +202,92 @@
         .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
 
         /* ============================================================ */
-        /* ADMIN DOWNLOADS PANEL                                        */
+        /* ADMIN-ONLY TOOLS PANEL                                       */
+        /* ============================================================ */
+        .admin-tools-panel {
+            display: none;
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin: 20px 0;
+        }
+        .admin-tools-panel.show { display: block; }
+        .admin-tools-panel .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fecaca;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(220, 38, 38, 0.4);
+        }
+        .admin-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .admin-tool-card {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #fff;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .admin-tool-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .admin-tool-card .card-icon { font-size: 26px; margin-bottom: 4px; }
+        .admin-tool-card .card-title { font-size: 15px; font-weight: 700; color: #fff; }
+        .admin-tool-card .card-desc { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+        .admin-tool-card.invoice { border-left: 4px solid #dc2626; }
+        .admin-tool-card.receipts { border-left: 4px solid #ea580c; }
+        .admin-tool-card.downloads { border-left: 4px solid #8b5cf6; }
+
+        /* ============================================================ */
+        /* ADMIN DOWNLOADS PANEL — collapsible                          */
         /* ============================================================ */
         .admin-downloads-panel {
             display: none;
             background: rgba(139, 92, 246, 0.08);
             border: 1px solid rgba(139, 92, 246, 0.35);
             border-radius: 18px;
-            padding: 20px 22px;
+            padding: 0;
             margin: 20px 0;
+            overflow: hidden;
         }
         .admin-downloads-panel.show { display: block; }
         .admin-downloads-panel .panel-title {
             font-size: 16px;
             font-weight: 700;
             color: #ddd6fe;
-            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(139, 92, 246, 0.4);
+            padding: 16px 22px;
+            background: rgba(139, 92, 246, 0.12);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .admin-downloads-panel .panel-title:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+        .admin-downloads-panel .panel-body {
+            padding: 20px 22px 22px;
         }
         .admin-downloads-panel .section-title {
             font-size: 12px;
@@ -242,6 +296,9 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin: 18px 0 10px;
+        }
+        .admin-downloads-panel .section-title:first-child {
+            margin-top: 0;
         }
         .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
@@ -294,10 +351,7 @@
             cursor: pointer;
         }
         .admin-toggle span { line-height: 1.5; }
-        .admin-toggle.disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-        }
+        .admin-toggle.disabled { opacity: 0.45; cursor: not-allowed; }
         .admin-toggle.disabled input { cursor: not-allowed; }
         .admin-columns-grid {
             display: grid;
@@ -358,18 +412,8 @@
             padding: 10px 8px;
             text-align: center;
         }
-        .admin-stat-cell .v {
-            font-size: 14px;
-            font-weight: bold;
-            color: #f5f3ff;
-        }
-        .admin-stat-cell .l {
-            font-size: 10px;
-            color: #c4b5fd;
-            margin-top: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+        .admin-stat-cell .v { font-size: 14px; font-weight: bold; color: #f5f3ff; }
+        .admin-stat-cell .l { font-size: 10px; color: #c4b5fd; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
         .admin-status-box {
             padding: 10px 14px;
             border-radius: 10px;
@@ -390,73 +434,6 @@
             flex-shrink: 0;
         }
         .admin-downloads-panel .helper { font-size: 11px; color: #a5b4fc; margin-top: 4px; display: block; }
-
-        /* ============================================================ */
-        /* ADMIN-ONLY TOOLS PANEL                                       */
-        /* ============================================================ */
-        .admin-tools-panel {
-            display: none;
-            background: rgba(220, 38, 38, 0.08);
-            border: 1px solid rgba(220, 38, 38, 0.35);
-            border-radius: 18px;
-            padding: 18px 20px;
-            margin: 20px 0;
-        }
-        .admin-tools-panel.show { display: block; }
-        .admin-tools-panel .panel-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fecaca;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(220, 38, 38, 0.4);
-        }
-        .admin-tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .admin-tool-card {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 16px 18px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #fff;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .admin-tool-card:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 215, 0, 0.4);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-        .admin-tool-card .card-icon {
-            font-size: 26px;
-            margin-bottom: 4px;
-        }
-        .admin-tool-card .card-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .admin-tool-card .card-desc {
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
-        .admin-tool-card.invoice { border-left: 4px solid #dc2626; }
-        .admin-tool-card.receipts { border-left: 4px solid #ea580c; }
-        .admin-tool-card.downloads { border-left: 4px solid #8b5cf6; }
-        .admin-tool-card.subscribe { border-left: 4px solid #06b6d4; }
 
         @media (max-width: 700px) {
             .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
@@ -612,118 +589,121 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- ADMIN DOWNLOADS PANEL                                        -->
+            <!-- ADMIN DOWNLOADS PANEL — collapsed by default                 -->
             <!-- ============================================================ -->
             <div id="adminDownloadsPanel" class="admin-downloads-panel">
-                <div class="panel-title">
+                <div class="panel-title" onclick="toggleDownloadsPanel()">
                     <span>📥</span>
                     <span>Class Fee Data Downloads</span>
+                    <span id="dl_chevron" style="margin-left:auto; transition:transform 0.25s; font-size:14px;">▼</span>
                 </div>
 
-                <div class="section-title">🎯 Scope</div>
-                <div class="admin-grid-2">
-                    <div class="admin-field">
-                        <label>Class / Scope</label>
-                        <select id="dl_class">
-                            <option value="__ALL__">★ ALL CLASSES</option>
-                            <option value="Form 1">Form 1</option>
-                            <option value="Form 2">Form 2</option>
-                            <option value="Form 3">Form 3</option>
-                            <option value="Form 4">Form 4</option>
-                            <option value="Form 1 ODL">Form 1 ODL</option>
-                            <option value="Form 2 ODL">Form 2 ODL</option>
-                            <option value="Form 3 ODL">Form 3 ODL</option>
-                            <option value="Form 4 ODL">Form 4 ODL</option>
-                        </select>
+                <div id="dl_panelBody" class="panel-body" style="display:none;">
+                    <div class="section-title">🎯 Scope</div>
+                    <div class="admin-grid-2">
+                        <div class="admin-field">
+                            <label>Class / Scope</label>
+                            <select id="dl_class">
+                                <option value="__ALL__">★ ALL CLASSES</option>
+                                <option value="Form 1">Form 1</option>
+                                <option value="Form 2">Form 2</option>
+                                <option value="Form 3">Form 3</option>
+                                <option value="Form 4">Form 4</option>
+                                <option value="Form 1 ODL">Form 1 ODL</option>
+                                <option value="Form 2 ODL">Form 2 ODL</option>
+                                <option value="Form 3 ODL">Form 3 ODL</option>
+                                <option value="Form 4 ODL">Form 4 ODL</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label>Term</label>
+                            <select id="dl_term">
+                                <option value="">Loading...</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="admin-field">
-                        <label>Term</label>
-                        <select id="dl_term">
-                            <option value="">Loading...</option>
-                        </select>
+
+                    <div class="section-title">🎚️ Filters</div>
+                    <div class="admin-grid-3">
+                        <div class="admin-field">
+                            <label>Status</label>
+                            <select id="dl_status">
+                                <option value="all">All students</option>
+                                <option value="owing">Only owing (balance &lt; 0)</option>
+                                <option value="partial">Only partially paid</option>
+                                <option value="full">Only fully paid</option>
+                                <option value="overpaid">Only overpaid</option>
+                                <option value="sponsored">Only sponsored</option>
+                                <option value="government">Only government-sponsored</option>
+                                <option value="nonsponsored">Only non-sponsored</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label>Sort by</label>
+                            <select id="dl_sort">
+                                <option value="balance_worst">Balance (worst first)</option>
+                                <option value="balance_best">Balance (best first)</option>
+                                <option value="name_asc">Name (A–Z)</option>
+                                <option value="name_desc">Name (Z–A)</option>
+                                <option value="lastpayment_recent">Last payment (recent)</option>
+                                <option value="lastpayment_oldest">Last payment (oldest)</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label>Search by name</label>
+                            <input type="text" id="dl_search" placeholder="e.g. BANDA">
+                        </div>
                     </div>
-                </div>
 
-                <div class="section-title">🎚️ Filters</div>
-                <div class="admin-grid-3">
-                    <div class="admin-field">
-                        <label>Status</label>
-                        <select id="dl_status">
-                            <option value="all">All students</option>
-                            <option value="owing">Only owing (balance &lt; 0)</option>
-                            <option value="partial">Only partially paid</option>
-                            <option value="full">Only fully paid</option>
-                            <option value="overpaid">Only overpaid</option>
-                            <option value="sponsored">Only sponsored</option>
-                            <option value="government">Only government-sponsored</option>
-                            <option value="nonsponsored">Only non-sponsored</option>
-                        </select>
+                    <div class="admin-grid-3" style="margin-top:12px;">
+                        <div class="admin-field">
+                            <label>Date from (optional)</label>
+                            <input type="date" id="dl_dateFrom">
+                        </div>
+                        <div class="admin-field">
+                            <label>Date to (optional)</label>
+                            <input type="date" id="dl_dateTo">
+                        </div>
+                        <div class="admin-field">
+                            <label>Date basis</label>
+                            <select id="dl_dateBasis">
+                                <option value="lastPayment">Latest payment date</option>
+                                <option value="entry">Last entry timestamp</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="admin-field">
-                        <label>Sort by</label>
-                        <select id="dl_sort">
-                            <option value="balance_worst">Balance (worst first)</option>
-                            <option value="balance_best">Balance (best first)</option>
-                            <option value="name_asc">Name (A–Z)</option>
-                            <option value="name_desc">Name (Z–A)</option>
-                            <option value="lastpayment_recent">Last payment (recent)</option>
-                            <option value="lastpayment_oldest">Last payment (oldest)</option>
-                        </select>
+
+                    <label class="admin-toggle" style="margin-top:12px;">
+                        <input type="checkbox" id="dl_hasPrevBalance">
+                        <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
+                    </label>
+
+                    <div class="section-title">📊 Report Content</div>
+                    <label class="admin-toggle">
+                        <input type="checkbox" id="dl_showSummary">
+                        <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts (turn OFF for form teachers)</span>
+                    </label>
+                    <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
+                        <input type="checkbox" id="dl_showByClass" disabled>
+                        <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
+                    </label>
+
+                    <div class="section-title">📋 Columns</div>
+                    <div class="admin-columns-grid" id="dl_columnsGrid"></div>
+
+                    <div class="admin-actions">
+                        <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
+                        <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
+                        <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
+                        <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
                     </div>
-                    <div class="admin-field">
-                        <label>Search by name</label>
-                        <input type="text" id="dl_search" placeholder="e.g. BANDA">
+
+                    <div id="dl_statusBox" class="admin-status-box"></div>
+                    <div id="dl_statsPreview" class="admin-stats-preview"></div>
+
+                    <div class="helper" style="margin-top:14px;">
+                        ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.
                     </div>
-                </div>
-
-                <div class="admin-grid-3" style="margin-top:12px;">
-                    <div class="admin-field">
-                        <label>Date from (optional)</label>
-                        <input type="date" id="dl_dateFrom">
-                    </div>
-                    <div class="admin-field">
-                        <label>Date to (optional)</label>
-                        <input type="date" id="dl_dateTo">
-                    </div>
-                    <div class="admin-field">
-                        <label>Date basis</label>
-                        <select id="dl_dateBasis">
-                            <option value="lastPayment">Latest payment date</option>
-                            <option value="entry">Last entry timestamp</option>
-                        </select>
-                    </div>
-                </div>
-
-                <label class="admin-toggle" style="margin-top:12px;">
-                    <input type="checkbox" id="dl_hasPrevBalance">
-                    <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
-                </label>
-
-                <div class="section-title">📊 Report Content</div>
-                <label class="admin-toggle">
-                    <input type="checkbox" id="dl_showSummary">
-                    <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts (turn OFF for form teachers)</span>
-                </label>
-                <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
-                    <input type="checkbox" id="dl_showByClass" disabled>
-                    <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
-                </label>
-
-                <div class="section-title">📋 Columns</div>
-                <div class="admin-columns-grid" id="dl_columnsGrid"></div>
-
-                <div class="admin-actions">
-                    <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
-                    <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
-                    <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
-                    <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
-                </div>
-
-                <div id="dl_statusBox" class="admin-status-box"></div>
-                <div id="dl_statsPreview" class="admin-stats-preview"></div>
-
-                <div class="helper" style="margin-top:14px;">
-                    ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.
                 </div>
             </div>
 
@@ -892,6 +872,8 @@
             const panel = document.getElementById('adminQueuePanel');
             const toolsPanel = document.getElementById('adminToolsPanel');
             const downloadsPanel = document.getElementById('adminDownloadsPanel');
+            const dlBody = document.getElementById('dl_panelBody');
+            const dlChevron = document.getElementById('dl_chevron');
             const dobInput = document.getElementById('dateOfBirth');
             const dobStar = document.getElementById('dobStar');
             const dobAdminLabel = document.getElementById('dobAdminLabel');
@@ -919,6 +901,9 @@
                 if (panel) panel.classList.remove('show');
                 if (toolsPanel) toolsPanel.classList.remove('show');
                 if (downloadsPanel) downloadsPanel.classList.remove('show');
+                // Collapse the downloads panel when leaving admin mode
+                if (dlBody) dlBody.style.display = 'none';
+                if (dlChevron) dlChevron.style.transform = 'rotate(0deg)';
                 dobInput.disabled = false;
                 dobInput.placeholder = '';
                 dobStar.style.display = 'inline';
@@ -929,8 +914,23 @@
         }
 
         // ============================================================
-        // 3. OPEN EXTERNAL PAGES (all in new tabs)
+        // 3. OPEN EXTERNAL PAGES / TOGGLE PANELS
         // ============================================================
+
+        function toggleDownloadsPanel() {
+            const body = document.getElementById('dl_panelBody');
+            const chevron = document.getElementById('dl_chevron');
+            if (!body) return;
+            const isClosed = !body.style.display || body.style.display === 'none';
+            if (isClosed) {
+                body.style.display = 'block';
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            } else {
+                body.style.display = 'none';
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function openReceiptsPage(e) {
             if (e) e.preventDefault();
             if (!isAdminMode) { alert('Enable admin mode first.'); return; }
@@ -964,7 +964,17 @@
         function scrollToDownloads(e) {
             if (e) e.preventDefault();
             const panel = document.getElementById('adminDownloadsPanel');
-            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const body = document.getElementById('dl_panelBody');
+            const chevron = document.getElementById('dl_chevron');
+            if (panel) {
+                // Auto-expand when the card is clicked
+                if (body) body.style.display = 'block';
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+                // Then scroll to it
+                setTimeout(() => {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+            }
         }
 
         // ----- INIT -----
