@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>Admin Dashboard - Lunzu Secondary School</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="shared.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -15,15 +16,8 @@
             padding: 20px;
             background: linear-gradient(135deg, #0a1f2e 0%, #003d5c 100%);
             color: #fff;
-            position: relative;
-            overflow-x: hidden;
         }
-        #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-
         .container {
-            position: relative;
-            z-index: 1;
             max-width: 1000px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.13);
@@ -36,17 +30,14 @@
         }
         .header {
             background: rgba(10, 30, 50, 0.65);
-            backdrop-filter: blur(6px);
             padding: 22px 20px 18px;
             text-align: center;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
         }
-        .header h1 { font-size: 24px; letter-spacing: 1px; font-weight: 700; color: #fff; }
-        .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; font-weight: 500; }
+        .header h1 { font-size: 24px; font-weight: 700; color: #fff; }
+        .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; }
         .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 2px; font-weight: 300; }
         .content { padding: 26px 24px; background: rgba(255, 255, 255, 0.06); }
-
-        /* Queue manager */
         .queue-panel {
             background: rgba(234, 88, 12, 0.12);
             border: 1px solid rgba(234, 88, 12, 0.35);
@@ -54,74 +45,20 @@
             padding: 16px 18px;
             margin-bottom: 20px;
         }
-        .queue-panel h4 { color: #fdba74; font-size: 15px; margin-bottom: 10px; font-weight: 600; }
+        .queue-panel h4 { color: #fdba74; font-size: 15px; margin-bottom: 10px; }
         .queue-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; color: #fed7aa; }
-        .queue-stats .stat { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 6px 12px; }
+        .queue-stats .stat { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 6px 12px; }
         .queue-stats .stat strong { color: #fb923c; }
         .queue-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .queue-actions button {
             padding: 10px 16px; border-radius: 10px; border: none;
-            font-size: 13px; font-weight: 600; cursor: pointer;
-            transition: 0.2s;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
-        .queue-actions .btn-refresh { background: rgba(100, 116, 139, 0.6); color: white; }
-        .queue-actions .btn-refresh:hover { background: rgba(100, 116, 139, 0.9); }
-        .queue-actions .btn-send { background: rgba(234, 88, 12, 0.85); color: white; }
-        .queue-actions .btn-send:hover { background: rgba(234, 88, 12, 1); }
+        .queue-actions .btn-refresh { background: rgba(100,116,139,0.6); color: #fff; }
+        .queue-actions .btn-refresh:hover { background: rgba(100,116,139,0.9); }
+        .queue-actions .btn-send { background: rgba(234,88,12,0.85); color: #fff; }
+        .queue-actions .btn-send:hover { background: rgba(234,88,12,1); }
         .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
-
-        /* Admin tools cards */
-        .admin-tools-panel {
-            background: rgba(220, 38, 38, 0.08);
-            border: 1px solid rgba(220, 38, 38, 0.35);
-            border-radius: 18px;
-            padding: 18px 20px;
-            margin-bottom: 20px;
-        }
-        .admin-tools-panel .panel-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fecaca;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(220, 38, 38, 0.4);
-        }
-        .admin-tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .admin-tool-card {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 16px 18px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #fff;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .admin-tool-card:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 215, 0, 0.4);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-        .admin-tool-card .card-icon { font-size: 26px; margin-bottom: 4px; }
-        .admin-tool-card .card-title { font-size: 15px; font-weight: 700; color: #fff; }
-        .admin-tool-card .card-desc { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
-        .admin-tool-card.invoice { border-left: 4px solid #dc2626; }
-        .admin-tool-card.receipts { border-left: 4px solid #ea580c; }
-        .admin-tool-card.downloads { border-left: 4px solid #8b5cf6; }
-
-        /* Admin notices */
         .admin-notice {
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(139, 92, 246, 0.3);
@@ -134,111 +71,71 @@
             gap: 10px;
             font-size: 13px;
         }
-
-        /* Password gate */
-        .pw-gate {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+        .admin-tools-panel {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            border-radius: 18px;
+            padding: 18px 20px;
         }
-        .pw-box {
-            background: rgba(20, 35, 55, 0.95);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        .admin-tools-panel .panel-title {
+            font-size: 16px; font-weight: 700; color: #fecaca;
+            margin-bottom: 12px; padding-bottom: 10px;
+            border-bottom: 2px solid rgba(220, 38, 38, 0.4);
+            display: flex; align-items: center; gap: 8px;
         }
-        .pw-box h2 { color: #fbbf24; font-size: 22px; margin-bottom: 10px; }
-        .pw-box p { color: #cbd5e1; font-size: 13px; margin-bottom: 20px; }
-        .pw-box input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid rgba(255,255,255,0.2);
+        .admin-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .admin-tool-card {
+            display: flex; flex-direction: column; gap: 6px;
+            padding: 16px 18px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.08);
+            text-decoration: none;
             color: #fff;
-            font-family: inherit;
-        }
-        .pw-box input:focus { outline: none; border-color: #fbbf24; background: rgba(255,255,255,0.15); }
-        .pw-box .err { color: #f87171; font-size: 13px; margin-bottom: 10px; display: none; }
-        .pw-box .err.show { display: block; }
-        .pw-box .btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 15px;
-            background: rgba(139, 92, 246, 0.85);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
             transition: 0.2s;
+            cursor: pointer;
         }
-        .pw-box .btn:hover { background: rgba(139, 92, 246, 1); transform: translateY(-2px); }
-        .pw-box .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
+        .admin-tool-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,215,0,0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .admin-tool-card .card-icon { font-size: 26px; margin-bottom: 4px; }
+        .admin-tool-card .card-title { font-size: 15px; font-weight: 700; color: #fff; }
+        .admin-tool-card .card-desc { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+        .admin-tool-card.invoice { border-left: 4px solid #dc2626; }
+        .admin-tool-card.receipts { border-left: 4px solid #ea580c; }
+        .admin-tool-card.downloads { border-left: 4px solid #8b5cf6; }
+        .admin-tool-card.subscribe { border-left: 4px solid #06b6d4; }
         .footer {
             text-align: center; padding: 16px;
-            background: rgba(0, 0, 0, 0.25);
-            color: #b8c4d4; font-size: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0,0,0,0.25); color: #b8c4d4; font-size: 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
         }
         .footer a { color: #fbbf24; text-decoration: none; }
-
-        /* Small utility */
-        .spinner-small {
-            display: inline-block; width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff;
-            border-radius: 50%; animation: spin 0.8s linear infinite;
-            vertical-align: middle; margin-right: 6px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
         .term-chip {
-            display: inline-block;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.35);
-            color: #ddd6fe;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-left: 8px;
-            font-weight: 500;
+            display: inline-block; background: rgba(139,92,246,0.2);
+            border: 1px solid rgba(139,92,246,0.35); color: #ddd6fe;
+            font-size: 11px; padding: 4px 10px; border-radius: 20px;
+            margin-left: 8px; font-weight: 500;
         }
-
+        #mainApp { display: none; }
         @media (max-width: 700px) {
             .admin-tools-grid { grid-template-columns: 1fr; }
             .content { padding: 18px 14px; }
-            .header h1 { font-size: 18px; }
         }
     </style>
 </head>
-<body>
+<body data-nav="true" data-page="admin">
 
-    <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
-
-    <!-- Password Gate (shown first) -->
-    <div id="pwGate" class="pw-gate">
-        <div class="pw-box">
-            <h2>🔒 Admin Access Required</h2>
-            <p>Enter the admin password to access the admin dashboard.</p>
-            <input type="password" id="pwInput" placeholder="Password" maxlength="40" autocomplete="off">
-            <div id="pwErr" class="err">Incorrect password. Please try again.</div>
-            <button class="btn" id="pwBtn" onclick="verifyPassword()">Unlock Admin Dashboard</button>
-        </div>
-    </div>
-
-    <!-- Main Dashboard (hidden until unlocked) -->
-    <div id="mainApp" class="container" style="display:none;">
+    <!-- Main Dashboard (auto-unlocked by shared.js) -->
+    <div id="mainApp" class="container">
         <div class="header">
             <h1>🛠️ Admin Dashboard</h1>
             <h2>LUNZU SECONDARY SCHOOL</h2>
@@ -246,10 +143,9 @@
         </div>
 
         <div class="content">
-
             <div class="admin-notice">
                 <span>🔑</span>
-                <span><strong>Admin Mode Active:</strong> All tools below open in new tabs. This dashboard stays open for convenience.</span>
+                <span><strong>Admin Session Active:</strong> All tools below open in new tabs. You won't be asked for a password again while this session is active.</span>
             </div>
 
             <!-- Fee Alert Queue Manager -->
@@ -291,7 +187,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
 
         <div class="footer">
@@ -302,129 +197,62 @@
 
     <script>
         // ============================================================
-        // BACKGROUND ANIMATION
+        // CONFIG
         // ============================================================
-        (function initBanknoteBackground() {
-            const canvas = document.getElementById('banknoteCanvas');
-            const container = document.getElementById('bg-canvas-container');
-            const ctx = canvas.getContext('2d');
-            let w, h, notes = [];
-            const NOTE_COUNT = 32;
-
-            function resizeCanvas() {
-                const rect = container.getBoundingClientRect();
-                canvas.width = rect.width || window.innerWidth;
-                canvas.height = rect.height || window.innerHeight;
-                w = canvas.width; h = canvas.height;
-            }
-            const symbols = ['💵', '💰', '💶', '💷', '💴', '🪙', '₿', '💳', '🏦', '💹', '🧾', '📈'];
-            function randomNote() {
-                return {
-                    x: Math.random() * w, y: Math.random() * h - 20,
-                    size: 30 + Math.random() * 40,
-                    speedX: (Math.random() - 0.5) * 0.9,
-                    speedY: 0.15 + Math.random() * 0.7,
-                    rotation: Math.random() * 360,
-                    rotSpeed: (Math.random() - 0.5) * 0.025,
-                    opacity: 0.2 + Math.random() * 0.35,
-                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                    phase: Math.random() * 100
-                };
-            }
-            function initNotes() { notes = []; for (let i = 0; i < NOTE_COUNT; i++) notes.push(randomNote()); }
-            function drawNotes() {
-                ctx.clearRect(0, 0, w, h);
-                const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.75);
-                grad.addColorStop(0, 'rgba(10, 31, 46, 0.08)');
-                grad.addColorStop(1, 'rgba(10, 31, 46, 0.45)');
-                ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-                notes.forEach(n => {
-                    ctx.save();
-                    ctx.translate(n.x, n.y);
-                    ctx.rotate(n.rotation * Math.PI / 180);
-                    ctx.globalAlpha = n.opacity;
-                    ctx.font = `${n.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-                    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 18;
-                    ctx.fillStyle = '#fbbf24'; ctx.shadowBlur = 20;
-                    ctx.fillText(n.symbol, 0, 0);
-                    ctx.restore();
-                    n.x += n.speedX + Math.sin(n.phase + performance.now() * 0.00025) * 0.2;
-                    n.y += n.speedY * 0.4 + Math.sin(n.phase + performance.now() * 0.0004) * 0.15;
-                    n.rotation += n.rotSpeed;
-                    if (n.x > w + 60) n.x = -60;
-                    if (n.x < -60) n.x = w + 60;
-                    if (n.y > h + 60) n.y = -60;
-                    if (n.y < -60) n.y = h + 60;
-                });
-                requestAnimationFrame(drawNotes);
-            }
-            function startBackground() { resizeCanvas(); initNotes(); drawNotes(); }
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                notes.forEach(n => { n.x = Math.min(Math.max(n.x, 0), w); n.y = Math.min(Math.max(n.y, 0), h); });
-            });
-            startBackground();
-        })();
-
-        // ============================================================
-        // CONFIGURATION
-        // ============================================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
-        const ADMIN_PASSWORD = "lss001";
         const RECEIPTS_PAGE_URL    = 'FeeReceipts.html';
         const INVOICE_PAGE_URL     = 'InvoiceGenerator.html';
         const CLASS_DOWNLOADS_URL  = 'ClassDownloads.html';
 
-        // URL params passed from index.html (term, class)
         const urlParams = new URLSearchParams(window.location.search);
         let currentTermKey = urlParams.get('term') || null;
         const preselectedClass = urlParams.get('class') || '';
 
         document.getElementById('year').textContent = new Date().getFullYear();
         if (currentTermKey) {
-            const chip = document.getElementById('termChip');
-            chip.textContent = currentTermKey.replace('_', ' ');
+            document.getElementById('termChip').textContent = currentTermKey.replace('_', ' ');
         }
 
         // ============================================================
-        // PASSWORD GATE
+        // AUTO-UNLOCK via shared.js
         // ============================================================
-        function verifyPassword() {
-            var pw = document.getElementById('pwInput').value.trim();
-            var err = document.getElementById('pwErr');
-            if (!pw) {
-                err.textContent = 'Please enter a password.';
-                err.classList.add('show');
-                return;
-            }
-            var btn = document.getElementById('pwBtn');
-            btn.disabled = true;
-            btn.textContent = 'Verifying...';
-            callGAS('verifyAdmin', { password: pw }, function(result) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock Admin Dashboard';
-                if (result && result.success) {
-                    document.getElementById('pwGate').style.display = 'none';
-                    document.getElementById('mainApp').style.display = 'block';
-                    refreshQueueStats();
-                } else {
-                    err.textContent = 'Incorrect password. Please try again.';
-                    err.classList.add('show');
-                    document.getElementById('pwInput').value = '';
-                    document.getElementById('pwInput').focus();
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await ensureUnlocked({
+                    title: 'Admin Access Required',
+                    subtitle: 'Enter the admin password to access the admin dashboard.'
+                });
+
+                // Session is valid → show dashboard
+                document.getElementById('mainApp').style.display = 'block';
+
+                // If no term was passed in the URL, fetch the default from the server
+                if (!currentTermKey) {
+                    await fetchDefaultTerm();
                 }
-            }, function(error) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock Admin Dashboard';
-                err.textContent = 'Network error: ' + error;
-                err.classList.add('show');
-            });
-        }
 
-        document.getElementById('pwInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') verifyPassword();
+                // Rerender nav to show "Sign Out" (session unlocked)
+                SharedNav.render({ current: 'admin', showAdmin: true, showLogout: true });
+
+                refreshQueueStats();
+            } catch (e) {
+                // User cancelled — send them back to the portal
+                window.location.href = 'index.html';
+            }
         });
+
+        async function fetchDefaultTerm() {
+            try {
+                const terms = await callGASPromise('getAvailableTerms', { admin: 'true' });
+                if (Array.isArray(terms) && terms.length) {
+                    const active = terms.find(t => t.isActive) || terms[0];
+                    currentTermKey = active.key;
+                    const chip = document.getElementById('termChip');
+                    if (chip) chip.textContent = currentTermKey.replace('_', ' ');
+                }
+            } catch (e) {
+                console.warn('[admin] Could not fetch terms:', e);
+            }
+        }
 
         // ============================================================
         // QUEUE MANAGER
@@ -433,53 +261,84 @@
             const pendingEl = document.getElementById('queuePending');
             const sentEl = document.getElementById('queueSent');
             const failedEl = document.getElementById('queueFailed');
-            pendingEl.textContent = '…'; sentEl.textContent = '…'; failedEl.textContent = '…';
+            const password = SharedSession.getPassword();
+
+            if (!currentTermKey) {
+                pendingEl.textContent = '—';
+                sentEl.textContent = '—';
+                failedEl.textContent = '—';
+                console.warn('[admin] No term selected, skipping queue stats');
+                return;
+            }
+            if (!password) {
+                pendingEl.textContent = '!';
+                sentEl.textContent = '!';
+                failedEl.textContent = '!';
+                return;
+            }
+
+            pendingEl.textContent = '…';
+            sentEl.textContent = '…';
+            failedEl.textContent = '…';
+
             try {
-                if (!currentTermKey) {
-                    pendingEl.textContent = 'N/A';
-                    sentEl.textContent = 'N/A';
-                    failedEl.textContent = 'N/A';
-                    return;
-                }
                 const res = await callGASPromise('getFeeAlertQueueStats', {
-                    password: ADMIN_PASSWORD,
+                    password: password,
                     term: currentTermKey
                 });
+
                 if (res && res.success) {
                     pendingEl.textContent = res.pending;
                     sentEl.textContent = res.sent;
                     failedEl.textContent = res.failed;
                 } else {
-                    pendingEl.textContent = '?'; sentEl.textContent = '?'; failedEl.textContent = '?';
+                    pendingEl.textContent = '?';
+                    sentEl.textContent = '?';
+                    failedEl.textContent = '?';
+                    const resultEl = document.getElementById('queueLastResult');
+                    if (resultEl && res && res.error) {
+                        resultEl.innerHTML = '⚠️ ' + escapeHtml(res.error);
+                    }
                 }
             } catch (e) {
-                pendingEl.textContent = '!'; sentEl.textContent = '!'; failedEl.textContent = '!';
+                pendingEl.textContent = '!';
+                sentEl.textContent = '!';
+                failedEl.textContent = '!';
+                const resultEl = document.getElementById('queueLastResult');
+                if (resultEl) {
+                    resultEl.innerHTML = '⚠️ Network error: ' + escapeHtml(String(e)) +
+                        '<br><small>Term: ' + escapeHtml(currentTermKey) + '</small>';
+                }
             }
         }
 
         async function processQueueNow() {
-            if (!currentTermKey) { alert('No term specified. Open this from the portal with a term selected.'); return; }
+            if (!currentTermKey) { alert('No term specified.'); return; }
+            const password = SharedSession.getPassword();
+            if (!password) { alert('Session expired. Please sign in again.'); return; }
             if (!confirm('Send all pending fee alert emails for this term now?')) return;
+
             const btn = document.getElementById('processQueueBtn');
             const original = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '⏳ Sending...';
             const resultEl = document.getElementById('queueLastResult');
             resultEl.textContent = 'Processing queue...';
+
             try {
                 const res = await callGASPromise('processFeeAlertQueueNow', {
-                    password: ADMIN_PASSWORD,
+                    password: password,
                     term: currentTermKey
                 });
                 if (res && res.success) {
                     resultEl.innerHTML = '✅ ' + escapeHtml(res.message) +
                         '<br><small>Term: ' + escapeHtml(res.termDisplay || '') + '</small>';
                 } else {
-                    resultEl.innerHTML = '❌ ' + escapeHtml(res?.error || 'Failed to process queue.');
+                    resultEl.innerHTML = '❌ ' + escapeHtml((res && res.error) || 'Failed to process queue.');
                 }
                 await refreshQueueStats();
             } catch (e) {
-                resultEl.innerHTML = '❌ ' + escapeHtml(e.message);
+                resultEl.innerHTML = '❌ ' + escapeHtml(String(e));
             } finally {
                 btn.innerHTML = original;
                 btn.disabled = false;
@@ -487,7 +346,7 @@
         }
 
         // ============================================================
-        // OPEN ADMIN TOOLS (all in new tabs)
+        // OPEN ADMIN TOOLS (new tab)
         // ============================================================
         function buildParams() {
             const params = new URLSearchParams();
@@ -498,62 +357,54 @@
 
         function openInvoiceGenerator(e) {
             if (e) e.preventDefault();
-            const url = INVOICE_PAGE_URL + buildParams();
-            const newTab = window.open(url, '_blank');
+            const newTab = window.open(INVOICE_PAGE_URL + buildParams(), '_blank');
             if (!newTab) alert('Please allow pop-ups to open the invoice generator.');
         }
-
         function openReceiptsPage(e) {
             if (e) e.preventDefault();
-            const url = RECEIPTS_PAGE_URL + buildParams();
-            const newTab = window.open(url, '_blank');
+            const newTab = window.open(RECEIPTS_PAGE_URL + buildParams(), '_blank');
             if (!newTab) alert('Please allow pop-ups to open the receipts page.');
         }
-
         function openClassDownloads(e) {
             if (e) e.preventDefault();
-            const url = CLASS_DOWNLOADS_URL + buildParams();
-            const newTab = window.open(url, '_blank');
+            const newTab = window.open(CLASS_DOWNLOADS_URL + buildParams(), '_blank');
             if (!newTab) alert('Please allow pop-ups to open the downloads page.');
         }
 
         // ============================================================
         // API HELPERS
         // ============================================================
-        function callGAS(action, params, onSuccess, onError) {
-            const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-            params = Object.assign({}, params, { callback: callbackName, action: action });
-            const qs = Object.keys(params).map(k =>
-                encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
-            ).join('&');
-            const script = document.createElement('script');
-            script.src = GAS_URL + '?' + qs;
-            const timeoutId = setTimeout(() => {
-                if (window[callbackName]) {
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    if (onError) onError('Request timeout');
-                }
-            }, 60000);
-            window[callbackName] = function(response) {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (response && response.error) { if (onError) onError(response.error); }
-                else if (onSuccess) onSuccess(response);
-            };
-            script.onerror = function() {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (onError) onError('Connection failed');
-            };
-            document.head.appendChild(script);
-        }
-
         function callGASPromise(action, params) {
             return new Promise((resolve, reject) => {
-                callGAS(action, params, resolve, reject);
+                const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                params = Object.assign({}, params, { callback: callbackName, action: action });
+                const qs = Object.keys(params)
+                    .filter(k => params[k] !== undefined && params[k] !== null)
+                    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                    .join('&');
+                const script = document.createElement('script');
+                script.src = GAS_URL + '?' + qs;
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) script.parentNode.removeChild(script);
+                        reject(new Error('Request timeout'));
+                    }
+                }, 60000);
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    if (response && response.error) reject(new Error(response.error));
+                    else resolve(response);
+                };
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Connection failed'));
+                };
+                document.head.appendChild(script);
             });
         }
 
@@ -563,6 +414,12 @@
             d.textContent = String(s);
             return d.innerHTML;
         }
+
+        window.refreshQueueStats = refreshQueueStats;
+        window.processQueueNow = processQueueNow;
+        window.openInvoiceGenerator = openInvoiceGenerator;
+        window.openReceiptsPage = openReceiptsPage;
+        window.openClassDownloads = openClassDownloads;
     </script>
 </body>
 </html>
