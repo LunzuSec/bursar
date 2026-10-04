@@ -6,6 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Invoice Generator - Lunzu Secondary School</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <script src="shared.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -18,59 +20,6 @@
         }
         #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-        /* ============================================================ */
-        /* TOP NAVIGATION BAR                                            */
-        /* ============================================================ */
-        .top-nav {
-            position: relative;
-            z-index: 5;
-            max-width: 1100px;
-            margin: 0 auto 16px;
-            background: rgba(10, 30, 50, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 14px;
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-        .nav-brand i { color: #fbbf24; font-size: 14px; }
-        .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.2s;
-            background: rgba(255,255,255,0.08);
-            color: #e2e8f0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .nav-link:hover {
-            background: rgba(255,255,255,0.16);
-            color: #fff;
-            transform: translateY(-1px);
-        }
-        .nav-link i { font-size: 11px; }
 
         .container {
             position: relative;
@@ -118,7 +67,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* Network status */
         .net-status {
             display: flex;
             align-items: center;
@@ -156,7 +104,6 @@
             background: rgba(255, 255, 255, 0.06);
         }
 
-        /* Alerts */
         .alert {
             padding: 14px 18px;
             border-radius: 12px;
@@ -176,7 +123,6 @@
         .alert-warn { background: rgba(245, 158, 11, 0.25); color: #fef3c7; border-color: #f59e0b; }
         .alert.show { display: block; }
 
-        /* Section titles */
         .section-title {
             font-size: 15px;
             font-weight: 600;
@@ -190,7 +136,6 @@
             text-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
-        /* Form */
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .form-group { margin-bottom: 15px; }
         .form-group label {
@@ -230,7 +175,6 @@
             cursor: not-allowed;
         }
 
-        /* Term checkboxes */
         .term-checkboxes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
         .term-checkboxes label {
             display: flex;
@@ -262,7 +206,6 @@
             font-weight: 600;
         }
 
-        /* Student entry */
         .student-entry {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -308,7 +251,6 @@
             vertical-align: middle;
         }
 
-        /* Buttons */
         .btn-group { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
         .btn {
             padding: 12px 22px;
@@ -371,7 +313,6 @@
         }
         .btn-sm { padding: 7px 12px; font-size: 12px; }
 
-        /* Loading overlay */
         .loading {
             display: none;
             position: fixed;
@@ -430,7 +371,6 @@
             border-radius: 4px;
         }
 
-        /* Existing invoices */
         .existing-invoices {
             margin-top: 15px;
             padding: 15px;
@@ -515,7 +455,6 @@
             font-weight: 600;
         }
 
-        /* ============ MODALS ============ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -566,78 +505,10 @@
         }
         .modal-box .form-group input::placeholder { color: rgba(255,255,255,0.4); }
 
-        /* Password gate */
-        .pw-gate {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .pw-box {
-            background: rgba(20, 35, 55, 0.95);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            backdrop-filter: blur(12px);
-        }
-        .pw-box h2 {
-            color: #fbbf24;
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        .pw-box p {
-            color: #cbd5e1;
-            font-size: 13px;
-            margin-bottom: 22px;
-        }
-        .pw-box input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-            font-family: inherit;
-        }
-        .pw-box input:focus {
-            outline: none;
-            border-color: #fbbf24;
-            background: rgba(255,255,255,0.15);
-        }
-        .pw-box .err {
-            color: #fca5a5;
-            font-size: 13px;
-            margin-bottom: 10px;
-            display: none;
-        }
-        .pw-box .err.show { display: block; }
-        .pw-box .btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
-            font-size: 15px;
-        }
-        .pw-box .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.55);
-        }
+        #mainApp { display: none; }
 
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .top-nav { flex-direction: column; align-items: stretch; padding: 10px 12px; }
-            .nav-links { justify-content: center; }
-            .nav-link { flex: 1; justify-content: center; font-size: 11px; padding: 8px 10px; }
             .content { padding: 18px 14px; }
             .header { padding: 18px 14px; }
             .header h1 { font-size: 18px; }
@@ -652,44 +523,12 @@
         }
     </style>
 </head>
-<body>
+<body data-nav="true" data-page="invoice">
 
     <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
 
-    <!-- ============================================================ -->
-    <!-- TOP NAVIGATION BAR                                            -->
-    <!-- ============================================================ -->
-    <nav class="top-nav">
-        <div class="nav-brand">
-            <i class="fas fa-file-invoice"></i>
-            <span>INVOICE GENERATOR</span>
-        </div>
-        <div class="nav-links">
-            <a href="https://lunzusec.github.io/School_results/index.html" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="admin.html" class="nav-link">
-                <i class="fas fa-arrow-left"></i> Admin
-            </a>
-            <a href="javascript:window.location.reload()" class="nav-link">
-                <i class="fas fa-sync-alt"></i> Reload
-            </a>
-        </div>
-    </nav>
-
-    <!-- Password Gate -->
-    <div id="pwGate" class="pw-gate">
-        <div class="pw-box">
-            <h2>🔒 Admin Access Required</h2>
-            <p>Enter the admin password to access the invoice generator.</p>
-            <input type="password" id="pwInput" placeholder="Password" maxlength="40" autocomplete="off">
-            <div id="pwErr" class="err">Incorrect password. Please try again.</div>
-            <button class="btn btn-primary" id="pwBtn" onclick="verifyPassword()">Unlock</button>
-        </div>
-    </div>
-
-    <!-- Main App (hidden until unlocked) -->
-    <div id="mainApp" class="container" style="display:none;">
+    <!-- Main App (auto-unlocked by shared.js) -->
+    <div id="mainApp" class="container">
         <div class="header">
             <h1>🏫 LUNZU SECONDARY SCHOOL</h1>
             <div class="subtitle">Boarding Fees Invoice Portal</div>
@@ -840,10 +679,6 @@
                 <label>Amount Received (K) <span class="required">*</span></label>
                 <input type="number" id="paidAmountInput" placeholder="e.g., 100000" min="1">
             </div>
-            <div class="form-group">
-                <label>Admin Password <span class="required">*</span></label>
-                <input type="password" id="paidPasswordInput" placeholder="Enter admin password">
-            </div>
             <div id="markPaidAlert" class="alert"></div>
             <div class="btn-group" style="margin-top:20px;">
                 <button class="btn btn-success" onclick="submitMarkPaid()" id="markPaidSubmitBtn">✓ Confirm Payment</button>
@@ -888,10 +723,6 @@
                 <label>Notes</label>
                 <input type="text" id="editNotes" placeholder="Optional notes">
             </div>
-            <div class="form-group">
-                <label>Admin Password <span class="required">*</span></label>
-                <input type="password" id="editPasswordInput" placeholder="Enter admin password">
-            </div>
             <div id="editAlert" class="alert"></div>
             <div class="btn-group" style="margin-top:20px;">
                 <button class="btn btn-primary" onclick="submitEdit()" id="editSubmitBtn">💾 Save Changes</button>
@@ -907,10 +738,6 @@
             <p id="deleteInvoiceInfo"></p>
             <div style="font-size:12px;color:#fca5a5;background:rgba(220,38,38,0.2);padding:10px;border-radius:8px;margin-bottom:16px;border:1px solid rgba(220,38,38,0.35);">
                 ⚠️ This action cannot be undone. The invoice will be permanently removed.
-            </div>
-            <div class="form-group">
-                <label>Admin Password <span class="required">*</span></label>
-                <input type="password" id="deletePasswordInput" placeholder="Enter admin password">
             </div>
             <div id="deleteAlert" class="alert"></div>
             <div class="btn-group" style="margin-top:20px;">
@@ -988,11 +815,6 @@
         })();
 
         // ============================================
-        // CONFIGURATION
-        // ============================================
-        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
-
-        // ============================================
         // STATE
         // ============================================
         let studentCounter = 0;
@@ -1001,7 +823,6 @@
         let isGenerating = false;
         let classData = [];
         let classesLoaded = false;
-        let adminPassword = sessionStorage.getItem('invoiceAdminPw') || '';
 
         let studentNamesCache = {};
         let progressTimer = null;
@@ -1013,54 +834,24 @@
         let currentEditInvoiceNumber = null;
 
         // ============================================
-        // PASSWORD GATE
+        // INIT with shared unlock
         // ============================================
-        function verifyPassword() {
-            var pw = document.getElementById('pwInput').value.trim();
-            var err = document.getElementById('pwErr');
-            if (!pw) {
-                err.textContent = 'Please enter a password.';
-                err.classList.add('show');
-                return;
-            }
-            var btn = document.getElementById('pwBtn');
-            btn.disabled = true;
-            btn.textContent = 'Verifying...';
-            callApi('verifyAdmin', { password: pw }, function(result) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock';
-                if (result && result.success) {
-                    adminPassword = pw;
-                    sessionStorage.setItem('invoiceAdminPw', pw);
-                    document.getElementById('pwGate').style.display = 'none';
-                    document.getElementById('mainApp').style.display = 'block';
-                    initApp();
-                } else {
-                    err.textContent = 'Incorrect password. Please try again.';
-                    err.classList.add('show');
-                    document.getElementById('pwInput').value = '';
-                    document.getElementById('pwInput').focus();
-                }
-            }, function(error) {
-                btn.disabled = false;
-                btn.textContent = 'Unlock';
-                err.textContent = 'Network error: ' + error;
-                err.classList.add('show');
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('pwInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') verifyPassword();
-            });
-            if (adminPassword) {
-                document.getElementById('pwInput').value = adminPassword;
-                verifyPassword();
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await ensureUnlocked({
+                    title: 'Invoice Generator Access',
+                    subtitle: 'Enter the admin password to access the invoice generator.'
+                });
+                document.getElementById('mainApp').style.display = 'block';
+                SharedNav.render({ current: 'invoice', showAdmin: true, showLogout: true });
+                initApp();
+            } catch (e) {
+                window.location.href = 'admin.html';
             }
         });
 
         // ============================================
-        // APP INIT
+        // APP INIT (after unlock)
         // ============================================
         function initApp() {
             updateNetworkStatus();
@@ -1071,7 +862,7 @@
             document.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     var t = e.target;
-                    if (t.tagName === 'INPUT' && t.type !== 'checkbox' && t.id !== 'pwInput') {
+                    if (t.tagName === 'INPUT' && t.type !== 'checkbox') {
                         e.preventDefault();
                         generateAndDownload();
                     }
@@ -1202,7 +993,9 @@
 
             var data = { action: action, callback: callbackName };
             for (var key in params) {
-                if (params.hasOwnProperty(key)) data[key] = params[key];
+                if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
+                    data[key] = params[key];
+                }
             }
 
             var qs = Object.keys(data).map(function(k) {
@@ -1210,7 +1003,7 @@
             }).join('&');
 
             var script = document.createElement('script');
-            script.src = GAS_WEB_APP_URL + '?' + qs;
+            script.src = GAS_URL + '?' + qs;
             script.async = true;
 
             var completed = false;
@@ -1563,7 +1356,6 @@
                 'Invoice: <strong>' + invoiceNumber + '</strong><br>' +
                 'Amount Owed: <strong style="color:#fca5a5;">K' + owedAmount.toLocaleString() + '</strong>';
             document.getElementById('paidAmountInput').value = owedAmount || '';
-            document.getElementById('paidPasswordInput').value = adminPassword;
             document.getElementById('markPaidAlert').className = 'alert';
             document.getElementById('markPaidModal').className = 'modal-overlay show';
             setTimeout(function() { document.getElementById('paidAmountInput').focus(); }, 100);
@@ -1576,7 +1368,7 @@
 
         function submitMarkPaid() {
             var amount = parseFloat(document.getElementById('paidAmountInput').value);
-            var password = document.getElementById('paidPasswordInput').value;
+            var password = SharedSession.getPassword();
             var alertEl = document.getElementById('markPaidAlert');
             var btn = document.getElementById('markPaidSubmitBtn');
             if (!amount || amount <= 0) {
@@ -1586,7 +1378,7 @@
             }
             if (!password) {
                 alertEl.className = 'alert alert-error show';
-                alertEl.textContent = 'Please enter the admin password';
+                alertEl.textContent = 'Session expired. Please reload and sign in again.';
                 return;
             }
             btn.disabled = true;
@@ -1639,7 +1431,6 @@
                 document.getElementById('editParentEmail').value = inv.parentEmail || '';
                 document.getElementById('editStatus').value = inv.status || 'UNPAID';
                 document.getElementById('editNotes').value = inv.notes || '';
-                document.getElementById('editPasswordInput').value = adminPassword;
             }, function(error) {
                 alertEl.className = 'alert alert-error show';
                 alertEl.textContent = 'Network error: ' + error;
@@ -1654,10 +1445,10 @@
         function submitEdit() {
             var alertEl = document.getElementById('editAlert');
             var btn = document.getElementById('editSubmitBtn');
-            var password = document.getElementById('editPasswordInput').value;
+            var password = SharedSession.getPassword();
             if (!password) {
                 alertEl.className = 'alert alert-error show';
-                alertEl.textContent = 'Please enter the admin password';
+                alertEl.textContent = 'Session expired. Please reload and sign in again.';
                 return;
             }
             btn.disabled = true;
@@ -1696,10 +1487,8 @@
             currentDeleteInvoiceNumber = invoiceNumber;
             document.getElementById('deleteInvoiceInfo').innerHTML =
                 'You are about to delete invoice <strong>' + invoiceNumber + '</strong>.';
-            document.getElementById('deletePasswordInput').value = adminPassword;
             document.getElementById('deleteAlert').className = 'alert';
             document.getElementById('deleteConfirmModal').className = 'modal-overlay show';
-            setTimeout(function() { document.getElementById('deletePasswordInput').focus(); }, 100);
         }
 
         function closeDeleteModal() {
@@ -1708,12 +1497,12 @@
         }
 
         function submitDeleteInvoice() {
-            var password = document.getElementById('deletePasswordInput').value;
+            var password = SharedSession.getPassword();
             var alertEl = document.getElementById('deleteAlert');
             var btn = document.getElementById('deleteSubmitBtn');
             if (!password) {
                 alertEl.className = 'alert alert-error show';
-                alertEl.textContent = 'Please enter the admin password';
+                alertEl.textContent = 'Session expired. Please reload and sign in again.';
                 return;
             }
             btn.disabled = true;
@@ -1751,6 +1540,8 @@
             var academicYear = document.getElementById('academicYear').value;
             var terms = getSelectedTerms();
             var students = getStudentsData();
+            var password = SharedSession.getPassword();
+
             if (!parentName) { showAlert('Please enter parent name', 'error'); return; }
             if (!academicYear) { showAlert('Please select an academic year', 'error'); return; }
             if (terms.length === 0) { showAlert('Please select at least one term', 'error'); return; }
@@ -1760,6 +1551,10 @@
                     showAlert('Please complete all student information', 'error');
                     return;
                 }
+            }
+            if (!password) {
+                showAlert('Session expired. Please reload and sign in again.', 'error');
+                return;
             }
             if (!navigator.onLine) {
                 showAlert('You appear to be offline', 'error');
@@ -1784,7 +1579,7 @@
             var termsParam = terms.join(',');
             updateLoading('Reading fee sheets...', 'STEP 1 OF 4', 20);
             callApi('generateInvoice', {
-                password: adminPassword,
+                password: password,
                 students: studentsParam,
                 parentName: parentName,
                 parentPhone: parentPhone,
@@ -1865,7 +1660,6 @@
         // ============================================
         // EXPOSE TO GLOBAL
         // ============================================
-        window.verifyPassword = verifyPassword;
         window.addStudent = addStudent;
         window.removeStudent = removeStudent;
         window.clearAllStudents = clearAllStudents;
