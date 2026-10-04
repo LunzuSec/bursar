@@ -21,38 +21,9 @@
   }
 
   /* ============================================================
-     LOGIN GATE
-     ============================================================ */
-  .login-gate {
-    max-width: 420px; margin: 80px auto;
-    background: white; padding: 32px;
-    border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    text-align: center;
-  }
-  .login-gate h1 { color: #002b54; font-size: 22px; margin-bottom: 6px; }
-  .login-gate .sub { color: #64748b; font-size: 13px; margin-bottom: 22px; }
-  .login-gate input {
-    width: 100%; padding: 12px 14px;
-    border: 1.5px solid #cbd5e1; border-radius: 8px;
-    font-size: 15px; text-align: center;
-    letter-spacing: 2px; margin-bottom: 14px;
-  }
-  .login-gate input:focus { outline: none; border-color: #002b54; }
-  .login-gate button {
-    width: 100%; padding: 12px;
-    background: #002b54; color: white;
-    border: none; border-radius: 8px;
-    font-size: 15px; font-weight: 600; cursor: pointer;
-  }
-  .login-gate button:hover { background: #003d75; }
-  .login-gate button:disabled { opacity: 0.6; cursor: not-allowed; }
-  .login-gate .err { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
-  .login-gate .err.show { display: block; }
-
-  /* ============================================================
      CONTROLS
      ============================================================ */
-  .main-wrapper { display: none; }
+  .main-wrapper { display: block; }
   .controls {
     max-width: 1000px; margin: 0 auto 16px;
     background: white; border-radius: 12px;
@@ -656,7 +627,7 @@
      ============================================================ */
   @media print {
     body { background: white; padding: 0; margin: 0; }
-    .login-gate, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
+    .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .main-wrapper { display: block !important; }
     #receiptContainer { overflow: visible !important; }
     .receipt-sheet {
@@ -683,14 +654,7 @@
   }
 </style>
 </head>
-<body>
 <body data-nav="true" data-page="receipts">
-  <h1>🧾 Fee Receipts</h1>
-  <p class="sub">Admin access required. Enter the bursar password to continue.</p>
-  <input type="password" id="adminPasswordInput" placeholder="••••••" maxlength="20" autocomplete="off">
-  <button id="unlockBtn" onclick="unlockReceipts()">Unlock</button>
-  <div id="loginError" class="err">Incorrect password. Please try again.</div>
-</div>
 
 <div id="mainWrapper" class="main-wrapper layout-signature">
   <div class="controls">
@@ -916,60 +880,14 @@
   }
 
   // ============================================================
-  // LOGIN
+  // INIT
   // ============================================================
-  async function unlockReceipts() {
-    const pw = document.getElementById('adminPasswordInput').value.trim();
-    const errEl = document.getElementById('loginError');
-    const btn = document.getElementById('unlockBtn');
-
-    if (!pw) { errEl.textContent = 'Please enter a password.'; errEl.classList.add('show'); return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Verifying…';
-    errEl.classList.remove('show');
-
-    try {
-      const res = await callGAS('verifyAdmin', { password: pw });
-      if (res && res.success) {
-        try { sessionStorage.setItem('lunzu_receipts_unlocked', '1'); } catch (e) {}
-        showMain();
-      } else {
-        errEl.textContent = 'Incorrect password. Please try again.';
-        errEl.classList.add('show');
-        document.getElementById('adminPasswordInput').value = '';
-        document.getElementById('adminPasswordInput').focus();
-      }
-    } catch (e) {
-      errEl.textContent = 'Error: ' + (e.message || 'Unknown');
-      errEl.classList.add('show');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Unlock';
-    }
-  }
-
-  document.getElementById('adminPasswordInput').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') unlockReceipts();
-  });
-
-  function showMain() {
-    document.getElementById('loginGate').style.display = 'none';
-    document.getElementById('mainWrapper').style.display = 'block';
-
+  window.onload = function () {
     const today = new Date();
     document.getElementById('rDateFrom').value = toIsoDate(today);
     document.getElementById('rDateTo').value = toIsoDate(today);
     updateRangeSummary();
-
     loadTerms();
-  }
-
-  window.onload = function () {
-    try {
-      if (sessionStorage.getItem('lunzu_receipts_unlocked') === '1') { showMain(); return; }
-    } catch (e) {}
-    document.getElementById('adminPasswordInput').focus();
   };
 
   async function loadTerms() {
