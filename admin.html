@@ -53,10 +53,11 @@
         .queue-actions button {
             padding: 10px 16px; border-radius: 10px; border: none;
             font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;
+            font-family: inherit; color: #fff;
         }
-        .queue-actions .btn-refresh { background: rgba(100,116,139,0.6); color: #fff; }
+        .queue-actions .btn-refresh { background: rgba(100,116,139,0.6); }
         .queue-actions .btn-refresh:hover { background: rgba(100,116,139,0.9); }
-        .queue-actions .btn-send { background: rgba(234,88,12,0.85); color: #fff; }
+        .queue-actions .btn-send { background: rgba(234,88,12,0.85); }
         .queue-actions .btn-send:hover { background: rgba(234,88,12,1); }
         .queue-last-result { margin-top: 10px; font-size: 12px; color: #fed7aa; line-height: 1.5; }
         .admin-notice {
@@ -112,7 +113,6 @@
         .admin-tool-card.invoice { border-left: 4px solid #dc2626; }
         .admin-tool-card.receipts { border-left: 4px solid #ea580c; }
         .admin-tool-card.downloads { border-left: 4px solid #8b5cf6; }
-        .admin-tool-card.subscribe { border-left: 4px solid #06b6d4; }
         .footer {
             text-align: center; padding: 16px;
             background: rgba(0,0,0,0.25); color: #b8c4d4; font-size: 12px;
@@ -129,12 +129,12 @@
         @media (max-width: 700px) {
             .admin-tools-grid { grid-template-columns: 1fr; }
             .content { padding: 18px 14px; }
+            .header h1 { font-size: 18px; }
         }
     </style>
 </head>
 <body data-nav="true" data-page="admin">
 
-    <!-- Main Dashboard (auto-unlocked by shared.js) -->
     <div id="mainApp" class="container">
         <div class="header">
             <h1>🛠️ Admin Dashboard</h1>
@@ -148,7 +148,6 @@
                 <span><strong>Admin Session Active:</strong> All tools below open in new tabs. You won't be asked for a password again while this session is active.</span>
             </div>
 
-            <!-- Fee Alert Queue Manager -->
             <div class="queue-panel">
                 <h4>📬 Fee Alert Queue Manager</h4>
                 <div class="queue-stats">
@@ -163,7 +162,6 @@
                 <div class="queue-last-result" id="queueLastResult"></div>
             </div>
 
-            <!-- Administrative Tools -->
             <div class="admin-tools-panel">
                 <div class="panel-title">
                     <span>🛠️</span>
@@ -196,9 +194,6 @@
     </div>
 
     <script>
-        // ============================================================
-        // CONFIG
-        // ============================================================
         const RECEIPTS_PAGE_URL    = 'FeeReceipts.html';
         const INVOICE_PAGE_URL     = 'InvoiceGenerator.html';
         const CLASS_DOWNLOADS_URL  = 'ClassDownloads.html';
@@ -212,9 +207,6 @@
             document.getElementById('termChip').textContent = currentTermKey.replace('_', ' ');
         }
 
-        // ============================================================
-        // AUTO-UNLOCK via shared.js
-        // ============================================================
         document.addEventListener('DOMContentLoaded', async function() {
             try {
                 await ensureUnlocked({
@@ -222,20 +214,15 @@
                     subtitle: 'Enter the admin password to access the admin dashboard.'
                 });
 
-                // Session is valid → show dashboard
                 document.getElementById('mainApp').style.display = 'block';
+                SharedNav.render({ current: 'admin', showAdmin: true, showLogout: true });
 
-                // If no term was passed in the URL, fetch the default from the server
                 if (!currentTermKey) {
                     await fetchDefaultTerm();
                 }
 
-                // Rerender nav to show "Sign Out" (session unlocked)
-                SharedNav.render({ current: 'admin', showAdmin: true, showLogout: true });
-
                 refreshQueueStats();
             } catch (e) {
-                // User cancelled — send them back to the portal
                 window.location.href = 'index.html';
             }
         });
@@ -254,9 +241,6 @@
             }
         }
 
-        // ============================================================
-        // QUEUE MANAGER
-        // ============================================================
         async function refreshQueueStats() {
             const pendingEl = document.getElementById('queuePending');
             const sentEl = document.getElementById('queueSent');
@@ -267,7 +251,6 @@
                 pendingEl.textContent = '—';
                 sentEl.textContent = '—';
                 failedEl.textContent = '—';
-                console.warn('[admin] No term selected, skipping queue stats');
                 return;
             }
             if (!password) {
@@ -286,7 +269,6 @@
                     password: password,
                     term: currentTermKey
                 });
-
                 if (res && res.success) {
                     pendingEl.textContent = res.pending;
                     sentEl.textContent = res.sent;
@@ -345,9 +327,6 @@
             }
         }
 
-        // ============================================================
-        // OPEN ADMIN TOOLS (new tab)
-        // ============================================================
         function buildParams() {
             const params = new URLSearchParams();
             if (currentTermKey) params.set('term', currentTermKey);
@@ -371,9 +350,6 @@
             if (!newTab) alert('Please allow pop-ups to open the downloads page.');
         }
 
-        // ============================================================
-        // API HELPERS
-        // ============================================================
         function callGASPromise(action, params) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
