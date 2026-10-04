@@ -21,6 +21,7 @@
     border: 1px solid rgba(255, 215, 0, 0.15);
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    box-sizing: border-box;
 }
 .shared-top-nav .nav-brand {
     display: flex;
@@ -39,6 +40,7 @@
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
+    align-items: center;
 }
 .shared-top-nav .nav-link {
     display: inline-flex;
@@ -55,6 +57,7 @@
     color: #e2e8f0;
     border: 1px solid rgba(255,255,255,0.1);
     font-family: inherit;
+    white-space: nowrap;
 }
 .shared-top-nav .nav-link:hover {
     background: rgba(255,255,255,0.16);
@@ -99,6 +102,7 @@
     border: 1px solid rgba(16, 185, 129, 0.4);
     color: #6ee7b7;
     white-space: nowrap;
+    margin-left: 8px;
 }
 .shared-session-pill.locked {
     background: rgba(100, 116, 139, 0.2);
