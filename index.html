@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>Lunzu Secondary School - Fee Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="shared.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -19,73 +20,6 @@
         }
         #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-        /* ============================================================ */
-        /* TOP NAVIGATION BAR                                            */
-        /* ============================================================ */
-        .top-nav {
-            position: relative;
-            z-index: 5;
-            max-width: 820px;
-            margin: 0 auto 16px;
-            background: rgba(10, 30, 50, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 14px;
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-        .nav-brand i { color: #fbbf24; font-size: 14px; }
-        .nav-links {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.2s;
-            background: rgba(255,255,255,0.08);
-            color: #e2e8f0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .nav-link:hover {
-            background: rgba(255,255,255,0.16);
-            color: #fff;
-            transform: translateY(-1px);
-        }
-        .nav-link i { font-size: 11px; }
-        .nav-link.primary {
-            background: rgba(139, 92, 246, 0.25);
-            border-color: rgba(139, 92, 246, 0.5);
-            color: #e9d5ff;
-        }
-        .nav-link.primary:hover {
-            background: rgba(139, 92, 246, 0.45);
-            color: #fff;
-        }
-
         .container {
             position: relative;
             z-index: 1;
@@ -132,16 +66,7 @@
         select option { background: #1e2f3f; color: #fff; }
         select:disabled, input:disabled { background: rgba(200, 200, 200, 0.15); color: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
         select:focus, input:focus { outline: none; border-color: #fbbf24; background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15); }
-
-        /* ============================================================ */
-        /* BUTTON SYSTEM — 3 tiers                                      */
-        /* ============================================================ */
-
-        /* ---- Tier 1: Primary CTA (full width, prominent) ---- */
-        .cta-block {
-            margin-top: 32px;
-            margin-bottom: 8px;
-        }
+        .cta-block { margin-top: 32px; margin-bottom: 8px; }
         .btn-cta {
             width: 100%;
             padding: 18px 24px;
@@ -160,15 +85,12 @@
             box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
             letter-spacing: 0.3px;
             border: 1px solid rgba(255,255,255,0.15);
+            font-family: inherit;
         }
         .btn-cta:hover:not(:disabled) {
             transform: translateY(-2px);
             background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             box-shadow: 0 12px 28px rgba(37, 99, 235, 0.55), inset 0 1px 0 rgba(255,255,255,0.25);
-        }
-        .btn-cta:active:not(:disabled) {
-            transform: translateY(0);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
         .btn-cta:disabled {
             background: rgba(100, 116, 139, 0.35);
@@ -176,30 +98,10 @@
             box-shadow: none;
             opacity: 0.55;
         }
-        .btn-cta .cta-icon {
-            font-size: 22px;
-            display: inline-flex;
-        }
-        .btn-cta .cta-text {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            line-height: 1.2;
-        }
-        .btn-cta .cta-text small {
-            font-size: 11px;
-            font-weight: 500;
-            opacity: 0.85;
-            margin-top: 2px;
-        }
-
-        /* ---- Tier 2: Secondary grid (2 columns) ---- */
-        .btn-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 14px;
-        }
+        .btn-cta .cta-icon { font-size: 22px; display: inline-flex; }
+        .btn-cta .cta-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
+        .btn-cta .cta-text small { font-size: 11px; font-weight: 500; opacity: 0.85; margin-top: 2px; }
+        .btn-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
         .btn-tile {
             padding: 16px 18px;
             border: none;
@@ -216,16 +118,13 @@
             border: 1px solid rgba(255,255,255,0.15);
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             text-align: left;
+            font-family: inherit;
         }
         .btn-tile:hover:not(:disabled) {
             background: rgba(255,255,255,0.15);
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0,0,0,0.25);
             border-color: rgba(255,215,0,0.35);
-        }
-        .btn-tile:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
         }
         .btn-tile .tile-icon {
             width: 38px; height: 38px;
@@ -236,22 +135,10 @@
             font-size: 18px;
             flex-shrink: 0;
         }
-        .btn-tile .tile-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.3;
-            min-width: 0;
-        }
-        .btn-tile .tile-text small {
-            font-size: 11px;
-            font-weight: 500;
-            opacity: 0.7;
-            margin-top: 2px;
-        }
+        .btn-tile .tile-text { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+        .btn-tile .tile-text small { font-size: 11px; font-weight: 500; opacity: 0.7; margin-top: 2px; }
         .btn-tile.subscribe .tile-icon { background: rgba(6, 182, 212, 0.25); color: #67e8f9; }
         .btn-tile.reset .tile-icon { background: rgba(100, 116, 139, 0.3); color: #cbd5e1; }
-
-        /* ---- Tier 3: Admin access — visually separated ---- */
         .admin-divider {
             display: flex;
             align-items: center;
@@ -263,8 +150,7 @@
             color: #94a3b8;
             font-weight: 600;
         }
-        .admin-divider::before,
-        .admin-divider::after {
+        .admin-divider::before, .admin-divider::after {
             content: '';
             flex: 1;
             height: 1px;
@@ -285,6 +171,7 @@
             transition: all 0.2s ease;
             background: rgba(139, 92, 246, 0.12);
             color: #ddd6fe;
+            font-family: inherit;
         }
         .btn-admin-full:hover {
             background: rgba(139, 92, 246, 0.25);
@@ -294,8 +181,6 @@
             box-shadow: 0 6px 16px rgba(139, 92, 246, 0.25);
         }
         .btn-admin-full i { font-size: 16px; }
-
-        /* Progress / loading */
         .progress-container { margin: 16px 0 8px 0; display: none; }
         .progress-label { display: flex; justify-content: space-between; font-size: 14px; color: #f0f4fa; font-weight: 500; margin-bottom: 4px; }
         .progress-bar { height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 20px; overflow: hidden; }
@@ -351,12 +236,8 @@
         .info-note strong { color: #fcd34d; }
         #apiStatus { color: #e2e8f0; font-weight: 400; word-break: break-word; }
         .dob-required { color: #fbbf24; font-size: 12px; display: block; margin-top: 5px; opacity: 0.8; }
-
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .top-nav { flex-direction: column; align-items: stretch; padding: 10px 12px; }
-            .nav-links { justify-content: center; }
-            .nav-link { flex: 1; justify-content: center; font-size: 11px; padding: 8px 10px; }
             .container { border-radius: 18px; }
             .header { padding: 16px 12px; }
             .content { padding: 18px 14px; }
@@ -368,41 +249,17 @@
             .btn-cta .cta-icon { font-size: 20px; }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body data-nav="true" data-page="portal">
 
     <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
 
-    <!-- ============================================================ -->
-    <!-- TOP NAVIGATION BAR                                            -->
-    <!-- ============================================================ -->
-    <nav class="top-nav">
-        <div class="nav-brand">
-            <i class="fas fa-school"></i>
-            <span>LUNZU SEC. SCHOOL</span>
-        </div>
-        <div class="nav-links">
-            <a href="https://lunzusec.github.io/School_results/index.html" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="javascript:window.location.reload()" class="nav-link">
-                <i class="fas fa-sync-alt"></i> Reload
-            </a>
-            <a href="javascript:openAdminMode()" class="nav-link primary">
-                <i class="fas fa-user-shield"></i> Admin
-            </a>
-        </div>
-    </nav>
-
-    <!-- Initial Loading Overlay -->
     <div id="initialLoading" class="initial-loading">
         <div class="big-spinner"></div>
         <p id="initialLoadingText">Loading fee portal configuration...</p>
         <button class="retry-btn" id="initialRetryBtn" style="display:none;" onclick="retryInitialLoad()">🔄 Retry</button>
     </div>
 
-    <!-- Main Card -->
     <div class="container">
         <div class="header">
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="Malawi Government Logo" class="logo">
@@ -456,9 +313,6 @@
                     <small class="dob-required">Format: YYYY-MM-DD - Used to verify your identity</small>
                 </div>
 
-                <!-- ==================================================== -->
-                <!-- TIER 1: PRIMARY CALL TO ACTION                        -->
-                <!-- ==================================================== -->
                 <div class="cta-block">
                     <button type="button" class="btn-cta" onclick="generateFeeReport()" id="generateReportBtn" disabled>
                         <span class="cta-icon">💰</span>
@@ -469,9 +323,6 @@
                     </button>
                 </div>
 
-                <!-- ==================================================== -->
-                <!-- TIER 2: SECONDARY ACTIONS (2-column grid)            -->
-                <!-- ==================================================== -->
                 <div class="btn-grid-2">
                     <button type="button" class="btn-tile subscribe" onclick="openSubscribePage()">
                         <span class="tile-icon"><i class="fas fa-envelope"></i></span>
@@ -489,9 +340,6 @@
                     </button>
                 </div>
 
-                <!-- ==================================================== -->
-                <!-- TIER 3: ADMIN ACCESS — VISUALLY SEPARATED            -->
-                <!-- ==================================================== -->
                 <div class="admin-divider">Administration</div>
                 <button type="button" class="btn-admin-full" onclick="openAdminMode()">
                     <i class="fas fa-user-shield"></i>
@@ -517,16 +365,12 @@
     </div>
 
     <script>
-        // ============================================================
-        // BANKNOTE BACKGROUND
-        // ============================================================
         (function initBanknoteBackground() {
             const canvas = document.getElementById('banknoteCanvas');
             const container = document.getElementById('bg-canvas-container');
             const ctx = canvas.getContext('2d');
             let w, h, notes = [];
             const NOTE_COUNT = 32;
-
             function resizeCanvas() {
                 const rect = container.getBoundingClientRect();
                 canvas.width = rect.width || window.innerWidth;
@@ -583,13 +427,8 @@
             startBackground();
         })();
 
-        // ============================================================
-        // CONFIG
-        // ============================================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
         const ADMIN_PAGE_URL       = 'admin.html';
         const SUBSCRIBE_PAGE_URL   = 'Subscribe.html';
-        const PORTAL_HOME_URL      = 'https://lunzusec.github.io/School_results/index.html';
 
         let availableTerms = [];
         let currentTermKey = null;
@@ -597,9 +436,6 @@
         let loadingInterval = null;
         let loadingProgress = 0;
 
-        // ============================================================
-        // OPEN EXTERNAL PAGES
-        // ============================================================
         function openAdminMode() {
             const params = new URLSearchParams();
             if (currentTermKey) params.set('term', currentTermKey);
@@ -618,9 +454,6 @@
             if (!newTab) alert('Please allow pop-ups to open the subscription page.');
         }
 
-        // ============================================================
-        // INIT
-        // ============================================================
         window.onload = async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             showInitialLoading(true, "Loading fee portal configuration...");
@@ -753,9 +586,6 @@
             if (document.getElementById('studentClass').value && currentTermKey) handleClassChange();
         }
 
-        // ============================================================
-        // PROGRESS
-        // ============================================================
         function startProgressAnimation(message = 'Loading fee records...') {
             loadingProgress = 0;
             const pc = document.getElementById('progressContainer');
@@ -790,9 +620,6 @@
         }
         function stopProgressAnimation() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
 
-        // ============================================================
-        // API CALLS
-        // ============================================================
         async function callGAS(action, params = {}, attempt = 1) {
             const body = new URLSearchParams();
             body.append('action', action);
@@ -841,9 +668,6 @@
             }
         }
 
-        // ============================================================
-        // FORM
-        // ============================================================
         function setupForm() {
             document.getElementById('studentClass').addEventListener('change', handleClassChange);
             document.getElementById('studentName').addEventListener('change', updateButtonState);
