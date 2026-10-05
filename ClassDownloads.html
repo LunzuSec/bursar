@@ -39,7 +39,6 @@
         .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 2px; font-weight: 300; }
         .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.06); }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 6px;
@@ -140,7 +139,6 @@
             gap: 10px; margin-top: 18px;
         }
         .admin-actions.two-col { grid-template-columns: 1fr 1fr; }
-        .admin-actions.one-col { grid-template-columns: 1fr; }
         .btn {
             padding: 12px 14px; border: none; border-radius: 12px;
             font-size: 13px; font-weight: 600; cursor: pointer;
@@ -218,21 +216,17 @@
 
         <div class="content">
 
-            <!-- ============================================
-                 TABS
-                 ============================================ -->
+            <!-- TABS -->
             <div class="tabs" id="dl_tabs">
                 <button type="button" class="active" data-tab="fee" onclick="dl_switchTab('fee')">
                     <i class="fas fa-file-invoice-dollar"></i> Fee Data
                 </button>
                 <button type="button" data-tab="creds" onclick="dl_switchTab('creds')">
-                    <i class="fas fa-key"></i> Student Credentials
+                    <i class="fas fa-id-card"></i> Student Registry
                 </button>
             </div>
 
-            <!-- ============================================
-                 TAB 1 — FEE DATA (existing)
-                 ============================================ -->
+            <!-- TAB 1 — FEE DATA -->
             <div class="tab-panel active" id="dl_tabFee">
                 <div class="section-title">🎯 Scope</div>
                 <div class="admin-grid-2">
@@ -342,9 +336,7 @@
                 </div>
             </div>
 
-            <!-- ============================================
-                 TAB 2 — STUDENT CREDENTIALS (new)
-                 ============================================ -->
+            <!-- TAB 2 — STUDENT REGISTRY -->
             <div class="tab-panel" id="dl_tabCreds">
                 <div class="section-title">🎯 Scope</div>
                 <div class="admin-grid-2">
@@ -371,7 +363,7 @@
                 </div>
 
                 <div class="section-title">🎚️ Filters</div>
-                <div class="admin-grid-3">
+                <div class="admin-grid-2">
                     <div class="admin-field">
                         <label>Filter by sponsor</label>
                         <input type="text" id="cr_sponsorFilter" placeholder="e.g. GOVERNMENT (blank = all)">
@@ -379,10 +371,6 @@
                     <div class="admin-field">
                         <label>Search by name</label>
                         <input type="text" id="cr_search" placeholder="e.g. BANDA">
-                    </div>
-                    <div class="admin-field">
-                        <label>Code prefix</label>
-                        <input type="text" id="cr_codePrefix" value="LSS-" maxlength="8">
                     </div>
                 </div>
 
@@ -394,7 +382,7 @@
 
                 <div class="admin-actions two-col">
                     <button type="button" class="btn btn-creds" onclick="cr_generate()" id="cr_btnGenerate">
-                        <i class="fas fa-key"></i> Generate Credentials PDF
+                        <i class="fas fa-id-card"></i> Generate Student Registry PDF
                     </button>
                     <button type="button" class="btn btn-ghost" onclick="cr_resetForm()">
                         <i class="fas fa-redo"></i> Reset
@@ -404,8 +392,9 @@
                 <div id="cr_statusBox" class="admin-status-box"></div>
 
                 <div class="helper">
-                    ⚠️ Each credential PDF contains student names and access codes. Distribute to the correct sponsor only, and log all exports.<br>
-                    💡 Codes are deterministic per student per term — regenerating the PDF will not change them.
+                    📋 The registry lists <strong>S/N, Student Name, Date of Birth, Class, Sponsor</strong>.<br>
+                    Students access their fee reports by choosing <em>Term → Class → Name → Date of Birth</em> — no password or code required.<br>
+                    ⚠️ Contains personal student information. Distribute to the correct sponsor only, and log all exports.
                 </div>
             </div>
 
@@ -589,16 +578,15 @@
         }
 
         // ============================================================
-        // CREDENTIALS PARAMS
+        // REGISTRY PARAMS
         // ============================================================
-        function collectCredentialParams(extra) {
+        function collectRegistryParams(extra) {
             const p = {
                 password: SharedSession.getPassword(),
                 studentClass: document.getElementById('cr_class').value,
                 term: document.getElementById('cr_term').value || currentTermKey,
                 search: document.getElementById('cr_search').value.trim(),
                 sponsorFilter: document.getElementById('cr_sponsorFilter').value.trim().toUpperCase(),
-                codePrefix: document.getElementById('cr_codePrefix').value.trim() || 'LSS-',
                 groupBySponsor: document.getElementById('cr_groupBySponsor').checked ? 'true' : 'false',
                 // Sensible defaults so gatherExportData doesn't filter anything out
                 statusFilter: 'all',
@@ -760,20 +748,20 @@
         }
 
         // ============================================================
-        // CREDENTIALS PDF
+        // REGISTRY PDF
         // ============================================================
         async function cr_generate() {
             setButtonBusy('cr_btnGenerate', true, 'Generating...');
-            setStatus('cr_statusBox', 'info', 'Generating credentials PDF... this may take 5–15 seconds.');
+            setStatus('cr_statusBox', 'info', 'Generating student registry PDF... this may take 5–15 seconds.');
             try {
-                const res = await callGASPromise('exportStudentCredentialsPDF', collectCredentialParams());
+                const res = await callGASPromise('exportStudentCredentialsPDF', collectRegistryParams());
                 if (!res.success) throw new Error(res.error || 'Failed');
-                downloadBase64(res.pdfBase64, res.filename || 'student_credentials.pdf', 'application/pdf');
+                downloadBase64(res.pdfBase64, res.filename || 'student_registry.pdf', 'application/pdf');
                 const sponsorInfo = res.sponsorCount
                     ? (' across ' + res.sponsorCount + ' sponsor(s)')
                     : '';
                 setStatus('cr_statusBox', 'success',
-                    '✅ Credentials PDF downloaded — ' + res.rowCount + ' student(s)' + sponsorInfo + '.');
+                    '✅ Registry PDF downloaded — ' + res.rowCount + ' student(s)' + sponsorInfo + '.');
             } catch (e) {
                 setStatus('cr_statusBox', 'error', '❌ ' + e.message);
             } finally {
@@ -784,7 +772,6 @@
         function cr_resetForm() {
             document.getElementById('cr_sponsorFilter').value = '';
             document.getElementById('cr_search').value = '';
-            document.getElementById('cr_codePrefix').value = 'LSS-';
             document.getElementById('cr_groupBySponsor').checked = true;
             const box = document.getElementById('cr_statusBox');
             box.className = 'admin-status-box';
