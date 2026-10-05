@@ -38,6 +38,43 @@
         .header h2 { font-size: 16px; color: #fcd34d; margin-top: 4px; }
         .header h3 { font-size: 13px; color: #d1e0f0; margin-top: 2px; font-weight: 300; }
         .content { padding: 28px 26px; background: rgba(255, 255, 255, 0.06); }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            padding: 5px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+        .tabs button {
+            flex: 1;
+            padding: 12px 14px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .tabs button:hover:not(.active) { background: rgba(255,255,255,0.15); color: #fff; }
+        .tabs button.active {
+            background: rgba(255,255,255,0.95);
+            color: #002b54;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
         .section-title {
             font-size: 12px; font-weight: 700; color: #c4b5fd;
             text-transform: uppercase; letter-spacing: 0.5px;
@@ -102,6 +139,8 @@
             display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 10px; margin-top: 18px;
         }
+        .admin-actions.two-col { grid-template-columns: 1fr 1fr; }
+        .admin-actions.one-col { grid-template-columns: 1fr; }
         .btn {
             padding: 12px 14px; border: none; border-radius: 12px;
             font-size: 13px; font-weight: 600; cursor: pointer;
@@ -117,6 +156,8 @@
         .btn-pdf:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5); }
         .btn-xlsx { background: linear-gradient(135deg, #217346 0%, #185c37 100%); box-shadow: 0 4px 14px rgba(33, 115, 70, 0.3); }
         .btn-xlsx:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(33, 115, 70, 0.5); }
+        .btn-creds { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); }
+        .btn-creds:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(139, 92, 246, 0.6); }
         .admin-status-box {
             padding: 12px 16px; border-radius: 10px; margin-top: 12px;
             font-size: 13px; display: none; align-items: center; gap: 10px;
@@ -159,8 +200,10 @@
         @media (max-width: 700px) {
             .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
             .admin-actions { grid-template-columns: 1fr 1fr; }
+            .admin-actions.two-col { grid-template-columns: 1fr; }
             .content { padding: 18px 14px; }
             .header h1 { font-size: 18px; }
+            .tabs { flex-direction: column; }
         }
     </style>
 </head>
@@ -174,112 +217,198 @@
         </div>
 
         <div class="content">
-            <div class="section-title">🎯 Scope</div>
-            <div class="admin-grid-2">
-                <div class="admin-field">
-                    <label>Class / Scope</label>
-                    <select id="dl_class">
-                        <option value="__ALL__">★ ALL CLASSES</option>
-                        <option value="Form 1">Form 1</option>
-                        <option value="Form 2">Form 2</option>
-                        <option value="Form 3">Form 3</option>
-                        <option value="Form 4">Form 4</option>
-                        <option value="Form 1 ODL">Form 1 ODL</option>
-                        <option value="Form 2 ODL">Form 2 ODL</option>
-                        <option value="Form 3 ODL">Form 3 ODL</option>
-                        <option value="Form 4 ODL">Form 4 ODL</option>
-                    </select>
+
+            <!-- ============================================
+                 TABS
+                 ============================================ -->
+            <div class="tabs" id="dl_tabs">
+                <button type="button" class="active" data-tab="fee" onclick="dl_switchTab('fee')">
+                    <i class="fas fa-file-invoice-dollar"></i> Fee Data
+                </button>
+                <button type="button" data-tab="creds" onclick="dl_switchTab('creds')">
+                    <i class="fas fa-key"></i> Student Credentials
+                </button>
+            </div>
+
+            <!-- ============================================
+                 TAB 1 — FEE DATA (existing)
+                 ============================================ -->
+            <div class="tab-panel active" id="dl_tabFee">
+                <div class="section-title">🎯 Scope</div>
+                <div class="admin-grid-2">
+                    <div class="admin-field">
+                        <label>Class / Scope</label>
+                        <select id="dl_class">
+                            <option value="__ALL__">★ ALL CLASSES</option>
+                            <option value="Form 1">Form 1</option>
+                            <option value="Form 2">Form 2</option>
+                            <option value="Form 3">Form 3</option>
+                            <option value="Form 4">Form 4</option>
+                            <option value="Form 1 ODL">Form 1 ODL</option>
+                            <option value="Form 2 ODL">Form 2 ODL</option>
+                            <option value="Form 3 ODL">Form 3 ODL</option>
+                            <option value="Form 4 ODL">Form 4 ODL</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Term</label>
+                        <select id="dl_term">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="admin-field">
-                    <label>Term</label>
-                    <select id="dl_term">
-                        <option value="">Loading...</option>
-                    </select>
+
+                <div class="section-title">🎚️ Filters</div>
+                <div class="admin-grid-3">
+                    <div class="admin-field">
+                        <label>Status</label>
+                        <select id="dl_status">
+                            <option value="all">All students</option>
+                            <option value="owing">Only owing (balance &lt; 0)</option>
+                            <option value="partial">Only partially paid</option>
+                            <option value="full">Only fully paid</option>
+                            <option value="overpaid">Only overpaid</option>
+                            <option value="sponsored">Only sponsored</option>
+                            <option value="government">Only government-sponsored</option>
+                            <option value="nonsponsored">Only non-sponsored</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Sort by</label>
+                        <select id="dl_sort">
+                            <option value="balance_worst">Balance (worst first)</option>
+                            <option value="balance_best">Balance (best first)</option>
+                            <option value="name_asc">Name (A–Z)</option>
+                            <option value="name_desc">Name (Z–A)</option>
+                            <option value="lastpayment_recent">Last payment (recent)</option>
+                            <option value="lastpayment_oldest">Last payment (oldest)</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Search by name</label>
+                        <input type="text" id="dl_search" placeholder="e.g. BANDA">
+                    </div>
+                </div>
+
+                <div class="admin-grid-3" style="margin-top:12px;">
+                    <div class="admin-field">
+                        <label>Date from (optional)</label>
+                        <input type="date" id="dl_dateFrom">
+                    </div>
+                    <div class="admin-field">
+                        <label>Date to (optional)</label>
+                        <input type="date" id="dl_dateTo">
+                    </div>
+                    <div class="admin-field">
+                        <label>Date basis</label>
+                        <select id="dl_dateBasis">
+                            <option value="lastPayment">Latest payment date</option>
+                            <option value="entry">Last entry timestamp</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="admin-toggle" style="margin-top:12px;">
+                    <input type="checkbox" id="dl_hasPrevBalance">
+                    <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
+                </label>
+
+                <div class="section-title">📊 Report Content</div>
+                <label class="admin-toggle">
+                    <input type="checkbox" id="dl_showSummary">
+                    <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts</span>
+                </label>
+                <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
+                    <input type="checkbox" id="dl_showByClass" disabled>
+                    <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
+                </label>
+
+                <div class="section-title">📋 Columns</div>
+                <div class="admin-columns-grid" id="dl_columnsGrid"></div>
+
+                <div class="admin-actions">
+                    <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
+                    <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
+                    <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
+                    <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
+                </div>
+
+                <div id="dl_statusBox" class="admin-status-box"></div>
+                <div id="dl_statsPreview" class="admin-stats-preview"></div>
+
+                <div class="helper">
+                    ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.<br>
+                    💡 Tip: turn OFF the aggregate summary when exporting for form teachers or parents.
                 </div>
             </div>
 
-            <div class="section-title">🎚️ Filters</div>
-            <div class="admin-grid-3">
-                <div class="admin-field">
-                    <label>Status</label>
-                    <select id="dl_status">
-                        <option value="all">All students</option>
-                        <option value="owing">Only owing (balance &lt; 0)</option>
-                        <option value="partial">Only partially paid</option>
-                        <option value="full">Only fully paid</option>
-                        <option value="overpaid">Only overpaid</option>
-                        <option value="sponsored">Only sponsored</option>
-                        <option value="government">Only government-sponsored</option>
-                        <option value="nonsponsored">Only non-sponsored</option>
-                    </select>
+            <!-- ============================================
+                 TAB 2 — STUDENT CREDENTIALS (new)
+                 ============================================ -->
+            <div class="tab-panel" id="dl_tabCreds">
+                <div class="section-title">🎯 Scope</div>
+                <div class="admin-grid-2">
+                    <div class="admin-field">
+                        <label>Class / Scope</label>
+                        <select id="cr_class">
+                            <option value="__ALL__">★ ALL CLASSES</option>
+                            <option value="Form 1">Form 1</option>
+                            <option value="Form 2">Form 2</option>
+                            <option value="Form 3">Form 3</option>
+                            <option value="Form 4">Form 4</option>
+                            <option value="Form 1 ODL">Form 1 ODL</option>
+                            <option value="Form 2 ODL">Form 2 ODL</option>
+                            <option value="Form 3 ODL">Form 3 ODL</option>
+                            <option value="Form 4 ODL">Form 4 ODL</option>
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label>Term</label>
+                        <select id="cr_term">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="admin-field">
-                    <label>Sort by</label>
-                    <select id="dl_sort">
-                        <option value="balance_worst">Balance (worst first)</option>
-                        <option value="balance_best">Balance (best first)</option>
-                        <option value="name_asc">Name (A–Z)</option>
-                        <option value="name_desc">Name (Z–A)</option>
-                        <option value="lastpayment_recent">Last payment (recent)</option>
-                        <option value="lastpayment_oldest">Last payment (oldest)</option>
-                    </select>
+
+                <div class="section-title">🎚️ Filters</div>
+                <div class="admin-grid-3">
+                    <div class="admin-field">
+                        <label>Filter by sponsor</label>
+                        <input type="text" id="cr_sponsorFilter" placeholder="e.g. GOVERNMENT (blank = all)">
+                    </div>
+                    <div class="admin-field">
+                        <label>Search by name</label>
+                        <input type="text" id="cr_search" placeholder="e.g. BANDA">
+                    </div>
+                    <div class="admin-field">
+                        <label>Code prefix</label>
+                        <input type="text" id="cr_codePrefix" value="LSS-" maxlength="8">
+                    </div>
                 </div>
-                <div class="admin-field">
-                    <label>Search by name</label>
-                    <input type="text" id="dl_search" placeholder="e.g. BANDA">
+
+                <div class="section-title">📄 Output</div>
+                <label class="admin-toggle">
+                    <input type="checkbox" id="cr_groupBySponsor" checked>
+                    <span><strong>Group by sponsor</strong> — one page per sponsor, with a sponsor banner. Uncheck for a single continuous table.</span>
+                </label>
+
+                <div class="admin-actions two-col">
+                    <button type="button" class="btn btn-creds" onclick="cr_generate()" id="cr_btnGenerate">
+                        <i class="fas fa-key"></i> Generate Credentials PDF
+                    </button>
+                    <button type="button" class="btn btn-ghost" onclick="cr_resetForm()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+
+                <div id="cr_statusBox" class="admin-status-box"></div>
+
+                <div class="helper">
+                    ⚠️ Each credential PDF contains student names and access codes. Distribute to the correct sponsor only, and log all exports.<br>
+                    💡 Codes are deterministic per student per term — regenerating the PDF will not change them.
                 </div>
             </div>
 
-            <div class="admin-grid-3" style="margin-top:12px;">
-                <div class="admin-field">
-                    <label>Date from (optional)</label>
-                    <input type="date" id="dl_dateFrom">
-                </div>
-                <div class="admin-field">
-                    <label>Date to (optional)</label>
-                    <input type="date" id="dl_dateTo">
-                </div>
-                <div class="admin-field">
-                    <label>Date basis</label>
-                    <select id="dl_dateBasis">
-                        <option value="lastPayment">Latest payment date</option>
-                        <option value="entry">Last entry timestamp</option>
-                    </select>
-                </div>
-            </div>
-
-            <label class="admin-toggle" style="margin-top:12px;">
-                <input type="checkbox" id="dl_hasPrevBalance">
-                <span>Only students with a <strong>previous balance</strong> (balance carried forward ≠ 0)</span>
-            </label>
-
-            <div class="section-title">📊 Report Content</div>
-            <label class="admin-toggle">
-                <input type="checkbox" id="dl_showSummary">
-                <span><strong>Include aggregate summary</strong> — totals, collection rate, status counts</span>
-            </label>
-            <label class="admin-toggle disabled" id="dl_byClassRow" style="margin-top:8px;">
-                <input type="checkbox" id="dl_showByClass" disabled>
-                <span><strong>Include per-class breakdown table</strong> — only applies in ALL CLASSES mode</span>
-            </label>
-
-            <div class="section-title">📋 Columns</div>
-            <div class="admin-columns-grid" id="dl_columnsGrid"></div>
-
-            <div class="admin-actions">
-                <button type="button" class="btn btn-ghost" onclick="dl_previewStats()" id="dl_btnPreview">📊 Preview Stats</button>
-                <button type="button" class="btn btn-csv" onclick="dl_downloadCSV()" id="dl_btnCSV">📄 CSV</button>
-                <button type="button" class="btn btn-pdf" onclick="dl_downloadPDF()" id="dl_btnPDF">📕 PDF</button>
-                <button type="button" class="btn btn-xlsx" onclick="dl_downloadXLSX()" id="dl_btnXLSX">📊 Excel</button>
-            </div>
-
-            <div id="dl_statusBox" class="admin-status-box"></div>
-            <div id="dl_statsPreview" class="admin-stats-preview"></div>
-
-            <div class="helper">
-                ⚠️ Downloads contain sensitive financial data. Handle with care and log all exports.<br>
-                💡 Tip: turn OFF the aggregate summary when exporting for form teachers or parents.
-            </div>
         </div>
 
         <div class="footer">
@@ -289,6 +418,9 @@
     </div>
 
     <script>
+        // ============================================================
+        // COLUMN DEFINITIONS (fee data)
+        // ============================================================
         const DL_COLUMNS = [
             { key: 'sn',                label: 'S/N',                 default: true  },
             { key: 'studentName',       label: 'Student Name',        default: true  },
@@ -313,6 +445,9 @@
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        // ============================================================
+        // BOOT
+        // ============================================================
         document.addEventListener('DOMContentLoaded', async function() {
             try {
                 await ensureUnlocked({
@@ -330,6 +465,20 @@
             }
         });
 
+        // ============================================================
+        // TAB SWITCHER
+        // ============================================================
+        function dl_switchTab(tab) {
+            document.querySelectorAll('#dl_tabs button').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+            document.getElementById('dl_tabFee').classList.toggle('active', tab === 'fee');
+            document.getElementById('dl_tabCreds').classList.toggle('active', tab === 'creds');
+        }
+
+        // ============================================================
+        // TERMS
+        // ============================================================
         async function loadTerms() {
             try {
                 const terms = await callGASPromise('getAvailableTerms', { admin: 'true' });
@@ -337,37 +486,49 @@
                     availableTerms = terms;
                     populateTerms(terms);
                 } else {
-                    document.getElementById('dl_term').innerHTML = '<option value="2026-2027_TERM_1">2026-2027 TERM 1</option>';
-                    currentTermKey = '2026-2027_TERM_1';
+                    fallbackTerms();
                 }
             } catch (e) {
                 console.error('Failed to load terms:', e);
-                document.getElementById('dl_term').innerHTML = '<option value="2026-2027_TERM_1">2026-2027 TERM 1</option>';
-                currentTermKey = '2026-2027_TERM_1';
+                fallbackTerms();
             }
+        }
+
+        function fallbackTerms() {
+            ['dl_term', 'cr_term'].forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '<option value="2026-2027_TERM_1">2026-2027 TERM 1</option>';
+            });
+            currentTermKey = '2026-2027_TERM_1';
         }
 
         function populateTerms(terms) {
-            const sel = document.getElementById('dl_term');
-            sel.innerHTML = '';
-            let activeTerm = null;
-            terms.forEach(function(t) {
-                const opt = document.createElement('option');
-                opt.value = t.key;
-                opt.textContent = t.display;
-                if (t.isActive) {
-                    opt.selected = true;
-                    currentTermKey = t.key;
-                    activeTerm = t;
+            ['dl_term', 'cr_term'].forEach(function(id) {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                sel.innerHTML = '';
+                let activeTerm = null;
+                terms.forEach(function(t) {
+                    const opt = document.createElement('option');
+                    opt.value = t.key;
+                    opt.textContent = t.display;
+                    if (t.isActive) {
+                        opt.selected = true;
+                        currentTermKey = t.key;
+                        activeTerm = t;
+                    }
+                    sel.appendChild(opt);
+                });
+                if (!activeTerm && terms.length) {
+                    sel.value = terms[0].key;
+                    currentTermKey = terms[0].key;
                 }
-                sel.appendChild(opt);
             });
-            if (!activeTerm && terms.length) {
-                sel.value = terms[0].key;
-                currentTermKey = terms[0].key;
-            }
         }
 
+        // ============================================================
+        // COLUMN CHECKBOXES
+        // ============================================================
         function renderColumnChecks() {
             const container = document.getElementById('dl_columnsGrid');
             container.innerHTML = DL_COLUMNS.map(function(c) {
@@ -402,6 +563,9 @@
             updateByClassState();
         }
 
+        // ============================================================
+        // FEE DATA PARAMS
+        // ============================================================
         function collectParams(extra) {
             const selected = Array.from(document.querySelectorAll('#dl_columnsGrid input:checked'))
                 .map(function(cb) { return cb.dataset.key; });
@@ -424,8 +588,38 @@
             return p;
         }
 
-        function setStatus(type, msg) {
-            const el = document.getElementById('dl_statusBox');
+        // ============================================================
+        // CREDENTIALS PARAMS
+        // ============================================================
+        function collectCredentialParams(extra) {
+            const p = {
+                password: SharedSession.getPassword(),
+                studentClass: document.getElementById('cr_class').value,
+                term: document.getElementById('cr_term').value || currentTermKey,
+                search: document.getElementById('cr_search').value.trim(),
+                sponsorFilter: document.getElementById('cr_sponsorFilter').value.trim().toUpperCase(),
+                codePrefix: document.getElementById('cr_codePrefix').value.trim() || 'LSS-',
+                groupBySponsor: document.getElementById('cr_groupBySponsor').checked ? 'true' : 'false',
+                // Sensible defaults so gatherExportData doesn't filter anything out
+                statusFilter: 'all',
+                sortBy: 'name_asc',
+                hasPrevBalance: 'false',
+                showSummary: 'false',
+                showByClass: 'false',
+                dateFrom: '',
+                dateTo: '',
+                dateBasis: 'lastPayment',
+                columns: 'sn,studentName,studentClass,dateOfBirth,bursary'
+            };
+            if (extra) Object.assign(p, extra);
+            return p;
+        }
+
+        // ============================================================
+        // STATUS + BUTTONS
+        // ============================================================
+        function setStatus(boxId, type, msg) {
+            const el = document.getElementById(boxId);
             el.className = 'admin-status-box show ' + type;
             let icon = '';
             if (type === 'info') icon = '<span class="spinner-small"></span>';
@@ -447,16 +641,19 @@
             }
         }
 
+        // ============================================================
+        // FEE DATA — PREVIEW
+        // ============================================================
         async function dl_previewStats() {
             setButtonBusy('dl_btnPreview', true, 'Calculating...');
-            setStatus('info', 'Computing preview statistics...');
+            setStatus('dl_statusBox', 'info', 'Computing preview statistics...');
             try {
                 const res = await callGASPromise('exportClassFeeStats', collectParams());
                 if (!res.success) throw new Error(res.error || 'Failed');
                 renderStatsPreview(res.stats, res.rowCount);
-                setStatus('success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
+                setStatus('dl_statusBox', 'success', '✅ Preview ready — ' + res.rowCount + ' student(s) match your filters.');
             } catch (e) {
-                setStatus('error', '❌ ' + e.message);
+                setStatus('dl_statusBox', 'error', '❌ ' + e.message);
             } finally {
                 setButtonBusy('dl_btnPreview', false);
             }
@@ -482,6 +679,9 @@
                 '</div>';
         }
 
+        // ============================================================
+        // DOWNLOAD HELPERS
+        // ============================================================
         function downloadBlob(content, filename, mime) {
             const blob = new Blob([content], { type: mime });
             const url = URL.createObjectURL(blob);
@@ -510,16 +710,19 @@
             }, 100);
         }
 
+        // ============================================================
+        // FEE DATA DOWNLOADS
+        // ============================================================
         async function dl_downloadCSV() {
             setButtonBusy('dl_btnCSV', true, 'CSV...');
-            setStatus('info', 'Generating CSV...');
+            setStatus('dl_statusBox', 'info', 'Generating CSV...');
             try {
                 const res = await callGASPromise('exportClassFeeCSV', collectParams());
                 if (!res.success) throw new Error(res.error || 'Failed');
                 downloadBlob(res.csv, res.filename || 'fee_data.csv', 'text/csv;charset=utf-8;');
-                setStatus('success', '✅ CSV downloaded — ' + res.rowCount + ' student(s).');
+                setStatus('dl_statusBox', 'success', '✅ CSV downloaded — ' + res.rowCount + ' student(s).');
             } catch (e) {
-                setStatus('error', '❌ ' + e.message);
+                setStatus('dl_statusBox', 'error', '❌ ' + e.message);
             } finally {
                 setButtonBusy('dl_btnCSV', false);
             }
@@ -527,14 +730,14 @@
 
         async function dl_downloadPDF() {
             setButtonBusy('dl_btnPDF', true, 'PDF...');
-            setStatus('info', 'Generating PDF... this may take 5–15 seconds.');
+            setStatus('dl_statusBox', 'info', 'Generating PDF... this may take 5–15 seconds.');
             try {
                 const res = await callGASPromise('exportClassFeePDF', collectParams());
                 if (!res.success) throw new Error(res.error || 'Failed');
                 downloadBase64(res.pdfBase64, res.filename || 'fee_data.pdf', 'application/pdf');
-                setStatus('success', '✅ PDF downloaded — ' + res.rowCount + ' student(s).');
+                setStatus('dl_statusBox', 'success', '✅ PDF downloaded — ' + res.rowCount + ' student(s).');
             } catch (e) {
-                setStatus('error', '❌ ' + e.message);
+                setStatus('dl_statusBox', 'error', '❌ ' + e.message);
             } finally {
                 setButtonBusy('dl_btnPDF', false);
             }
@@ -542,20 +745,55 @@
 
         async function dl_downloadXLSX() {
             setButtonBusy('dl_btnXLSX', true, 'Excel...');
-            setStatus('info', 'Generating Excel file... this may take 10–25 seconds.');
+            setStatus('dl_statusBox', 'info', 'Generating Excel file... this may take 10–25 seconds.');
             try {
                 const res = await callGASPromise('exportClassFeeXLSX', collectParams());
                 if (!res.success) throw new Error(res.error || 'Failed');
                 downloadBase64(res.xlsxBase64, res.filename || 'fee_data.xlsx',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                setStatus('success', '✅ Excel downloaded — ' + res.rowCount + ' student(s).');
+                setStatus('dl_statusBox', 'success', '✅ Excel downloaded — ' + res.rowCount + ' student(s).');
             } catch (e) {
-                setStatus('error', '❌ ' + e.message);
+                setStatus('dl_statusBox', 'error', '❌ ' + e.message);
             } finally {
                 setButtonBusy('dl_btnXLSX', false);
             }
         }
 
+        // ============================================================
+        // CREDENTIALS PDF
+        // ============================================================
+        async function cr_generate() {
+            setButtonBusy('cr_btnGenerate', true, 'Generating...');
+            setStatus('cr_statusBox', 'info', 'Generating credentials PDF... this may take 5–15 seconds.');
+            try {
+                const res = await callGASPromise('exportStudentCredentialsPDF', collectCredentialParams());
+                if (!res.success) throw new Error(res.error || 'Failed');
+                downloadBase64(res.pdfBase64, res.filename || 'student_credentials.pdf', 'application/pdf');
+                const sponsorInfo = res.sponsorCount
+                    ? (' across ' + res.sponsorCount + ' sponsor(s)')
+                    : '';
+                setStatus('cr_statusBox', 'success',
+                    '✅ Credentials PDF downloaded — ' + res.rowCount + ' student(s)' + sponsorInfo + '.');
+            } catch (e) {
+                setStatus('cr_statusBox', 'error', '❌ ' + e.message);
+            } finally {
+                setButtonBusy('cr_btnGenerate', false);
+            }
+        }
+
+        function cr_resetForm() {
+            document.getElementById('cr_sponsorFilter').value = '';
+            document.getElementById('cr_search').value = '';
+            document.getElementById('cr_codePrefix').value = 'LSS-';
+            document.getElementById('cr_groupBySponsor').checked = true;
+            const box = document.getElementById('cr_statusBox');
+            box.className = 'admin-status-box';
+            box.innerHTML = '';
+        }
+
+        // ============================================================
+        // JSONP TRANSPORT
+        // ============================================================
         function callGASPromise(action, params) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
@@ -572,7 +810,7 @@
                         if (script.parentNode) script.parentNode.removeChild(script);
                         reject(new Error('Request timeout'));
                     }
-                }, 120000);
+                }, 180000);
                 window[callbackName] = function(response) {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
