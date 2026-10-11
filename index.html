@@ -27,9 +27,6 @@
             justify-content: center;
         }
 
-        /* ============================================
-           LAYOUT
-           ============================================ */
         .portal {
             width: 100%;
             max-width: 460px;
@@ -42,16 +39,13 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
+        /* ---- Header ---- */
         .portal-header {
             background: rgba(10, 30, 50, 0.7);
             padding: 28px 24px 22px;
             text-align: center;
             border-bottom: 1px solid rgba(255, 215, 0, 0.15);
         }
-
         .portal-header .crest {
             width: 56px;
             height: 56px;
@@ -61,7 +55,6 @@
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-
         .portal-header h1 {
             font-size: 16px;
             font-weight: 700;
@@ -69,7 +62,6 @@
             color: #fff;
             text-transform: uppercase;
         }
-
         .portal-header h2 {
             font-size: 12px;
             font-weight: 400;
@@ -78,17 +70,24 @@
             margin-top: 4px;
         }
 
-        /* ============================================
-           FORM BODY
-           ============================================ */
-        .portal-body {
-            padding: 26px 24px 20px;
+        /* ---- Admin banner ---- */
+        .admin-banner {
+            display: none;
+            background: rgba(139, 92, 246, 0.12);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #ddd6fe;
+            text-align: center;
         }
+        .admin-banner.show { display: block; }
+        .admin-banner i { margin-right: 5px; }
+        .admin-banner strong { color: #c4b5fd; }
 
-        .field {
-            margin-bottom: 18px;
-        }
+        /* ---- Form body ---- */
+        .portal-body { padding: 26px 24px 20px; }
 
+        .field { margin-bottom: 18px; }
         .field label {
             display: block;
             font-size: 12px;
@@ -98,11 +97,7 @@
             letter-spacing: 0.6px;
             margin-bottom: 6px;
         }
-
-        .field .req {
-            color: #fbbf24;
-            margin-left: 2px;
-        }
+        .field .req { color: #fbbf24; margin-left: 2px; }
 
         .field input,
         .field select {
@@ -118,7 +113,6 @@
             appearance: none;
             -webkit-appearance: none;
         }
-
         .field select {
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
@@ -126,11 +120,7 @@
             background-size: 16px;
             padding-right: 38px;
         }
-
-        .field select option {
-            background: #1e2f3f;
-            color: #fff;
-        }
+        .field select option { background: #1e2f3f; color: #fff; }
 
         .field input:focus,
         .field select:focus {
@@ -138,13 +128,11 @@
             border-color: rgba(251, 191, 36, 0.7);
             background: rgba(255, 255, 255, 0.09);
         }
-
         .field input:disabled,
         .field select:disabled {
             opacity: 0.45;
             cursor: not-allowed;
         }
-
         .field .hint {
             display: block;
             font-size: 11px;
@@ -152,9 +140,10 @@
             margin-top: 5px;
         }
 
-        /* ============================================
-           SUBMIT BUTTON
-           ============================================ */
+        /* ---- DOB field hidden when admin ---- */
+        .field.dob-field.hidden { display: none; }
+
+        /* ---- Submit button ---- */
         .btn-submit {
             width: 100%;
             padding: 14px 20px;
@@ -175,12 +164,10 @@
             gap: 8px;
             margin-top: 6px;
         }
-
         .btn-submit:hover:not(:disabled) {
             transform: translateY(-1px);
             box-shadow: 0 10px 24px rgba(251, 191, 36, 0.35);
         }
-
         .btn-submit:disabled {
             background: rgba(100, 116, 139, 0.35);
             color: rgba(255, 255, 255, 0.45);
@@ -188,9 +175,7 @@
             box-shadow: none;
         }
 
-        /* ============================================
-           SECONDARY LINKS
-           ============================================ */
+        /* ---- Secondary links ---- */
         .secondary-links {
             display: flex;
             justify-content: space-between;
@@ -200,7 +185,6 @@
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 12px;
         }
-
         .secondary-links button {
             background: none;
             border: none;
@@ -214,18 +198,10 @@
             gap: 6px;
             transition: color 0.15s;
         }
+        .secondary-links button:hover { color: #fbbf24; }
+        .secondary-links i { font-size: 11px; }
 
-        .secondary-links button:hover {
-            color: #fbbf24;
-        }
-
-        .secondary-links i {
-            font-size: 11px;
-        }
-
-        /* ============================================
-           INLINE MESSAGES
-           ============================================ */
+        /* ---- Messages ---- */
         .msg {
             padding: 10px 14px;
             border-radius: 8px;
@@ -236,31 +212,25 @@
             align-items: flex-start;
             gap: 8px;
         }
-
         .msg.show { display: flex; }
         .msg i { font-size: 13px; margin-top: 1px; flex-shrink: 0; }
-
         .msg-error {
             background: rgba(220, 38, 38, 0.12);
             border: 1px solid rgba(220, 38, 38, 0.35);
             color: #fecaca;
         }
-
         .msg-success {
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.35);
             color: #a7f3d0;
         }
-
         .msg-info {
             background: rgba(59, 130, 246, 0.12);
             border: 1px solid rgba(59, 130, 246, 0.35);
             color: #bfdbfe;
         }
 
-        /* ============================================
-           LOADING STATES
-           ============================================ */
+        /* ---- Loading ---- */
         .inline-loading {
             display: none;
             align-items: center;
@@ -269,7 +239,6 @@
             color: #94a3b8;
             margin-bottom: 14px;
         }
-
         .inline-loading.show { display: flex; }
 
         .spinner {
@@ -280,14 +249,9 @@
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ============================================
-           FULL-PAGE LOADER (initial boot only)
-           ============================================ */
+        /* ---- Boot loader ---- */
         .boot-loader {
             position: fixed;
             inset: 0;
@@ -301,9 +265,7 @@
             padding: 24px;
             text-align: center;
         }
-
         .boot-loader.hidden { display: none; }
-
         .boot-loader .spinner-lg {
             width: 40px;
             height: 40px;
@@ -313,13 +275,11 @@
             animation: spin 0.9s linear infinite;
             margin-bottom: 18px;
         }
-
         .boot-loader p {
             font-size: 14px;
             color: #cbd5e1;
             margin-bottom: 18px;
         }
-
         .boot-loader .retry {
             padding: 10px 22px;
             background: #fbbf24;
@@ -332,12 +292,9 @@
             cursor: pointer;
             display: none;
         }
-
         .boot-loader .retry.show { display: inline-block; }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
+        /* ---- Footer ---- */
         .portal-footer {
             padding: 16px 24px 20px;
             text-align: center;
@@ -346,19 +303,13 @@
             border-top: 1px solid rgba(255, 255, 255, 0.06);
             line-height: 1.6;
         }
-
         .portal-footer a {
             color: #fbbf24;
             text-decoration: none;
         }
+        .portal-footer a:hover { text-decoration: underline; }
 
-        .portal-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* ---- Responsive ---- */
         @media (max-width: 480px) {
             body { padding: 12px; }
             .portal-header { padding: 22px 18px 18px; }
@@ -369,14 +320,14 @@
 </head>
 <body data-nav="true" data-page="portal">
 
-    <!-- Full-page boot loader (only during initial config fetch) -->
+    <!-- Boot loader -->
     <div id="bootLoader" class="boot-loader">
         <div class="spinner-lg"></div>
         <p id="bootLoaderText">Connecting to server…</p>
         <button id="bootRetryBtn" class="retry" onclick="retryBoot()">Retry</button>
     </div>
 
-    <!-- Main card -->
+    <!-- Portal card -->
     <main class="portal" id="portalCard" style="display:none;">
 
         <header class="portal-header">
@@ -389,12 +340,16 @@
             <h2>Fee Statement Portal</h2>
         </header>
 
+        <!-- Admin banner (shown only when admin session active) -->
+        <div id="adminBanner" class="admin-banner">
+            <i class="fas fa-user-shield"></i>
+            <strong>Admin session active</strong> — DOB is not required for report access.
+        </div>
+
         <section class="portal-body">
 
-            <!-- Inline message slot -->
             <div id="msgSlot" class="msg"></div>
 
-            <!-- Loading indicator for student list -->
             <div id="loadingStudents" class="inline-loading">
                 <div class="spinner"></div>
                 <span id="loadingStudentsText">Loading students…</span>
@@ -432,8 +387,8 @@
                 </select>
             </div>
 
-            <!-- DOB -->
-            <div class="field">
+            <!-- DOB — hidden when admin -->
+            <div class="field dob-field" id="dobField">
                 <label for="dateOfBirth">Date of Birth <span class="req">*</span></label>
                 <input type="date" id="dateOfBirth" onchange="updateSubmitState()">
                 <span class="hint">Used to verify your identity</span>
@@ -467,7 +422,8 @@
 
         <footer class="portal-footer">
             Office of the Bursar<br>
-            <a href="https://wa.me/265888866269" target="_blank">WhatsApp +265 888 866 269</a>
+            <a href="https://wa.me/265888866269" target="_blank">WhatsApp +265 888 866 269</a><br>
+            © <span id="currentYear"></span> Lunzu Secondary School
         </footer>
 
     </main>
@@ -482,11 +438,19 @@
         let availableTerms = [];
         let currentTermKey = null;
         let isLoadingStudents = false;
+        let isAdminSession = false;
 
         // ============================================
         // BOOT
         // ============================================
         window.addEventListener('DOMContentLoaded', async () => {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Detect admin session
+            isAdminSession = SharedSession.isUnlocked();
+            applyAdminUI();
+
             try {
                 await loadAvailableTerms();
                 document.getElementById('bootLoader').classList.add('hidden');
@@ -496,6 +460,18 @@
                 bootFail(err.message || 'Unable to connect to the server.');
             }
         });
+
+        function applyAdminUI() {
+            const banner = document.getElementById('adminBanner');
+            const dobField = document.getElementById('dobField');
+            if (isAdminSession) {
+                banner.classList.add('show');
+                dobField.classList.add('hidden');
+            } else {
+                banner.classList.remove('show');
+                dobField.classList.remove('hidden');
+            }
+        }
 
         function bootFail(message) {
             document.getElementById('bootLoaderText').textContent = message;
@@ -673,7 +649,7 @@
         }
 
         // ============================================
-        // SUBMIT STATE
+        // SUBMIT STATE — DOB only required when NOT admin
         // ============================================
         function updateSubmitState() {
             const name = document.getElementById('studentName').value;
@@ -681,14 +657,16 @@
             const dob  = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
 
-            const ok = name && cls && dob && term &&
-                       name !== '' && cls !== '' && dob !== '' && term !== '';
+            let ok = name && cls && term && name !== '' && cls !== '' && term !== '';
+            if (!isAdminSession) {
+                ok = ok && dob && dob !== '';
+            }
 
             document.getElementById('generateBtn').disabled = !ok || isLoadingStudents;
         }
 
         // ============================================
-        // GENERATE REPORT
+        // GENERATE REPORT — pass admin=true when signed in
         // ============================================
         function generateFeeReport() {
             const name = document.getElementById('studentName').value.trim();
@@ -696,21 +674,34 @@
             const dob  = document.getElementById('dateOfBirth').value;
             const term = document.getElementById('termSelect').value;
 
-            if (!name || !cls || !dob || !term) {
-                showMessage('error', 'Please fill in all fields.');
+            if (!name || !cls || !term) {
+                showMessage('error', 'Please fill in all required fields.');
                 return;
             }
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
-                showMessage('error', 'Please enter a valid date of birth.');
-                return;
+            if (!isAdminSession) {
+                if (!dob) {
+                    showMessage('error', 'Please enter the date of birth.');
+                    return;
+                }
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+                    showMessage('error', 'Please enter a valid date of birth.');
+                    return;
+                }
             }
 
             clearMessage();
-            const url = 'FeeReportWindow.html'
-                + '?name='  + encodeURIComponent(name)
-                + '&class=' + encodeURIComponent(cls)
-                + '&dob='   + encodeURIComponent(dob)
-                + '&term='  + encodeURIComponent(term);
+
+            const params = new URLSearchParams();
+            params.set('name', name);
+            params.set('class', cls);
+            params.set('term', term);
+            if (isAdminSession) {
+                params.set('admin', 'true');
+            } else {
+                params.set('dob', dob);
+            }
+
+            const url = 'FeeReportWindow.html?' + params.toString();
 
             const tab = window.open(url, '_blank');
             if (!tab) {
@@ -743,7 +734,7 @@
         }
 
         // ============================================
-        // GAS CALL (POST, JSON body)
+        // GAS CALL
         // ============================================
         async function callGAS(action, params = {}, attempt = 1) {
             const body = new URLSearchParams();
