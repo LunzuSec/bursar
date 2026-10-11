@@ -92,6 +92,9 @@ const SharedSession = {
 
 /* ============================================================ */
 /* NAVIGATION — Render the top nav bar                          */
+/*                                                              */
+/* Layout:                                                      */
+/*   [brand]                              [links]  [account]    */
 /* ============================================================ */
 
 const SharedNav = {
@@ -102,52 +105,55 @@ const SharedNav = {
         const showLogout = opts.showLogout !== false;
         const unlocked = SharedSession.isUnlocked();
 
+        // Remove any existing nav
         const existing = document.querySelector('.shared-top-nav');
         if (existing) existing.remove();
 
         const nav = document.createElement('nav');
         nav.className = 'shared-top-nav';
 
-        const brandIcon = current === 'admin' ? 'fa-user-shield' :
-                         current === 'invoice' ? 'fa-file-invoice' :
-                         current === 'receipts' ? 'fa-receipt' :
-                         current === 'downloads' ? 'fa-download' :
-                         current === 'subscribe' ? 'fa-envelope' :
-                         'fa-school';
-        const brandText = current === 'admin' ? 'ADMIN DASHBOARD' :
-                         current === 'invoice' ? 'INVOICE GENERATOR' :
-                         current === 'receipts' ? 'RECEIPTS' :
-                         current === 'downloads' ? 'CLASS DOWNLOADS' :
-                         current === 'subscribe' ? 'SUBSCRIBE' :
-                         'LUNZU SEC. SCHOOL';
+        // ---- Brand (static) ----
+        const brandIcon = 'fa-school';
 
-        const sessionPill = unlocked
-            ? '<span class="shared-session-pill"><i class="fas fa-circle"></i> Admin Session</span>'
-            : '<span class="shared-session-pill locked"><i class="fas fa-lock"></i> Locked</span>';
+        // ---- Nav links ----
+        let links = '';
 
-        let links = '<a href="https://lunzusec.github.io/School_results/index.html" class="nav-link' +
-            (current === 'home' ? ' active' : '') + '"><i class="fas fa-home"></i> Home</a>';
+        links += '<a href="https://lunzusec.github.io/School_results/index.html" '
+              +  'class="nav-link">'
+              +  '<i class="fas fa-home"></i> Home</a>';
 
-        links += '<a href="index.html" class="nav-link' +
-            (current === 'portal' ? ' active' : '') + '"><i class="fas fa-wallet"></i> Portal</a>';
+        links += '<a href="index.html" class="nav-link'
+              +  (current === 'portal' ? ' active' : '') + '">'
+              +  '<i class="fas fa-wallet"></i> Portal</a>';
 
         if (showAdmin) {
-            links += '<a href="admin.html" class="nav-link primary' +
-                (current === 'admin' ? ' active' : '') + '"><i class="fas fa-user-shield"></i> Admin</a>';
+            links += '<a href="admin.html" class="nav-link'
+                  +  (current === 'admin' ? ' active' : '') + '">'
+                  +  '<i class="fas fa-user-shield"></i> Admin</a>';
         }
 
-        links += '<a href="javascript:window.location.reload()" class="nav-link">' +
-            '<i class="fas fa-sync-alt"></i> Reload</a>';
-
-        if (showLogout && unlocked) {
-            links += '<a href="javascript:SharedSession.clear();window.location.reload()" class="nav-link logout">' +
-                '<i class="fas fa-sign-out-alt"></i> Sign Out</a>';
+        // ---- Account zone (only when signed in) ----
+        let account = '';
+        if (unlocked) {
+            let acct = '<span class="nav-account-badge"><i class="fas fa-circle"></i> Signed in</span>';
+            if (showLogout) {
+                acct += '<a href="javascript:SharedSession.clear();window.location.reload()" '
+                     +  'class="nav-link logout">'
+                     +  '<i class="fas fa-sign-out-alt"></i> Sign out</a>';
+            }
+            account = '<div class="nav-account">' + acct + '</div>';
         }
 
+        // ---- Assemble ----
         nav.innerHTML =
-            '<div class="nav-brand"><i class="fas ' + brandIcon + '"></i> <span>' + brandText + '</span>' +
-            sessionPill + '</div>' +
-            '<div class="nav-links">' + links + '</div>';
+            '<div class="nav-brand">'
+            +   '<i class="fas ' + brandIcon + '"></i>'
+            +   '<span>LUNZU SEC. SCHOOL</span>'
+            + '</div>'
+            + '<div class="nav-right">'
+            +   '<div class="nav-links">' + links + '</div>'
+            +   account
+            + '</div>';
 
         document.body.insertBefore(nav, document.body.firstChild);
     }
