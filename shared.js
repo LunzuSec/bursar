@@ -91,13 +91,18 @@ const SharedSession = {
 };
 
 /* ============================================================ */
-/* NAVIGATION — Render the top nav bar                          */
+/* NAVIGATION — Floating menu button + expandable panel         */
 /*                                                              */
-/* Layout:                                                      */
-/*   [brand]                              [links]  [account]    */
+/* Renders a small circular button in the top-right corner.     */
+/* Clicking it opens a dropdown panel with links + account.     */
+/* Clicking outside closes it. Esc also closes it.              */
 /* ============================================================ */
 
 const SharedNav = {
+    _panelOpen: false,
+    _outsideHandler: null,
+    _escHandler: null,
+
     render: function(opts) {
         opts = opts || {};
         const current = opts.current || '';
@@ -105,57 +110,142 @@ const SharedNav = {
         const showLogout = opts.showLogout !== false;
         const unlocked = SharedSession.isUnlocked();
 
-        // Remove any existing nav
-        const existing = document.querySelector('.shared-top-nav');
+        // Remove any existing widget
+        const existing = document.querySelector('.shared-menu');
         if (existing) existing.remove();
+        this._removeListeners();
 
-        const nav = document.createElement('nav');
-        nav.className = 'shared-top-nav';
+        // ========================================================
+        // Build the DOM
+        // ========================================================
+        const root = document.createElement('div');
+        root.className = 'shared-menu';
 
-        // ---- Brand (static) ----
-        const brandIcon = 'fa-school';
+        // Determine page title (small subtitle inside panel header)
+        const pageTitle =
+            current === 'admin'     ? 'Admin Dashboard' :
+            current === 'invoice'   ? 'Invoice Generator' :
+            current === 'receipts'  ? 'Receipts' :
+            current === 'downloads' ? 'Class Downloads' :
+            current === 'subscribe' ? 'Subscribe' :
+            current === 'portal'    ? 'Fee Portal' :
+            current === 'home'      ? 'Home' :
+            '';
 
-        // ---- Nav links ----
-        let links = '';
+        // ---- Links ----
+        let linksHtml = '';
 
-        links += '<a href="https://lunzusec.github.io/School_results/index.html" '
-              +  'class="nav-link">'
-              +  '<i class="fas fa-home"></i> Home</a>';
+        linksHtml += '<a href="https://lunzusec.github.io/School_results/index.html" '
+                  +  'class="shared-menu-link">'
+                  +  '<span class="shared-menu-icon"><i class="fas fa-home"></i></span>'
+                  +  '<span class="shared-menu-label">Home</span>'
+                  +  '</a>';
 
-        links += '<a href="index.html" class="nav-link'
-              +  (current === 'portal' ? ' active' : '') + '">'
-              +  '<i class="fas fa-wallet"></i> Portal</a>';
+        linksHtml += '<a href="index.html" class="shared-menu-link'
+                  +  (current === 'portal' ? ' active' : '') + '">'
+                  +  '<span class="shared-menu-icon"><i class="fas fa-wallet"></i></span>'
+                  +  '<span class="shared-menu-label">Portal</span>'
+                  +  (current === 'portal' ? '<i class="fas fa-check shared-menu-check"></i>' : '')
+                  +  '</a>';
 
         if (showAdmin) {
-            links += '<a href="admin.html" class="nav-link'
-                  +  (current === 'admin' ? ' active' : '') + '">'
-                  +  '<i class="fas fa-user-shield"></i> Admin</a>';
+            linksHtml += '<a href="admin.html" class="shared-menu-link'
+                      +  (current === 'admin' ? ' active' : '') + '">'
+                      +  '<span class="shared-menu-icon"><i class="fas fa-user-shield"></i></span>'
+                      +  '<span class="shared-menu-label">Admin</span>'
+                      +  (current === 'admin' ? '<i class="fas fa-check shared-menu-check"></i>' : '')
+                      +  '</a>';
         }
 
-        // ---- Account zone (only when signed in) ----
-        let account = '';
+        // ---- Account section ----
+        let accountHtml = '';
         if (unlocked) {
-            let acct = '<span class="nav-account-badge"><i class="fas fa-circle"></i> Signed in</span>';
+            accountHtml += '<div class="shared-menu-divider"></div>';
+            accountHtml += '<div class="shared-menu-account">';
+            accountHtml +=   '<span class="shared-menu-dot"></span>';
+            accountHtml +=   '<span>Signed in as Admin</span>';
+            accountHtml += '</div>';
             if (showLogout) {
-                acct += '<a href="javascript:SharedSession.clear();window.location.reload()" '
-                     +  'class="nav-link logout">'
-                     +  '<i class="fas fa-sign-out-alt"></i> Sign out</a>';
+                accountHtml += '<button type="button" class="shared-menu-link logout" '
+                            +  'onclick="SharedSession.clear();window.location.reload();">'
+                            +  '<span class="shared-menu-icon"><i class="fas fa-sign-out-alt"></i></span>'
+                            +  '<span class="shared-menu-label">Sign out</span>'
+                            +  '</button>';
             }
-            account = '<div class="nav-account">' + acct + '</div>';
         }
 
         // ---- Assemble ----
-        nav.innerHTML =
-            '<div class="nav-brand">'
-            +   '<i class="fas ' + brandIcon + '"></i>'
-            +   '<span>LUNZU SEC. SCHOOL</span>'
-            + '</div>'
-            + '<div class="nav-right">'
-            +   '<div class="nav-links">' + links + '</div>'
-            +   account
+        root.innerHTML =
+            '<button type="button" class="shared-menu-btn" aria-label="Menu" aria-expanded="false">'
+            +   '<i class="fas fa-bars"></i>'
+            + '</button>'
+            + '<div class="shared-menu-panel" role="menu" aria-hidden="true">'
+            +   '<div class="shared-menu-header">'
+            +     '<div class="shared-menu-brand">LUNZU SEC. SCHOOL</div>'
+            +     (pageTitle ? '<div class="shared-menu-page">' + pageTitle + '</div>' : '')
+            +   '</div>'
+            +   '<div class="shared-menu-links">' + linksHtml + '</div>'
+            +   accountHtml
             + '</div>';
 
-        document.body.insertBefore(nav, document.body.firstChild);
+        document.body.appendChild(root);
+
+        // ========================================================
+        // Wire up interactions
+        // ========================================================
+        const btn = root.querySelector('.shared-menu-btn');
+        const panel = root.querySelector('.shared-menu-panel');
+
+        const self = this;
+
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            self._panelOpen ? self.close() : self.open();
+        });
+
+        // Click outside → close
+        this._outsideHandler = function(e) {
+            if (!root.contains(e.target)) self.close();
+        };
+        document.addEventListener('click', this._outsideHandler);
+
+        // Esc → close
+        this._escHandler = function(e) {
+            if (e.key === 'Escape') self.close();
+        };
+        document.addEventListener('keydown', this._escHandler);
+
+        // Store refs for open/close
+        this._root = root;
+        this._btn = btn;
+        this._panel = panel;
+    },
+
+    open: function() {
+        if (!this._root) return;
+        this._panelOpen = true;
+        this._root.classList.add('open');
+        this._btn.setAttribute('aria-expanded', 'true');
+        this._panel.setAttribute('aria-hidden', 'false');
+    },
+
+    close: function() {
+        if (!this._root) return;
+        this._panelOpen = false;
+        this._root.classList.remove('open');
+        this._btn.setAttribute('aria-expanded', 'false');
+        this._panel.setAttribute('aria-hidden', 'true');
+    },
+
+    _removeListeners: function() {
+        if (this._outsideHandler) {
+            document.removeEventListener('click', this._outsideHandler);
+            this._outsideHandler = null;
+        }
+        if (this._escHandler) {
+            document.removeEventListener('keydown', this._escHandler);
+            this._escHandler = null;
+        }
     }
 };
 
