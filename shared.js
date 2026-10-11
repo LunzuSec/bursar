@@ -1,6 +1,6 @@
 /* ============================================================ */
 /* SHARED SCRIPT — Floating menu + password session management  */
-/* Load on every page: <script src="shared.js?v=3"></script>    */
+/* Load on every page: <script src="shared.js?v=4"></script>    */
 /* ============================================================ */
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
@@ -96,6 +96,13 @@ const SharedSession = {
 /* Renders a small circular button in the top-right corner.     */
 /* Clicking it opens a dropdown panel with links + account.     */
 /* Clicking outside closes it. Esc also closes it.              */
+/*                                                              */
+/* Body attributes that control the menu:                       */
+/*   data-nav="true"               → render the menu            */
+/*   data-page="portal|admin|..."  → highlight active link      */
+/*   data-show-admin="false"       → hide Admin link            */
+/*   data-show-subscribe="false"   → hide Subscribe link        */
+/*   data-show-logout="false"      → hide Sign out button       */
 /* ============================================================ */
 
 const SharedNav = {
@@ -107,6 +114,7 @@ const SharedNav = {
         opts = opts || {};
         const current = opts.current || '';
         const showAdmin = opts.showAdmin !== false;
+        const showSubscribe = opts.showSubscribe !== false;
         const showLogout = opts.showLogout !== false;
         const unlocked = SharedSession.isUnlocked();
 
@@ -154,6 +162,15 @@ const SharedNav = {
                       +  '<span class="shared-menu-icon"><i class="fas fa-user-shield"></i></span>'
                       +  '<span class="shared-menu-label">Admin</span>'
                       +  (current === 'admin' ? '<i class="fas fa-check shared-menu-check"></i>' : '')
+                      +  '</a>';
+        }
+
+        if (showSubscribe) {
+            linksHtml += '<a href="FeeEmailSubscribe.html" class="shared-menu-link'
+                      +  (current === 'subscribe' ? ' active' : '') + '">'
+                      +  '<span class="shared-menu-icon"><i class="fas fa-envelope"></i></span>'
+                      +  '<span class="shared-menu-label">Subscribe to Alerts</span>'
+                      +  (current === 'subscribe' ? '<i class="fas fa-check shared-menu-check"></i>' : '')
                       +  '</a>';
         }
 
@@ -380,12 +397,14 @@ function initSharedNav() {
     if (!body) return;
     const currentPage = body.dataset.page || '';
     const showAdmin = body.dataset.showAdmin !== 'false';
+    const showSubscribe = body.dataset.showSubscribe !== 'false';
     const showLogout = body.dataset.showLogout !== 'false';
 
     if (body.dataset.nav === 'true') {
         SharedNav.render({
             current: currentPage,
             showAdmin: showAdmin,
+            showSubscribe: showSubscribe,
             showLogout: showLogout
         });
     }
