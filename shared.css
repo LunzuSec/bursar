@@ -1,155 +1,222 @@
 /* ============================================================ */
-/* SHARED STYLES — Navigation bar + common shell               */
+/* SHARED STYLES — Floating menu button + panel + modal shell   */
 /* Load on every page: <link rel="stylesheet" href="shared.css"> */
 /* ============================================================ */
 
-/* ---- Top navigation bar ---- */
-.shared-top-nav {
-    position: relative;
-    z-index: 50;
-    max-width: 1100px;
-    margin: 0 auto 16px;
+/* ============================================================
+   FLOATING MENU WIDGET
+   ============================================================ */
+.shared-menu {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9000;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* ---- Toggle button ---- */
+.shared-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 215, 0, 0.25);
     background: rgba(10, 30, 50, 0.85);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 10px 18px;
+    color: #e2e8f0;
+    font-size: 15px;
+    cursor: pointer;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    padding: 0;
+    font-family: inherit;
+}
+.shared-menu-btn:hover {
+    background: rgba(20, 45, 70, 0.95);
+    color: #fbbf24;
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+.shared-menu-btn:focus-visible {
+    outline: 2px solid #fbbf24;
+    outline-offset: 3px;
+}
+
+.shared-menu.open .shared-menu-btn {
+    background: rgba(20, 45, 70, 0.98);
+    color: #fbbf24;
+    border-color: rgba(255, 215, 0, 0.6);
+}
+
+/* ---- Dropdown panel ---- */
+.shared-menu-panel {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    width: 260px;
+    background: rgba(15, 32, 52, 0.97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    padding: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top right;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    overflow: hidden;
+}
+.shared-menu.open .shared-menu-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* ---- Panel header ---- */
+.shared-menu-header {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 6px;
+}
+.shared-menu-brand {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+.shared-menu-page {
+    color: #fbbf24;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+}
+
+/* ---- Links ---- */
+.shared-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.shared-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
     box-sizing: border-box;
 }
-
-/* ---- Brand ---- */
-.shared-top-nav .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    color: #fff;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.7px;
-    text-transform: uppercase;
-    flex-shrink: 0;
-}
-.shared-top-nav .nav-brand i {
-    color: #fbbf24;
-    font-size: 15px;
-}
-
-/* ---- Right zone (links + account) ---- */
-.shared-top-nav .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-}
-
-.shared-top-nav .nav-links {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-}
-
-/* ---- Nav links ---- */
-.shared-top-nav .nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s;
-    background: transparent;
-    color: #cbd5e1;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    cursor: pointer;
-}
-.shared-top-nav .nav-link:hover {
-    background: rgba(255, 255, 255, 0.08);
+.shared-menu-link:hover {
+    background: rgba(255, 255, 255, 0.06);
     color: #fff;
 }
-.shared-top-nav .nav-link i {
-    font-size: 11px;
-    opacity: 0.85;
-}
-
-/* Active page — subtle gold tint */
-.shared-top-nav .nav-link.active {
+.shared-menu-link.active {
     background: rgba(251, 191, 36, 0.12);
     color: #fef3c7;
-    border-color: rgba(251, 191, 36, 0.35);
 }
 
-/* ---- Account zone (right) ---- */
-.shared-top-nav .nav-account {
+.shared-menu-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+.shared-menu-link.active .shared-menu-icon {
+    color: #fbbf24;
+    opacity: 1;
+}
+
+.shared-menu-label {
+    flex: 1;
+}
+
+.shared-menu-check {
+    color: #fbbf24;
+    font-size: 10px;
+    margin-left: auto;
+}
+
+/* ---- Divider + account ---- */
+.shared-menu-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 6px 0;
+}
+
+.shared-menu-account {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding-left: 14px;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.shared-top-nav .nav-account-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    padding: 8px 12px 6px;
     font-size: 11px;
-    font-weight: 600;
-    color: #6ee7b7;
-    white-space: nowrap;
-}
-.shared-top-nav .nav-account-badge i {
-    font-size: 7px;
-    color: #10b981;
+    color: #94a3b8;
+    font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
-/* Sign-out link styling */
-.shared-top-nav .nav-link.logout {
+.shared-menu-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+    flex-shrink: 0;
+}
+
+/* Sign-out button */
+.shared-menu-link.logout {
     color: #fca5a5;
 }
-.shared-top-nav .nav-link.logout:hover {
-    background: rgba(220, 38, 38, 0.15);
+.shared-menu-link.logout:hover {
+    background: rgba(220, 38, 38, 0.12);
     color: #fee2e2;
 }
 
-/* ---- Mobile ---- */
-@media (max-width: 720px) {
-    .shared-top-nav {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px 12px;
-        gap: 10px;
+/* ============================================================
+   RESPONSIVE — smaller button on phones
+   ============================================================ */
+@media (max-width: 600px) {
+    .shared-menu {
+        top: 12px;
+        right: 12px;
     }
-    .shared-top-nav .nav-brand {
-        justify-content: center;
+    .shared-menu-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
     }
-    .shared-top-nav .nav-right {
-        flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
+    .shared-menu-panel {
+        width: calc(100vw - 24px);
+        max-width: 300px;
+        top: 50px;
     }
-    .shared-top-nav .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    .shared-top-nav .nav-link {
-        font-size: 11px;
-        padding: 6px 10px;
-    }
-    .shared-top-nav .nav-account {
-        justify-content: center;
-        border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-left: 0;
-        padding-top: 8px;
-        width: 100%;
+}
+
+/* ============================================================
+   PRINT — hide menu entirely
+   ============================================================ */
+@media print {
+    .shared-menu {
+        display: none !important;
     }
 }
