@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Fee Report - Lunzu Secondary School</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared.css">
     <script src="shared.js"></script>
-    
+
     <style>
         :root {
             --primary-color: #003366;
@@ -19,13 +19,13 @@
             --light-bg: #f8f9fa;
             --border-color: #dee2e6;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--light-bg);
@@ -33,7 +33,7 @@
             padding: 8px;
             min-height: 100vh;
         }
-        
+
         .report-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -42,7 +42,7 @@
             border-radius: 12px;
             overflow: hidden;
         }
-        
+
         .report-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -50,7 +50,7 @@
             text-align: center;
             position: relative;
         }
-        
+
         .admin-badge {
             position: absolute;
             top: 10px;
@@ -67,13 +67,13 @@
         .admin-badge.show {
             display: inline-block;
         }
-        
+
         .school-logo {
             height: 45px;
             margin-bottom: 6px;
             max-width: 100%;
         }
-        
+
         .school-name {
             font-family: 'Roboto Slab', serif;
             font-size: 18px;
@@ -81,26 +81,26 @@
             margin-bottom: 2px;
             word-wrap: break-word;
         }
-        
+
         .school-address {
             font-size: 10px;
             opacity: 0.8;
             word-wrap: break-word;
         }
-        
+
         .report-title {
             font-size: 13px;
             margin-top: 8px;
             padding-top: 8px;
             border-top: 1px solid rgba(255,255,255,0.3);
         }
-        
+
         .report-title small {
             font-size: 11px;
             opacity: 0.9;
             display: block;
         }
-        
+
         .student-info {
             background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
             padding: 12px;
@@ -109,16 +109,16 @@
             grid-template-columns: 1fr 1fr;
             gap: 4px;
         }
-        
+
         .info-item {
             padding: 5px 8px;
             min-width: 0;
         }
-        
+
         .info-item-full {
             grid-column: 1 / -1;
         }
-        
+
         .info-label {
             font-size: 9px;
             color: var(--primary-color);
@@ -127,7 +127,7 @@
             font-weight: 600;
             display: block;
         }
-        
+
         .info-value {
             font-size: 14px;
             font-weight: bold;
@@ -135,7 +135,7 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
-        
+
         .sponsor-strip {
             grid-column: 1 / -1;
             background: #f5f3ff;
@@ -157,7 +157,7 @@
         .sponsor-strip strong {
             color: #5b21b6;
         }
-        
+
         .status-badge {
             display: inline-block;
             padding: 3px 12px;
@@ -166,14 +166,14 @@
             font-size: 11px;
             white-space: nowrap;
         }
-        
+
         .status-paid { background: #4caf50; color: white; }
         .status-partial { background: #ff9800; color: white; }
         .status-unpaid { background: #f44336; color: white; }
         .status-credit { background: #2196f3; color: white; }
         .status-overpaid { background: #8b5cf6; color: white; }
         .status-refund { background: #8b5cf6; color: white; }
-        
+
         .card {
             background: white;
             border-radius: 10px;
@@ -181,7 +181,7 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
-        
+
         .card-header {
             background: #f8f9fa;
             padding: 10px 12px;
@@ -190,68 +190,68 @@
             font-size: 13px;
             color: var(--primary-color);
         }
-        
+
         .card-header i {
             margin-right: 6px;
         }
-        
+
         .card-body {
             padding: 12px;
             overflow-x: auto;
         }
-        
+
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
         }
-        
+
         .summary-item {
             text-align: center;
             padding: 10px 6px;
             background: #f8f9fa;
             border-radius: 8px;
         }
-        
+
         .summary-item-full {
             grid-column: 1 / -1;
         }
-        
+
         .summary-amount {
             font-size: 18px;
             font-weight: bold;
             color: var(--primary-color);
             word-wrap: break-word;
         }
-        
+
         .summary-label {
             font-size: 9px;
             color: #666;
             margin-top: 2px;
             word-wrap: break-word;
         }
-        
+
         .amount-positive { color: #4caf50; }
         .amount-negative { color: #f44336; }
         .amount-credit { color: #2196f3; }
         .amount-overpaid { color: #8b5cf6; }
         .amount-refund { color: #8b5cf6; }
         .amount-zero { color: #666; }
-        
+
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin: 0 -4px;
             padding: 0 4px;
         }
-        
+
         .installment-table {
             width: 100%;
             min-width: 350px;
             border-collapse: collapse;
             font-size: 12px;
         }
-        
+
         .installment-table th,
         .installment-table td {
             padding: 8px 6px;
@@ -259,7 +259,7 @@
             border-bottom: 1px solid var(--border-color);
             word-wrap: break-word;
         }
-        
+
         .installment-table th {
             background: #f5f5f5;
             font-weight: bold;
@@ -269,42 +269,42 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        
+
         .installment-table tr {
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .installment-table td:first-child {
             font-weight: 600;
             font-size: 11px;
         }
-        
+
         .installment-table .refund-row td:first-child {
             color: #8b5cf6;
         }
-        
+
         .installment-table .refund-row td:nth-child(2) {
             color: #8b5cf6;
         }
-        
+
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
-        
+
         .contact-grid > div {
             word-wrap: break-word;
             overflow-wrap: break-word;
             font-size: 12px;
         }
-        
+
         .contact-grid strong {
             font-size: 11px;
             display: block;
             margin-bottom: 4px;
         }
-        
+
         .policy-box {
             background: #fff3e0;
             border-left: 4px solid #ff9800;
@@ -314,7 +314,7 @@
             font-size: 11px;
             word-wrap: break-word;
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -323,7 +323,7 @@
             border-top: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
-        
+
         .btn {
             padding: 10px 18px;
             border: none;
@@ -339,12 +339,12 @@
             min-width: 100px;
             justify-content: center;
         }
-        
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         .btn-primary {
             background: var(--primary-color);
             color: white;
@@ -352,7 +352,7 @@
         .btn-primary:hover:not(:disabled) {
             background: var(--secondary-color);
         }
-        
+
         .btn-secondary {
             background: #6c757d;
             color: white;
@@ -360,7 +360,7 @@
         .btn-secondary:hover:not(:disabled) {
             background: #5a6268;
         }
-        
+
         .btn-print {
             background: #607d8b;
             color: white;
@@ -368,7 +368,7 @@
         .btn-print:hover:not(:disabled) {
             background: #455a64;
         }
-        
+
         .btn-success {
             background: #28a745;
             color: white;
@@ -376,7 +376,7 @@
         .btn-success:hover:not(:disabled) {
             background: #218838;
         }
-        
+
         .btn-admin {
             background: #8b5cf6;
             color: white;
@@ -388,7 +388,7 @@
             background: #7c3aed;
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
-        
+
         .btn-retry {
             background: #f59e0b;
             color: #0a1628;
@@ -396,7 +396,7 @@
         .btn-retry:hover:not(:disabled) {
             background: #d97706;
         }
-        
+
         .report-footer {
             text-align: center;
             padding: 15px;
@@ -405,7 +405,28 @@
             border-top: 1px solid var(--border-color);
             background: #f8f9fa;
         }
-        
+
+        /* ---- Page-level footer (dynamic year) ---- */
+        .page-footer {
+            max-width: 1200px;
+            margin: 16px auto 0;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            line-height: 1.7;
+        }
+        .page-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .page-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---- Loading Overlay ---- */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -420,7 +441,7 @@
             z-index: 1000;
             padding: 20px;
         }
-        
+
         .spinner {
             width: 40px;
             height: 40px;
@@ -430,33 +451,33 @@
             animation: spin 1s linear infinite;
             margin-bottom: 12px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .loading-overlay h4 {
             font-size: 16px;
             color: var(--primary-color);
             text-align: center;
         }
-        
+
         .loading-overlay p {
             font-size: 13px;
             color: #666;
             text-align: center;
         }
-        
+
         .loading-overlay .retry-section {
             margin-top: 15px;
             display: none;
         }
-        
+
         .loading-overlay .retry-section.show {
             display: block;
         }
-        
+
         .status-indicator {
             padding: 10px 16px;
             border-radius: 8px;
@@ -467,29 +488,29 @@
             gap: 10px;
             font-weight: 500;
         }
-        
+
         .status-indicator.show {
             display: flex;
         }
-        
+
         .status-indicator.loading {
             background: #e8f0fe;
             border-left: 4px solid #3b82f6;
             color: #1e293b;
         }
-        
+
         .status-indicator.error {
             background: #fef2f2;
             border-left: 4px solid #ef4444;
             color: #991b1b;
         }
-        
+
         .status-indicator.success {
             background: #ecfdf5;
             border-left: 4px solid #10b981;
             color: #065f46;
         }
-        
+
         .status-indicator .spinner-small {
             width: 18px;
             height: 18px;
@@ -500,7 +521,7 @@
             display: inline-block;
             flex-shrink: 0;
         }
-        
+
         .error-message {
             text-align: center;
             padding: 30px 20px;
@@ -510,72 +531,69 @@
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .error-icon {
             font-size: 2.5rem;
             color: #dc3545;
             margin-bottom: 12px;
         }
-        
+
         .error-message h4 {
             font-size: 16px;
             color: #dc3545;
             margin-bottom: 10px;
         }
-        
+
         .error-message p {
             font-size: 13px;
             color: #666;
             margin-bottom: 15px;
         }
-        
-        /* ============================================
-           REMINDER BOXES — FIXED LAYOUT
-           Only the title <strong> (direct child) is block.
-           Nested <strong> inside <p> stays inline.
-           ============================================ */
+
+        /* ---- Reminder boxes (fixed inline strong) ---- */
         .reminder-box {
             padding: 8px 14px;
             margin: 6px 16px;
             border-radius: 8px;
         }
-        
+
         .reminder-box > strong {
             display: block;
             font-size: 12px;
             margin-bottom: 2px;
         }
-        
+
         .reminder-box p {
             font-size: 11px;
             color: #1e293b;
             line-height: 1.4;
+            margin: 0;
         }
-        
-        /* Make sure any <strong> nested inside <p> stays inline */
+
         .reminder-box p strong {
             display: inline;
             font-weight: bold;
         }
-        
+
         .reminder-danger {
             background: #fef2f2;
             border-left: 4px solid #ef4444;
         }
         .reminder-danger > strong { color: #b91c1c; }
-        
+
         .reminder-success {
             background: #ecfdf5;
             border-left: 4px solid #10b981;
         }
         .reminder-success > strong { color: #065f46; }
-        
+
         .reminder-info {
             background: #f0f4ff;
             border-left: 4px solid #8b5cf6;
         }
         .reminder-info > strong { color: #5b21b6; }
-        
+
+        /* ---- Admin Modal ---- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -671,7 +689,7 @@
         .modal-box .error-msg.show {
             display: block;
         }
-        
+
         @media (max-width: 768px) {
             body { padding: 5px; }
             .school-name { font-size: 16px; }
@@ -695,8 +713,9 @@
             .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
             .admin-badge { font-size: 7px; padding: 2px 8px; top: 5px; right: 8px; }
             .sponsor-strip { font-size: 11px; padding: 5px 8px; }
+            .page-footer { font-size: 10px; padding: 12px 14px; }
         }
-        
+
         @media (max-width: 480px) {
             .student-info { grid-template-columns: 1fr; gap: 2px; }
             .info-item { padding: 3px 4px; }
@@ -714,9 +733,16 @@
             .modal-box { padding: 20px; }
             .sponsor-strip { font-size: 11px; }
         }
-        
+
         @media print {
-            .action-buttons, .loading-overlay, .modal-overlay, .admin-badge, .status-indicator { display: none !important; }
+            .action-buttons,
+            .loading-overlay,
+            .modal-overlay,
+            .admin-badge,
+            .status-indicator,
+            .page-footer {
+                display: none !important;
+            }
             body { padding: 0; margin: 0; background: white; }
             .card { break-inside: avoid; }
             .report-container { border-radius: 0; box-shadow: none; }
@@ -724,11 +750,13 @@
     </style>
 </head>
 <body data-nav="true" data-page="portal" data-show-admin="false" data-show-logout="false">
-    <!-- Password Modal -->
+
+    <!-- Admin Password Modal -->
     <div id="adminModal" class="modal-overlay">
         <div class="modal-box">
             <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
-            <p>Enter the admin password to enable administrative mode.<br><small style="color:#94a3b8;">(No DOB required in admin mode)</small></p>
+            <p>Enter the admin password to enable administrative mode.<br>
+               <small style="color:#94a3b8;">(No DOB required in admin mode)</small></p>
             <input type="password" id="adminPasswordInput" placeholder="Enter password" maxlength="20">
             <div id="modalError" class="error-msg">Incorrect password. Please try again.</div>
             <div class="modal-buttons">
@@ -737,7 +765,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Full Page Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
@@ -749,97 +777,114 @@
             </button>
         </div>
     </div>
-    
+
+    <!-- Report -->
     <div id="reportContainer" class="report-container" style="display: none;">
+
         <div class="report-header">
-            <span id="adminBadge" class="admin-badge"><i class="fas fa-user-shield me-1"></i> ADMIN MODE</span>
+            <span id="adminBadge" class="admin-badge">
+                <i class="fas fa-user-shield me-1"></i> ADMIN MODE
+            </span>
             <img src="https://i.ibb.co/LxSJnMj/MALAWI-GOVERNMENT-3.png" alt="School Logo" class="school-logo">
             <div class="school-name" id="schoolName">LUNZU SECONDARY SCHOOL</div>
             <div class="school-address" id="schoolAddress">Private Bag 130, Lunzu, Malawi</div>
             <div class="report-title" id="reportTitle"></div>
         </div>
-        
+
         <div id="statusIndicator" class="status-indicator">
             <span id="statusIcon"></span>
             <span id="statusMessage">Loading...</span>
         </div>
-        
+
         <div class="student-info" id="studentInfo"></div>
-        
+
         <div class="card">
             <div class="card-header"><i class="fas fa-money-bill-wave me-2"></i> FEE SUMMARY</div>
             <div class="card-body" id="feeSummary"></div>
         </div>
-        
+
         <div class="card">
             <div class="card-header"><i class="fas fa-calendar-alt me-2"></i> PAYMENT HISTORY</div>
             <div class="card-body" id="installmentHistory"></div>
         </div>
-        
-        <!-- Outstanding Notice (only one place shows this) -->
+
+        <!-- Outstanding notice (single paragraph, inline amount) -->
         <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
             <strong>⚠️ URGENT PAYMENT REMINDER</strong>
             <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>. Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
         </div>
-        
+
         <div id="overpaidNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>💜 OVERPAYMENT NOTICE</strong>
             <p>You have overpaid by <strong id="overpaidAmount"></strong>. This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
         </div>
-        
+
         <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
             <strong>✅ FULLY PAID</strong>
             <p>Your fees for this term are fully paid. Thank you for your timely payment!</p>
         </div>
-        
+
         <div id="sponsoredNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>🎓 SPONSORED STUDENT</strong>
             <p>Fees for this student are covered by <strong id="sponsorName"></strong>. No payment action is required from the guardian.</p>
         </div>
-        
-        <!-- Bank details card (dynamic) -->
+
         <div class="card">
             <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
             <div class="card-body" id="paymentInstructions"></div>
         </div>
-        
-        <!-- Policy box (dynamic) -->
+
         <div id="policyContainer"></div>
-        
+
         <div class="report-footer" id="reportFooter"></div>
-        
+
         <div class="action-buttons">
-            <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print me-2"></i> Print</button>
-            <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn"><i class="fas fa-download me-2"></i> Download PDF</button>
-            <button class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn"><i class="fas fa-user-shield me-2"></i> <span id="adminModeText">Admin Mode</span></button>
-            <button class="btn btn-secondary" onclick="closeWindow()"><i class="fas fa-times me-2"></i> Close</button>
+            <button class="btn btn-print" onclick="window.print()">
+                <i class="fas fa-print me-2"></i> Print
+            </button>
+            <button class="btn btn-success" onclick="downloadPDF()" id="downloadPdfBtn">
+                <i class="fas fa-download me-2"></i> Download PDF
+            </button>
+            <button class="btn btn-admin" onclick="openAdminModal()" id="adminModeBtn">
+                <i class="fas fa-user-shield me-2"></i>
+                <span id="adminModeText">Admin Mode</span>
+            </button>
+            <button class="btn btn-secondary" onclick="closeWindow()">
+                <i class="fas fa-times me-2"></i> Close
+            </button>
         </div>
     </div>
-    
+
     <div id="errorContainer" style="display: none;"></div>
+
+    <!-- Page-level footer with dynamic year -->
+    <footer class="page-footer">
+        © <span id="footerYear"></span> Lunzu Secondary School — Office of the Bursar<br>
+        For help: <a href="https://wa.me/265888866269" target="_blank">WhatsApp +265 888 866 269</a>
+    </footer>
 
     <script>
         // ============================================
-        // CONFIGURATION
+        // CONFIG
         // ============================================
-        // GAS_URL is already declared in shared.js - use it directly
-        
+        // GAS_URL is declared in shared.js
+
         const reportUrlParams = new URLSearchParams(window.location.search);
         let studentName = reportUrlParams.get('name');
         let studentClass = reportUrlParams.get('class');
         let dateOfBirth = reportUrlParams.get('dob');
         const termKey = reportUrlParams.get('term');
         const adminParam = reportUrlParams.get('admin');
-        
+
         let isAdminMode = adminParam === 'true';
         let cachedFeeReport = null;
         let isGeneratingPDF = false;
         let isLoading = false;
         let retryCount = 0;
         const MAX_RETRIES = 3;
-        
+
         // ============================================
-        // ADMIN MODE FUNCTIONS
+        // ADMIN MODE
         // ============================================
         function openAdminModal() {
             if (isAdminMode) {
@@ -873,13 +918,13 @@
                 showInlineStatus('loading', 'Verifying password...');
                 const result = await callGAS('verifyAdmin', { password: password });
                 if (result && result.success) {
+                    // Store in SharedSession so other pages see admin state
+                    SharedSession.setPassword(password, false);
                     isAdminMode = true;
                     updateAdminUI();
                     closeAdminModal();
                     showInlineStatus('success', '🔑 Admin mode activated! Reloading...');
-                    setTimeout(() => {
-                        reloadWithAdminMode();
-                    }, 1500);
+                    setTimeout(() => reloadWithAdminMode(), 1500);
                 } else {
                     document.getElementById('modalError').textContent = 'Incorrect password. Please try again.';
                     document.getElementById('modalError').classList.add('show');
@@ -905,7 +950,7 @@
             const btnText = document.getElementById('adminModeText');
             const btn = document.getElementById('adminModeBtn');
             const badge = document.getElementById('adminBadge');
-            
+
             if (isAdminMode) {
                 btnText.textContent = '🔓 Admin ON';
                 btn.classList.add('active');
@@ -918,25 +963,21 @@
         }
 
         document.getElementById('adminPasswordInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                confirmAdminPassword();
-            }
-            if (e.key === 'Escape') {
-                closeAdminModal();
-            }
+            if (e.key === 'Enter') confirmAdminPassword();
+            if (e.key === 'Escape') closeAdminModal();
         });
 
         // ============================================
-        // INLINE STATUS INDICATOR FUNCTIONS
+        // INLINE STATUS
         // ============================================
         function showInlineStatus(type, message) {
             const indicator = document.getElementById('statusIndicator');
             const icon = document.getElementById('statusIcon');
             const msg = document.getElementById('statusMessage');
-            
+
             indicator.className = 'status-indicator show ' + type;
             msg.textContent = message;
-            
+
             if (type === 'loading') {
                 icon.innerHTML = '<span class="spinner-small"></span>';
             } else if (type === 'success') {
@@ -946,34 +987,32 @@
             } else {
                 icon.innerHTML = 'ℹ️';
             }
-            
+
             if (type !== 'loading') {
                 clearTimeout(window.statusTimeout);
-                window.statusTimeout = setTimeout(() => {
-                    hideInlineStatus();
-                }, 5000);
+                window.statusTimeout = setTimeout(hideInlineStatus, 5000);
             }
         }
-        
+
         function hideInlineStatus() {
             const indicator = document.getElementById('statusIndicator');
             indicator.className = 'status-indicator';
             clearTimeout(window.statusTimeout);
         }
-        
+
         function updateInlineStatusMessage(message) {
             document.getElementById('statusMessage').textContent = message;
         }
 
         // ============================================
-        // JSONP API CALL WITH RETRY LOGIC
+        // JSONP API CALL WITH RETRY
         // ============================================
         function callGAS(action, params = {}, retryAttempt = 0) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
                 params.callback = callbackName;
                 params.action = action;
-                
+
                 let url = GAS_URL + '?';
                 const urlParams = [];
                 for (const key in params) {
@@ -982,16 +1021,16 @@
                     }
                 }
                 url += urlParams.join('&');
-                
+
                 const script = document.createElement('script');
                 script.src = url;
-                
+
                 const timeoutDuration = 30000;
                 const timeoutId = setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
                         if (script.parentNode) script.parentNode.removeChild(script);
-                        
+
                         if (retryAttempt < MAX_RETRIES) {
                             console.log(`Retry ${retryAttempt + 1} for action ${action} (timeout)`);
                             showInlineStatus('loading', `Retrying... (Attempt ${retryAttempt + 2}/${MAX_RETRIES + 1})`);
@@ -1002,12 +1041,12 @@
                         }
                     }
                 }, timeoutDuration);
-                
+
                 window[callbackName] = function(response) {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
-                    
+
                     if (response && response.error) {
                         if (retryAttempt < MAX_RETRIES) {
                             console.log(`Retry ${retryAttempt + 1} for action ${action} due to error: ${response.error}`);
@@ -1022,12 +1061,12 @@
                         resolve(response);
                     }
                 };
-                
+
                 script.onerror = function() {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
-                    
+
                     if (retryAttempt < MAX_RETRIES) {
                         console.log(`Retry ${retryAttempt + 1} for action ${action} due to script error`);
                         showInlineStatus('loading', `Connection lost. Retrying... (Attempt ${retryAttempt + 2}/${MAX_RETRIES + 1})`);
@@ -1037,34 +1076,32 @@
                         reject(new Error('Connection failed after ' + MAX_RETRIES + ' retries.'));
                     }
                 };
-                
+
                 document.head.appendChild(script);
             });
         }
-        
+
         // ============================================
         // LOAD FEE REPORT
         // ============================================
         async function loadFeeReport() {
             if (isLoading) return;
-            
+
             if (!studentName || !studentClass) {
                 showError('Missing student information. Please go back and try again.');
                 return;
             }
-            
+
             isLoading = true;
             retryCount = 0;
             document.getElementById('retrySection').classList.remove('show');
             document.querySelector('#loadingOverlay .spinner').style.display = 'block';
-            
+
             showInlineStatus('loading', 'Fetching fee records...');
-            
+
             try {
-                if (!cachedFeeReport) {
-                    showLoading(true);
-                }
-                
+                if (!cachedFeeReport) showLoading(true);
+
                 let response;
                 if (isAdminMode) {
                     updateInlineStatusMessage('Fetching fee records (Admin Mode - DOB bypassed)...');
@@ -1086,15 +1123,14 @@
                         isAdmin: false
                     });
                 }
-                
+
                 if (!response || response.error) {
                     throw new Error(response?.error || 'Failed to load fee report');
                 }
-                
                 if (!response.success) {
                     throw new Error(response.message || 'No fee records found');
                 }
-                
+
                 cachedFeeReport = response;
                 renderReport(response);
                 showLoading(false);
@@ -1102,10 +1138,10 @@
                 hideInlineStatus();
                 showInlineStatus('success', '✅ Fee report loaded successfully!');
                 setTimeout(() => hideInlineStatus(), 3000);
-                
+
             } catch (error) {
                 console.error('Error:', error);
-                
+
                 if (error.message.includes('timeout') || error.message.includes('Connection failed')) {
                     document.getElementById('retrySection').classList.add('show');
                     updateLoadingMessage('Network error: ' + error.message);
@@ -1120,7 +1156,7 @@
                 isLoading = false;
             }
         }
-        
+
         function retryLoad() {
             retryCount++;
             document.getElementById('retrySection').classList.remove('show');
@@ -1129,7 +1165,7 @@
             showInlineStatus('loading', 'Retrying... (Attempt ' + (retryCount + 1) + ')');
             loadFeeReport();
         }
-        
+
         // ============================================
         // INSTALLMENT NAME
         // ============================================
@@ -1142,31 +1178,32 @@
             if (number === 6) return "6th Installment";
             return "Installment " + number;
         }
-        
+
         // ============================================
         // RENDER REPORT
         // ============================================
         function renderReport(data) {
             const config = data.termConfig || {};
             const isODL = data.studentClass && data.studentClass.includes("ODL");
-            
-            document.getElementById('schoolName').textContent = isODL ? 
-                (config.schoolNameODL || "LUNZU OPEN SECONDARY SCHOOL") : 
-                (config.schoolName || "LUNZU SECONDARY SCHOOL");
+
+            document.getElementById('schoolName').textContent = isODL
+                ? (config.schoolNameODL || "LUNZU OPEN SECONDARY SCHOOL")
+                : (config.schoolName || "LUNZU SECONDARY SCHOOL");
             document.getElementById('schoolAddress').textContent = config.schoolAddress || "Private Bag 130, Lunzu, Malawi";
-            document.getElementById('reportTitle').innerHTML = `COMPREHENSIVE FEE REPORT<br><small>${data.academicYear || ''} | ${data.term || ''}</small>`;
-            
+            document.getElementById('reportTitle').innerHTML =
+                `COMPREHENSIVE FEE REPORT<br><small>${data.academicYear || ''} | ${data.term || ''}</small>`;
+
             let statusClass = 'unpaid';
             if (data.paymentStatus === 'FULLY PAID') statusClass = 'paid';
             else if (data.paymentStatus === 'PARTIALLY PAID') statusClass = 'partial';
             else if (data.paymentStatus === 'OVERPAID') statusClass = 'overpaid';
             else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
-            
+
             const bursary = (data.bursary || '').trim();
             const sponsorHtml = bursary
                 ? `<div class="sponsor-strip"><i class="fas fa-graduation-cap"></i><span><strong>Sponsor:</strong> ${escapeHtml(bursary)}</span></div>`
                 : '';
-            
+
             document.getElementById('studentInfo').innerHTML = `
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-user"></i> STUDENT</span>
@@ -1188,10 +1225,9 @@
                 </div>
                 ${sponsorHtml}
             `;
-            
+
             const cumulativeBalance = data.cumulativeBalance || 0;
-            let balanceDisplay = '';
-            let balanceClass = '';
+            let balanceDisplay, balanceClass;
             if (cumulativeBalance < 0) {
                 balanceClass = 'amount-negative';
                 balanceDisplay = 'K' + Math.abs(cumulativeBalance).toLocaleString() + ' (To Pay)';
@@ -1202,10 +1238,9 @@
                 balanceClass = 'amount-zero';
                 balanceDisplay = 'K0';
             }
-            
+
             const previousBalance = data.previousBalance || 0;
-            let prevBalanceDisplay = '';
-            let prevBalanceClass = '';
+            let prevBalanceDisplay, prevBalanceClass;
             if (previousBalance < 0) {
                 prevBalanceClass = 'amount-negative';
                 prevBalanceDisplay = 'K' + Math.abs(previousBalance).toLocaleString() + ' (To Pay)';
@@ -1216,26 +1251,23 @@
                 prevBalanceClass = 'amount-zero';
                 prevBalanceDisplay = 'K0';
             }
-            
+
             let refundsHtml = '';
             if (data.totalRefunds && data.totalRefunds > 0) {
                 refundsHtml = `
                     <div class="summary-item">
                         <div class="summary-amount amount-refund">-K${data.totalRefunds.toLocaleString()}</div>
                         <div class="summary-label">Total Refunds</div>
-                    </div>
-                `;
+                    </div>`;
             } else {
                 refundsHtml = `
                     <div class="summary-item">
                         <div class="summary-amount amount-zero">K0</div>
                         <div class="summary-label">Total Refunds</div>
-                    </div>
-                `;
+                    </div>`;
             }
-            
-            // NOTE: data.statusMessage is intentionally NOT rendered here.
-            // The notice boxes below already convey the same info.
+
+            // NOTE: statusMessage intentionally NOT rendered — reminder box covers it
             document.getElementById('feeSummary').innerHTML = `
                 <div class="summary-grid">
                     <div class="summary-item">
@@ -1252,16 +1284,35 @@
                         <div class="summary-label">Previous Term Balance</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-amount ${balanceClass}" style="font-size: 20px;">
-                            ${balanceDisplay}
-                        </div>
+                        <div class="summary-amount ${balanceClass}" style="font-size: 20px;">${balanceDisplay}</div>
                         <div class="summary-label">Current Balance</div>
                     </div>
                 </div>
             `;
-            
+
+            // Payment history
             if (data.installments && data.installments.length > 0) {
-                let installmentsHtml = `
+                let rows = '';
+                data.installments.forEach(inst => {
+                    const installmentName = inst.displayName || getInstallmentName(inst.number);
+                    const dateDisplay = inst.date || 'Not recorded';
+                    const isRefund = inst.isRefund || inst.amount < 0;
+                    const amount = inst.displayAmount || Math.abs(inst.amount || 0);
+                    const amountPrefix = isRefund ? '-K' : 'K';
+                    const statusText = isRefund ? 'REFUND' : 'PAID';
+                    const statusClassInst = isRefund ? 'status-refund' : 'status-paid';
+                    const rowClass = isRefund ? 'refund-row' : '';
+
+                    rows += `
+                        <tr class="${rowClass}">
+                            <td><strong>${escapeHtml(installmentName)}</strong></td>
+                            <td>${amountPrefix}${amount.toLocaleString()}</td>
+                            <td>${escapeHtml(dateDisplay)}</td>
+                            <td><span class="status-badge ${statusClassInst}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
+                        </tr>`;
+                });
+
+                document.getElementById('installmentHistory').innerHTML = `
                     <div class="table-wrapper">
                         <table class="installment-table">
                             <thead>
@@ -1272,60 +1323,33 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                `;
-                data.installments.forEach(inst => {
-                    const installmentName = inst.displayName || getInstallmentName(inst.number);
-                    const dateDisplay = inst.date || 'Not recorded';
-                    const isRefund = inst.isRefund || inst.amount < 0;
-                    const amount = inst.displayAmount || Math.abs(inst.amount || 0);
-                    const amountPrefix = isRefund ? '-K' : 'K';
-                    const statusText = isRefund ? 'REFUND' : 'PAID';
-                    const statusClassInst = isRefund ? 'status-refund' : 'status-paid';
-                    const rowClass = isRefund ? 'refund-row' : '';
-                    
-                    installmentsHtml += `
-                        <tr class="${rowClass}">
-                            <td><strong>${escapeHtml(installmentName)}</strong></td>
-                            <td>${amountPrefix}${amount.toLocaleString()}</td>
-                            <td>${escapeHtml(dateDisplay)}</td>
-                            <td><span class="status-badge ${statusClassInst}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
-                        </tr>
-                    `;
-                });
-                installmentsHtml += `
-                            </tbody>
+                            <tbody>${rows}</tbody>
                         </table>
-                    </div>
-                `;
-                document.getElementById('installmentHistory').innerHTML = installmentsHtml;
+                    </div>`;
             } else {
                 document.getElementById('installmentHistory').innerHTML = `
                     <div style="text-align: center; color: #999; padding: 15px;">
                         <i class="fas fa-receipt me-2"></i>No payment records found for this term.
-                    </div>
-                `;
+                    </div>`;
             }
-            
-            // ---- Notices (only ONE will show) ----
+
+            // Notices
             const outstandingNotice = document.getElementById('outstandingNotice');
             const overpaidNotice = document.getElementById('overpaidNotice');
             const fullyPaidNotice = document.getElementById('fullyPaidNotice');
             const sponsoredNotice = document.getElementById('sponsoredNotice');
-            
+
             const bursaryUpper = bursary.toUpperCase();
             const isSponsored = bursary &&
                 bursaryUpper !== 'GOVERNMENT' &&
                 bursaryUpper !== 'NONE' &&
                 bursaryUpper !== 'N/A';
-            
-            // Hide all first
+
             outstandingNotice.style.display = 'none';
             overpaidNotice.style.display = 'none';
             fullyPaidNotice.style.display = 'none';
             sponsoredNotice.style.display = 'none';
-            
-            // Show only ONE notice based on state
+
             if (isSponsored && cumulativeBalance >= 0) {
                 sponsoredNotice.style.display = 'block';
                 document.getElementById('sponsorName').textContent = bursary;
@@ -1338,11 +1362,11 @@
             } else {
                 fullyPaidNotice.style.display = 'block';
             }
-            
-            // ---- Bank details / contact (dynamic only) ----
+
+            // Payment instructions
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "FDH Bank, Lunzu Branch";
-            
+
             document.getElementById('paymentInstructions').innerHTML = `
                 <div class="contact-grid">
                     <div>
@@ -1360,29 +1384,31 @@
                     </div>
                 </div>
             `;
-            
-            // ---- Policy box ----
-            const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
-            
+
+            // Policy
+            const governmentPolicy = data.governmentPolicy
+                || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
+
             document.getElementById('policyContainer').innerHTML = `
                 <div class="policy-box">
                     <strong><i class="fas fa-gavel me-2"></i>Fee Policy Information</strong><br>
                     ${escapeHtml(governmentPolicy)}
                 </div>
             `;
-            
+
+            // Report footer
             document.getElementById('reportFooter').innerHTML = `
                 <i class="fas fa-calendar-alt me-2"></i>Generated: ${new Date(data.reportGenerated || Date.now()).toLocaleString()}<br>
                 <i class="fas fa-certificate me-2"></i>Official fee statement from ${escapeHtml(data.termConfig?.schoolName || 'Lunzu Secondary School')}
                 <br><strong>Note: All payments must be made directly to the school bank account. No cash or mobile money payments accepted at the school.</strong>
             `;
-            
+
             document.getElementById('reportContainer').style.display = 'block';
             document.title = `Fee Report - ${data.studentName} | ${data.term || 'Fee Report'}`;
         }
-        
+
         // ============================================
-        // HELPER FUNCTIONS
+        // HELPERS
         // ============================================
         function escapeHtml(text) {
             if (text === null || text === undefined) return '';
@@ -1390,7 +1416,7 @@
             div.textContent = String(text);
             return div.innerHTML;
         }
-        
+
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) {
@@ -1400,12 +1426,12 @@
                 }
             }
         }
-        
+
         function updateLoadingMessage(message) {
             const msgEl = document.getElementById('loadingMessage');
             if (msgEl) msgEl.textContent = message;
         }
-        
+
         function showError(message) {
             const errorContainer = document.getElementById('errorContainer');
             errorContainer.innerHTML = `
@@ -1414,9 +1440,15 @@
                     <h4>Error Loading Fee Report</h4>
                     <p>${escapeHtml(message)}</p>
                     <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-                        <button onclick="closeWindow()" class="btn btn-secondary" style="flex:1; min-width:80px;"><i class="fas fa-times"></i> Close</button>
-                        <button onclick="retryLoad()" class="btn btn-primary" style="flex:1; min-width:80px;"><i class="fas fa-redo"></i> Retry</button>
-                        <button onclick="window.history.back()" class="btn btn-print" style="flex:1; min-width:80px;"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button onclick="closeWindow()" class="btn btn-secondary" style="flex:1; min-width:80px;">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                        <button onclick="retryLoad()" class="btn btn-primary" style="flex:1; min-width:80px;">
+                            <i class="fas fa-redo"></i> Retry
+                        </button>
+                        <button onclick="window.history.back()" class="btn btn-print" style="flex:1; min-width:80px;">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
                     </div>
                 </div>
             `;
@@ -1424,7 +1456,7 @@
             document.getElementById('reportContainer').style.display = 'none';
             document.getElementById('loadingOverlay').style.display = 'none';
         }
-        
+
         function closeWindow() {
             if (window.history.length > 1) {
                 window.history.back();
@@ -1432,7 +1464,7 @@
                 window.close();
             }
         }
-        
+
         // ============================================
         // DOWNLOAD PDF
         // ============================================
@@ -1444,15 +1476,15 @@
                 }
                 return;
             }
-            
+
             isGeneratingPDF = true;
             const btn = document.getElementById('downloadPdfBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             btn.disabled = true;
-            
+
             showInlineStatus('loading', 'Generating PDF...');
-            
+
             try {
                 let pdfResponse;
                 if (isAdminMode) {
@@ -1470,11 +1502,11 @@
                         isAdmin: false
                     });
                 }
-                
+
                 if (pdfResponse && !pdfResponse.error && pdfResponse.pdfBase64) {
-                    const fileName = pdfResponse.fileName || 
+                    const fileName = pdfResponse.fileName ||
                         `${cachedFeeReport.studentName.replace(/\s+/g, '_')}_${cachedFeeReport.academicYear || 'Unknown'}_${(cachedFeeReport.term || 'Report').replace(/\s+/g, '_')}_Fee_Report.pdf`;
-                    
+
                     const byteCharacters = atob(pdfResponse.pdfBase64);
                     const byteNumbers = new Array(byteCharacters.length);
                     for (let i = 0; i < byteCharacters.length; i++) {
@@ -1492,7 +1524,7 @@
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
                     }, 100);
-                    
+
                     showInlineStatus('success', '✅ PDF downloaded successfully!');
                     setTimeout(() => hideInlineStatus(), 3000);
                 } else {
@@ -1507,24 +1539,26 @@
                 btn.disabled = false;
             }
         }
-        
+
         // ============================================
-        // INITIALIZE
+        // INIT
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            // Dynamic year in page footer
+            const yearEl = document.getElementById('footerYear');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
             updateAdminUI();
             loadFeeReport();
         });
-        
+
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                 e.preventDefault();
                 window.print();
             }
-            if (e.key === 'Escape') {
-                closeAdminModal();
-            }
+            if (e.key === 'Escape') closeAdminModal();
         });
     </script>
 </body>
