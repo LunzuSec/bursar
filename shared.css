@@ -1,45 +1,68 @@
 /* ============================================================ */
 /* SHARED STYLES — Floating menu button + panel + modal shell   */
-/* Load on every page: <link rel="stylesheet" href="shared.css"> */
+/* Load on every page: <link rel="stylesheet" href="shared.css?v=3"> */
 /* ============================================================ */
 
 /* ============================================================
-   FLOATING MENU WIDGET
+   FLOATING MENU WIDGET — bulletproof for mobile
    ============================================================ */
 .shared-menu {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 9000;
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: 2147483000 !important;   /* near-max int32 */
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    transform: none !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
 }
 
 /* ---- Toggle button ---- */
 .shared-menu-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    background: rgba(10, 30, 50, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #e2e8f0;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 215, 0, 0.4);
+    background: rgba(10, 30, 50, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fbbf24;
+    font-size: 17px;
+    cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.1);
     padding: 0;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    box-sizing: border-box;
+    line-height: 1;
 }
 .shared-menu-btn:hover {
-    background: rgba(20, 45, 70, 0.95);
+    background: rgba(20, 45, 70, 1);
     color: #fbbf24;
-    border-color: rgba(255, 215, 0, 0.5);
+    border-color: rgba(255, 215, 0, 0.7);
     transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+.shared-menu-btn:active {
+    transform: scale(0.95);
 }
 .shared-menu-btn:focus-visible {
     outline: 2px solid #fbbf24;
@@ -47,23 +70,23 @@
 }
 
 .shared-menu.open .shared-menu-btn {
-    background: rgba(20, 45, 70, 0.98);
+    background: rgba(20, 45, 70, 1);
     color: #fbbf24;
-    border-color: rgba(255, 215, 0, 0.6);
+    border-color: rgba(255, 215, 0, 0.8);
 }
 
 /* ---- Dropdown panel ---- */
 .shared-menu-panel {
     position: absolute;
-    top: 56px;
+    top: calc(100% + 10px);
     right: 0;
-    width: 260px;
-    background: rgba(15, 32, 52, 0.97);
+    width: 270px;
+    background: rgba(15, 32, 52, 0.98);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.25);
     border-radius: 14px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     padding: 6px;
     opacity: 0;
     visibility: hidden;
@@ -71,6 +94,8 @@
     transform-origin: top right;
     transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
     overflow: hidden;
+    z-index: 2147483001;
+    box-sizing: border-box;
 }
 .shared-menu.open .shared-menu-panel {
     opacity: 1;
@@ -110,7 +135,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 12px;
+    padding: 10px 12px;
     border-radius: 8px;
     color: #cbd5e1;
     font-size: 13px;
@@ -124,6 +149,7 @@
     text-align: left;
     font-family: inherit;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 .shared-menu-link:hover {
     background: rgba(255, 255, 255, 0.06);
@@ -193,27 +219,47 @@
 }
 
 /* ============================================================
-   RESPONSIVE — smaller button on phones
+   MOBILE — reposition, handle notch, full-width panel
    ============================================================ */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .shared-menu {
-        top: 12px;
-        right: 12px;
+        top: 12px !important;
+        right: 12px !important;
+        /* Handle iPhone notch safe area if available */
+        top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+        right: calc(12px + env(safe-area-inset-right, 0px)) !important;
     }
     .shared-menu-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
+        width: 46px;
+        height: 46px;
+        font-size: 16px;
     }
     .shared-menu-panel {
         width: calc(100vw - 24px);
-        max-width: 300px;
-        top: 50px;
+        max-width: 320px;
+        right: 0;
+        top: calc(100% + 8px);
+    }
+    /* Bigger tap targets */
+    .shared-menu-link {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .shared-menu {
+        top: calc(10px + env(safe-area-inset-top, 0px)) !important;
+        right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+    }
+    .shared-menu-btn {
+        width: 44px;
+        height: 44px;
     }
 }
 
 /* ============================================================
-   PRINT — hide menu entirely
+   PRINT — hide menu
    ============================================================ */
 @media print {
     .shared-menu {
