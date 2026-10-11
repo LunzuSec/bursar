@@ -1,6 +1,6 @@
 /* ============================================================ */
-/* SHARED SCRIPT — Navigation + password session management     */
-/* Load on every page: <script src="shared.js"></script>        */
+/* SHARED SCRIPT — Floating menu + password session management  */
+/* Load on every page: <script src="shared.js?v=3"></script>    */
 /* ============================================================ */
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
@@ -188,14 +188,15 @@ const SharedNav = {
             +   accountHtml
             + '</div>';
 
-        document.body.appendChild(root);
+        // CRITICAL — append to <html> not <body> so no parent transform
+        // or overflow can trap the fixed positioning on mobile.
+        (document.documentElement || document.body).appendChild(root);
 
         // ========================================================
         // Wire up interactions
         // ========================================================
         const btn = root.querySelector('.shared-menu-btn');
         const panel = root.querySelector('.shared-menu-panel');
-
         const self = this;
 
         btn.addEventListener('click', function(e) {
@@ -371,10 +372,12 @@ function showPasswordModal(title, subtitle, resolve, reject) {
 
 /* ============================================================ */
 /* AUTO-NAV RENDER                                              */
+/* Runs on DOMContentLoaded, or immediately if DOM is parsed.   */
 /* ============================================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initSharedNav() {
     const body = document.body;
+    if (!body) return;
     const currentPage = body.dataset.page || '';
     const showAdmin = body.dataset.showAdmin !== 'false';
     const showLogout = body.dataset.showLogout !== 'false';
@@ -386,4 +389,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showLogout: showLogout
         });
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSharedNav);
+} else {
+    // DOM already parsed — run immediately
+    initSharedNav();
+}
