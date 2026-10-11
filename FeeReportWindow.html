@@ -315,28 +315,6 @@
             word-wrap: break-word;
         }
         
-        .payment-instructions-box {
-            background: #e8f0fe;
-            border-left: 4px solid var(--primary-color);
-            padding: 12px 15px;
-            margin: 10px 8px;
-            border-radius: 8px;
-            font-size: 12px;
-            word-wrap: break-word;
-        }
-        
-        .payment-instructions-box strong {
-            color: var(--primary-color);
-        }
-        
-        .payment-instructions-box .instruction-section {
-            margin-bottom: 10px;
-        }
-        
-        .payment-instructions-box .instruction-section:last-child {
-            margin-bottom: 0;
-        }
-        
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -551,13 +529,6 @@
             margin-bottom: 15px;
         }
         
-        .status-note-box {
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 12px;
-        }
-        
         .reminder-box {
             padding: 8px 14px;
             margin: 6px 16px;
@@ -711,7 +682,6 @@
             .installment-table th { font-size: 9px; }
             .status-badge { font-size: 10px; padding: 2px 10px; }
             .policy-box { font-size: 10px; padding: 8px 10px; margin: 8px 5px; }
-            .payment-instructions-box { font-size: 11px; padding: 10px 12px; margin: 8px 5px; }
             .admin-badge { font-size: 7px; padding: 2px 8px; top: 5px; right: 8px; }
             .sponsor-strip { font-size: 11px; padding: 5px 8px; }
         }
@@ -795,6 +765,7 @@
             <div class="card-body" id="installmentHistory"></div>
         </div>
         
+        <!-- Outstanding Notice (only one place shows this) -->
         <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
             <strong>⚠️ URGENT PAYMENT REMINDER</strong>
             <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>.</p>
@@ -844,7 +815,6 @@
         // ============================================
         // GAS_URL is already declared in shared.js - use it directly
         
-        // Get URL parameters - use unique variable names to avoid conflict
         const reportUrlParams = new URLSearchParams(window.location.search);
         let studentName = reportUrlParams.get('name');
         let studentClass = reportUrlParams.get('class');
@@ -1238,24 +1208,6 @@
                 prevBalanceDisplay = 'K0';
             }
             
-            let statusMessageHtml = '';
-            if (data.statusMessage) {
-                let bgColor = '#ffebee';
-                let borderColor = '#f44336';
-                if (data.paymentStatus === 'FULLY PAID') {
-                    bgColor = '#e8f5e9';
-                    borderColor = '#4caf50';
-                } else if (data.paymentStatus === 'OVERPAID' || data.paymentStatus === 'CREDIT AVAILABLE') {
-                    bgColor = '#e3f2fd';
-                    borderColor = '#2196f3';
-                }
-                statusMessageHtml = `
-                    <div class="status-note-box" style="background: ${bgColor}; border-left: 4px solid ${borderColor};">
-                        <strong><i class="fas fa-info-circle me-2"></i>Note:</strong> ${escapeHtml(data.statusMessage)}
-                    </div>
-                `;
-            }
-            
             let refundsHtml = '';
             if (data.totalRefunds && data.totalRefunds > 0) {
                 refundsHtml = `
@@ -1273,6 +1225,10 @@
                 `;
             }
             
+            // NOTE: data.statusMessage is intentionally NOT rendered here.
+            // The notice boxes below (outstandingNotice / overpaidNotice /
+            // fullyPaidNotice / sponsoredNotice) already convey the same info,
+            // so rendering statusMessage would duplicate the message.
             document.getElementById('feeSummary').innerHTML = `
                 <div class="summary-grid">
                     <div class="summary-item">
@@ -1295,7 +1251,6 @@
                         <div class="summary-label">Current Balance</div>
                     </div>
                 </div>
-                ${statusMessageHtml}
             `;
             
             if (data.installments && data.installments.length > 0) {
@@ -1319,7 +1274,7 @@
                     const amount = inst.displayAmount || Math.abs(inst.amount || 0);
                     const amountPrefix = isRefund ? '-K' : 'K';
                     const statusText = isRefund ? 'REFUND' : 'PAID';
-                    const statusClass = isRefund ? 'status-refund' : 'status-paid';
+                    const statusClassInst = isRefund ? 'status-refund' : 'status-paid';
                     const rowClass = isRefund ? 'refund-row' : '';
                     
                     installmentsHtml += `
@@ -1327,7 +1282,7 @@
                             <td><strong>${escapeHtml(installmentName)}</strong></td>
                             <td>${amountPrefix}${amount.toLocaleString()}</td>
                             <td>${escapeHtml(dateDisplay)}</td>
-                            <td><span class="status-badge ${statusClass}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
+                            <td><span class="status-badge ${statusClassInst}" style="padding: 3px 10px; font-size: 10px;">${statusText}</span></td>
                         </tr>
                     `;
                 });
@@ -1345,6 +1300,7 @@
                 `;
             }
             
+            // ---- Notices (only ONE will show) ----
             const outstandingNotice = document.getElementById('outstandingNotice');
             const overpaidNotice = document.getElementById('overpaidNotice');
             const fullyPaidNotice = document.getElementById('fullyPaidNotice');
@@ -1356,11 +1312,13 @@
                 bursaryUpper !== 'NONE' &&
                 bursaryUpper !== 'N/A';
             
+            // Hide all first
             outstandingNotice.style.display = 'none';
             overpaidNotice.style.display = 'none';
             fullyPaidNotice.style.display = 'none';
             sponsoredNotice.style.display = 'none';
             
+            // Show only ONE notice based on state
             if (isSponsored && cumulativeBalance >= 0) {
                 sponsoredNotice.style.display = 'block';
                 document.getElementById('sponsorName').textContent = bursary;
@@ -1374,7 +1332,7 @@
                 fullyPaidNotice.style.display = 'block';
             }
             
-            // ---- Bank details / contact (dynamic only — no static duplicate) ----
+            // ---- Bank details / contact (dynamic only) ----
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "FDH Bank, Lunzu Branch";
             
