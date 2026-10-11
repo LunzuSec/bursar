@@ -817,26 +817,13 @@
             <p>Fees for this student are covered by <strong id="sponsorName"></strong>. No payment action is required from the guardian.</p>
         </div>
         
+        <!-- Bank details card (dynamic) -->
         <div class="card">
             <div class="card-header"><i class="fas fa-university me-2"></i> PAYMENT INSTRUCTIONS</div>
             <div class="card-body" id="paymentInstructions"></div>
         </div>
         
-        <div class="payment-instructions-box" id="paymentInstructionsBox">
-            <div class="instruction-section">
-                <strong><i class="fas fa-info-circle me-2"></i>ENGLISH:</strong>
-                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsEnglish">
-                    All fees must be paid into the school's bank account. Provide a receipt via acceptable channel or in person. For digital submissions, send a screenshot showing the school's account number, transaction date, and student name/description. SMS messages alone are not accepted as they can be edited—screenshots must clearly show the sender. Incomplete submissions will delay verification.
-                </p>
-            </div>
-            <div class="instruction-section" style="border-top: 1px solid #dee2e6; padding-top: 10px; margin-top: 10px;">
-                <strong><i class="fas fa-info-circle me-2"></i>CHICHEWA:</strong>
-                <p style="margin-top: 5px; margin-bottom: 0; font-size: 12px; line-height: 1.6;" id="paymentInstructionsChichewa">
-                    Ndalama zonse ziyenera kulipidwa ku akaunti ya banki ya sukulu. Perekani risiti kudzera njira yovomerezeka kapena mwawekha. Ngati mukutumiza digito, tumizani screenshot yosonyeza nambala ya akaunti ya sukulu, tsiku la kubweza ndalama, ndi dzina / kufotokozera kwa wophunzira. Mauthenga a SMS okha sangavomerezedwe chifukwa amatha kusinthidwa—screenshot ziyenera kusonyeza bwino wotumiza. Ngati zonse zosowa sizinaperekedwe, kutsimikizira kwa malipiro kungachedwe.
-                </p>
-            </div>
-        </div>
-        
+        <!-- Policy box (dynamic) -->
         <div id="policyContainer"></div>
         
         <div class="report-footer" id="reportFooter"></div>
@@ -857,7 +844,7 @@
         // ============================================
         // GAS_URL is already declared in shared.js - use it directly
         
-        // Get URL parameters - use unique variable names to avoid conflict with shared.js
+        // Get URL parameters - use unique variable names to avoid conflict
         const reportUrlParams = new URLSearchParams(window.location.search);
         let studentName = reportUrlParams.get('name');
         let studentClass = reportUrlParams.get('class');
@@ -1387,6 +1374,7 @@
                 fullyPaidNotice.style.display = 'block';
             }
             
+            // ---- Bank details / contact (dynamic only — no static duplicate) ----
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "FDH Bank, Lunzu Branch";
             
@@ -1408,15 +1396,7 @@
                 </div>
             `;
             
-            if (data.paymentInstructions) {
-                if (data.paymentInstructions.english) {
-                    document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
-                }
-                if (data.paymentInstructions.chichewa) {
-                    document.getElementById('paymentInstructionsChichewa').textContent = data.paymentInstructions.chichewa;
-                }
-            }
-            
+            // ---- Policy box ----
             const governmentPolicy = data.governmentPolicy || "The grace period for payment of school fees is 2 weeks from the beginning of each term.";
             
             document.getElementById('policyContainer').innerHTML = `
