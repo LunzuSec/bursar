@@ -136,7 +136,6 @@
             overflow-wrap: break-word;
         }
         
-        /* Sponsor strip inside student-info grid */
         .sponsor-strip {
             grid-column: 1 / -1;
             background: #f5f3ff;
@@ -429,7 +428,6 @@
             background: #f8f9fa;
         }
         
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -596,7 +594,6 @@
         }
         .reminder-info strong { color: #5b21b6; }
         
-        /* Password Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -745,8 +742,7 @@
         }
     </style>
 </head>
-<body>
-    <body data-nav="true" data-page="portal" data-show-admin="false" data-show-logout="false">
+<body data-nav="true" data-page="portal" data-show-admin="false" data-show-logout="false">
     <!-- Password Modal -->
     <div id="adminModal" class="modal-overlay">
         <div class="modal-box">
@@ -761,7 +757,7 @@
         </div>
     </div>
     
-    <!-- Full Page Loading Overlay (shown only during initial load) -->
+    <!-- Full Page Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
         <h4 style="color: var(--primary-color);">Loading Fee Report</h4>
@@ -782,7 +778,6 @@
             <div class="report-title" id="reportTitle"></div>
         </div>
         
-        <!-- Inline Status Indicator -->
         <div id="statusIndicator" class="status-indicator">
             <span id="statusIcon"></span>
             <span id="statusMessage">Loading...</span>
@@ -800,27 +795,23 @@
             <div class="card-body" id="installmentHistory"></div>
         </div>
         
-        <!-- Outstanding Notice -->
         <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
             <strong>⚠️ URGENT PAYMENT REMINDER</strong>
             <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>.</p>
             <p style="margin-top:4px;">Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
         </div>
         
-        <!-- Overpaid Notice -->
         <div id="overpaidNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>💜 OVERPAYMENT NOTICE</strong>
             <p>You have overpaid by <strong id="overpaidAmount"></strong>.</p>
             <p style="margin-top:4px;">This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
         </div>
         
-        <!-- Fully Paid Notice -->
         <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
             <strong>✅ FULLY PAID</strong>
             <p>Your fees for this term are fully paid. Thank you for your timely payment!</p>
         </div>
         
-        <!-- Sponsored Student Notice (NEW) -->
         <div id="sponsoredNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>🎓 SPONSORED STUDENT</strong>
             <p>Fees for this student are covered by <strong id="sponsorName"></strong>. No payment action is required from the guardian.</p>
@@ -831,7 +822,6 @@
             <div class="card-body" id="paymentInstructions"></div>
         </div>
         
-        <!-- Payment Instructions - English and Chichewa -->
         <div class="payment-instructions-box" id="paymentInstructionsBox">
             <div class="instruction-section">
                 <strong><i class="fas fa-info-circle me-2"></i>ENGLISH:</strong>
@@ -865,15 +855,15 @@
         // ============================================
         // CONFIGURATION
         // ============================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
+        // GAS_URL is already declared in shared.js - use it directly
         
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        let studentName = urlParams.get('name');
-        let studentClass = urlParams.get('class');
-        let dateOfBirth = urlParams.get('dob');
-        const termKey = urlParams.get('term');
-        const adminParam = urlParams.get('admin');
+        // Get URL parameters - use unique variable names to avoid conflict with shared.js
+        const reportUrlParams = new URLSearchParams(window.location.search);
+        let studentName = reportUrlParams.get('name');
+        let studentClass = reportUrlParams.get('class');
+        let dateOfBirth = reportUrlParams.get('dob');
+        const termKey = reportUrlParams.get('term');
+        const adminParam = reportUrlParams.get('admin');
         
         let isAdminMode = adminParam === 'true';
         let cachedFeeReport = null;
@@ -1206,7 +1196,6 @@
             else if (data.paymentStatus === 'OVERPAID') statusClass = 'overpaid';
             else if (data.paymentStatus === 'CREDIT AVAILABLE') statusClass = 'credit';
             
-            // ---- Student info grid + optional sponsor strip ----
             const bursary = (data.bursary || '').trim();
             const sponsorHtml = bursary
                 ? `<div class="sponsor-strip"><i class="fas fa-graduation-cap"></i><span><strong>Sponsor:</strong> ${escapeHtml(bursary)}</span></div>`
@@ -1234,7 +1223,6 @@
                 ${sponsorHtml}
             `;
             
-            // Format balances
             const cumulativeBalance = data.cumulativeBalance || 0;
             let balanceDisplay = '';
             let balanceClass = '';
@@ -1263,7 +1251,6 @@
                 prevBalanceDisplay = 'K0';
             }
             
-            // Status message box
             let statusMessageHtml = '';
             if (data.statusMessage) {
                 let bgColor = '#ffebee';
@@ -1282,7 +1269,6 @@
                 `;
             }
             
-            // Refunds tile
             let refundsHtml = '';
             if (data.totalRefunds && data.totalRefunds > 0) {
                 refundsHtml = `
@@ -1325,7 +1311,6 @@
                 ${statusMessageHtml}
             `;
             
-            // Installment History
             if (data.installments && data.installments.length > 0) {
                 let installmentsHtml = `
                     <div class="table-wrapper">
@@ -1373,31 +1358,26 @@
                 `;
             }
             
-            // ---- Notices (sponsor-aware) ----
             const outstandingNotice = document.getElementById('outstandingNotice');
             const overpaidNotice = document.getElementById('overpaidNotice');
             const fullyPaidNotice = document.getElementById('fullyPaidNotice');
             const sponsoredNotice = document.getElementById('sponsoredNotice');
             
-            // Determine "is sponsored" — any non-empty bursary that isn't generic
             const bursaryUpper = bursary.toUpperCase();
             const isSponsored = bursary &&
                 bursaryUpper !== 'GOVERNMENT' &&
                 bursaryUpper !== 'NONE' &&
                 bursaryUpper !== 'N/A';
             
-            // Hide all first
             outstandingNotice.style.display = 'none';
             overpaidNotice.style.display = 'none';
             fullyPaidNotice.style.display = 'none';
             sponsoredNotice.style.display = 'none';
             
             if (isSponsored && cumulativeBalance >= 0) {
-                // Sponsored & not owing → show neutral sponsor notice
                 sponsoredNotice.style.display = 'block';
                 document.getElementById('sponsorName').textContent = bursary;
             } else if (cumulativeBalance < 0) {
-                // Anything owing (even if sponsored) → show the urgent reminder
                 outstandingNotice.style.display = 'block';
                 document.getElementById('outstandingAmount').textContent = 'K' + Math.abs(cumulativeBalance).toLocaleString();
             } else if (cumulativeBalance > 0) {
@@ -1407,7 +1387,6 @@
                 fullyPaidNotice.style.display = 'block';
             }
             
-            // Payment Instructions
             const contactInfo = data.contactInfo || {};
             const bankInfo = data.bankInfo || "FDH Bank, Lunzu Branch";
             
@@ -1429,7 +1408,6 @@
                 </div>
             `;
             
-            // Update Payment Instructions text
             if (data.paymentInstructions) {
                 if (data.paymentInstructions.english) {
                     document.getElementById('paymentInstructionsEnglish').textContent = data.paymentInstructions.english;
