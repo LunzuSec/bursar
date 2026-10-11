@@ -529,13 +529,18 @@
             margin-bottom: 15px;
         }
         
+        /* ============================================
+           REMINDER BOXES — FIXED LAYOUT
+           Only the title <strong> (direct child) is block.
+           Nested <strong> inside <p> stays inline.
+           ============================================ */
         .reminder-box {
             padding: 8px 14px;
             margin: 6px 16px;
             border-radius: 8px;
         }
         
-        .reminder-box strong {
+        .reminder-box > strong {
             display: block;
             font-size: 12px;
             margin-bottom: 2px;
@@ -547,23 +552,29 @@
             line-height: 1.4;
         }
         
+        /* Make sure any <strong> nested inside <p> stays inline */
+        .reminder-box p strong {
+            display: inline;
+            font-weight: bold;
+        }
+        
         .reminder-danger {
             background: #fef2f2;
             border-left: 4px solid #ef4444;
         }
-        .reminder-danger strong { color: #b91c1c; }
+        .reminder-danger > strong { color: #b91c1c; }
         
         .reminder-success {
             background: #ecfdf5;
             border-left: 4px solid #10b981;
         }
-        .reminder-success strong { color: #065f46; }
+        .reminder-success > strong { color: #065f46; }
         
         .reminder-info {
             background: #f0f4ff;
             border-left: 4px solid #8b5cf6;
         }
-        .reminder-info strong { color: #5b21b6; }
+        .reminder-info > strong { color: #5b21b6; }
         
         .modal-overlay {
             position: fixed;
@@ -768,14 +779,12 @@
         <!-- Outstanding Notice (only one place shows this) -->
         <div id="outstandingNotice" style="display:none;" class="reminder-box reminder-danger">
             <strong>⚠️ URGENT PAYMENT REMINDER</strong>
-            <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>.</p>
-            <p style="margin-top:4px;">Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
+            <p>You have an outstanding balance of <strong id="outstandingAmount"></strong>. Please pay this amount as soon as possible. All fees must be deposited directly to the school bank account below.</p>
         </div>
         
         <div id="overpaidNotice" style="display:none;" class="reminder-box reminder-info">
             <strong>💜 OVERPAYMENT NOTICE</strong>
-            <p>You have overpaid by <strong id="overpaidAmount"></strong>.</p>
-            <p style="margin-top:4px;">This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
+            <p>You have overpaid by <strong id="overpaidAmount"></strong>. This amount will be applied to your future fees. If you wish to request a refund, please contact the accounts office.</p>
         </div>
         
         <div id="fullyPaidNotice" style="display:none;" class="reminder-box reminder-success">
@@ -1226,9 +1235,7 @@
             }
             
             // NOTE: data.statusMessage is intentionally NOT rendered here.
-            // The notice boxes below (outstandingNotice / overpaidNotice /
-            // fullyPaidNotice / sponsoredNotice) already convey the same info,
-            // so rendering statusMessage would duplicate the message.
+            // The notice boxes below already convey the same info.
             document.getElementById('feeSummary').innerHTML = `
                 <div class="summary-grid">
                     <div class="summary-item">
