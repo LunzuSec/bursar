@@ -66,7 +66,6 @@
             overflow: hidden;
         }
 
-        /* ============ HEADER ============ */
         .header {
             background: linear-gradient(135deg, rgba(10, 30, 50, 0.85) 0%, rgba(15, 37, 64, 0.85) 100%);
             backdrop-filter: blur(12px);
@@ -120,7 +119,6 @@
             box-shadow: 0 4px 16px rgba(251, 191, 36, 0.3);
         }
 
-        /* ============ NETWORK STATUS ============ */
         .net-status {
             display: flex;
             align-items: center;
@@ -155,12 +153,8 @@
         }
         .offline-banner.show { display: block; }
 
-        /* ============ CONTENT ============ */
-        .content {
-            padding: 32px 32px;
-        }
+        .content { padding: 32px 32px; }
 
-        /* ============ ALERTS ============ */
         .alert {
             padding: 14px 18px;
             border-radius: 12px;
@@ -182,7 +176,6 @@
         .alert-warn { background: rgba(245, 158, 11, 0.15); color: #fef3c7; border-color: var(--warn); }
         .alert.show { display: block; }
 
-        /* ============ SECTION TITLES ============ */
         .section-title {
             font-size: 14px;
             font-weight: 700;
@@ -196,12 +189,8 @@
             letter-spacing: 0.3px;
             text-transform: uppercase;
         }
-        .section-title i {
-            font-size: 16px;
-            opacity: 0.9;
-        }
+        .section-title i { font-size: 16px; opacity: 0.9; }
 
-        /* ============ FORM ============ */
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
         .form-group { margin-bottom: 16px; }
         .form-group label {
@@ -243,12 +232,8 @@
             box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.12);
         }
         .form-group input:disabled,
-        .form-group select:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .form-group select:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ============ TERM CHECKBOXES ============ */
         .term-checkboxes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
         .term-checkboxes label {
             display: flex;
@@ -283,7 +268,6 @@
             box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25);
         }
 
-        /* ============ INVOICE MODE SELECTOR ============ */
         .invoice-mode-group {
             margin: 0;
             padding: 18px 20px;
@@ -363,208 +347,349 @@
         }
 
         /* ============================================================
-           COMPACT STUDENT SELECTION
+           POS-STYLE STUDENT BASKET
            ============================================================ */
-        .students-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .students-toolbar .hint {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
 
-        .student-row {
+        /* --- Add form (fixed at top of section) --- */
+        .pos-add-bar {
             display: grid;
-            grid-template-columns: 1fr 2fr 36px;
-            gap: 8px;
-            align-items: center;
-            padding: 8px 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: all 0.2s ease;
-            animation: fadeIn 0.2s ease;
-        }
-        .student-row:hover {
-            border-color: rgba(251, 191, 36, 0.25);
-            background: rgba(0, 0, 0, 0.28);
-        }
-        .student-row.focus-within {
-            border-color: var(--gold-500);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-3px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .student-row .row-index {
-            display: none;
-        }
-
-        .student-row .class-select {
-            padding: 8px 10px;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            font-size: 12.5px;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            min-width: 0;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23fbbf24' d='M4.5 6L8 9.5 11.5 6z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 12px;
-            padding-right: 26px;
-        }
-        .student-row .class-select:hover:not(:disabled) {
-            border-color: rgba(251, 191, 36, 0.35);
-        }
-        .student-row .class-select:focus {
-            outline: none;
-            border-color: var(--gold-500);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
-        }
-        .student-row .class-select option { background: var(--navy-800); color: var(--text-primary); }
-
-        /* Searchable name field */
-        .student-row .name-combo {
+            grid-template-columns: minmax(140px, 1fr) minmax(200px, 2fr) auto;
+            gap: 10px;
+            align-items: stretch;
+            padding: 14px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.04) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.28);
+            border-radius: 14px;
+            margin-bottom: 14px;
             position: relative;
-            min-width: 0;
         }
-        .student-row .name-combo input {
+        .pos-add-bar .pos-field {
+            position: relative;
+        }
+        .pos-add-bar .pos-field input,
+        .pos-add-bar .pos-field select {
             width: 100%;
-            padding: 8px 10px;
-            padding-right: 30px;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            font-size: 12.5px;
-            background: rgba(0, 0, 0, 0.3);
+            height: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-medium);
+            border-radius: 10px;
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.35);
             color: var(--text-primary);
             font-family: inherit;
             font-weight: 500;
             transition: all 0.2s;
         }
-        .student-row .name-combo input::placeholder {
-            color: var(--text-muted);
-            font-weight: 400;
+        .pos-add-bar .pos-field select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23fbbf24' d='M4.5 6L8 9.5 11.5 6z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            padding-right: 30px;
         }
-        .student-row .name-combo input:hover:not(:disabled) {
-            border-color: rgba(251, 191, 36, 0.35);
-        }
-        .student-row .name-combo input:focus {
+        .pos-add-bar .pos-field select option { background: var(--navy-800); color: var(--text-primary); }
+        .pos-add-bar .pos-field input::placeholder { color: var(--text-muted); font-weight: 400; }
+        .pos-add-bar .pos-field input:focus,
+        .pos-add-bar .pos-field select:focus {
             outline: none;
             border-color: var(--gold-500);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.45);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
         }
-        .student-row .name-combo input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .student-row .name-combo .combo-status {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 10px;
-            color: var(--gold-500);
-            pointer-events: none;
-            display: none;
-        }
-        .student-row .name-combo .combo-status.show { display: block; }
 
-        .student-row .name-combo .dropdown {
+        /* Autocomplete dropdown */
+        .pos-add-bar .autocomplete-dropdown {
             position: absolute;
             top: calc(100% + 4px);
             left: 0;
             right: 0;
-            max-height: 260px;
+            max-height: 280px;
             overflow-y: auto;
             background: rgba(20, 35, 55, 0.99);
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            border: 1px solid rgba(251, 191, 36, 0.35);
             border-radius: 10px;
-            box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.85);
             z-index: 100;
             display: none;
             padding: 4px 0;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
         }
-        .student-row .name-combo .dropdown.show { display: block; }
-        .student-row .name-combo .dropdown .empty {
+        .pos-add-bar .autocomplete-dropdown.show { display: block; }
+        .pos-add-bar .autocomplete-dropdown .empty {
             padding: 14px 16px;
             font-size: 12px;
             color: var(--text-muted);
             text-align: center;
             font-style: italic;
         }
-        .student-row .name-combo .dropdown .option {
-            padding: 9px 14px;
+        .pos-add-bar .autocomplete-dropdown .option {
+            padding: 10px 14px;
             font-size: 12.5px;
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
         }
-        .student-row .name-combo .dropdown .option:hover,
-        .student-row .name-combo .dropdown .option.highlighted {
+        .pos-add-bar .autocomplete-dropdown .option:hover,
+        .pos-add-bar .autocomplete-dropdown .option.highlighted {
             background: rgba(251, 191, 36, 0.15);
             color: var(--gold-500);
         }
-        .student-row .name-combo .dropdown .option .match {
+        .pos-add-bar .autocomplete-dropdown .option .match {
             color: var(--gold-500);
             font-weight: 700;
         }
 
-        .student-row .remove-btn {
-            width: 32px;
-            height: 32px;
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
+        .pos-add-bar .add-btn {
+            padding: 0 22px;
+            background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%);
+            color: var(--navy-900);
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
             transition: all 0.2s;
-            line-height: 1;
+            font-family: inherit;
+            box-shadow: 0 4px 14px -2px rgba(251, 191, 36, 0.4);
+            white-space: nowrap;
+            min-height: 44px;
+        }
+        .pos-add-bar .add-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px -2px rgba(251, 191, 36, 0.6);
+            filter: brightness(1.05);
+        }
+        .pos-add-bar .add-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            filter: grayscale(0.3);
+        }
+
+        /* --- Basket (scrollable list) --- */
+        .pos-basket {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .pos-basket-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            flex-wrap: wrap;
+        }
+        .pos-basket-header .basket-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-500);
+        }
+        .pos-basket-header .basket-count {
+            font-size: 11px;
+            padding: 3px 10px;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: var(--gold-500);
+            border-radius: 100px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        .pos-basket-header .clear-btn {
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .pos-basket-header .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--danger);
+            color: #fff;
+        }
+
+        .pos-basket-list {
+            max-height: 340px;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        .pos-basket-list::-webkit-scrollbar { width: 8px; }
+        .pos-basket-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .pos-basket-list::-webkit-scrollbar-thumb {
+            background: rgba(251, 191, 36, 0.25);
+            border-radius: 4px;
+        }
+        .pos-basket-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(251, 191, 36, 0.45);
+        }
+
+        /* Basket row (each student) */
+        .basket-row {
+            display: grid;
+            grid-template-columns: 32px 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            transition: all 0.15s;
+            animation: rowIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .basket-row:last-child { margin-bottom: 0; }
+        .basket-row:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(251, 191, 36, 0.25);
+        }
+        @keyframes rowIn {
+            from { opacity: 0; transform: translateX(-8px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .basket-row .row-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(251, 191, 36, 0.12);
+            color: var(--gold-500);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+
+        .basket-row .row-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+        .basket-row .row-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .basket-row .row-class {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .basket-row .row-class .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--gold-500);
+            opacity: 0.6;
+        }
+
+        .basket-row .row-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .basket-row .icon-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            color: var(--text-secondary);
             padding: 0;
         }
-        .student-row .remove-btn:hover {
+        .basket-row .icon-btn.remove {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.25);
+            background: rgba(239, 68, 68, 0.08);
+        }
+        .basket-row .icon-btn.remove:hover {
             background: rgba(239, 68, 68, 0.9);
             color: #fff;
             border-color: var(--danger);
             transform: scale(1.05);
         }
 
-        /* Empty state */
-        .students-empty {
-            padding: 24px 16px;
+        /* Empty basket */
+        .pos-empty {
+            padding: 44px 20px;
             text-align: center;
-            font-size: 12.5px;
             color: var(--text-muted);
+            font-size: 13px;
             font-style: italic;
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px dashed var(--border-subtle);
-            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .pos-empty i {
+            font-size: 36px;
+            color: rgba(251, 191, 36, 0.25);
+            margin-bottom: 4px;
+        }
+        .pos-empty strong {
+            color: var(--text-secondary);
+            font-style: normal;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Mobile: basket rows condense */
+        @media (max-width: 640px) {
+            .pos-add-bar {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+            .pos-add-bar .add-btn { min-height: 44px; }
+            .basket-row {
+                grid-template-columns: 28px 1fr 30px;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+            .basket-row .row-num { width: 24px; height: 24px; font-size: 10px; }
+            .basket-row .row-actions .icon-btn.remove { width: 28px; height: 28px; }
+            .pos-basket-list { max-height: 280px; }
+            .pos-basket-header { font-size: 11px; padding: 10px 12px; }
         }
 
         /* ============ BUTTONS ============ */
@@ -758,7 +883,6 @@
         .status-partial { color: var(--gold-500); font-weight: 700; }
         .status-credit { color: #93c5fd; font-weight: 700; }
 
-        /* ============ DIVIDER ============ */
         .divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
@@ -766,7 +890,6 @@
             border: none;
         }
 
-        /* ============ FOOTER ============ */
         .footer {
             text-align: center;
             padding: 20px;
@@ -778,7 +901,6 @@
         }
         .footer p { margin: 2px 0; }
 
-        /* ============ HELP SECTION ============ */
         .help-section {
             background: rgba(15, 37, 64, 0.5);
             border: 1px solid rgba(251, 191, 36, 0.15);
@@ -884,7 +1006,6 @@
 
         #mainApp { display: none; }
 
-        /* ============ RESPONSIVE ============ */
         @media (max-width: 860px) {
             .mode-buttons { grid-template-columns: repeat(2, 1fr); }
         }
@@ -908,25 +1029,6 @@
             .mode-buttons { grid-template-columns: 1fr; }
             .mode-btn { min-height: 48px; }
             .modal-box .btn { flex: none; width: 100%; }
-            .student-row {
-                grid-template-columns: 1fr 36px;
-                grid-template-rows: auto auto;
-                gap: 6px;
-                padding: 10px;
-            }
-            .student-row .class-select {
-                grid-column: 1;
-                grid-row: 1;
-            }
-            .student-row .name-combo {
-                grid-column: 1;
-                grid-row: 2;
-            }
-            .student-row .remove-btn {
-                grid-column: 2;
-                grid-row: 1 / span 2;
-                height: 100%;
-            }
         }
         @media (max-width: 420px) {
             .header h1 { font-size: 18px; }
@@ -960,7 +1062,6 @@
         <div class="content">
             <div id="alert" class="alert"></div>
 
-            <!-- Parent Info -->
             <div>
                 <h3 class="section-title"><i class="fas fa-user"></i> Parent / Guardian Information</h3>
                 <div class="form-row">
@@ -981,7 +1082,6 @@
 
             <div class="divider"></div>
 
-            <!-- Academic Year + Terms -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-calendar-alt"></i> Academic Year &amp; Terms
@@ -1020,7 +1120,6 @@
 
             <div class="divider"></div>
 
-            <!-- Balance Display Mode -->
             <div>
                 <h3 class="section-title"><i class="fas fa-balance-scale"></i> Balance Display Mode</h3>
 
@@ -1051,32 +1150,53 @@
 
             <div class="divider"></div>
 
-            <!-- Students -->
+            <!-- ============================================================
+                 POS-STYLE STUDENT BASKET
+                 ============================================================ -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-user-graduate"></i> Students
                     <span class="invoice-count" id="studentCount">(0 students)</span>
                 </h3>
 
-                <div class="students-toolbar">
-                    <div class="hint">Type to search students — dropdown filters as you type</div>
+                <!-- Add bar -->
+                <div class="pos-add-bar">
+                    <div class="pos-field">
+                        <select id="posClassSelect">
+                            <option value="">Select Class...</option>
+                        </select>
+                    </div>
+                    <div class="pos-field">
+                        <input type="text" id="posNameInput"
+                               placeholder="Search or type student name..."
+                               autocomplete="off" spellcheck="false" disabled>
+                        <div id="posAutocomplete" class="autocomplete-dropdown"></div>
+                    </div>
+                    <button type="button" class="add-btn" id="posAddBtn" disabled>
+                        <i class="fas fa-plus"></i> Add
+                    </button>
                 </div>
 
-                <div id="studentsContainer"></div>
-
-                <div class="btn-group" style="margin-top:12px;">
-                    <button type="button" class="btn btn-secondary" onclick="addStudent()">
-                        <i class="fas fa-plus"></i> Add Student
-                    </button>
-                    <button type="button" class="btn btn-outline btn-sm" onclick="clearAllStudents()">
-                        <i class="fas fa-trash"></i> Clear All
-                    </button>
+                <!-- Basket -->
+                <div class="pos-basket">
+                    <div class="pos-basket-header">
+                        <div class="basket-title">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>Selected Students</span>
+                            <span class="basket-count" id="basketCount">0</span>
+                        </div>
+                        <button type="button" class="clear-btn" id="basketClearBtn" style="display:none;">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                    <div class="pos-basket-list" id="basketList">
+                        <!-- Rows injected here -->
+                    </div>
                 </div>
             </div>
 
             <div class="divider"></div>
 
-            <!-- Actions -->
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" onclick="generateAndDownload()" id="generateBtn">
                     <i class="fas fa-file-invoice"></i> Generate Invoice (PDF)
@@ -1096,11 +1216,11 @@
                 <strong><i class="fas fa-info-circle"></i> How to Use</strong>
                 <ul>
                     <li>Enter the <strong>parent/guardian name</strong> (required)</li>
-                    <li>Select the <strong>academic year</strong> and the <strong>terms</strong> to invoice</li>
+                    <li>Select the <strong>academic year</strong> and <strong>terms</strong> to invoice</li>
                     <li>Pick a <strong>Balance Display Mode</strong> — applies to new invoices</li>
-                    <li>Add students — select class, then start typing a name to filter</li>
+                    <li>Choose a class, search a student, click <strong>Add</strong> to add them to the basket</li>
+                    <li>Repeat to add more students — the basket scrolls when it fills up</li>
                     <li>Click <strong>Generate Invoice</strong> to create and download the PDF</li>
-                    <li>Use <strong>Check Existing Invoices</strong> to manage past invoices</li>
                 </ul>
             </div>
         </div>
@@ -1178,7 +1298,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div id="deleteConfirmModal" class="modal-overlay">
         <div class="modal-box" style="max-width:440px;">
             <h3 style="color:#fca5a5;"><i class="fas fa-trash"></i> Delete Invoice</h3>
@@ -1259,13 +1378,11 @@
         // ============================================
         // STATE
         // ============================================
-        let studentCounter = 0;
         let currentPDFBase64 = null;
         let currentFileName = null;
         let isGenerating = false;
         let classData = [];
         let classesLoaded = false;
-
         let studentNamesCache = {};
         let progressTimer = null;
         let progressIndex = 0;
@@ -1277,9 +1394,11 @@
         let currentDeleteInvoiceNumber = null;
         let currentEditInvoiceNumber = null;
 
-        // Tracks open autocomplete state per row
-        let activeCombo = null;      // { rowEl, inputEl, dropdownEl, options, highlightIndex }
-        let outsideClickHandler = null;
+        // Basket state — array of { name, class }
+        let basket = [];
+        // Autocomplete state
+        let acHighlightIndex = -1;
+        let acFilteredNames = [];
 
         // ============================================
         // INIT
@@ -1303,13 +1422,81 @@
             updateBFPreview();
             loadClasses();
             setInvoiceMode('include_both', document.querySelector('.mode-btn[data-mode="include_both"]'));
-            renderEmptyStudentsMessage();
-            setTimeout(function() { addStudent(); }, 400);
+            renderBasket();
+
+            // Wire up POS bar
+            var posClassSelect = document.getElementById('posClassSelect');
+            var posNameInput = document.getElementById('posNameInput');
+            var posAddBtn = document.getElementById('posAddBtn');
+            var posDropdown = document.getElementById('posAutocomplete');
+
+            posClassSelect.addEventListener('change', function() {
+                posNameInput.value = '';
+                posAddBtn.disabled = true;
+                closeAutocomplete();
+                if (posClassSelect.value) {
+                    posNameInput.disabled = false;
+                    posNameInput.focus();
+                    loadAutocompleteNames(posClassSelect.value).then(function(names) {
+                        openAutocomplete(names);
+                    });
+                } else {
+                    posNameInput.disabled = true;
+                }
+            });
+
+            posNameInput.addEventListener('input', async function() {
+                var cls = posClassSelect.value;
+                if (!cls) return;
+                posAddBtn.disabled = !posNameInput.value.trim();
+                var names = await loadAutocompleteNames(cls);
+                openAutocomplete(names);
+            });
+
+            posNameInput.addEventListener('focus', async function() {
+                var cls = posClassSelect.value;
+                if (!cls) return;
+                var names = await loadAutocompleteNames(cls);
+                openAutocomplete(names);
+            });
+
+            posNameInput.addEventListener('keydown', function(e) {
+                var options = posDropdown.querySelectorAll('.option');
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    acHighlightIndex = Math.min(acHighlightIndex + 1, options.length - 1);
+                    updateAcHighlight(options);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    acHighlightIndex = Math.max(acHighlightIndex - 1, 0);
+                    updateAcHighlight(options);
+                } else if (e.key === 'Enter') {
+                    if (acHighlightIndex >= 0 && options[acHighlightIndex]) {
+                        e.preventDefault();
+                        posNameInput.value = options[acHighlightIndex].getAttribute('data-name');
+                        closeAutocomplete();
+                        posAddBtn.disabled = false;
+                    } else if (posNameInput.value.trim()) {
+                        e.preventDefault();
+                        addToBasket();
+                    }
+                } else if (e.key === 'Escape') {
+                    closeAutocomplete();
+                }
+            });
+
+            posNameInput.addEventListener('blur', function() {
+                setTimeout(closeAutocomplete, 150);
+            });
+
+            posAddBtn.addEventListener('click', addToBasket);
+
+            document.getElementById('basketClearBtn').addEventListener('click', clearBasket);
 
             document.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     var t = e.target;
-                    if (t.tagName === 'INPUT' && t.type !== 'checkbox' && !t.classList.contains('name-input')) {
+                    if (t.tagName === 'INPUT' && t.type !== 'checkbox' && t.id !== 'posNameInput') {
                         e.preventDefault();
                         generateAndDownload();
                     }
@@ -1321,7 +1508,7 @@
                     closeMarkPaidModal();
                     closeDeleteModal();
                     closeEditModal();
-                    closeActiveCombo();
+                    closeAutocomplete();
                 }
             });
 
@@ -1329,6 +1516,7 @@
                 if (e.target.id === 'markPaidModal') closeMarkPaidModal();
                 if (e.target.id === 'deleteConfirmModal') closeDeleteModal();
                 if (e.target.id === 'editModal') closeEditModal();
+                if (!e.target.closest('.pos-add-bar')) closeAutocomplete();
             });
         }
 
@@ -1344,24 +1532,11 @@
         }
         function hideAlert() { document.getElementById('alert').className = 'alert'; }
 
-        function updateStudentCount() {
-            var students = document.querySelectorAll('.student-row');
-            document.getElementById('studentCount').textContent = '(' + students.length + ' students)';
-            if (students.length === 0) renderEmptyStudentsMessage();
-            else {
-                var empty = document.querySelector('.students-empty');
-                if (empty) empty.remove();
-            }
+        function escapeHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
-
-        function renderEmptyStudentsMessage() {
-            var container = document.getElementById('studentsContainer');
-            if (container.querySelectorAll('.student-row').length === 0 && !container.querySelector('.students-empty')) {
-                var div = document.createElement('div');
-                div.className = 'students-empty';
-                div.textContent = 'No students added yet — click "Add Student" below to begin.';
-                container.appendChild(div);
-            }
+        function escapeHtmlAttr(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
         function updateNetworkStatus() {
@@ -1401,9 +1576,7 @@
             document.getElementById('invoiceMode').value = mode;
 
             var all = document.querySelectorAll('.mode-btn');
-            for (var i = 0; i < all.length; i++) {
-                all[i].classList.remove('active');
-            }
+            for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
             if (btn) btn.classList.add('active');
 
             var hints = {
@@ -1570,8 +1743,7 @@
         // ============================================
         function loadClasses() {
             if (classesLoaded && classData.length > 0) {
-                var selects = document.querySelectorAll('.student-row .class-select');
-                for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classData);
+                populatePosClassSelect(classData);
                 return;
             }
             callApi('getClasses', {}, function(result) {
@@ -1581,16 +1753,16 @@
                 else if (result.classes && Array.isArray(result.classes)) classes = result.classes;
                 classData = classes;
                 classesLoaded = true;
-                var selects = document.querySelectorAll('.student-row .class-select');
-                for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classes);
+                populatePosClassSelect(classes);
             }, function(error) {
                 showAlert('Error loading classes: ' + error, 'error');
             });
         }
 
-        function populateClassSelect(select, classes) {
+        function populatePosClassSelect(classes) {
+            var select = document.getElementById('posClassSelect');
             var currentValue = select.value;
-            select.innerHTML = '<option value="">Class...</option>';
+            select.innerHTML = '<option value="">Select Class...</option>';
             for (var i = 0; i < classes.length; i++) {
                 var opt = document.createElement('option');
                 opt.value = classes[i].value || classes[i];
@@ -1607,9 +1779,9 @@
         }
 
         // ============================================
-        // STUDENT NAME AUTOCOMPLETE
+        // AUTOCOMPLETE
         // ============================================
-        function getStudentNamesForClass(className) {
+        function loadAutocompleteNames(className) {
             if (!className) return Promise.resolve([]);
             var academicYear = document.getElementById('academicYear').value;
             var term = getFirstSelectedTerm();
@@ -1635,54 +1807,52 @@
             });
         }
 
-        function closeActiveCombo() {
-            if (activeCombo) {
-                activeCombo.dropdownEl.classList.remove('show');
-                activeCombo = null;
-            }
-        }
-
-        function openCombo(rowEl, inputEl, dropdownEl, allNames) {
+        function openAutocomplete(allNames) {
+            var inputEl = document.getElementById('posNameInput');
+            var dropdown = document.getElementById('posAutocomplete');
             var q = inputEl.value.toLowerCase().trim();
-            var filtered = allNames;
-            if (q) {
-                filtered = allNames.filter(function(n) {
-                    return n.toLowerCase().indexOf(q) !== -1;
-                });
-            }
+
+            // Filter out already-added names in same class
+            var currentClass = document.getElementById('posClassSelect').value;
+            var addedNames = basket.filter(function(b) { return b.class === currentClass; })
+                                    .map(function(b) { return b.name.toLowerCase(); });
+
+            var filtered = allNames.filter(function(n) {
+                if (addedNames.indexOf(n.toLowerCase()) !== -1) return false;
+                if (!q) return true;
+                return n.toLowerCase().indexOf(q) !== -1;
+            });
+
+            acFilteredNames = filtered;
+            acHighlightIndex = filtered.length > 0 ? 0 : -1;
+
             var html = '';
             if (filtered.length === 0) {
-                html = '<div class="empty">No matching students</div>';
+                html = '<div class="empty">' +
+                    (allNames.length === 0 ? 'No students in this class' : 'No matching students — all may already be added') +
+                    '</div>';
             } else {
                 var limit = 200;
                 var shown = filtered.slice(0, limit);
                 for (var i = 0; i < shown.length; i++) {
-                    html += '<div class="option" data-name="' + escapeHtmlAttr(shown[i]) + '">' + highlightMatch(shown[i], q) + '</div>';
+                    var highlighted = i === acHighlightIndex ? ' highlighted' : '';
+                    html += '<div class="option' + highlighted + '" data-name="' + escapeHtmlAttr(shown[i]) + '">' + highlightMatch(shown[i], q) + '</div>';
                 }
                 if (filtered.length > limit) {
                     html += '<div class="empty">Showing first ' + limit + ' of ' + filtered.length + ' — type to narrow</div>';
                 }
             }
-            dropdownEl.innerHTML = html;
-            dropdownEl.classList.add('show');
-            activeCombo = { rowEl: rowEl, inputEl: inputEl, dropdownEl: dropdownEl, allNames: allNames };
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
 
-            // Bind click on option
-            dropdownEl.querySelectorAll('.option').forEach(function(optEl) {
+            dropdown.querySelectorAll('.option').forEach(function(optEl) {
                 optEl.addEventListener('mousedown', function(e) {
                     e.preventDefault();
                     inputEl.value = optEl.getAttribute('data-name');
-                    closeActiveCombo();
+                    closeAutocomplete();
+                    document.getElementById('posAddBtn').disabled = false;
                 });
             });
-        }
-
-        function escapeHtmlAttr(s) {
-            return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        function escapeHtml(s) {
-            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
         function highlightMatch(name, q) {
@@ -1694,171 +1864,107 @@
                    escapeHtml(name.slice(idx + q.length));
         }
 
-        function attachNameCombo(rowEl, inputEl, dropdownEl) {
-            var combo = { rowEl: rowEl, inputEl: inputEl, dropdownEl: dropdownEl };
-            rowEl._combo = combo;
+        function updateAcHighlight(options) {
+            for (var i = 0; i < options.length; i++) {
+                if (i === acHighlightIndex) options[i].classList.add('highlighted');
+                else options[i].classList.remove('highlighted');
+            }
+            if (options[acHighlightIndex]) {
+                options[acHighlightIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
 
-            inputEl.addEventListener('focus', async function() {
-                var className = rowEl.querySelector('.class-select').value;
-                if (!className) {
-                    inputEl.blur();
-                    rowEl.querySelector('.class-select').focus();
-                    return;
-                }
-                var allNames = await getStudentNamesForClass(className);
-                openCombo(rowEl, inputEl, dropdownEl, allNames);
-            });
-
-            inputEl.addEventListener('input', async function() {
-                var className = rowEl.querySelector('.class-select').value;
-                if (!className) return;
-                var allNames = await getStudentNamesForClass(className);
-                openCombo(rowEl, inputEl, dropdownEl, allNames);
-            });
-
-            inputEl.addEventListener('keydown', function(e) {
-                if (!activeCombo) return;
-                var options = dropdownEl.querySelectorAll('.option');
-                if (options.length === 0) return;
-                var currentIdx = -1;
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].classList.contains('highlighted')) { currentIdx = i; break; }
-                }
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
-                    var next = currentIdx < options.length - 1 ? currentIdx + 1 : 0;
-                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
-                    else if (currentIdx === 0) options[0].classList.remove('highlighted');
-                    options[next].classList.add('highlighted');
-                    options[next].scrollIntoView({ block: 'nearest' });
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
-                    var prev = currentIdx > 0 ? currentIdx - 1 : options.length - 1;
-                    options[prev].classList.add('highlighted');
-                    options[prev].scrollIntoView({ block: 'nearest' });
-                } else if (e.key === 'Enter') {
-                    if (currentIdx >= 0) {
-                        e.preventDefault();
-                        inputEl.value = options[currentIdx].getAttribute('data-name');
-                        closeActiveCombo();
-                    }
-                } else if (e.key === 'Escape') {
-                    closeActiveCombo();
-                }
-            });
-
-            inputEl.addEventListener('blur', function() {
-                setTimeout(function() { closeActiveCombo(); }, 150);
-            });
+        function closeAutocomplete() {
+            document.getElementById('posAutocomplete').classList.remove('show');
+            acHighlightIndex = -1;
         }
 
         // ============================================
-        // STUDENT MANAGEMENT
+        // BASKET
         // ============================================
-        function addStudent() {
-            var container = document.getElementById('studentsContainer');
-            var empty = container.querySelector('.students-empty');
-            if (empty) empty.remove();
+        function addToBasket() {
+            var cls = document.getElementById('posClassSelect').value;
+            var name = document.getElementById('posNameInput').value.trim();
+            if (!cls || !name) return;
 
-            var id = ++studentCounter;
-            var previousClass = '';
-            var rows = document.querySelectorAll('.student-row');
-            if (rows.length > 0) {
-                var lastClass = rows[rows.length - 1].querySelector('.class-select');
-                if (lastClass && lastClass.value) previousClass = lastClass.value;
+            // Prevent duplicates
+            var dup = basket.some(function(b) { return b.name === name && b.class === cls; });
+            if (dup) {
+                showAlert('"' + name + '" is already in the basket', 'warn');
+                return;
             }
 
-            var rowEl = document.createElement('div');
-            rowEl.className = 'student-row';
-            rowEl.dataset.id = id;
-            rowEl.innerHTML =
-                '<select class="class-select"><option value="">Class...</option></select>' +
-                '<div class="name-combo">' +
-                '  <input type="text" class="name-input" placeholder="Type to search student name..." autocomplete="off" spellcheck="false">' +
-                '  <div class="dropdown"></div>' +
-                '</div>' +
-                '<button type="button" class="remove-btn" title="Remove student">&times;</button>';
+            basket.push({ name: name, class: cls });
+            renderBasket();
 
-            container.appendChild(rowEl);
-
-            var classSelect = rowEl.querySelector('.class-select');
-            var nameInput = rowEl.querySelector('.name-input');
-            var dropdown = rowEl.querySelector('.dropdown');
-            var removeBtn = rowEl.querySelector('.remove-btn');
-
-            populateClassSelect(classSelect, classData);
-
-            rowEl.addEventListener('focusin', function() { rowEl.classList.add('focus-within'); });
-            rowEl.addEventListener('focusout', function() {
-                setTimeout(function() {
-                    if (!rowEl.contains(document.activeElement)) rowEl.classList.remove('focus-within');
-                }, 100);
-            });
-
-            classSelect.addEventListener('change', function() {
-                nameInput.value = '';
-                closeActiveCombo();
-                if (classSelect.value) {
-                    nameInput.focus();
-                }
-            });
-
-            removeBtn.addEventListener('click', function() { removeStudent(id); });
-
-            attachNameCombo(rowEl, nameInput, dropdown);
-
-            if (previousClass) {
-                classSelect.value = previousClass;
-            }
-
-            updateStudentCount();
-            if (!previousClass) classSelect.focus();
+            // Reset name input but keep class
+            document.getElementById('posNameInput').value = '';
+            document.getElementById('posAddBtn').disabled = true;
+            document.getElementById('posNameInput').focus();
+            showAlert('Added: ' + name, 'success');
         }
 
-        function removeStudent(id) {
-            var entry = document.querySelector('.student-row[data-id="' + id + '"]');
-            if (entry) {
-                entry.style.opacity = '0';
-                entry.style.transform = 'translateY(-4px)';
-                entry.style.transition = 'all 0.15s';
-                setTimeout(function() {
-                    entry.remove();
-                    updateStudentCount();
-                    renderEmptyStudentsMessage();
-                }, 150);
-            }
+        function removeFromBasket(index) {
+            basket.splice(index, 1);
+            renderBasket();
         }
 
-        function clearAllStudents() {
-            document.getElementById('studentsContainer').innerHTML = '';
-            studentCounter = 0;
-            updateStudentCount();
-            renderEmptyStudentsMessage();
+        function clearBasket() {
+            if (basket.length === 0) return;
+            if (!confirm('Remove all ' + basket.length + ' students from the basket?')) return;
+            basket = [];
+            renderBasket();
+            showAlert('Basket cleared', 'info');
+        }
+
+        function renderBasket() {
+            var listEl = document.getElementById('basketList');
+            var countEl = document.getElementById('basketCount');
+            var clearBtn = document.getElementById('basketClearBtn');
+            var studentCountEl = document.getElementById('studentCount');
+
+            countEl.textContent = basket.length;
+            studentCountEl.textContent = '(' + basket.length + ' students)';
+            clearBtn.style.display = basket.length > 0 ? 'inline-flex' : 'none';
+
+            if (basket.length === 0) {
+                listEl.innerHTML =
+                    '<div class="pos-empty">' +
+                    '  <i class="fas fa-shopping-basket"></i>' +
+                    '  <strong>Your basket is empty</strong>' +
+                    '  <span>Select a class and search a student above, then click Add.</span>' +
+                    '</div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < basket.length; i++) {
+                var item = basket[i];
+                html += '<div class="basket-row">' +
+                    '<div class="row-num">' + (i + 1) + '</div>' +
+                    '<div class="row-info">' +
+                        '<div class="row-name">' + escapeHtml(item.name) + '</div>' +
+                        '<div class="row-class"><span class="dot"></span>' + escapeHtml(item.class) + '</div>' +
+                    '</div>' +
+                    '<div class="row-actions">' +
+                        '<button type="button" class="icon-btn remove" onclick="removeFromBasket(' + i + ')" title="Remove">' +
+                            '<i class="fas fa-times"></i>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>';
+            }
+            listEl.innerHTML = html;
         }
 
         function getStudentsData() {
-            var rows = document.querySelectorAll('.student-row');
-            var students = [];
-            for (var i = 0; i < rows.length; i++) {
-                var classSelect = rows[i].querySelector('.class-select');
-                var nameInput = rows[i].querySelector('.name-input');
-                if (classSelect.value && nameInput.value.trim()) {
-                    students.push({ name: nameInput.value.trim(), class: classSelect.value });
-                }
-            }
-            return students;
+            return basket.slice();
         }
 
         function onAcademicYearChange() {
             studentNamesCache = {};
-            // Clear all name inputs since cached names are now stale
-            var rows = document.querySelectorAll('.student-row');
-            for (var i = 0; i < rows.length; i++) {
-                var nameInput = rows[i].querySelector('.name-input');
-                if (nameInput) nameInput.value = '';
-            }
+            closeAutocomplete();
+            document.getElementById('posNameInput').value = '';
+            document.getElementById('posAddBtn').disabled = true;
             updateBFPreview();
         }
 
@@ -2142,13 +2248,7 @@
             if (!parentName) { showAlert('Please enter parent name', 'error'); return; }
             if (!academicYear) { showAlert('Please select an academic year', 'error'); return; }
             if (terms.length === 0) { showAlert('Please select at least one term', 'error'); return; }
-            if (students.length === 0) { showAlert('Please add at least one student', 'error'); return; }
-            for (var i = 0; i < students.length; i++) {
-                if (!students[i].class || !students[i].name) {
-                    showAlert('Please complete all student information', 'error');
-                    return;
-                }
-            }
+            if (students.length === 0) { showAlert('Please add at least one student to the basket', 'error'); return; }
             if (!password) {
                 showAlert('Session expired. Please reload and sign in again.', 'error');
                 return;
@@ -2206,10 +2306,9 @@
                         currentFileName = pdfResult.fileName || 'invoice.pdf';
                         downloadPDF();
                         showAlert('✅ Invoice generated: ' + result.invoice.invoiceNumber, 'success');
-                        document.getElementById('studentsContainer').innerHTML = '';
-                        studentCounter = 0;
-                        updateStudentCount();
-                        renderEmptyStudentsMessage();
+                        // Clear form
+                        basket = [];
+                        renderBasket();
                         document.getElementById('parentName').value = '';
                         document.getElementById('parentPhone').value = '';
                         document.getElementById('parentEmail').value = '';
@@ -2259,9 +2358,6 @@
         // ============================================
         // EXPOSE TO GLOBAL
         // ============================================
-        window.addStudent = addStudent;
-        window.removeStudent = removeStudent;
-        window.clearAllStudents = clearAllStudents;
         window.onAcademicYearChange = onAcademicYearChange;
         window.onTermChange = onTermChange;
         window.checkExisting = checkExisting;
@@ -2269,6 +2365,7 @@
         window.downloadInvoice = downloadInvoice;
         window.downloadPDF = downloadPDF;
         window.setInvoiceMode = setInvoiceMode;
+        window.removeFromBasket = removeFromBasket;
         window.openMarkPaidModal = openMarkPaidModal;
         window.closeMarkPaidModal = closeMarkPaidModal;
         window.submitMarkPaid = submitMarkPaid;
