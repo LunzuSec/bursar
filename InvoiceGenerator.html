@@ -206,6 +206,63 @@
             font-weight: 600;
         }
 
+        /* ============================================================
+           INVOICE MODE BUTTONS
+           ============================================================ */
+        .invoice-mode-group {
+            margin: 12px 0;
+            padding: 14px 16px;
+            background: rgba(251, 191, 36, 0.08);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            border-left: 4px solid #fbbf24;
+            border-radius: 12px;
+        }
+        .mode-label {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            color: #fcd34d;
+        }
+        .mode-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .mode-btn {
+            padding: 10px 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: #e2e8f0;
+            transition: all 0.2s;
+            flex: 1 1 auto;
+            min-width: 160px;
+            font-family: inherit;
+        }
+        .mode-btn:hover {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #002b54;
+            border-color: #fbbf24;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(251, 191, 36, 0.35);
+        }
+        .mode-hint {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #cbd5e1;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
         .student-entry {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -520,6 +577,8 @@
             .progress-bar { width: 220px; }
             .existing-invoices .invoice-item { flex-direction: column; align-items: flex-start; }
             .existing-invoices .invoice-item .actions { width: 100%; }
+            .mode-buttons { flex-direction: column; }
+            .mode-btn { width: 100%; }
         }
     </style>
 </head>
@@ -607,6 +666,35 @@
 
             <div class="divider"></div>
 
+            <!-- Balance Display Mode -->
+            <div>
+                <h3 class="section-title">⚖️ Balance Display Mode</h3>
+
+                <div class="invoice-mode-group">
+                    <div class="mode-label">Choose how balances and payments appear on the invoice</div>
+                    <div class="mode-buttons">
+                        <button type="button" class="mode-btn active" data-mode="include_both" onclick="setInvoiceMode('include_both', this)">
+                            ✅ Include Both
+                        </button>
+                        <button type="button" class="mode-btn" data-mode="ignore_bf" onclick="setInvoiceMode('ignore_bf', this)">
+                            🚫 Ignore Previous Balances
+                        </button>
+                        <button type="button" class="mode-btn" data-mode="ignore_paid" onclick="setInvoiceMode('ignore_paid', this)">
+                            🚫 Ignore Current Paid
+                        </button>
+                        <button type="button" class="mode-btn" data-mode="ignore_both" onclick="setInvoiceMode('ignore_both', this)">
+                            🚫 Ignore Both
+                        </button>
+                    </div>
+                    <input type="hidden" id="invoiceMode" value="include_both">
+                    <div class="mode-hint" id="invoiceModeHint">
+                        Shows previous balances and payments as recorded.
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
             <!-- Students -->
             <div>
                 <h3 class="section-title">
@@ -649,6 +737,7 @@
                 <ul>
                     <li>Select the <strong>Academic Year</strong> first</li>
                     <li>Choose the <strong>Terms</strong> you want to invoice</li>
+                    <li>Pick a <strong>Balance Display Mode</strong> — applies to new invoices</li>
                     <li>Add students — changing Class reloads the correct names</li>
                     <li>Click <strong>Generate</strong> to create and download the PDF</li>
                     <li>Use <strong>Check Existing Invoices</strong> to manage past invoices</li>
@@ -829,6 +918,9 @@
         let progressIndex = 0;
         let consecutiveFailures = 0;
 
+        // Invoice mode
+        let currentInvoiceMode = 'include_both';
+
         let currentPaidInvoiceNumber = null;
         let currentDeleteInvoiceNumber = null;
         let currentEditInvoiceNumber = null;
@@ -857,6 +949,7 @@
             updateNetworkStatus();
             updateBFPreview();
             loadClasses();
+            setInvoiceMode('include_both', document.querySelector('.mode-btn[data-mode="include_both"]'));
             setTimeout(function() { addStudent(); }, 400);
 
             document.addEventListener('keypress', function(e) {
@@ -929,6 +1022,28 @@
             updateNetworkStatus();
             showAlert('⚠️ You are offline. Please reconnect.', 'warn');
         });
+
+        // ============================================
+        // INVOICE MODE
+        // ============================================
+        function setInvoiceMode(mode, btn) {
+            currentInvoiceMode = mode;
+            document.getElementById('invoiceMode').value = mode;
+
+            var all = document.querySelectorAll('.mode-btn');
+            for (var i = 0; i < all.length; i++) {
+                all[i].classList.remove('active');
+            }
+            if (btn) btn.classList.add('active');
+
+            var hints = {
+                include_both: 'Shows previous balances and payments as recorded.',
+                ignore_bf:    'Previous balances will be shown as K0. Current payments still apply.',
+                ignore_paid:  'Payments already made will be shown as K0. Full fees will appear due.',
+                ignore_both:  'Both previous balances AND current payments will be shown as K0. Only current term fees will appear due.'
+            };
+            document.getElementById('invoiceModeHint').textContent = hints[mode] || '';
+        }
 
         // ============================================
         // PROGRESS / LOADING
@@ -1293,6 +1408,12 @@
                 var list = document.getElementById('invoiceList');
                 if (result.success && result.invoices && result.invoices.length > 0) {
                     list.innerHTML = '';
+                    var modeLabels = {
+                        include_both: '✅ Include Both',
+                        ignore_bf:    '🚫 Ignore B/F',
+                        ignore_paid:  '🚫 Ignore Paid',
+                        ignore_both:  '🚫 Ignore Both'
+                    };
                     for (var i = 0; i < result.invoices.length; i++) {
                         var inv = result.invoices[i];
                         var statusKey = (inv.status || 'UNPAID').toLowerCase().replace(' ', '');
@@ -1300,12 +1421,14 @@
                         if (statusKey.indexOf('credit') !== -1) statusKey = 'credit';
                         var balance = inv.totalBalance || 0;
                         var owedAmount = Math.abs(balance);
+                        var storedMode = inv.mode || 'include_both';
+                        var modeBadge = '<span style="display:inline-block;font-size:10px;padding:1px 6px;background:rgba(99,102,241,0.25);color:#c7d2fe;border-radius:3px;margin-left:6px;vertical-align:middle;">' + (modeLabels[storedMode] || storedMode) + '</span>';
                         var div = document.createElement('div');
                         div.className = 'invoice-item';
                         div.innerHTML = '<span><strong>' + inv.invoiceNumber + '</strong><br>' + inv.issueDate + '</span>' +
                             '<span>' + (inv.terms || '') + '<br>(' + (inv.academicYear || '') + ')</span>' +
                             '<span>' + (inv.studentList || 'N/A') + '</span>' +
-                            '<span>Due: <strong>K' + owedAmount.toLocaleString() + '</strong></span>' +
+                            '<span>Due: <strong>K' + owedAmount.toLocaleString() + '</strong>' + modeBadge + '</span>' +
                             '<span class="status-' + statusKey + '">' + inv.status + '</span>' +
                             '<span class="actions">' +
                             '<button class="btn btn-sm btn-success" onclick="downloadInvoice(\'' + inv.invoiceNumber + '\')">📥 PDF</button>' +
@@ -1541,6 +1664,7 @@
             var terms = getSelectedTerms();
             var students = getStudentsData();
             var password = SharedSession.getPassword();
+            var mode = document.getElementById('invoiceMode').value || 'include_both';
 
             if (!parentName) { showAlert('Please enter parent name', 'error'); return; }
             if (!academicYear) { showAlert('Please select an academic year', 'error'); return; }
@@ -1585,7 +1709,8 @@
                 parentPhone: parentPhone,
                 parentEmail: parentEmail,
                 terms: termsParam,
-                academicYear: academicYear
+                academicYear: academicYear,
+                mode: mode
             }, function(result) {
                 if (!result.success) {
                     clearTimeout(safetyTimeout);
@@ -1669,6 +1794,7 @@
         window.generateAndDownload = generateAndDownload;
         window.downloadInvoice = downloadInvoice;
         window.downloadPDF = downloadPDF;
+        window.setInvoiceMode = setInvoiceMode;
         window.openMarkPaidModal = openMarkPaidModal;
         window.closeMarkPaidModal = closeMarkPaidModal;
         window.submitMarkPaid = submitMarkPaid;
