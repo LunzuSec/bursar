@@ -347,7 +347,7 @@
         }
 
         /* ============================================================
-           POS-STYLE STUDENT BASKET
+           POS-STYLE STUDENT BASKET — FIXED HEIGHT SCROLLABLE
            ============================================================ */
 
         /* --- Add form (fixed at top of section) --- */
@@ -397,6 +397,10 @@
             border-color: var(--gold-500);
             background: rgba(0, 0, 0, 0.45);
             box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+        }
+        .pos-add-bar .pos-field input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* Autocomplete dropdown */
@@ -472,7 +476,7 @@
             filter: grayscale(0.3);
         }
 
-        /* --- Basket (scrollable list) --- */
+        /* --- Basket (fixed-height scrollable list) --- */
         .pos-basket {
             background: rgba(0, 0, 0, 0.25);
             border: 1px solid var(--border-subtle);
@@ -480,6 +484,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         .pos-basket-header {
             display: flex;
@@ -495,6 +500,7 @@
             text-transform: uppercase;
             letter-spacing: 0.4px;
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
         .pos-basket-header .basket-title {
             display: flex;
@@ -535,22 +541,86 @@
             color: #fff;
         }
 
+        /* ---- Fixed-height scrollable list ---- */
+        .pos-basket-scroll-wrap {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+        }
         .pos-basket-list {
-            max-height: 340px;
-            overflow-y: auto;
+            height: 320px;          /* FIXED — not max-height */
+            overflow-y: scroll;     /* always reserve scrollbar space */
+            overflow-x: hidden;
             padding: 8px;
-        }
-        .pos-basket-list::-webkit-scrollbar { width: 8px; }
-        .pos-basket-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        .pos-basket-list::-webkit-scrollbar-thumb {
-            background: rgba(251, 191, 36, 0.25);
-            border-radius: 4px;
-        }
-        .pos-basket-list::-webkit-scrollbar-thumb:hover {
-            background: rgba(251, 191, 36, 0.45);
+            scrollbar-gutter: stable;
         }
 
-        /* Basket row (each student) */
+        /* Custom scrollbar — always visible */
+        .pos-basket-list::-webkit-scrollbar {
+            width: 10px;
+        }
+        .pos-basket-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 4px;
+            margin: 4px 0;
+        }
+        .pos-basket-list::-webkit-scrollbar-thumb {
+            background: rgba(251, 191, 36, 0.35);
+            border-radius: 4px;
+            border: 2px solid rgba(0, 0, 0, 0.35);
+        }
+        .pos-basket-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(251, 191, 36, 0.6);
+        }
+        /* Firefox */
+        .pos-basket-list {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(251, 191, 36, 0.45) rgba(0, 0, 0, 0.35);
+        }
+
+        /* Fade + scroll hint at the bottom */
+        .pos-basket-fade {
+            position: absolute;
+            left: 0; right: 10px;
+            bottom: 0;
+            height: 48px;
+            background: linear-gradient(to top, rgba(5, 13, 24, 0.95), transparent);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            border-bottom-left-radius: 14px;
+        }
+        .pos-basket-fade.show { opacity: 1; }
+
+        .pos-basket-scroll-hint {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(251, 191, 36, 0.9);
+            color: var(--navy-900);
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 100px;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .pos-basket-scroll-hint.show { display: inline-flex; }
+        .pos-basket-scroll-hint i {
+            animation: hintBounce 1.4s ease-in-out infinite;
+        }
+        @keyframes hintBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(2px); }
+        }
+
+        /* Row styles */
         .basket-row {
             display: grid;
             grid-template-columns: 32px 1fr auto auto;
@@ -652,15 +722,18 @@
 
         /* Empty basket */
         .pos-empty {
-            padding: 44px 20px;
+            height: 100%;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             text-align: center;
             color: var(--text-muted);
             font-size: 13px;
             font-style: italic;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            padding: 20px;
         }
         .pos-empty i {
             font-size: 36px;
@@ -674,13 +747,15 @@
             font-weight: 600;
         }
 
-        /* Mobile: basket rows condense */
+        /* Mobile */
         @media (max-width: 640px) {
             .pos-add-bar {
                 grid-template-columns: 1fr;
                 padding: 12px;
             }
             .pos-add-bar .add-btn { min-height: 44px; }
+            .pos-basket-list { height: 260px; }
+            .pos-basket-fade { right: 10px; }
             .basket-row {
                 grid-template-columns: 28px 1fr 30px;
                 padding: 8px 10px;
@@ -688,7 +763,6 @@
             }
             .basket-row .row-num { width: 24px; height: 24px; font-size: 10px; }
             .basket-row .row-actions .icon-btn.remove { width: 28px; height: 28px; }
-            .pos-basket-list { max-height: 280px; }
             .pos-basket-header { font-size: 11px; padding: 10px 12px; }
         }
 
@@ -1150,9 +1224,7 @@
 
             <div class="divider"></div>
 
-            <!-- ============================================================
-                 POS-STYLE STUDENT BASKET
-                 ============================================================ -->
+            <!-- POS-STYLE STUDENT BASKET -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-user-graduate"></i> Students
@@ -1177,7 +1249,7 @@
                     </button>
                 </div>
 
-                <!-- Basket -->
+                <!-- Basket (fixed height) -->
                 <div class="pos-basket">
                     <div class="pos-basket-header">
                         <div class="basket-title">
@@ -1189,8 +1261,14 @@
                             <i class="fas fa-trash"></i> Clear All
                         </button>
                     </div>
-                    <div class="pos-basket-list" id="basketList">
-                        <!-- Rows injected here -->
+                    <div class="pos-basket-scroll-wrap">
+                        <div class="pos-basket-list" id="basketList">
+                            <!-- Rows injected here -->
+                        </div>
+                        <div class="pos-basket-fade" id="basketFade"></div>
+                        <div class="pos-basket-scroll-hint" id="basketScrollHint">
+                            <i class="fas fa-chevron-down"></i> Scroll for more
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1219,7 +1297,7 @@
                     <li>Select the <strong>academic year</strong> and <strong>terms</strong> to invoice</li>
                     <li>Pick a <strong>Balance Display Mode</strong> — applies to new invoices</li>
                     <li>Choose a class, search a student, click <strong>Add</strong> to add them to the basket</li>
-                    <li>Repeat to add more students — the basket scrolls when it fills up</li>
+                    <li>Repeat to add more students — the basket scrolls internally when it fills up</li>
                     <li>Click <strong>Generate Invoice</strong> to create and download the PDF</li>
                 </ul>
             </div>
@@ -1424,7 +1502,6 @@
             setInvoiceMode('include_both', document.querySelector('.mode-btn[data-mode="include_both"]'));
             renderBasket();
 
-            // Wire up POS bar
             var posClassSelect = document.getElementById('posClassSelect');
             var posNameInput = document.getElementById('posNameInput');
             var posAddBtn = document.getElementById('posAddBtn');
@@ -1490,8 +1567,14 @@
             });
 
             posAddBtn.addEventListener('click', addToBasket);
-
             document.getElementById('basketClearBtn').addEventListener('click', clearBasket);
+
+            // Basket scroll hint listener
+            var basketListEl = document.getElementById('basketList');
+            if (basketListEl) {
+                basketListEl.addEventListener('scroll', updateBasketScrollHint);
+            }
+            window.addEventListener('resize', updateBasketScrollHint);
 
             document.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -1812,7 +1895,6 @@
             var dropdown = document.getElementById('posAutocomplete');
             var q = inputEl.value.toLowerCase().trim();
 
-            // Filter out already-added names in same class
             var currentClass = document.getElementById('posClassSelect').value;
             var addedNames = basket.filter(function(b) { return b.class === currentClass; })
                                     .map(function(b) { return b.name.toLowerCase(); });
@@ -1887,7 +1969,6 @@
             var name = document.getElementById('posNameInput').value.trim();
             if (!cls || !name) return;
 
-            // Prevent duplicates
             var dup = basket.some(function(b) { return b.name === name && b.class === cls; });
             if (dup) {
                 showAlert('"' + name + '" is already in the basket', 'warn');
@@ -1897,7 +1978,6 @@
             basket.push({ name: name, class: cls });
             renderBasket();
 
-            // Reset name input but keep class
             document.getElementById('posNameInput').value = '';
             document.getElementById('posAddBtn').disabled = true;
             document.getElementById('posNameInput').focus();
@@ -1934,6 +2014,7 @@
                     '  <strong>Your basket is empty</strong>' +
                     '  <span>Select a class and search a student above, then click Add.</span>' +
                     '</div>';
+                setTimeout(updateBasketScrollHint, 20);
                 return;
             }
 
@@ -1954,6 +2035,27 @@
                 '</div>';
             }
             listEl.innerHTML = html;
+
+            listEl.scrollTop = 0;
+            setTimeout(updateBasketScrollHint, 20);
+        }
+
+        function updateBasketScrollHint() {
+            var listEl = document.getElementById('basketList');
+            var fade = document.getElementById('basketFade');
+            var hint = document.getElementById('basketScrollHint');
+            if (!listEl || !fade || !hint) return;
+
+            var hasOverflow = listEl.scrollHeight > listEl.clientHeight + 4;
+            var notAtBottom = listEl.scrollTop + listEl.clientHeight < listEl.scrollHeight - 4;
+
+            if (hasOverflow && notAtBottom) {
+                fade.classList.add('show');
+                hint.classList.add('show');
+            } else {
+                fade.classList.remove('show');
+                hint.classList.remove('show');
+            }
         }
 
         function getStudentsData() {
@@ -2306,7 +2408,6 @@
                         currentFileName = pdfResult.fileName || 'invoice.pdf';
                         downloadPDF();
                         showAlert('✅ Invoice generated: ' + result.invoice.invoiceNumber, 'success');
-                        // Clear form
                         basket = [];
                         renderBasket();
                         document.getElementById('parentName').value = '';
