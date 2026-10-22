@@ -26,8 +26,6 @@
             --text-muted: #94a3b8;
             --border-subtle: rgba(255, 255, 255, 0.08);
             --border-medium: rgba(255, 255, 255, 0.14);
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-bg-strong: rgba(255, 255, 255, 0.08);
             --success: #10b981;
             --danger: #ef4444;
             --info: #3b82f6;
@@ -364,57 +362,209 @@
             padding-left: 2px;
         }
 
-        /* ============ STUDENT ENTRIES ============ */
-        .student-entry {
+        /* ============================================================
+           COMPACT STUDENT SELECTION
+           ============================================================ */
+        .students-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .students-toolbar .hint {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .student-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 36px;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 10px;
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
-            position: relative;
-            animation: fadeIn 0.25s ease;
-            transition: border-color 0.2s;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.2s ease;
         }
-        .student-entry:hover {
-            border-color: rgba(251, 191, 36, 0.2);
+        .student-row:hover {
+            border-color: rgba(251, 191, 36, 0.25);
+            background: rgba(0, 0, 0, 0.28);
+        }
+        .student-row.focus-within {
+            border-color: var(--gold-500);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
+            from { opacity: 0; transform: translateY(-3px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .student-entry .remove-btn {
+
+        .student-row .row-index {
+            display: none;
+        }
+
+        .student-row .class-select {
+            padding: 8px 10px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 12.5px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            min-width: 0;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23fbbf24' d='M4.5 6L8 9.5 11.5 6z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+            padding-right: 26px;
+        }
+        .student-row .class-select:hover:not(:disabled) {
+            border-color: rgba(251, 191, 36, 0.35);
+        }
+        .student-row .class-select:focus {
+            outline: none;
+            border-color: var(--gold-500);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+        }
+        .student-row .class-select option { background: var(--navy-800); color: var(--text-primary); }
+
+        /* Searchable name field */
+        .student-row .name-combo {
+            position: relative;
+            min-width: 0;
+        }
+        .student-row .name-combo input {
+            width: 100%;
+            padding: 8px 10px;
+            padding-right: 30px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 12.5px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .student-row .name-combo input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .student-row .name-combo input:hover:not(:disabled) {
+            border-color: rgba(251, 191, 36, 0.35);
+        }
+        .student-row .name-combo input:focus {
+            outline: none;
+            border-color: var(--gold-500);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .student-row .name-combo input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .student-row .name-combo .combo-status {
             position: absolute;
-            top: 12px; right: 12px;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            color: var(--gold-500);
+            pointer-events: none;
+            display: none;
+        }
+        .student-row .name-combo .combo-status.show { display: block; }
+
+        .student-row .name-combo .dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            max-height: 260px;
+            overflow-y: auto;
+            background: rgba(20, 35, 55, 0.99);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            display: none;
+            padding: 4px 0;
+            backdrop-filter: blur(12px);
+        }
+        .student-row .name-combo .dropdown.show { display: block; }
+        .student-row .name-combo .dropdown .empty {
+            padding: 14px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            font-style: italic;
+        }
+        .student-row .name-combo .dropdown .option {
+            padding: 9px 14px;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .student-row .name-combo .dropdown .option:hover,
+        .student-row .name-combo .dropdown .option.highlighted {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--gold-500);
+        }
+        .student-row .name-combo .dropdown .option .match {
+            color: var(--gold-500);
+            font-weight: 700;
+        }
+
+        .student-row .remove-btn {
+            width: 32px;
+            height: 32px;
             background: rgba(239, 68, 68, 0.15);
             color: #fca5a5;
             border: 1px solid rgba(239, 68, 68, 0.3);
             border-radius: 8px;
-            width: 30px; height: 30px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
             transition: all 0.2s;
             line-height: 1;
+            padding: 0;
         }
-        .student-entry .remove-btn:hover {
+        .student-row .remove-btn:hover {
             background: rgba(239, 68, 68, 0.9);
             color: #fff;
             border-color: var(--danger);
             transform: scale(1.05);
         }
-        .student-entry .spinner-mini {
-            display: inline-block;
-            width: 12px; height: 12px;
-            border: 2px solid rgba(251, 191, 36, 0.2);
-            border-top: 2px solid var(--gold-500);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin-left: 6px;
-            vertical-align: middle;
+
+        /* Empty state */
+        .students-empty {
+            padding: 24px 16px;
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px dashed var(--border-subtle);
+            border-radius: 10px;
         }
 
         /* ============ BUTTONS ============ */
@@ -652,7 +802,6 @@
         .help-section ul { margin: 0; padding-left: 20px; line-height: 1.9; }
         .help-section li::marker { color: var(--gold-500); }
 
-        /* ============ INFO COUNTS / BADGES ============ */
         .invoice-count {
             font-size: 11px;
             color: var(--text-muted);
@@ -739,7 +888,7 @@
         @media (max-width: 860px) {
             .mode-buttons { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
             body { padding: 10px; }
             .content { padding: 20px 16px; }
             .header { padding: 24px 16px 22px; }
@@ -759,6 +908,25 @@
             .mode-buttons { grid-template-columns: 1fr; }
             .mode-btn { min-height: 48px; }
             .modal-box .btn { flex: none; width: 100%; }
+            .student-row {
+                grid-template-columns: 1fr 36px;
+                grid-template-rows: auto auto;
+                gap: 6px;
+                padding: 10px;
+            }
+            .student-row .class-select {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            .student-row .name-combo {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            .student-row .remove-btn {
+                grid-column: 2;
+                grid-row: 1 / span 2;
+                height: 100%;
+            }
         }
         @media (max-width: 420px) {
             .header h1 { font-size: 18px; }
@@ -772,7 +940,6 @@
 
     <div id="bg-canvas-container"><canvas id="banknoteCanvas"></canvas></div>
 
-    <!-- Main App (auto-unlocked by shared.js) -->
     <div id="mainApp" class="container">
         <div class="header">
             <div class="header-icon">🏫</div>
@@ -891,6 +1058,10 @@
                     <span class="invoice-count" id="studentCount">(0 students)</span>
                 </h3>
 
+                <div class="students-toolbar">
+                    <div class="hint">Type to search students — dropdown filters as you type</div>
+                </div>
+
                 <div id="studentsContainer"></div>
 
                 <div class="btn-group" style="margin-top:12px;">
@@ -927,7 +1098,7 @@
                     <li>Enter the <strong>parent/guardian name</strong> (required)</li>
                     <li>Select the <strong>academic year</strong> and the <strong>terms</strong> to invoice</li>
                     <li>Pick a <strong>Balance Display Mode</strong> — applies to new invoices</li>
-                    <li>Add students — the correct names load automatically per class</li>
+                    <li>Add students — select class, then start typing a name to filter</li>
                     <li>Click <strong>Generate Invoice</strong> to create and download the PDF</li>
                     <li>Use <strong>Check Existing Invoices</strong> to manage past invoices</li>
                 </ul>
@@ -940,7 +1111,6 @@
         </div>
     </div>
 
-    <!-- Loading overlay -->
     <div id="loading" class="loading">
         <div class="spinner"></div>
         <div class="loading-text" id="loadingText">Preparing...</div>
@@ -1107,8 +1277,12 @@
         let currentDeleteInvoiceNumber = null;
         let currentEditInvoiceNumber = null;
 
+        // Tracks open autocomplete state per row
+        let activeCombo = null;      // { rowEl, inputEl, dropdownEl, options, highlightIndex }
+        let outsideClickHandler = null;
+
         // ============================================
-        // INIT with shared unlock
+        // INIT
         // ============================================
         document.addEventListener('DOMContentLoaded', async function() {
             try {
@@ -1124,20 +1298,18 @@
             }
         });
 
-        // ============================================
-        // APP INIT
-        // ============================================
         function initApp() {
             updateNetworkStatus();
             updateBFPreview();
             loadClasses();
             setInvoiceMode('include_both', document.querySelector('.mode-btn[data-mode="include_both"]'));
+            renderEmptyStudentsMessage();
             setTimeout(function() { addStudent(); }, 400);
 
             document.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     var t = e.target;
-                    if (t.tagName === 'INPUT' && t.type !== 'checkbox') {
+                    if (t.tagName === 'INPUT' && t.type !== 'checkbox' && !t.classList.contains('name-input')) {
                         e.preventDefault();
                         generateAndDownload();
                     }
@@ -1149,6 +1321,7 @@
                     closeMarkPaidModal();
                     closeDeleteModal();
                     closeEditModal();
+                    closeActiveCombo();
                 }
             });
 
@@ -1172,8 +1345,23 @@
         function hideAlert() { document.getElementById('alert').className = 'alert'; }
 
         function updateStudentCount() {
-            var students = document.querySelectorAll('.student-entry');
+            var students = document.querySelectorAll('.student-row');
             document.getElementById('studentCount').textContent = '(' + students.length + ' students)';
+            if (students.length === 0) renderEmptyStudentsMessage();
+            else {
+                var empty = document.querySelector('.students-empty');
+                if (empty) empty.remove();
+            }
+        }
+
+        function renderEmptyStudentsMessage() {
+            var container = document.getElementById('studentsContainer');
+            if (container.querySelectorAll('.student-row').length === 0 && !container.querySelector('.students-empty')) {
+                var div = document.createElement('div');
+                div.className = 'students-empty';
+                div.textContent = 'No students added yet — click "Add Student" below to begin.';
+                container.appendChild(div);
+            }
         }
 
         function updateNetworkStatus() {
@@ -1378,11 +1566,11 @@
         }
 
         // ============================================
-        // CLASSES + STUDENTS
+        // CLASSES
         // ============================================
         function loadClasses() {
             if (classesLoaded && classData.length > 0) {
-                var selects = document.querySelectorAll('.student-class-select');
+                var selects = document.querySelectorAll('.student-row .class-select');
                 for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classData);
                 return;
             }
@@ -1393,7 +1581,7 @@
                 else if (result.classes && Array.isArray(result.classes)) classes = result.classes;
                 classData = classes;
                 classesLoaded = true;
-                var selects = document.querySelectorAll('.student-class-select');
+                var selects = document.querySelectorAll('.student-row .class-select');
                 for (var i = 0; i < selects.length; i++) populateClassSelect(selects[i], classes);
             }, function(error) {
                 showAlert('Error loading classes: ' + error, 'error');
@@ -1402,7 +1590,7 @@
 
         function populateClassSelect(select, classes) {
             var currentValue = select.value;
-            select.innerHTML = '<option value="">Select Class...</option>';
+            select.innerHTML = '<option value="">Class...</option>';
             for (var i = 0; i < classes.length; i++) {
                 var opt = document.createElement('option');
                 opt.value = classes[i].value || classes[i];
@@ -1418,70 +1606,152 @@
             return checked[0].value;
         }
 
-        function loadStudentNamesForSelect(select, className, force) {
-            if (!className) {
-                select.innerHTML = '<option value="">Select Student...</option>';
-                return;
-            }
+        // ============================================
+        // STUDENT NAME AUTOCOMPLETE
+        // ============================================
+        function getStudentNamesForClass(className) {
+            if (!className) return Promise.resolve([]);
             var academicYear = document.getElementById('academicYear').value;
             var term = getFirstSelectedTerm();
             var cacheKey = className + '|' + academicYear + '|' + term;
-            if (!force && studentNamesCache[cacheKey]) {
-                fillNameSelect(select, studentNamesCache[cacheKey]);
-                return;
+            if (studentNamesCache[cacheKey]) {
+                return Promise.resolve(studentNamesCache[cacheKey]);
             }
-            var entry = select.closest('.student-entry');
-            if (entry) {
-                var existingSpinner = entry.querySelector('.spinner-mini');
-                if (existingSpinner) existingSpinner.remove();
-                var spin = document.createElement('span');
-                spin.className = 'spinner-mini';
-                select.parentNode.appendChild(spin);
-            }
-            select.disabled = true;
-            callApi('getInvoiceStudentNames', {
-                className: className,
-                academicYear: academicYear,
-                term: term
-            }, function(result) {
-                select.disabled = false;
-                var entry = select.closest('.student-entry');
-                if (entry) {
-                    var sp = entry.querySelector('.spinner-mini');
-                    if (sp) sp.remove();
-                }
-                var names = [];
-                if (Array.isArray(result)) names = result;
-                else if (result.data && Array.isArray(result.data)) names = result.data;
-                else if (result.names && Array.isArray(result.names)) names = result.names;
-                studentNamesCache[cacheKey] = names;
-                fillNameSelect(select, names);
-            }, function(error) {
-                select.disabled = false;
-                var entry = select.closest('.student-entry');
-                if (entry) {
-                    var sp = entry.querySelector('.spinner-mini');
-                    if (sp) sp.remove();
-                }
-                select.innerHTML = '<option value="">Error loading — try again</option>';
-                showAlert('Error loading students: ' + error, 'error');
+            return new Promise(function(resolve) {
+                callApi('getInvoiceStudentNames', {
+                    className: className,
+                    academicYear: academicYear,
+                    term: term
+                }, function(result) {
+                    var names = [];
+                    if (Array.isArray(result)) names = result;
+                    else if (result.data && Array.isArray(result.data)) names = result.data;
+                    else if (result.names && Array.isArray(result.names)) names = result.names;
+                    studentNamesCache[cacheKey] = names;
+                    resolve(names);
+                }, function() {
+                    resolve([]);
+                });
             });
         }
 
-        function fillNameSelect(select, names) {
-            var currentValue = select.value;
-            select.innerHTML = '<option value="">Select Student...</option>';
-            if (names && names.length > 0) {
-                for (var i = 0; i < names.length; i++) {
-                    var opt = document.createElement('option');
-                    opt.value = names[i];
-                    opt.textContent = names[i];
-                    select.appendChild(opt);
-                }
-                if (currentValue && names.indexOf(currentValue) !== -1) select.value = currentValue;
-            } else {
-                select.innerHTML = '<option value="">No students found</option>';
+        function closeActiveCombo() {
+            if (activeCombo) {
+                activeCombo.dropdownEl.classList.remove('show');
+                activeCombo = null;
             }
+        }
+
+        function openCombo(rowEl, inputEl, dropdownEl, allNames) {
+            var q = inputEl.value.toLowerCase().trim();
+            var filtered = allNames;
+            if (q) {
+                filtered = allNames.filter(function(n) {
+                    return n.toLowerCase().indexOf(q) !== -1;
+                });
+            }
+            var html = '';
+            if (filtered.length === 0) {
+                html = '<div class="empty">No matching students</div>';
+            } else {
+                var limit = 200;
+                var shown = filtered.slice(0, limit);
+                for (var i = 0; i < shown.length; i++) {
+                    html += '<div class="option" data-name="' + escapeHtmlAttr(shown[i]) + '">' + highlightMatch(shown[i], q) + '</div>';
+                }
+                if (filtered.length > limit) {
+                    html += '<div class="empty">Showing first ' + limit + ' of ' + filtered.length + ' — type to narrow</div>';
+                }
+            }
+            dropdownEl.innerHTML = html;
+            dropdownEl.classList.add('show');
+            activeCombo = { rowEl: rowEl, inputEl: inputEl, dropdownEl: dropdownEl, allNames: allNames };
+
+            // Bind click on option
+            dropdownEl.querySelectorAll('.option').forEach(function(optEl) {
+                optEl.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    inputEl.value = optEl.getAttribute('data-name');
+                    closeActiveCombo();
+                });
+            });
+        }
+
+        function escapeHtmlAttr(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function highlightMatch(name, q) {
+            if (!q) return escapeHtml(name);
+            var idx = name.toLowerCase().indexOf(q);
+            if (idx === -1) return escapeHtml(name);
+            return escapeHtml(name.slice(0, idx)) +
+                   '<span class="match">' + escapeHtml(name.slice(idx, idx + q.length)) + '</span>' +
+                   escapeHtml(name.slice(idx + q.length));
+        }
+
+        function attachNameCombo(rowEl, inputEl, dropdownEl) {
+            var combo = { rowEl: rowEl, inputEl: inputEl, dropdownEl: dropdownEl };
+            rowEl._combo = combo;
+
+            inputEl.addEventListener('focus', async function() {
+                var className = rowEl.querySelector('.class-select').value;
+                if (!className) {
+                    inputEl.blur();
+                    rowEl.querySelector('.class-select').focus();
+                    return;
+                }
+                var allNames = await getStudentNamesForClass(className);
+                openCombo(rowEl, inputEl, dropdownEl, allNames);
+            });
+
+            inputEl.addEventListener('input', async function() {
+                var className = rowEl.querySelector('.class-select').value;
+                if (!className) return;
+                var allNames = await getStudentNamesForClass(className);
+                openCombo(rowEl, inputEl, dropdownEl, allNames);
+            });
+
+            inputEl.addEventListener('keydown', function(e) {
+                if (!activeCombo) return;
+                var options = dropdownEl.querySelectorAll('.option');
+                if (options.length === 0) return;
+                var currentIdx = -1;
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].classList.contains('highlighted')) { currentIdx = i; break; }
+                }
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
+                    var next = currentIdx < options.length - 1 ? currentIdx + 1 : 0;
+                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
+                    else if (currentIdx === 0) options[0].classList.remove('highlighted');
+                    options[next].classList.add('highlighted');
+                    options[next].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (currentIdx > 0) options[currentIdx].classList.remove('highlighted');
+                    var prev = currentIdx > 0 ? currentIdx - 1 : options.length - 1;
+                    options[prev].classList.add('highlighted');
+                    options[prev].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'Enter') {
+                    if (currentIdx >= 0) {
+                        e.preventDefault();
+                        inputEl.value = options[currentIdx].getAttribute('data-name');
+                        closeActiveCombo();
+                    }
+                } else if (e.key === 'Escape') {
+                    closeActiveCombo();
+                }
+            });
+
+            inputEl.addEventListener('blur', function() {
+                setTimeout(function() { closeActiveCombo(); }, 150);
+            });
         }
 
         // ============================================
@@ -1489,52 +1759,74 @@
         // ============================================
         function addStudent() {
             var container = document.getElementById('studentsContainer');
+            var empty = container.querySelector('.students-empty');
+            if (empty) empty.remove();
+
             var id = ++studentCounter;
             var previousClass = '';
-            var entries = document.querySelectorAll('.student-entry');
-            if (entries.length > 0) {
-                var lastClass = entries[entries.length - 1].querySelector('.student-class-select');
+            var rows = document.querySelectorAll('.student-row');
+            if (rows.length > 0) {
+                var lastClass = rows[rows.length - 1].querySelector('.class-select');
                 if (lastClass && lastClass.value) previousClass = lastClass.value;
             }
-            var div = document.createElement('div');
-            div.className = 'student-entry';
-            div.dataset.id = id;
-            div.innerHTML = '<button type="button" class="remove-btn" onclick="removeStudent(' + id + ')" title="Remove student">&times;</button>' +
-                '<div class="form-row">' +
-                '<div class="form-group" style="margin-bottom:0;">' +
-                '<label>Student Class <span class="required">*</span></label>' +
-                '<select class="student-class-select" data-id="' + id + '"><option value="">Select Class...</option></select>' +
+
+            var rowEl = document.createElement('div');
+            rowEl.className = 'student-row';
+            rowEl.dataset.id = id;
+            rowEl.innerHTML =
+                '<select class="class-select"><option value="">Class...</option></select>' +
+                '<div class="name-combo">' +
+                '  <input type="text" class="name-input" placeholder="Type to search student name..." autocomplete="off" spellcheck="false">' +
+                '  <div class="dropdown"></div>' +
                 '</div>' +
-                '<div class="form-group" style="margin-bottom:0;">' +
-                '<label>Student Name <span class="required">*</span></label>' +
-                '<select class="student-name-select" data-id="' + id + '"><option value="">Select Student...</option></select>' +
-                '</div></div>';
-            container.appendChild(div);
-            var classSelect = div.querySelector('.student-class-select');
+                '<button type="button" class="remove-btn" title="Remove student">&times;</button>';
+
+            container.appendChild(rowEl);
+
+            var classSelect = rowEl.querySelector('.class-select');
+            var nameInput = rowEl.querySelector('.name-input');
+            var dropdown = rowEl.querySelector('.dropdown');
+            var removeBtn = rowEl.querySelector('.remove-btn');
+
             populateClassSelect(classSelect, classData);
-            classSelect.addEventListener('change', function() {
-                var nameSelect = div.querySelector('.student-name-select');
-                nameSelect.value = '';
-                nameSelect.innerHTML = '<option value="">Loading...</option>';
-                loadStudentNamesForSelect(nameSelect, classSelect.value, false);
+
+            rowEl.addEventListener('focusin', function() { rowEl.classList.add('focus-within'); });
+            rowEl.addEventListener('focusout', function() {
+                setTimeout(function() {
+                    if (!rowEl.contains(document.activeElement)) rowEl.classList.remove('focus-within');
+                }, 100);
             });
+
+            classSelect.addEventListener('change', function() {
+                nameInput.value = '';
+                closeActiveCombo();
+                if (classSelect.value) {
+                    nameInput.focus();
+                }
+            });
+
+            removeBtn.addEventListener('click', function() { removeStudent(id); });
+
+            attachNameCombo(rowEl, nameInput, dropdown);
+
             if (previousClass) {
                 classSelect.value = previousClass;
-                var nameSelect = div.querySelector('.student-name-select');
-                loadStudentNamesForSelect(nameSelect, previousClass, false);
             }
+
             updateStudentCount();
+            if (!previousClass) classSelect.focus();
         }
 
         function removeStudent(id) {
-            var entry = document.querySelector('.student-entry[data-id="' + id + '"]');
+            var entry = document.querySelector('.student-row[data-id="' + id + '"]');
             if (entry) {
                 entry.style.opacity = '0';
                 entry.style.transform = 'translateY(-4px)';
-                entry.style.transition = 'all 0.2s';
+                entry.style.transition = 'all 0.15s';
                 setTimeout(function() {
                     entry.remove();
                     updateStudentCount();
+                    renderEmptyStudentsMessage();
                 }, 150);
             }
         }
@@ -1543,16 +1835,17 @@
             document.getElementById('studentsContainer').innerHTML = '';
             studentCounter = 0;
             updateStudentCount();
+            renderEmptyStudentsMessage();
         }
 
         function getStudentsData() {
-            var entries = document.querySelectorAll('.student-entry');
+            var rows = document.querySelectorAll('.student-row');
             var students = [];
-            for (var i = 0; i < entries.length; i++) {
-                var classSelect = entries[i].querySelector('.student-class-select');
-                var nameSelect = entries[i].querySelector('.student-name-select');
-                if (classSelect.value && nameSelect.value) {
-                    students.push({ name: nameSelect.value, class: classSelect.value });
+            for (var i = 0; i < rows.length; i++) {
+                var classSelect = rows[i].querySelector('.class-select');
+                var nameInput = rows[i].querySelector('.name-input');
+                if (classSelect.value && nameInput.value.trim()) {
+                    students.push({ name: nameInput.value.trim(), class: classSelect.value });
                 }
             }
             return students;
@@ -1560,13 +1853,11 @@
 
         function onAcademicYearChange() {
             studentNamesCache = {};
-            var entries = document.querySelectorAll('.student-entry');
-            for (var i = 0; i < entries.length; i++) {
-                var classSelect = entries[i].querySelector('.student-class-select');
-                var nameSelect = entries[i].querySelector('.student-name-select');
-                if (classSelect && nameSelect && classSelect.value) {
-                    loadStudentNamesForSelect(nameSelect, classSelect.value, true);
-                }
+            // Clear all name inputs since cached names are now stale
+            var rows = document.querySelectorAll('.student-row');
+            for (var i = 0; i < rows.length; i++) {
+                var nameInput = rows[i].querySelector('.name-input');
+                if (nameInput) nameInput.value = '';
             }
             updateBFPreview();
         }
@@ -1918,6 +2209,7 @@
                         document.getElementById('studentsContainer').innerHTML = '';
                         studentCounter = 0;
                         updateStudentCount();
+                        renderEmptyStudentsMessage();
                         document.getElementById('parentName').value = '';
                         document.getElementById('parentPhone').value = '';
                         document.getElementById('parentEmail').value = '';
