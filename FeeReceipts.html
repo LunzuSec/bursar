@@ -128,16 +128,22 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
+  /* FORCE 2x2 GRID FOR SIGNATURE LAYOUT */
+  .layout-signature .receipt-sheet { 
+    grid-template-columns: repeat(2, 1fr) !important; 
+    grid-template-rows: repeat(2, 1fr) !important; 
+    gap: 4mm; 
+    padding: 6mm; 
+  }
+
   .layout-full .receipt-sheet { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3mm; padding: 5mm; }
   .layout-compact .receipt-sheet { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2mm; padding: 4mm; }
-  .layout-signature .receipt-sheet { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 4mm; padding: 6mm; }
 
   /* ============================================================
      RECEIPT BASE STYLES - FIXED PROPORTIONS
      ============================================================ */
   .receipt {
     border: 1px solid #000; border-radius: 4px; padding: 3mm; position: relative; 
-    /* Rigid grid layout forces spacing */
     display: grid !important; 
     grid-template-rows: auto auto 1fr auto !important;
     height: 100% !important; 
@@ -151,7 +157,6 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
-  /* Force content above watermark */
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
   .receipt-header {
@@ -170,7 +175,6 @@
   }
   .receipt-number .num-label { display: block; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.75em; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 1px; }
 
-  /* The 1fr row that grows and forces the footer down */
   .receipt-body { display: flex; flex-direction: column; min-height: 0; line-height: 1.25; overflow: hidden; }
 
   .student-line { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #000; margin-bottom: 3px; gap: 4px; }
@@ -187,7 +191,6 @@
   .payments-table tbody td.dt { text-align: right; color: #333; white-space: nowrap; }
   .payments-table tbody td.dt.nodate { color: #777; font-style: italic; }
 
-  /* Totals block now flows right after the table */
   .totals-block { border: 1px solid #000; border-radius: 3px; padding: 3px 5px; margin-top: 0 !important; }
   .totals-row { display: flex; justify-content: space-between; padding: 1px 0; color: #000; }
   .totals-row.big { border-top: 1px solid #000; margin-top: 2px; padding-top: 2px; font-weight: 800; color: #000; }
@@ -196,7 +199,6 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  /* Footer is pinned to the last grid row */
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
