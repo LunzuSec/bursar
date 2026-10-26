@@ -133,11 +133,13 @@
   .layout-signature .receipt-sheet { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 4mm; padding: 6mm; }
 
   /* ============================================================
-     RECEIPT BASE STYLES
+     RECEIPT BASE STYLES - Locked Grid to prevent overlapping
      ============================================================ */
   .receipt {
-    border: 1px solid #000; border-radius: 4px; padding: 3mm; position: relative; display: flex; flex-direction: column;
-    overflow: hidden; background: transparent; height: 100%; box-sizing: border-box; color: #000;
+    border: 1px solid #000; border-radius: 4px; padding: 3mm; position: relative; 
+    display: grid; 
+    grid-template-rows: auto auto 1fr auto; 
+    height: 100%; box-sizing: border-box; color: #000; background: transparent; overflow: hidden;
   }
 
   .watermark { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 0; overflow: hidden; }
@@ -146,11 +148,11 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
-  /* Make sure content is ABOVE the watermark */
-  .receipt > *:not(.watermark) { position: relative; z-index: 1; background: transparent; }
+  /* Force content above watermark */
+  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
   .receipt-header {
-    display: flex; align-items: stretch; gap: 5px; border-bottom: 1.2px solid #000; padding-bottom: 3px; margin-bottom: 4px; min-height: 34px;
+    display: flex; align-items: center; gap: 5px; border-bottom: 1.2px solid #000; padding-bottom: 3px; margin-bottom: 4px; min-height: 34px;
   }
   .receipt-header .crest { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; align-self: center; }
   .receipt-header .title { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
@@ -165,9 +167,9 @@
   }
   .receipt-number .num-label { display: block; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.75em; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 1px; }
 
-  .receipt-body { flex: 1; display: flex; flex-direction: column; min-height: 0; line-height: 1.25; background: transparent; }
+  .receipt-body { display: flex; flex-direction: column; min-height: 0; line-height: 1.25; }
 
-  .student-line { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #000; margin-bottom: 3px; gap: 4px; background: transparent; }
+  .student-line { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #000; margin-bottom: 3px; gap: 4px; }
   .student-line .left { font-weight: 700; color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .student-line .right { color: #333; text-align: right; white-space: nowrap; flex-shrink: 0; }
 
@@ -189,7 +191,7 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  .receipt-footer { margin-top: 3px; padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .receipt-footer { margin-top: 3px; padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
   .receipt-footer .left .acct { margin-top: 1px; color: #000; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.3px; word-break: break-all; }
@@ -197,13 +199,13 @@
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
 
   .signature-block { display: none; }
-  .layout-signature .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 4mm; padding-top: 3mm; flex-shrink: 0; }
+  .layout-signature .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 4mm; padding-top: 3mm; }
   .layout-signature .signature-block .sig-box { flex: 1; text-align: center; }
   .layout-signature .signature-block .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
   .layout-signature .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
 
   /* ============================================================
-     SPECIFIC LAYOUTS (Font Scaling)
+     SPECIFIC LAYOUTS (Font Scaling to fit perfectly)
      ============================================================ */
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
