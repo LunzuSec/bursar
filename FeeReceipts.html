@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="shared.css">
 <script src="shared.js"></script>
 <style>
+  /* ============================================================
+     GLOBAL RESET & BACKGROUND
+     ============================================================ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
@@ -26,6 +29,9 @@
   }
   #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
 
+  /* ============================================================
+     UI CONTROLS (GLASS PANEL)
+     ============================================================ */
   .page-shell {
     position: relative;
     z-index: 1;
@@ -120,15 +126,29 @@
   .preview-header .count { font-size: 14px; color: #d1e0f0; font-weight: 600; }
   .preview-header .count strong { color: #fcd34d; font-size: 16px; }
 
-  #receiptContainer { width: 100%; overflow-x: auto; padding-bottom: 12px; }
+  /* ============================================================
+     PRINT PREVIEW CONTAINER
+     ============================================================ */
+  #receiptContainer { width: 100%; padding-bottom: 12px; display: flex; flex-direction: column; align-items: center; }
 
+  /* Physical A4 Sheet */
   .receipt-sheet {
-    width: 210mm; height: 297mm; margin: 0 auto 20px; background: white; padding: 5mm; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    page-break-after: always; break-after: page; overflow: hidden; box-sizing: border-box; display: grid; border-radius: 4px;
+    width: 210mm; 
+    height: 297mm; 
+    margin: 0 auto 20px; 
+    background: white; 
+    padding: 5mm; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    page-break-after: always; 
+    break-after: page; 
+    overflow: hidden; 
+    box-sizing: border-box; 
+    display: grid; 
+    border-radius: 4px;
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* FORCE 2x2 GRID FOR SIGNATURE LAYOUT */
+  /* Force Perfect 2x2 Grid (Signature) - 4 per page */
   .layout-signature .receipt-sheet { 
     grid-template-columns: repeat(2, 1fr) !important; 
     grid-template-rows: repeat(2, 1fr) !important; 
@@ -136,19 +156,42 @@
     padding: 6mm; 
   }
 
-  .layout-full .receipt-sheet { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3mm; padding: 5mm; }
-  .layout-compact .receipt-sheet { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2mm; padding: 4mm; }
+  /* Force Perfect 3x3 Grid (Full) - 9 per page */
+  .layout-full .receipt-sheet { 
+    grid-template-columns: repeat(3, 1fr) !important; 
+    grid-template-rows: repeat(3, 1fr) !important; 
+    gap: 3mm; 
+    padding: 5mm; 
+  }
+
+  /* Force Perfect 4x4 Grid (Compact) - 16 per page */
+  .layout-compact .receipt-sheet { 
+    grid-template-columns: repeat(4, 1fr) !important; 
+    grid-template-rows: repeat(4, 1fr) !important; 
+    gap: 2mm; 
+    padding: 4mm; 
+  }
 
   /* ============================================================
-     RECEIPT BASE STYLES - FIXED PROPORTIONS
+     RECEIPT BASE STYLES - Strict Grid Layout
      ============================================================ */
   .receipt {
-    border: 1px solid #000; border-radius: 4px; padding: 3mm; position: relative; 
+    border: 1px solid #000; 
+    border-radius: 4px; 
+    padding: 3mm; 
+    position: relative; 
+    
+    /* Force layout to fill the entire grid cell */
     display: grid !important; 
     grid-template-rows: auto auto 1fr auto !important;
     height: 100% !important; 
+    width: 100% !important;
     min-height: 0 !important;
-    box-sizing: border-box; color: #000; background: transparent; overflow: hidden;
+    
+    box-sizing: border-box; 
+    color: #000; 
+    background: transparent; 
+    overflow: hidden;
   }
 
   .watermark { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 0; overflow: hidden; }
@@ -157,8 +200,10 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
+  /* Force content above watermark */
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
+  /* HEADER */
   .receipt-header {
     display: flex; align-items: center; gap: 5px; border-bottom: 1.2px solid #000; padding-bottom: 3px; margin-bottom: 4px; min-height: 34px;
   }
@@ -175,6 +220,7 @@
   }
   .receipt-number .num-label { display: block; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.75em; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 1px; }
 
+  /* BODY */
   .receipt-body { display: flex; flex-direction: column; min-height: 0; line-height: 1.25; overflow: hidden; }
 
   .student-line { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #000; margin-bottom: 3px; gap: 4px; }
@@ -191,6 +237,7 @@
   .payments-table tbody td.dt { text-align: right; color: #333; white-space: nowrap; }
   .payments-table tbody td.dt.nodate { color: #777; font-style: italic; }
 
+  /* TOTALS */
   .totals-block { border: 1px solid #000; border-radius: 3px; padding: 3px 5px; margin-top: 0 !important; }
   .totals-row { display: flex; justify-content: space-between; padding: 1px 0; color: #000; }
   .totals-row.big { border-top: 1px solid #000; margin-top: 2px; padding-top: 2px; font-weight: 800; color: #000; }
@@ -199,6 +246,7 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
+  /* FOOTER (Pinned to bottom) */
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
@@ -213,7 +261,7 @@
   .layout-signature .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
 
   /* ============================================================
-     SPECIFIC LAYOUTS (Font Scaling to fit perfectly)
+     SPECIFIC LAYOUTS (Font Scaling)
      ============================================================ */
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
@@ -293,7 +341,7 @@
     body { background: white; padding: 0; margin: 0; }
     #bg-canvas-container, .shared-top-nav, .glass-panel, .controls, .preview-header, .error-msg, .warning-msg, .loading-overlay { display: none !important; }
     .page-shell { display: block !important; }
-    #receiptContainer { overflow: visible !important; }
+    #receiptContainer { overflow: visible !important; display: block !important; }
     .receipt-sheet { box-shadow: none; margin: 0; width: 210mm; height: 297mm; page-break-after: always; break-after: page; background: white; border-radius: 0; }
     .receipt { page-break-inside: avoid; break-inside: avoid; }
     @page { size: A4 portrait; margin: 0; }
@@ -304,7 +352,7 @@
     body { padding: 10px; }
     .row { grid-template-columns: 1fr; }
     .preview-header { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
-    #receiptContainer { overflow-x: auto; padding-bottom: 12px; }
+    #receiptContainer { overflow-x: auto; padding-bottom: 12px; display: block; }
     .controls { padding: 18px 16px; }
     .actions button { min-width: 100%; }
   }
