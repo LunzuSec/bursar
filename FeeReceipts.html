@@ -131,7 +131,7 @@
      ============================================================ */
   #receiptContainer { width: 100%; padding-bottom: 12px; display: flex; flex-direction: column; align-items: center; }
 
-  /* Physical A4 Sheet */
+  /* Physical A4 Sheet - Now defaults to 2x2 grid immediately */
   .receipt-sheet {
     width: 210mm; 
     height: 297mm; 
@@ -143,20 +143,18 @@
     break-after: page; 
     overflow: hidden; 
     box-sizing: border-box; 
-    display: grid; 
+    display: grid !important; 
     border-radius: 4px;
+    
+    /* THE FIX: Force 2x2 by default so it works even before JS runs */
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+    gap: 4mm;
+    padding: 6mm;
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* Force Perfect 2x2 Grid (Signature) - 4 per page */
-  .layout-signature .receipt-sheet { 
-    grid-template-columns: repeat(2, 1fr) !important; 
-    grid-template-rows: repeat(2, 1fr) !important; 
-    gap: 4mm; 
-    padding: 6mm; 
-  }
-
-  /* Force Perfect 3x3 Grid (Full) - 9 per page */
+  /* These classes will override the default 2x2 when clicked */
   .layout-full .receipt-sheet { 
     grid-template-columns: repeat(3, 1fr) !important; 
     grid-template-rows: repeat(3, 1fr) !important; 
@@ -164,7 +162,6 @@
     padding: 5mm; 
   }
 
-  /* Force Perfect 4x4 Grid (Compact) - 16 per page */
   .layout-compact .receipt-sheet { 
     grid-template-columns: repeat(4, 1fr) !important; 
     grid-template-rows: repeat(4, 1fr) !important; 
@@ -666,6 +663,7 @@
     document.getElementById('rDateFrom').value = toIsoDate(today);
     document.getElementById('rDateTo').value = toIsoDate(today);
     updateRangeSummary();
+    setLayout('signature');   // <--- THIS IS THE FIX
     loadTerms();
   };
 
