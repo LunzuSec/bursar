@@ -225,7 +225,6 @@
     .shared-menu {
         top: 12px !important;
         right: 12px !important;
-        /* Handle iPhone notch safe area if available */
         top: calc(12px + env(safe-area-inset-top, 0px)) !important;
         right: calc(12px + env(safe-area-inset-right, 0px)) !important;
     }
@@ -240,7 +239,6 @@
         right: 0;
         top: calc(100% + 8px);
     }
-    /* Bigger tap targets */
     .shared-menu-link {
         padding: 12px 14px;
         font-size: 14px;
@@ -258,9 +256,6 @@
     }
 }
 
-/* ============================================================
-   PRINT — hide menu
-   ============================================================ */
 @media print {
     .shared-menu {
         display: none !important;
