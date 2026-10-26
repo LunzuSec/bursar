@@ -131,7 +131,7 @@
      ============================================================ */
   #receiptContainer { width: 100%; padding-bottom: 12px; display: flex; flex-direction: column; align-items: center; }
 
-  /* Physical A4 Sheet - Now defaults to 2x2 grid immediately */
+  /* Physical A4 Sheet */
   .receipt-sheet {
     width: 210mm; 
     height: 297mm; 
@@ -146,7 +146,7 @@
     display: grid !important; 
     border-radius: 4px;
     
-    /* THE FIX: Force 2x2 by default so it works even before JS runs */
+    /* Force 2x2 by default */
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(2, 1fr) !important;
     gap: 4mm;
@@ -154,37 +154,22 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
-  /* These classes will override the default 2x2 when clicked */
-  .layout-full .receipt-sheet { 
-    grid-template-columns: repeat(3, 1fr) !important; 
-    grid-template-rows: repeat(3, 1fr) !important; 
-    gap: 3mm; 
-    padding: 5mm; 
-  }
-
-  .layout-compact .receipt-sheet { 
-    grid-template-columns: repeat(4, 1fr) !important; 
-    grid-template-rows: repeat(4, 1fr) !important; 
-    gap: 2mm; 
-    padding: 4mm; 
-  }
+  .layout-full .receipt-sheet { grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; gap: 3mm; padding: 5mm; }
+  .layout-compact .receipt-sheet { grid-template-columns: repeat(4, 1fr) !important; grid-template-rows: repeat(4, 1fr) !important; gap: 2mm; padding: 4mm; }
 
   /* ============================================================
-     RECEIPT BASE STYLES - Strict Grid Layout
+     RECEIPT BASE STYLES
      ============================================================ */
   .receipt {
     border: 1px solid #000; 
     border-radius: 4px; 
     padding: 3mm; 
     position: relative; 
-    
-    /* Force layout to fill the entire grid cell */
     display: grid !important; 
     grid-template-rows: auto auto 1fr auto !important;
     height: 100% !important; 
     width: 100% !important;
     min-height: 0 !important;
-    
     box-sizing: border-box; 
     color: #000; 
     background: transparent; 
@@ -197,10 +182,8 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
-  /* Force content above watermark */
   .receipt > *:not(.watermark) { position: relative; z-index: 1; }
 
-  /* HEADER */
   .receipt-header {
     display: flex; align-items: center; gap: 5px; border-bottom: 1.2px solid #000; padding-bottom: 3px; margin-bottom: 4px; min-height: 34px;
   }
@@ -208,7 +191,13 @@
   .receipt-header .title { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
   .receipt-header .school { font-weight: 700; color: #000; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .receipt-header .doc-type { color: #000; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.1; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .receipt-header .period { color: #333; font-weight: 600; line-height: 1.1; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  
+  /* Font-size for the "Entries from..." badge is fixed here */
+  .receipt-header .range-badge { 
+    color: #333; font-weight: 600; line-height: 1.1; margin-top: 1px; 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+    font-size: 7px !important; 
+  }
 
   .receipt-number {
     flex-shrink: 0; font-family: 'Courier New', monospace; font-weight: 700; background: transparent; color: #000;
@@ -217,7 +206,6 @@
   }
   .receipt-number .num-label { display: block; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.75em; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 1px; }
 
-  /* BODY */
   .receipt-body { display: flex; flex-direction: column; min-height: 0; line-height: 1.25; overflow: hidden; }
 
   .student-line { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #000; margin-bottom: 3px; gap: 4px; }
@@ -234,7 +222,6 @@
   .payments-table tbody td.dt { text-align: right; color: #333; white-space: nowrap; }
   .payments-table tbody td.dt.nodate { color: #777; font-style: italic; }
 
-  /* TOTALS */
   .totals-block { border: 1px solid #000; border-radius: 3px; padding: 3px 5px; margin-top: 0 !important; }
   .totals-row { display: flex; justify-content: space-between; padding: 1px 0; color: #000; }
   .totals-row.big { border-top: 1px solid #000; margin-top: 2px; padding-top: 2px; font-weight: 800; color: #000; }
@@ -243,7 +230,6 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  /* FOOTER (Pinned to bottom) */
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
@@ -258,13 +244,14 @@
   .layout-signature .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
 
   /* ============================================================
-     SPECIFIC LAYOUTS (Font Scaling)
+     SPECIFIC LAYOUTS
      ============================================================ */
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
   .layout-full .receipt-header .school { font-size: 9px; }
   .layout-full .receipt-header .doc-type { font-size: 6.5px; }
+  .layout-full .receipt-header .range-badge { font-size: 6px; }
   .layout-full .receipt-header .period { font-size: 6.5px; }
   .layout-full .receipt-body { font-size: 7px; }
   .layout-full .student-line .left { font-size: 9px; }
@@ -286,6 +273,7 @@
   .layout-compact .receipt-header .crest { width: 16px; height: 16px; }
   .layout-compact .receipt-header .school { font-size: 7px; }
   .layout-compact .receipt-header .doc-type { font-size: 5px; }
+  .layout-compact .receipt-header .range-badge { display: none; }
   .layout-compact .receipt-header .period { display: none; }
   .layout-compact .receipt-body { font-size: 5.5px; }
   .layout-compact .student-line { padding: 1px 0; margin-bottom: 2px; }
@@ -308,7 +296,7 @@
   .layout-signature .receipt-header .crest { width: 42px; height: 42px; }
   .layout-signature .receipt-header .school { font-size: 13px; }
   .layout-signature .receipt-header .doc-type { font-size: 9px; }
-  .layout-signature .receipt-header .period { font-size: 9px; }
+  .layout-signature .receipt-header .range-badge { font-size: 7px !important; }
   .layout-signature .receipt-body { font-size: 9px; }
   .layout-signature .student-line { padding: 4px 0; margin-bottom: 5px; }
   .layout-signature .student-line .left { font-size: 12px; }
@@ -557,9 +545,9 @@
   let currentMode = 'single';
   let currentLayout = 'signature';
   let selectedStudents = new Set();
-
+  
+  // We no longer pre-fetch numbers on selection
   let assignedNumbers = new Map();
-  let nextNumberBuffer = [];
 
   const dataCache = new Map();
   const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -663,7 +651,7 @@
     document.getElementById('rDateFrom').value = toIsoDate(today);
     document.getElementById('rDateTo').value = toIsoDate(today);
     updateRangeSummary();
-    setLayout('signature');   // <--- THIS IS THE FIX
+    setLayout('signature');
     loadTerms();
   };
 
@@ -869,7 +857,6 @@
     currentClass = null;
     selectedStudents.clear();
     assignedNumbers.clear();
-    nextNumberBuffer = [];
     clearWarning();
     updateRangeSummary();
   }
@@ -885,7 +872,6 @@
     const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndatedFlag);
 
     assignedNumbers.clear();
-    nextNumberBuffer = [];
     clearWarning();
 
     const cached = cacheGet(key);
@@ -939,37 +925,6 @@
   }
 
   // ============================================================
-  // RECEIPT NUMBER ALLOCATION — ATOMIC
-  // ============================================================
-  async function ensureNumberBuffer(count) {
-    if (nextNumberBuffer.length >= count) return;
-    const needed = count - nextNumberBuffer.length;
-    const res = await callGAS('reserveReceiptNumbers', { term: currentTermKey, count: needed });
-    if (!res || !res.success || !res.numbers) throw new Error(res?.error || 'Could not reserve receipt numbers.');
-    for (let i = 0; i < res.numbers.length; i++) nextNumberBuffer.push(res.numbers[i]);
-  }
-
-  async function assignNumberToStudent(rowNumber) {
-    if (assignedNumbers.has(rowNumber)) return assignedNumbers.get(rowNumber);
-    try { await ensureNumberBuffer(1); } catch (e) { return null; }
-    const num = nextNumberBuffer.shift();
-    assignedNumbers.set(rowNumber, num);
-    return num;
-  }
-
-  function releaseNumberForStudent(rowNumber) {
-    if (assignedNumbers.has(rowNumber)) {
-      const num = assignedNumbers.get(rowNumber);
-      nextNumberBuffer.unshift(num);
-      assignedNumbers.delete(rowNumber);
-    }
-  }
-
-  async function commitAllAssignedNumbers() {
-    return;
-  }
-
-  // ============================================================
   // SINGLE MODE
   // ============================================================
   function populateStudentSelect(students) {
@@ -1016,17 +971,10 @@
 
     clearWarning();
 
-    for (const rn of Array.from(assignedNumbers.keys())) {
-      if (rn !== rowNumber) releaseNumberForStudent(rn);
-    }
     selectedStudents.clear();
     selectedStudents.add(rowNumber);
-
-    const num = await assignNumberToStudent(rowNumber);
-    if (!num) {
-      showError('Could not reserve a receipt number. Check your connection and try again.');
-      return;
-    }
+    
+    // Note: We do NOT assign a number here anymore. We do it at print time.
 
     renderPreview(getSelectedStudents());
     document.getElementById('btnPrint').disabled = false;
@@ -1081,7 +1029,6 @@
     document.getElementById('btnPDF').disabled = true;
     selectedStudents.clear();
     assignedNumbers.clear();
-    nextNumberBuffer = [];
     updateSelectAllLabel();
     updatePreviewHeader();
   }
@@ -1092,16 +1039,8 @@
 
     if (e.target.checked) {
       selectedStudents.add(rowNum);
-      const num = await assignNumberToStudent(rowNum);
-      if (!num) {
-        e.target.checked = false;
-        selectedStudents.delete(rowNum);
-        showError('Could not reserve a receipt number. Check your connection.');
-        return;
-      }
     } else {
       selectedStudents.delete(rowNum);
-      releaseNumberForStudent(rowNum);
     }
     updateSelectionState();
   }
@@ -1113,21 +1052,12 @@
     if (allChecked) {
       boxes.forEach(b => { b.checked = false; });
       selectedStudents.clear();
-      assignedNumbers.clear();
-      nextNumberBuffer = [];
     } else {
       boxes.forEach(b => { b.checked = true; });
       selectedStudents.clear();
-      assignedNumbers.clear();
-      nextNumberBuffer = [];
-
-      try { await ensureNumberBuffer(boxes.length); }
-      catch (err) { showError('Could not reserve receipt numbers: ' + err.message); return; }
 
       boxes.forEach(b => {
         const rowNum = parseInt(b.dataset.row, 10);
-        const num = nextNumberBuffer.shift();
-        assignedNumbers.set(rowNum, num);
         selectedStudents.add(rowNum);
       });
     }
@@ -1169,7 +1099,6 @@
     document.getElementById('btnPDF').disabled = true;
     document.getElementById('receiptContainer').innerHTML = '';
     assignedNumbers.clear();
-    nextNumberBuffer = [];
     updatePreviewHeader();
     updateSelectAllLabel();
     clearWarning();
@@ -1415,15 +1344,30 @@
       return;
     }
 
-    const missing = students.filter(s => !assignedNumbers.has(s.rowNumber));
-    if (missing.length > 0) {
-      showError('Cannot print: ' + missing.length + ' student(s) do not have a receipt number yet. Clear the selection and re-select.');
+    showLoading('Reserving receipt numbers…');
+    
+    try {
+      // ONLY fetch numbers when actually printing
+      const res = await callGAS('reserveReceiptNumbers', { term: currentTermKey, count: students.length });
+      if (!res || !res.success || !res.numbers) throw new Error(res?.error || 'Could not reserve receipt numbers.');
+      
+      assignedNumbers.clear();
+      const numbers = res.numbers;
+      
+      students.forEach((s, i) => {
+        assignedNumbers.set(s.rowNumber, numbers[i]);
+      });
+      
+      // Re-render the preview with the final numbers
+      renderPreview(students);
+      
+    } catch (e) {
+      showError(e.message);
+      hideLoading();
       return;
     }
 
-    showLoading('Preparing receipts…');
-    await commitAllAssignedNumbers();
-
+    // Log receipts
     const receiptsLog = students.map(s => ({
       receiptNumber: assignedNumbers.get(s.rowNumber) || '',
       studentName: s.studentName,
@@ -1439,7 +1383,7 @@
     }).catch(e => console.warn('Log failed (non-fatal):', e));
 
     hideLoading();
-    setTimeout(() => window.print(), 150);
+    setTimeout(() => window.print(), 200);
   }
 
   async function saveAsPDF() { await printReceipts(); }
