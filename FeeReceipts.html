@@ -87,6 +87,20 @@
     box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15);
   }
 
+  .checkbox-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: #fbbf24; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checkbox-row label {
+    margin: 0; cursor: pointer;
+    font-weight: 500; font-size: 13px; color: #d1e0f0;
+  }
+
   .mode-tabs, .layout-toggle {
     display: flex; gap: 6px;
     padding: 5px;
@@ -132,10 +146,12 @@
     padding: 12px 16px; border-radius: 10px;
     font-size: 13px; color: #d1fae5;
     margin-bottom: 16px; display: none;
-    line-height: 1.5;
+    line-height: 1.6;
   }
   .range-summary.show { display: block; }
   .range-summary strong { color: #6ee7b7; }
+  .range-summary .warning { color: #fca5a5; }
+  .range-summary .muted { color: #94a3b8; font-style: italic; }
 
   .student-list {
     max-height: 340px; overflow-y: auto;
@@ -705,6 +721,11 @@
         </div>
       </div>
 
+      <div class="checkbox-row">
+        <input type="checkbox" id="chkIncludeUndated" onchange="handleRangeChange()">
+        <label for="chkIncludeUndated">Include payments with no recorded date</label>
+      </div>
+
       <div class="quick-ranges">
         <button type="button" onclick="setQuickRange('today')">Today</button>
         <button type="button" onclick="setQuickRange('yesterday')">Yesterday</button>
@@ -749,7 +770,7 @@
         <strong>Full</strong> — 9 receipts per A4 (3×3).
         <strong>Compact</strong> — 16 receipts per A4 (4×4).
         Numbers are unique and never reused.
-        <br><strong>Filtering:</strong> only students with <strong>at least one payment</strong> in the selected date range are shown. Payments outside the range are hidden so each receipt only shows the payments that occurred in the window.
+        <br><strong>Filtering:</strong> a student appears only if they have <strong>at least one payment</strong> in the selected date range. Payments outside the range are hidden on each receipt so the receipt only shows the payments that occurred in the window.
       </div>
     </div>
   </div>
@@ -772,7 +793,7 @@
 
 <script>
   // ============================================================
-  // ANIMATED BANKNOTE BACKGROUND (unchanged)
+  // ANIMATED BANKNOTE BACKGROUND
   // ============================================================
   (function initBanknoteBackground() {
     const canvas = document.getElementById('banknoteCanvas');
@@ -870,7 +891,7 @@
   }
 
   // ============================================================
-  // API CALL — includes admin password automatically
+  // API CALL — attaches admin password automatically
   // ============================================================
   async function callGAS(action, params = {}, attempt = 1) {
     const body = new URLSearchParams();
@@ -878,7 +899,6 @@
     for (const key in params) {
       if (params[key] !== undefined && params[key] !== null) body.append(key, params[key]);
     }
-    // Attach admin password so gateTerm() doesn't reject us
     if (typeof SharedSession !== 'undefined' && SharedSession.isUnlocked()) {
       body.append('admin', 'true');
       body.append('password', SharedSession.getPassword());
@@ -1022,6 +1042,10 @@
   }
   function getDateFromInput() { return document.getElementById('rDateFrom').value || null; }
   function getDateToInput() { return document.getElementById('rDateTo').value || null; }
+  function getIncludeUndated() {
+    const el = document.getElementById('chkIncludeUndated');
+    return el ? el.checked : false;
+  }
 
   function setQuickRange(kind) {
     const from = document.getElementById('rDateFrom');
@@ -1047,27 +1071,68 @@
     handleRangeChange();
   }
 
+  // ============================================================
+  // RANGE SUMMARY — shows the TRUTH
+  //   State 1: no data loaded yet → describe the rule
+  //   State 2: data loaded → show real counts
+  //   State 3: zero results → say so explicitly
+  // ============================================================
   function updateRangeSummary() {
     const el = document.getElementById('rangeSummary');
     const from = getDateFromInput();
     const to = getDateToInput();
+    const includeUndated = getIncludeUndated();
 
-    if (!from && !to) {
-      el.innerHTML = '<strong>All Entries mode:</strong> showing every student who has at least one payment recorded.';
+    const hasRange = !!(from || to);
+    const dataLoaded = !!(receiptData && receiptData._meta);
+    const meta = dataLoaded ? receiptData._meta : null;
+
+    // ---- No date range at all ----
+    if (!hasRange) {
+      let html = '<strong>No date filter:</strong> showing every student who has at least one recorded payment.';
+      if (dataLoaded) {
+        html += ' <strong>' + meta.studentCount + ' student' + (meta.studentCount === 1 ? '' : 's') +
+                ', ' + meta.paymentCount + ' payment' + (meta.paymentCount === 1 ? '' : 's') +
+                '</strong> loaded.';
+        if (meta.studentCount === 0) {
+          html = '<strong class="warning">No students with payments found for this class.</strong>';
+        }
+      } else {
+        html += ' <span class="muted">Not yet loaded — select a class to see results.</span>';
+      }
+      el.innerHTML = html;
       el.classList.add('show');
       return;
     }
 
-    let msg = '<strong>Filter active:</strong> only students with <strong>at least one payment</strong> ';
-    if (from && to) msg += `between <strong>${formatDateDisplay(from)}</strong> and <strong>${formatDateDisplay(to)}</strong>.`;
-    else if (from) msg += `on or after <strong>${formatDateDisplay(from)}</strong>.`;
-    else if (to) msg += `on or before <strong>${formatDateDisplay(to)}</strong>.`;
-    msg += ' Only in-range payments appear on each receipt.';
-    el.innerHTML = msg;
+    // ---- Date range is set ----
+    let rangeText = '';
+    if (from && to && from === to) rangeText = 'on <strong>' + formatDateDisplay(from) + '</strong>';
+    else if (from && to) rangeText = 'between <strong>' + formatDateDisplay(from) + '</strong> and <strong>' + formatDateDisplay(to) + '</strong>';
+    else if (from) rangeText = 'on or after <strong>' + formatDateDisplay(from) + '</strong>';
+    else if (to) rangeText = 'on or before <strong>' + formatDateDisplay(to) + '</strong>';
+
+    let html = '<strong>Filter active:</strong> showing students with at least one payment ' + rangeText + '.';
+    html += ' Payments outside the range are hidden on each receipt.';
+    if (!includeUndated) html += ' <em>Undated slips are excluded.</em>';
+
+    if (dataLoaded) {
+      html += '<br><strong>Result:</strong> ' + meta.studentCount + ' student' +
+              (meta.studentCount === 1 ? '' : 's') + ', ' + meta.paymentCount + ' payment' +
+              (meta.paymentCount === 1 ? '' : 's') + ' matched.';
+      if (meta.studentCount === 0) {
+        html += ' <span class="warning">Nothing to print for this range.</span>';
+      }
+    } else {
+      html += '<br><span class="muted">Not yet loaded — select a class to see results.</span>';
+    }
+
+    el.innerHTML = html;
     el.classList.add('show');
   }
 
   function handleRangeChange() {
+    receiptData = null; // banner must not show stale results
     if (currentClass && currentTermKey) {
       cacheInvalidateClass(currentTermKey, currentClass);
       handleClassChange();
@@ -1123,6 +1188,7 @@
     assignedNumbers.clear();
     nextNumberBuffer = [];
     clearWarning();
+    updateRangeSummary();
   }
 
   async function handleClassChange() {
@@ -1131,7 +1197,9 @@
 
     const dateFrom = getDateFromInput();
     const dateTo = getDateToInput();
-    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, false);
+    const includeUndatedFlag = getIncludeUndated();
+
+    const key = cacheKey(currentTermKey, currentClass, dateFrom, dateTo, includeUndatedFlag);
 
     assignedNumbers.clear();
     nextNumberBuffer = [];
@@ -1150,19 +1218,27 @@
       const params = { studentClass: currentClass, term: currentTermKey };
       if (dateFrom) params.dateFrom = dateFrom;
       if (dateTo) params.dateTo = dateTo;
+      if (includeUndatedFlag) params.includeUndated = 'true';
 
       const res = await callGAS('getReceiptDataForClass', params);
 
       if (!res || !res.success) { showError(res?.error || 'Failed to load students.'); hideLoading(); return; }
 
-      // ---- DEFENSIVE: filter out students with zero payments ----
-      // (backend already does this, but double-check)
+      // Defensive: exclude any student with zero payments (backend already does this)
       if (Array.isArray(res.students)) {
-        res.students = res.students.filter(s =>
-          Array.isArray(s.payments) && s.payments.length > 0
-        );
+        res.students = res.students.filter(s => Array.isArray(s.payments) && s.payments.length > 0);
         res.count = res.students.length;
       }
+
+      // Store the truth for the banner
+      res._meta = {
+        dateFrom: dateFrom || '',
+        dateTo: dateTo || '',
+        includeUndated: includeUndatedFlag,
+        studentCount: res.students.length,
+        paymentCount: res.students.reduce((n, s) => n + (s.payments ? s.payments.length : 0), 0),
+        loadedAt: new Date().toISOString()
+      };
 
       receiptData = res;
       cacheSet(key, res);
@@ -1177,6 +1253,7 @@
     if (!receiptData) return;
     if (currentMode === 'single') populateStudentSelect(receiptData.students);
     else renderStudentList(receiptData.students);
+    updateRangeSummary();   // refresh banner with the truth
     if (fromCache) console.log('Loaded from cache.');
   }
 
@@ -1186,7 +1263,6 @@
   async function ensureNumberBuffer(count) {
     if (nextNumberBuffer.length >= count) return;
     const needed = count - nextNumberBuffer.length;
-    // NEW: single atomic call — reserves AND commits in one shot
     const res = await callGAS('reserveReceiptNumbers', { term: currentTermKey, count: needed });
     if (!res || !res.success || !res.numbers) throw new Error(res?.error || 'Could not reserve receipt numbers.');
     for (let i = 0; i < res.numbers.length; i++) nextNumberBuffer.push(res.numbers[i]);
@@ -1208,9 +1284,8 @@
     }
   }
 
-  // Numbers are now committed atomically at reservation time — no commit needed.
   async function commitAllAssignedNumbers() {
-    // No-op: reserveReceiptNumbers already committed.
+    // No-op: reserveReceiptNumbers committed atomically at reservation time.
     return;
   }
 
@@ -1234,7 +1309,6 @@
       return;
     }
 
-    // Students already come sorted by receipt date from backend.
     students.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.rowNumber;
@@ -1255,7 +1329,6 @@
     const student = receiptData.students.find(s => s.rowNumber === rowNumber);
     if (!student) return;
 
-    // DEFENSIVE: refuse to issue receipt for student with no payments
     if (!student.payments || student.payments.length === 0) {
       showError('This student has no recorded payments and cannot receive a receipt.');
       return;
@@ -1286,8 +1359,7 @@
   // ============================================================
   function renderStudentList(students) {
     const list = document.getElementById('studentList');
-    // Students already sorted by backend (chronological)
-    const sorted = students.slice();
+    const sorted = students.slice(); // backend already chronological
 
     let html = '';
     if (!sorted.length) {
@@ -1478,9 +1550,6 @@
     return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
   }
 
-  // ============================================================
-  // SIGNATURE BLOCK
-  // ============================================================
   function signatureBlockHtml(layout) {
     if (layout !== 'signature') return '';
 
@@ -1530,14 +1599,12 @@
     if (isPaid) { wmClass = 'paid'; wmText = 'PAID IN FULL'; }
     else if (isOver) { wmClass = 'over'; wmText = 'CREDIT'; }
 
-    // Use in-range total if available; fall back to lifetime total
     const displayTotalPaid = student.inRangeTotalPaid != null
       ? student.inRangeTotalPaid
       : student.totalPaidThisTerm;
 
     let rowsHTML = '';
     if (!student.payments || !student.payments.length) {
-      // This should never happen (backend filters them out), but defensive
       rowsHTML = '<tr><td colspan="3" style="padding:5px;text-align:center;color:#666;font-style:italic;">No payments recorded.</td></tr>';
     } else {
       student.payments.forEach(p => {
@@ -1662,7 +1729,6 @@
     const students = getSelectedStudents();
     if (!students.length) return;
 
-    // DEFENSIVE: refuse to print if any selected student has no payments
     const noPayments = students.filter(s => !s.payments || s.payments.length === 0);
     if (noPayments.length > 0) {
       showError('Cannot print: ' + noPayments.length + ' selected student(s) have no payments.');
@@ -1675,7 +1741,6 @@
       return;
     }
 
-    // Numbers are now committed atomically — nothing to do, but kept for clarity
     showLoading('Preparing receipts…');
     await commitAllAssignedNumbers();
 
