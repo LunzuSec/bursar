@@ -189,6 +189,7 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
+  /* Force content above watermark, but keep stamp z-index high */
   .receipt > *:not(.watermark):not(.receipt-stamp) { position: relative; z-index: 1; }
 
   .receipt-header {
@@ -236,8 +237,11 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  /* SIGNATURE BLOCK - Dotted line above, then solid line */
-  .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 20mm; margin-top: 4mm; padding-top: 3mm; border-top: 1px dashed #000; align-self: end; }
+  /* THE FIX: The dotted line is now forced to sit right below the balance note */
+  .receipt-body { border-bottom: 1px dashed #000; padding-bottom: 4px; }
+
+  /* SIGNATURE BLOCK - Now positioned below the dotted line */
+  .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 20mm; margin-top: 6mm; padding-top: 4mm; align-self: end; }
   .signature-block .sig-box { flex: 1; text-align: center; }
   .signature-block .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
   .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
