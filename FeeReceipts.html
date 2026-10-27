@@ -70,10 +70,10 @@
   .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #fbbf24; cursor: pointer; flex-shrink: 0; }
   .checkbox-row label { margin: 0; cursor: pointer; font-weight: 500; font-size: 13px; color: #d1e0f0; }
 
-  .mode-tabs, .layout-toggle { display: flex; gap: 6px; padding: 5px; border-radius: 14px; margin-bottom: 16px; }
+  .mode-tabs, .layout-toggle { display: flex; gap: 6px; padding: 5px; border-radius: 14px; margin-bottom: 16px; flex-wrap: wrap; }
   .mode-tabs { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
   .layout-toggle { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.2); }
-  .mode-tabs button, .layout-toggle button { flex: 1; padding: 11px 10px; background: transparent; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: inherit; }
+  .mode-tabs button, .layout-toggle button { flex: 1; min-width: 100px; padding: 11px 10px; background: transparent; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: inherit; }
   .mode-tabs button { color: #cbd5e1; font-size: 13px; padding: 11px 14px; }
   .layout-toggle button { color: #fcd34d; }
   .mode-tabs button.active, .layout-toggle button.active { background: rgba(255,255,255,0.95); color: #002b54; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
@@ -146,7 +146,7 @@
     display: grid !important; 
     border-radius: 4px;
     
-    /* Force 2x2 by default */
+    /* Default 2x2 */
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(2, 1fr) !important;
     gap: 4mm;
@@ -154,8 +154,13 @@
   }
   .receipt-sheet:last-child { page-break-after: auto; break-after: auto; }
 
+  /* Overrides for dynamic layouts */
   .layout-full .receipt-sheet { grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; gap: 3mm; padding: 5mm; }
   .layout-compact .receipt-sheet { grid-template-columns: repeat(4, 1fr) !important; grid-template-rows: repeat(4, 1fr) !important; gap: 2mm; padding: 4mm; }
+  
+  /* NEW LAYOUTS */
+  .layout-1x1 .receipt-sheet { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; padding: 10mm; }
+  .layout-2x1 .receipt-sheet { grid-template-columns: repeat(2, 1fr) !important; grid-template-rows: 1fr !important; padding: 8mm; }
 
   /* ============================================================
      RECEIPT BASE STYLES
@@ -243,8 +248,61 @@
   .layout-signature .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
 
   /* ============================================================
-     SPECIFIC LAYOUTS
+     SPECIFIC LAYOUTS (Font Scaling)
      ============================================================ */
+  
+  /* 1x1 (1 per page) - Huge fonts to fill A4 */
+  .layout-1x1 .receipt { padding: 15mm; border: 2px solid #000; }
+  .layout-1x1 .receipt-header { padding-bottom: 10px; margin-bottom: 12px; min-height: 80px; }
+  .layout-1x1 .receipt-header .crest { width: 80px; height: 80px; }
+  .layout-1x1 .receipt-header .school { font-size: 28px; }
+  .layout-1x1 .receipt-header .doc-type { font-size: 18px; }
+  .layout-1x1 .receipt-header .range-badge { font-size: 14px !important; }
+  .layout-1x1 .receipt-number { font-size: 20px; padding: 8px 16px; border-width: 2px; }
+  .layout-1x1 .receipt-number .num-label { font-size: 12px; }
+  .layout-1x1 .student-line { padding: 10px 0; margin-bottom: 12px; border-bottom-width: 2px; }
+  .layout-1x1 .student-line .left { font-size: 24px; }
+  .layout-1x1 .student-line .right { font-size: 20px; }
+  .layout-1x1 .payments-table { font-size: 18px; margin-bottom: 12px; }
+  .layout-1x1 .payments-table thead th { font-size: 14px; padding: 6px 8px; border-bottom-width: 2px; }
+  .layout-1x1 .payments-table tbody td { padding: 8px; }
+  .layout-1x1 .totals-block { padding: 10px 14px; border-width: 2px; }
+  .layout-1x1 .totals-row { font-size: 18px; padding: 4px 0; }
+  .layout-1x1 .totals-row.big { font-size: 24px; margin-top: 6px; padding-top: 6px; border-top-width: 2px; }
+  .layout-1x1 .balance-note { font-size: 18px; padding: 10px; margin-top: 10px; border-width: 2px; }
+  .layout-1x1 .receipt-footer { padding-top: 10px; margin-top: 12px; border-top-width: 2px; }
+  .layout-1x1 .receipt-footer .left { font-size: 14px; }
+  .layout-1x1 .receipt-footer .left .office { font-size: 16px; }
+  .layout-1x1 .receipt-footer .left .acct { font-size: 16px; }
+  .layout-1x1 .receipt-footer .right { font-size: 14px; }
+  .layout-1x1 .watermark .wm-badge { font-size: 60px; border-width: 4px; padding: 20px 40px; }
+
+  /* 2x1 (2 per page) - Large fonts */
+  .layout-2x1 .receipt { padding: 10mm; border: 1.5px solid #000; }
+  .layout-2x1 .receipt-header { padding-bottom: 6px; margin-bottom: 8px; min-height: 60px; }
+  .layout-2x1 .receipt-header .crest { width: 55px; height: 55px; }
+  .layout-2x1 .receipt-header .school { font-size: 18px; }
+  .layout-2x1 .receipt-header .doc-type { font-size: 13px; }
+  .layout-2x1 .receipt-header .range-badge { font-size: 10px !important; }
+  .layout-2x1 .receipt-number { font-size: 15px; padding: 5px 12px; }
+  .layout-2x1 .receipt-number .num-label { font-size: 9px; }
+  .layout-2x1 .student-line { padding: 6px 0; margin-bottom: 8px; }
+  .layout-2x1 .student-line .left { font-size: 18px; }
+  .layout-2x1 .student-line .right { font-size: 14px; }
+  .layout-2x1 .payments-table { font-size: 13px; margin-bottom: 8px; }
+  .layout-2x1 .payments-table thead th { font-size: 10px; padding: 4px 6px; }
+  .layout-2x1 .payments-table tbody td { padding: 4px 6px; }
+  .layout-2x1 .totals-block { padding: 6px 10px; }
+  .layout-2x1 .totals-row { font-size: 13px; padding: 2px 0; }
+  .layout-2x1 .totals-row.big { font-size: 18px; margin-top: 4px; padding-top: 4px; }
+  .layout-2x1 .balance-note { font-size: 13px; padding: 6px; margin-top: 6px; }
+  .layout-2x1 .receipt-footer { padding-top: 6px; margin-top: 8px; }
+  .layout-2x1 .receipt-footer .left { font-size: 11px; }
+  .layout-2x1 .receipt-footer .left .office { font-size: 12px; }
+  .layout-2x1 .receipt-footer .left .acct { font-size: 12px; }
+  .layout-2x1 .receipt-footer .right { font-size: 11px; }
+  .layout-2x1 .watermark .wm-badge { font-size: 40px; padding: 12px 24px; }
+
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
   .layout-full .receipt-number .num-label { font-size: 5px; }
@@ -359,9 +417,11 @@
       </div>
 
       <div class="layout-toggle">
-        <button id="layoutSignature" class="active" onclick="setLayout('signature')">📑 Signature — 4 per page</button>
-        <button id="layoutFull" onclick="setLayout('full')">📄 Full — 9 per page</button>
-        <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16 per page</button>
+        <button id="layout1x1" onclick="setLayout('1x1')">🖼️ 1 per page</button>
+        <button id="layout2x1" onclick="setLayout('2x1')">📰 2 per page</button>
+        <button id="layoutSignature" class="active" onclick="setLayout('signature')">📑 Signature — 4</button>
+        <button id="layoutFull" onclick="setLayout('full')">📄 Full — 9</button>
+        <button id="layoutCompact" onclick="setLayout('compact')">🎫 Compact — 16</button>
       </div>
 
       <div class="row">
@@ -443,9 +503,11 @@
 
       <div class="info">
         <strong>Layouts:</strong>
-        <strong>Signature</strong> — 4 receipts per A4 (2×2), includes signature & stamp area.
-        <strong>Full</strong> — 9 receipts per A4 (3×3).
-        <strong>Compact</strong> — 16 receipts per A4 (4×4).
+        <strong>1 per page</strong> — Huge layout.
+        <strong>2 per page</strong> — Wide layout.
+        <strong>Signature</strong> — 4 receipts (2x2).
+        <strong>Full</strong> — 9 receipts (3x3).
+        <strong>Compact</strong> — 16 receipts (4x4).
         Numbers are unique and never reused.
         <br><strong>Filtering:</strong> a student appears only if they have <strong>at least one payment</strong> in the selected date range. If they qualify, <strong>all</strong> their payment installments are shown on the receipt so parents see their full history.
       </div>
@@ -826,10 +888,15 @@
 
   function setLayout(layout) {
     currentLayout = layout;
+    document.getElementById('layout1x1').classList.toggle('active', layout === '1x1');
+    document.getElementById('layout2x1').classList.toggle('active', layout === '2x1');
     document.getElementById('layoutSignature').classList.toggle('active', layout === 'signature');
     document.getElementById('layoutFull').classList.toggle('active', layout === 'full');
     document.getElementById('layoutCompact').classList.toggle('active', layout === 'compact');
+    
     const wrapper = document.body;
+    wrapper.classList.toggle('layout-1x1', layout === '1x1');
+    wrapper.classList.toggle('layout-2x1', layout === '2x1');
     wrapper.classList.toggle('layout-signature', layout === 'signature');
     wrapper.classList.toggle('layout-full', layout === 'full');
     wrapper.classList.toggle('layout-compact', layout === 'compact');
@@ -1109,9 +1176,12 @@
       return;
     }
 
-    const perSheet = currentLayout === 'compact' ? 16
-                   : currentLayout === 'signature' ? 4
-                   : 9;
+    let perSheet = 4;
+    if (currentLayout === '1x1') perSheet = 1;
+    else if (currentLayout === '2x1') perSheet = 2;
+    else if (currentLayout === 'compact') perSheet = 16;
+    else if (currentLayout === 'signature') perSheet = 4;
+    else if (currentLayout === 'full') perSheet = 9;
 
     const from = getDateFromInput();
     const to = getDateToInput();
@@ -1388,66 +1458,7 @@
       .map(rn => receiptData.students.find(s => s.rowNumber === rn))
       .filter(Boolean)
       .map(student => {
-        // THE FIX: Clone the student object
         const fullStudent = JSON.parse(JSON.stringify(student));
-        
-        // If the backend only sent in-range payments (because of the date filter),
-        // we need to fetch the original full list from the raw data.
-        // Since we can't refetch per student, we rely on the fact that the backend 
-        // caches the full record. Wait, the backend doesn't cache it. 
-        // But we can reconstruct the full installments from the `receiptData` meta 
-        // if it was saved, OR we use the frontend cache.
-        
-        // Actually, the easiest way is to change the frontend logic:
-        // If a student matches the range, we need ALL their installments.
-        // The `getReceiptDataForClass` API only sends in-range payments.
-        // So we must merge the in-range payments with any cached full payments.
-        
-        // Since this is complex, we will simply use the `extractFeeData` equivalent
-        // on the frontend if available, OR we just trust the backend to send all.
-        
-        return fullStudent;
-      });
-  }
-  
-  // Wait, the easiest way to fix this is to update `getReceiptDataForClass` in the backend.
-  // BUT since you asked for the code here, I will fix it by ensuring the backend 
-  // sends ALL payments. 
-  
-  // Actually, look at the `getReceiptDataForClass` in the RECEIPTS.js you provided:
-  // It filters `payments` to only include in-range ones. 
-  // If you want ALL payments to show on the receipt, we just need to change the backend.
-  
-  // BUT you said "provide complete code". I will fix the backend logic in the 
-  // `getSelectedStudents` function by rebuilding the payments array.
-  
-  // Wait, the backend only sends in-range payments. We don't have the full list here.
-  // The ONLY way to show all installments is to change the backend to send all 
-  // payments, but mark them as "inRange" or not.
-  
-  // Let's modify the frontend `getSelectedStudents` to just return the student as-is,
-  // and I will tell you to update the backend `getReceiptDataForClass`.
-  
-  // I will provide the updated `getSelectedStudents` and `printReceipts`.
-
-  function getSelectedStudents() {
-    if (!receiptData) return [];
-    
-    return Array.from(selectedStudents)
-      .map(rn => receiptData.students.find(s => s.rowNumber === rn))
-      .filter(Boolean)
-      .map(student => {
-        // Clone the student object
-        const fullStudent = JSON.parse(JSON.stringify(student));
-        
-        // Check if we have a cached copy of the full payments
-        // (This is a fallback, but the real fix is in the backend)
-        
-        // The backend `getReceiptDataForClass` filters `payments` to only include in-range ones. 
-        // To fix this, we must modify the backend. 
-        // But since we are only providing `receipts.html` here, I will assume you will update the backend.
-        
-        // For now, let's just return the student.
         return fullStudent;
       });
   }
