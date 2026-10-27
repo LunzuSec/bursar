@@ -250,50 +250,52 @@
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
 
   /* ============================================================
-     OFFICIAL STAMP CSS - Wider and lower
+     OFFICIAL STAMP CSS - Replicated from photo
      ============================================================ */
   .receipt-stamp {
     position: absolute;
     top: 65%; /* Pushed down close to signature */
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-2deg);
-    border: 3px double #555;
-    border-radius: 6px;
-    padding: 12px 20px;
+    transform: translate(-50%, -50%) rotate(-1.5deg);
+    /* Box styling */
+    border: 4px solid #444;
+    outline: 1px solid #444;
+    outline-offset: -6px;
+    padding: 15px 20px;
     text-align: center;
-    opacity: 0.35;
+    opacity: 0.55;
     pointer-events: none;
     z-index: 0;
-    font-family: 'Courier New', monospace;
-    color: #000;
+    color: #444;
     mix-blend-mode: multiply;
-    width: 95%; /* Widened significantly */
-    max-width: 400px; /* Very wide */
+    width: 95%; 
+    max-width: 450px; /* Wide */
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
   }
   .receipt-stamp .stamp-title {
-    font-size: 14px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
+    font-size: 20px;
+    letter-spacing: 1px;
     margin-bottom: 2px;
     text-transform: uppercase;
   }
   .receipt-stamp .stamp-subtitle {
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
     text-transform: uppercase;
   }
   .receipt-stamp .stamp-date {
-    font-size: 24px;
-    font-weight: 900;
-    margin-bottom: 12px;
-    letter-spacing: 4px;
+    font-size: 32px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    margin-bottom: 25px;
+    letter-spacing: 6px;
   }
   .receipt-stamp .stamp-address {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 1px;
     line-height: 1.2;
+    text-transform: uppercase;
   }
 
   /* ============================================================
@@ -319,7 +321,7 @@
   .layout-1x1 .totals-row { font-size: 12px; padding: 2px 0; }
   .layout-1x1 .totals-row.big { font-size: 14px; margin-top: 4px; padding-top: 4px; border-top-width: 1.5px; }
   .layout-1x1 .balance-note { font-size: 12px; padding: 6px; margin-top: 6px; border-width: 1.5px; }
-  .layout-1x1 .signature-block { margin-top: 8mm; padding-top: 6mm; }
+  .layout-1x1 .signature-block { margin-top: 10mm; padding-top: 8mm; }
   .layout-1x1 .signature-block .sig-line { height: 15mm; }
   .layout-1x1 .signature-block .sig-label { font-size: 10px; }
   .layout-1x1 .receipt-footer { padding-top: 6px; margin-top: 8px; border-top-width: 1.5px; }
@@ -328,7 +330,7 @@
   .layout-1x1 .receipt-footer .left .acct { font-size: 11px; }
   .layout-1x1 .receipt-footer .right { font-size: 10px; }
   .layout-1x1 .watermark .wm-badge { font-size: 40px; border-width: 3px; padding: 10px 20px; }
-  .layout-1x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-2deg) scale(1.3); opacity: 0.45; top: 65%; max-width: 500px; }
+  .layout-1x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1.3); top: 65%; max-width: 550px; }
 
   /* 2x1 (2 per page) */
   .layout-2x1 .receipt { padding: 6mm; border: 1.5px solid #000; }
@@ -349,7 +351,7 @@
   .layout-2x1 .totals-row { font-size: 9px; padding: 1px 0; }
   .layout-2x1 .totals-row.big { font-size: 11px; margin-top: 2px; padding-top: 2px; }
   .layout-2x1 .balance-note { font-size: 9px; padding: 4px; margin-top: 4px; }
-  .layout-2x1 .signature-block { margin-top: 6mm; padding-top: 4mm; }
+  .layout-2x1 .signature-block { margin-top: 8mm; padding-top: 6mm; }
   .layout-2x1 .signature-block .sig-line { height: 12mm; }
   .layout-2x1 .signature-block .sig-label { font-size: 8px; }
   .layout-2x1 .receipt-footer { padding-top: 4px; margin-top: 4px; }
@@ -358,7 +360,7 @@
   .layout-2x1 .receipt-footer .left .acct { font-size: 9px; }
   .layout-2x1 .receipt-footer .right { font-size: 8px; }
   .layout-2x1 .watermark .wm-badge { font-size: 24px; }
-  .layout-2x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-2deg) scale(1.1); top: 65%; max-width: 350px; }
+  .layout-2x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1.1); top: 65%; max-width: 380px; }
 
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
@@ -381,7 +383,7 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .watermark .wm-badge { font-size: 22px; }
-  .layout-full .receipt-stamp { transform: translate(-50%, -50%) rotate(-2deg) scale(0.75); top: 62%; }
+  .layout-full .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(0.8); top: 62%; }
 
   /* COMPACT (4x4) */
   .layout-compact .receipt { padding: 2mm; }
@@ -408,7 +410,7 @@
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; }
-  .layout-compact .receipt-stamp { transform: translate(-50%, -50%) rotate(-2deg) scale(0.5); top: 60%; }
+  .layout-compact .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(0.55); top: 60%; }
 
   /* SIGNATURE (2x2) */
   .layout-signature .receipt { padding: 5mm; border: 1.5px solid #000; }
@@ -428,14 +430,14 @@
   .layout-signature .totals-row { font-size: 9px; }
   .layout-signature .totals-row.big { font-size: 12px; }
   .layout-signature .balance-note { font-size: 9px; padding: 4px 6px; }
-  .layout-signature .signature-block { margin-top: 5mm; padding-top: 3mm; }
+  .layout-signature .signature-block { margin-top: 6mm; padding-top: 4mm; }
   .layout-signature .signature-block .sig-line { height: 10mm; }
   .layout-signature .signature-block .sig-label { font-size: 7px; }
   .layout-signature .receipt-footer { padding-top: 4px; margin-top: 5px; }
   .layout-signature .receipt-footer .left { font-size: 8px; }
   .layout-signature .receipt-footer .right { font-size: 8px; }
   .layout-signature .watermark .wm-badge { font-size: 28px; }
-  .layout-signature .receipt-stamp { transform: translate(-50%, -50%) rotate(-2deg) scale(1); top: 65%; max-width: 300px; }
+  .layout-signature .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1); top: 65%; max-width: 320px; }
 
   .empty-sheet-slot { border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; }
 
