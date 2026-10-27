@@ -158,8 +158,9 @@
   .layout-full .receipt-sheet { grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; gap: 3mm; padding: 5mm; }
   .layout-compact .receipt-sheet { grid-template-columns: repeat(4, 1fr) !important; grid-template-rows: repeat(4, 1fr) !important; gap: 2mm; padding: 4mm; }
   
-  /* NEW LAYOUTS */
+  /* 1x1 (1 per page) */
   .layout-1x1 .receipt-sheet { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; padding: 10mm; }
+  /* 2x1 (2 per page) */
   .layout-2x1 .receipt-sheet { grid-template-columns: repeat(2, 1fr) !important; grid-template-rows: 1fr !important; padding: 8mm; }
 
   /* ============================================================
@@ -234,6 +235,7 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
+  /* FOOTER - pushed to the bottom of the grid */
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
@@ -251,57 +253,61 @@
      SPECIFIC LAYOUTS (Font Scaling)
      ============================================================ */
   
-  /* 1x1 (1 per page) - Huge fonts to fill A4 */
+  /* 1x1 (1 per page) - Capped at 12px max */
   .layout-1x1 .receipt { padding: 15mm; border: 2px solid #000; }
-  .layout-1x1 .receipt-header { padding-bottom: 10px; margin-bottom: 12px; min-height: 80px; }
-  .layout-1x1 .receipt-header .crest { width: 80px; height: 80px; }
-  .layout-1x1 .receipt-header .school { font-size: 28px; }
-  .layout-1x1 .receipt-header .doc-type { font-size: 18px; }
-  .layout-1x1 .receipt-header .range-badge { font-size: 14px !important; }
-  .layout-1x1 .receipt-number { font-size: 20px; padding: 8px 16px; border-width: 2px; }
-  .layout-1x1 .receipt-number .num-label { font-size: 12px; }
-  .layout-1x1 .student-line { padding: 10px 0; margin-bottom: 12px; border-bottom-width: 2px; }
-  .layout-1x1 .student-line .left { font-size: 24px; }
-  .layout-1x1 .student-line .right { font-size: 20px; }
-  .layout-1x1 .payments-table { font-size: 18px; margin-bottom: 12px; }
-  .layout-1x1 .payments-table thead th { font-size: 14px; padding: 6px 8px; border-bottom-width: 2px; }
-  .layout-1x1 .payments-table tbody td { padding: 8px; }
-  .layout-1x1 .totals-block { padding: 10px 14px; border-width: 2px; }
-  .layout-1x1 .totals-row { font-size: 18px; padding: 4px 0; }
-  .layout-1x1 .totals-row.big { font-size: 24px; margin-top: 6px; padding-top: 6px; border-top-width: 2px; }
-  .layout-1x1 .balance-note { font-size: 18px; padding: 10px; margin-top: 10px; border-width: 2px; }
-  .layout-1x1 .receipt-footer { padding-top: 10px; margin-top: 12px; border-top-width: 2px; }
-  .layout-1x1 .receipt-footer .left { font-size: 14px; }
-  .layout-1x1 .receipt-footer .left .office { font-size: 16px; }
-  .layout-1x1 .receipt-footer .left .acct { font-size: 16px; }
-  .layout-1x1 .receipt-footer .right { font-size: 14px; }
-  .layout-1x1 .watermark .wm-badge { font-size: 60px; border-width: 4px; padding: 20px 40px; }
+  .layout-1x1 .receipt-header { padding-bottom: 10px; margin-bottom: 12px; min-height: 70px; }
+  .layout-1x1 .receipt-header .crest { width: 65px; height: 65px; }
+  .layout-1x1 .receipt-header .school { font-size: 16px; }
+  .layout-1x1 .receipt-header .doc-type { font-size: 12px; }
+  .layout-1x1 .receipt-header .range-badge { font-size: 10px !important; }
+  .layout-1x1 .receipt-number { font-size: 14px; padding: 6px 12px; border-width: 2px; }
+  .layout-1x1 .receipt-number .num-label { font-size: 9px; }
+  .layout-1x1 .student-line { padding: 6px 0; margin-bottom: 8px; border-bottom-width: 1.5px; }
+  .layout-1x1 .student-line .left { font-size: 14px; }
+  .layout-1x1 .student-line .right { font-size: 12px; }
+  .layout-1x1 .payments-table { font-size: 12px; margin-bottom: 8px; }
+  .layout-1x1 .payments-table thead th { font-size: 10px; padding: 4px 6px; border-bottom-width: 1.5px; }
+  .layout-1x1 .payments-table tbody td { padding: 4px 6px; }
+  .layout-1x1 .totals-block { padding: 6px 10px; border-width: 1.5px; }
+  .layout-1x1 .totals-row { font-size: 12px; padding: 2px 0; }
+  .layout-1x1 .totals-row.big { font-size: 14px; margin-top: 4px; padding-top: 4px; border-top-width: 1.5px; }
+  .layout-1x1 .balance-note { font-size: 12px; padding: 6px; margin-top: 6px; border-width: 1.5px; }
+  .layout-1x1 .receipt-footer { padding-top: 6px; margin-top: 8px; border-top-width: 1.5px; }
+  .layout-1x1 .receipt-footer .left { font-size: 10px; }
+  .layout-1x1 .receipt-footer .left .office { font-size: 11px; }
+  .layout-1x1 .receipt-footer .left .acct { font-size: 11px; }
+  .layout-1x1 .receipt-footer .right { font-size: 10px; }
+  .layout-1x1 .watermark .wm-badge { font-size: 40px; border-width: 3px; padding: 10px 20px; }
+  
+  /* 1x1 Specific fix to force footer to bottom */
+  .layout-1x1 .receipt { grid-template-rows: auto auto 1fr auto !important; }
+  .layout-1x1 .receipt-body { margin-bottom: auto; }
 
-  /* 2x1 (2 per page) - Large fonts */
-  .layout-2x1 .receipt { padding: 10mm; border: 1.5px solid #000; }
-  .layout-2x1 .receipt-header { padding-bottom: 6px; margin-bottom: 8px; min-height: 60px; }
-  .layout-2x1 .receipt-header .crest { width: 55px; height: 55px; }
-  .layout-2x1 .receipt-header .school { font-size: 18px; }
-  .layout-2x1 .receipt-header .doc-type { font-size: 13px; }
-  .layout-2x1 .receipt-header .range-badge { font-size: 10px !important; }
-  .layout-2x1 .receipt-number { font-size: 15px; padding: 5px 12px; }
-  .layout-2x1 .receipt-number .num-label { font-size: 9px; }
-  .layout-2x1 .student-line { padding: 6px 0; margin-bottom: 8px; }
-  .layout-2x1 .student-line .left { font-size: 18px; }
-  .layout-2x1 .student-line .right { font-size: 14px; }
-  .layout-2x1 .payments-table { font-size: 13px; margin-bottom: 8px; }
-  .layout-2x1 .payments-table thead th { font-size: 10px; padding: 4px 6px; }
-  .layout-2x1 .payments-table tbody td { padding: 4px 6px; }
-  .layout-2x1 .totals-block { padding: 6px 10px; }
-  .layout-2x1 .totals-row { font-size: 13px; padding: 2px 0; }
-  .layout-2x1 .totals-row.big { font-size: 18px; margin-top: 4px; padding-top: 4px; }
-  .layout-2x1 .balance-note { font-size: 13px; padding: 6px; margin-top: 6px; }
-  .layout-2x1 .receipt-footer { padding-top: 6px; margin-top: 8px; }
-  .layout-2x1 .receipt-footer .left { font-size: 11px; }
-  .layout-2x1 .receipt-footer .left .office { font-size: 12px; }
-  .layout-2x1 .receipt-footer .left .acct { font-size: 12px; }
-  .layout-2x1 .receipt-footer .right { font-size: 11px; }
-  .layout-2x1 .watermark .wm-badge { font-size: 40px; padding: 12px 24px; }
+  /* 2x1 (2 per page) - Scaled down so content fits */
+  .layout-2x1 .receipt { padding: 8mm; border: 1.5px solid #000; }
+  .layout-2x1 .receipt-header { padding-bottom: 6px; margin-bottom: 8px; min-height: 50px; }
+  .layout-2x1 .receipt-header .crest { width: 40px; height: 40px; }
+  .layout-2x1 .receipt-header .school { font-size: 12px; }
+  .layout-2x1 .receipt-header .doc-type { font-size: 9px; }
+  .layout-2x1 .receipt-header .range-badge { font-size: 7px !important; }
+  .layout-2x1 .receipt-number { font-size: 12px; padding: 4px 10px; }
+  .layout-2x1 .receipt-number .num-label { font-size: 7px; }
+  .layout-2x1 .student-line { padding: 4px 0; margin-bottom: 6px; }
+  .layout-2x1 .student-line .left { font-size: 12px; }
+  .layout-2x1 .student-line .right { font-size: 10px; }
+  .layout-2x1 .payments-table { font-size: 10px; margin-bottom: 6px; }
+  .layout-2x1 .payments-table thead th { font-size: 8px; padding: 2px 4px; }
+  .layout-2x1 .payments-table tbody td { padding: 2px 4px; }
+  .layout-2x1 .totals-block { padding: 4px 8px; }
+  .layout-2x1 .totals-row { font-size: 10px; padding: 1px 0; }
+  .layout-2x1 .totals-row.big { font-size: 12px; margin-top: 2px; padding-top: 2px; }
+  .layout-2x1 .balance-note { font-size: 10px; padding: 4px; margin-top: 4px; }
+  .layout-2x1 .receipt-footer { padding-top: 4px; margin-top: 4px; }
+  .layout-2x1 .receipt-footer .left { font-size: 8px; }
+  .layout-2x1 .receipt-footer .left .office { font-size: 9px; }
+  .layout-2x1 .receipt-footer .left .acct { font-size: 9px; }
+  .layout-2x1 .receipt-footer .right { font-size: 8px; }
+  .layout-2x1 .watermark .wm-badge { font-size: 24px; }
 
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
