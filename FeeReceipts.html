@@ -172,7 +172,7 @@
     padding: 3mm; 
     position: relative; 
     display: grid !important; 
-    grid-template-rows: auto auto 1fr auto auto !important; /* Added row for signature */
+    grid-template-rows: auto auto 1fr auto auto !important; 
     height: 100% !important; 
     width: 100% !important;
     min-height: 0 !important;
@@ -188,7 +188,7 @@
     border: 2px dashed #000; border-radius: 8px; padding: 6px 14px; opacity: 0.15; white-space: nowrap; color: #000; font-family: 'Segoe UI', Arial, sans-serif;
   }
 
-  .receipt > *:not(.watermark) { position: relative; z-index: 1; }
+  .receipt > *:not(.watermark):not(.receipt-stamp) { position: relative; z-index: 1; }
 
   .receipt-header {
     display: flex; align-items: center; gap: 5px; border-bottom: 1.2px solid #000; padding-bottom: 3px; margin-bottom: 4px; min-height: 34px;
@@ -235,7 +235,7 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  /* SIGNATURE BLOCK - Now visible for all layouts */
+  /* SIGNATURE BLOCK */
   .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 4mm; padding-top: 3mm; border-top: 1px dashed #000; }
   .signature-block .sig-box { flex: 1; text-align: center; }
   .signature-block .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
@@ -247,6 +247,53 @@
   .receipt-footer .left .acct { margin-top: 1px; color: #000; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.3px; word-break: break-all; }
   .receipt-footer .right { text-align: right; color: #333; font-family: 'Courier New', monospace; line-height: 1.2; white-space: nowrap; flex-shrink: 0; }
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
+
+  /* ============================================================
+     NEW: OFFICIAL STAMP CSS
+     ============================================================ */
+  .receipt-stamp {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-4deg);
+    border: 3px double #555;
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+    font-family: 'Courier New', monospace;
+    color: #000;
+    mix-blend-mode: multiply;
+    width: 80%;
+    max-width: 220px;
+  }
+  .receipt-stamp .stamp-title {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+  }
+  .receipt-stamp .stamp-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .receipt-stamp .stamp-date {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  .receipt-stamp .stamp-address {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
 
   /* ============================================================
      SPECIFIC LAYOUTS (Font Scaling)
@@ -280,6 +327,7 @@
   .layout-1x1 .receipt-footer .left .acct { font-size: 11px; }
   .layout-1x1 .receipt-footer .right { font-size: 10px; }
   .layout-1x1 .watermark .wm-badge { font-size: 40px; border-width: 3px; padding: 10px 20px; }
+  .layout-1x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-4deg) scale(1.3); opacity: 0.4; }
 
   /* 2x1 (2 per page) */
   .layout-2x1 .receipt { padding: 6mm; border: 1.5px solid #000; }
@@ -309,6 +357,7 @@
   .layout-2x1 .receipt-footer .left .acct { font-size: 9px; }
   .layout-2x1 .receipt-footer .right { font-size: 8px; }
   .layout-2x1 .watermark .wm-badge { font-size: 24px; }
+  .layout-2x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-4deg) scale(0.85); }
 
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
@@ -331,6 +380,7 @@
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .watermark .wm-badge { font-size: 22px; }
+  .layout-full .receipt-stamp { transform: translate(-50%, -50%) rotate(-4deg) scale(0.6); }
 
   /* COMPACT (4x4) */
   .layout-compact .receipt { padding: 2mm; }
@@ -357,6 +407,7 @@
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; }
+  .layout-compact .receipt-stamp { transform: translate(-50%, -50%) rotate(-4deg) scale(0.4); }
 
   /* SIGNATURE (2x2) */
   .layout-signature .receipt { padding: 5mm; border: 1.5px solid #000; }
@@ -383,6 +434,7 @@
   .layout-signature .receipt-footer .left { font-size: 8px; }
   .layout-signature .receipt-footer .right { font-size: 8px; }
   .layout-signature .watermark .wm-badge { font-size: 28px; }
+  .layout-signature .receipt-stamp { transform: translate(-50%, -50%) rotate(-4deg) scale(0.85); }
 
   .empty-sheet-slot { border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; }
 
@@ -802,6 +854,31 @@
     return el ? el.checked : false;
   }
 
+  // Helper to get date for the stamp (final date of the range)
+  function getStampDate() {
+    const from = getDateFromInput();
+    const to = getDateToInput();
+    
+    // If "Entries To" is selected, use it. Otherwise use "Entries From".
+    // If neither, use today's date.
+    let targetDate = to || from;
+    if (!targetDate) {
+      const today = new Date();
+      targetDate = toIsoDate(today);
+    }
+    
+    // Format as "27 OCT 2026"
+    const d = new Date(targetDate);
+    if (isNaN(d.getTime())) return '';
+    
+    const day = d.getDate();
+    const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const month = monthNames[d.getMonth()];
+    const year = d.getFullYear();
+    
+    return `${day} ${month} ${year}`;
+  }
+
   function setQuickRange(kind) {
     const from = document.getElementById('rDateFrom');
     const to = document.getElementById('rDateTo');
@@ -1216,6 +1293,7 @@
     };
 
     const printedAt = formatTimestamp(new Date());
+    const stampDate = getStampDate(); // <--- Pass the stamp date here
 
     let html = '';
     for (let i = 0; i < students.length; i += perSheet) {
@@ -1223,7 +1301,7 @@
       html += '<div class="receipt-sheet">';
       group.forEach(s => {
         const receiptNumber = assignedNumbers.get(s.rowNumber) || null;
-        html += buildReceiptHTML(s, termInfo, printedAt, currentLayout, receiptNumber);
+        html += buildReceiptHTML(s, termInfo, printedAt, stampDate, currentLayout, receiptNumber);
       });
       for (let k = group.length; k < perSheet; k++) html += '<div class="empty-sheet-slot"></div>';
       html += '</div>';
@@ -1242,7 +1320,6 @@
   }
 
   function signatureBlockHtml(layout) {
-    // Signature block now applies to ALL layouts, not just 'signature'
     return ''
       + '<div class="signature-block">'
         + '<div class="sig-box">'
@@ -1259,7 +1336,7 @@
   // ============================================================
   // BUILD RECEIPT HTML
   // ============================================================
-  function buildReceiptHTML(student, termInfo, printedAt, layout, receiptNumber) {
+  function buildReceiptHTML(student, termInfo, printedAt, stampDate, layout, receiptNumber) {
     const isODL = student.studentClass && student.studentClass.indexOf('ODL') !== -1;
     const schoolName = isODL
       ? (termInfo.termConfig.schoolNameODL || 'LUNZU OPEN SECONDARY SCHOOL')
@@ -1407,6 +1484,12 @@
           + '<span class="ts-label">Printed</span>'
           + printedAt
         + '</div>'
+      + '</div>'
+      + '<div class="receipt-stamp">'
+        + '<div class="stamp-title">THE ACCOUNTS OFFICE</div>'
+        + '<div class="stamp-subtitle">LUNZU SECONDARY SCHOOL</div>'
+        + '<div class="stamp-date">' + escapeHtml(stampDate) + '</div>'
+        + '<div class="stamp-address">PRIVATE BAG 130<br>LUNZU</div>'
       + '</div>'
       + '<div class="watermark ' + wmClass + '"><div class="wm-badge">' + wmText + '</div></div>'
     + '</div>';
