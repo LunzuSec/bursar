@@ -172,7 +172,7 @@
     padding: 3mm; 
     position: relative; 
     display: grid !important; 
-    grid-template-rows: auto auto 1fr auto !important;
+    grid-template-rows: auto auto 1fr auto auto !important; /* Added row for signature */
     height: 100% !important; 
     width: 100% !important;
     min-height: 0 !important;
@@ -235,7 +235,12 @@
 
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; }
 
-  /* FOOTER - pushed to the bottom of the grid */
+  /* SIGNATURE BLOCK - Now visible for all layouts */
+  .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 4mm; padding-top: 3mm; border-top: 1px dashed #000; }
+  .signature-block .sig-box { flex: 1; text-align: center; }
+  .signature-block .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
+  .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
+
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
   .receipt-footer .left .office { font-weight: 700; color: #000; display: block; }
@@ -243,18 +248,12 @@
   .receipt-footer .right { text-align: right; color: #333; font-family: 'Courier New', monospace; line-height: 1.2; white-space: nowrap; flex-shrink: 0; }
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
 
-  .signature-block { display: none; }
-  .layout-signature .signature-block { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 4mm; padding-top: 3mm; }
-  .layout-signature .signature-block .sig-box { flex: 1; text-align: center; }
-  .layout-signature .signature-block .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
-  .layout-signature .signature-block .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
-
   /* ============================================================
      SPECIFIC LAYOUTS (Font Scaling)
      ============================================================ */
   
-  /* 1x1 (1 per page) - Capped at 12px max */
-  .layout-1x1 .receipt { padding: 15mm; border: 2px solid #000; }
+  /* 1x1 (1 per page) */
+  .layout-1x1 .receipt { padding: 12mm; border: 2px solid #000; }
   .layout-1x1 .receipt-header { padding-bottom: 10px; margin-bottom: 12px; min-height: 70px; }
   .layout-1x1 .receipt-header .crest { width: 65px; height: 65px; }
   .layout-1x1 .receipt-header .school { font-size: 16px; }
@@ -272,36 +271,38 @@
   .layout-1x1 .totals-row { font-size: 12px; padding: 2px 0; }
   .layout-1x1 .totals-row.big { font-size: 14px; margin-top: 4px; padding-top: 4px; border-top-width: 1.5px; }
   .layout-1x1 .balance-note { font-size: 12px; padding: 6px; margin-top: 6px; border-width: 1.5px; }
+  .layout-1x1 .signature-block { margin-top: 12px; padding-top: 8px; }
+  .layout-1x1 .signature-block .sig-line { height: 15mm; }
+  .layout-1x1 .signature-block .sig-label { font-size: 10px; }
   .layout-1x1 .receipt-footer { padding-top: 6px; margin-top: 8px; border-top-width: 1.5px; }
   .layout-1x1 .receipt-footer .left { font-size: 10px; }
   .layout-1x1 .receipt-footer .left .office { font-size: 11px; }
   .layout-1x1 .receipt-footer .left .acct { font-size: 11px; }
   .layout-1x1 .receipt-footer .right { font-size: 10px; }
   .layout-1x1 .watermark .wm-badge { font-size: 40px; border-width: 3px; padding: 10px 20px; }
-  
-  /* 1x1 Specific fix to force footer to bottom */
-  .layout-1x1 .receipt { grid-template-rows: auto auto 1fr auto !important; }
-  .layout-1x1 .receipt-body { margin-bottom: auto; }
 
-  /* 2x1 (2 per page) - Scaled down so content fits */
-  .layout-2x1 .receipt { padding: 8mm; border: 1.5px solid #000; }
+  /* 2x1 (2 per page) */
+  .layout-2x1 .receipt { padding: 6mm; border: 1.5px solid #000; }
   .layout-2x1 .receipt-header { padding-bottom: 6px; margin-bottom: 8px; min-height: 50px; }
   .layout-2x1 .receipt-header .crest { width: 40px; height: 40px; }
-  .layout-2x1 .receipt-header .school { font-size: 12px; }
-  .layout-2x1 .receipt-header .doc-type { font-size: 9px; }
+  .layout-2x1 .receipt-header .school { font-size: 11px; }
+  .layout-2x1 .receipt-header .doc-type { font-size: 8px; }
   .layout-2x1 .receipt-header .range-badge { font-size: 7px !important; }
-  .layout-2x1 .receipt-number { font-size: 12px; padding: 4px 10px; }
+  .layout-2x1 .receipt-number { font-size: 11px; padding: 4px 10px; }
   .layout-2x1 .receipt-number .num-label { font-size: 7px; }
   .layout-2x1 .student-line { padding: 4px 0; margin-bottom: 6px; }
-  .layout-2x1 .student-line .left { font-size: 12px; }
-  .layout-2x1 .student-line .right { font-size: 10px; }
-  .layout-2x1 .payments-table { font-size: 10px; margin-bottom: 6px; }
-  .layout-2x1 .payments-table thead th { font-size: 8px; padding: 2px 4px; }
+  .layout-2x1 .student-line .left { font-size: 11px; }
+  .layout-2x1 .student-line .right { font-size: 9px; }
+  .layout-2x1 .payments-table { font-size: 9px; margin-bottom: 6px; }
+  .layout-2x1 .payments-table thead th { font-size: 7px; padding: 2px 4px; }
   .layout-2x1 .payments-table tbody td { padding: 2px 4px; }
   .layout-2x1 .totals-block { padding: 4px 8px; }
-  .layout-2x1 .totals-row { font-size: 10px; padding: 1px 0; }
-  .layout-2x1 .totals-row.big { font-size: 12px; margin-top: 2px; padding-top: 2px; }
-  .layout-2x1 .balance-note { font-size: 10px; padding: 4px; margin-top: 4px; }
+  .layout-2x1 .totals-row { font-size: 9px; padding: 1px 0; }
+  .layout-2x1 .totals-row.big { font-size: 11px; margin-top: 2px; padding-top: 2px; }
+  .layout-2x1 .balance-note { font-size: 9px; padding: 4px; margin-top: 4px; }
+  .layout-2x1 .signature-block { margin-top: 8px; padding-top: 4px; }
+  .layout-2x1 .signature-block .sig-line { height: 12mm; }
+  .layout-2x1 .signature-block .sig-label { font-size: 8px; }
   .layout-2x1 .receipt-footer { padding-top: 4px; margin-top: 4px; }
   .layout-2x1 .receipt-footer .left { font-size: 8px; }
   .layout-2x1 .receipt-footer .left .office { font-size: 9px; }
@@ -324,6 +325,9 @@
   .layout-full .totals-row { font-size: 7px; }
   .layout-full .totals-row.big { font-size: 9px; }
   .layout-full .balance-note { font-size: 6.5px; }
+  .layout-full .signature-block { margin-top: 4px; padding-top: 2px; }
+  .layout-full .signature-block .sig-line { height: 8mm; }
+  .layout-full .signature-block .sig-label { font-size: 5px; }
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .watermark .wm-badge { font-size: 22px; }
@@ -347,6 +351,9 @@
   .layout-compact .totals-row { font-size: 5.5px; }
   .layout-compact .totals-row.big { font-size: 7px; }
   .layout-compact .balance-note { font-size: 5px; }
+  .layout-compact .signature-block { margin-top: 2px; padding-top: 1px; }
+  .layout-compact .signature-block .sig-line { height: 5mm; }
+  .layout-compact .signature-block .sig-label { font-size: 4px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; }
@@ -369,6 +376,9 @@
   .layout-signature .totals-row { font-size: 9px; }
   .layout-signature .totals-row.big { font-size: 12px; }
   .layout-signature .balance-note { font-size: 9px; padding: 4px 6px; }
+  .layout-signature .signature-block { margin-top: 6px; padding-top: 4px; }
+  .layout-signature .signature-block .sig-line { height: 10mm; }
+  .layout-signature .signature-block .sig-label { font-size: 7px; }
   .layout-signature .receipt-footer { padding-top: 4px; margin-top: 5px; }
   .layout-signature .receipt-footer .left { font-size: 8px; }
   .layout-signature .receipt-footer .right { font-size: 8px; }
@@ -1232,8 +1242,7 @@
   }
 
   function signatureBlockHtml(layout) {
-    if (layout !== 'signature') return '';
-
+    // Signature block now applies to ALL layouts, not just 'signature'
     return ''
       + '<div class="signature-block">'
         + '<div class="sig-box">'
