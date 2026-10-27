@@ -238,35 +238,33 @@
   .balance-note { margin-top: 3px; padding: 3px 5px; border-radius: 3px; line-height: 1.25; font-weight: 700; background: transparent; color: #000; border: 1px solid #000; flex-shrink: 0; }
 
   /* ============================================================
-     NEW SIGNATURE/STAMP LAYOUT SYSTEM
+     DOTTED LINE & SIGNATURE GROUP
      ============================================================ */
   
-  /* Container that holds the dotted line + signatures */
-  .sig-container {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px dashed #000; /* The dotted line */
-    padding-top: 2mm;
-    flex-shrink: 0;
+  /* The dotted line */
+  .receipt-divider {
+    border-top: 1px dashed #000;
     margin-top: 2mm;
+    margin-bottom: 4mm;
+    width: 100%;
+    flex-shrink: 0;
   }
-  
-  .sig-row {
+
+  /* Group for signatures */
+  .sig-group {
     display: flex;
     justify-content: space-between;
-    gap: 20mm;
+    gap: 15mm;
+    margin-top: auto; /* Pushes it to the bottom, just above footer */
+    margin-bottom: 4mm;
+    flex-shrink: 0;
+    z-index: 2; /* Above the stamp */
+    position: relative;
   }
   
   .sig-box { flex: 1; text-align: center; }
-  .sig-line { height: 12mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
+  .sig-line { height: 8mm; border-bottom: 1px solid #000; margin-bottom: 1mm; }
   .sig-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.6px; color: #333; }
-
-  /* The space between the signature and the footer where the stamp goes */
-  .stamp-space {
-    flex-grow: 1;
-    min-height: 10mm;
-    position: relative;
-  }
 
   .receipt-footer { padding-top: 3px; border-top: 1px dashed #000; display: flex; justify-content: space-between; align-items: flex-end; gap: 4px; margin-top: 0 !important; flex-shrink: 0; }
   .receipt-footer .left { color: #000; line-height: 1.2; min-width: 0; overflow: hidden; }
@@ -276,13 +274,13 @@
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
 
   /* ============================================================
-     OFFICIAL STAMP CSS - 60mm x 35mm
+     OFFICIAL STAMP CSS - Positioned absolutely in the middle
      ============================================================ */
   .receipt-stamp {
     position: absolute;
-    bottom: 15mm; /* Positioned inside the stamp-space */
+    top: 65%; /* Positioned between dotted line and signature group */
     left: 50%;
-    transform: translateX(-50%) rotate(-1.5deg);
+    transform: translate(-50%, -50%) rotate(-1.5deg);
     
     /* Exact Dimensions */
     width: 60mm !important;
@@ -300,7 +298,7 @@
     
     opacity: 0.55;
     pointer-events: none;
-    z-index: 10;
+    z-index: 5; /* Sits over the white space but below sig-group */
     color: #444;
     mix-blend-mode: multiply;
     font-family: 'Impact', 'Arial Narrow', sans-serif;
@@ -355,8 +353,7 @@
   .layout-1x1 .totals-row { font-size: 12px; padding: 2px 0; }
   .layout-1x1 .totals-row.big { font-size: 14px; margin-top: 4px; padding-top: 4px; border-top-width: 1.5px; }
   .layout-1x1 .balance-note { font-size: 12px; padding: 6px; margin-top: 6px; border-width: 1.5px; }
-  .layout-1x1 .sig-container { padding-top: 4mm; margin-top: 4mm; }
-  .layout-1x1 .sig-line { height: 15mm; }
+  .layout-1x1 .sig-line { height: 12mm; }
   .layout-1x1 .sig-label { font-size: 10px; }
   .layout-1x1 .receipt-footer { padding-top: 6px; margin-top: 8px; border-top-width: 1.5px; }
   .layout-1x1 .receipt-footer .left { font-size: 10px; }
@@ -364,8 +361,7 @@
   .layout-1x1 .receipt-footer .left .acct { font-size: 11px; }
   .layout-1x1 .receipt-footer .right { font-size: 10px; }
   .layout-1x1 .watermark .wm-badge { font-size: 40px; border-width: 3px; padding: 10px 20px; }
-  .layout-1x1 .receipt-stamp { transform: translateX(-50%) rotate(-1.5deg) scale(1.2); bottom: 20mm; }
-  .layout-1x1 .stamp-space { min-height: 60mm; }
+  .layout-1x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1.2); top: 68%; }
 
   /* 2x1 (2 per page) */
   .layout-2x1 .receipt { padding: 6mm; border: 1.5px solid #000; }
@@ -386,8 +382,7 @@
   .layout-2x1 .totals-row { font-size: 9px; padding: 1px 0; }
   .layout-2x1 .totals-row.big { font-size: 11px; margin-top: 2px; padding-top: 2px; }
   .layout-2x1 .balance-note { font-size: 9px; padding: 4px; margin-top: 4px; }
-  .layout-2x1 .sig-container { padding-top: 3mm; margin-top: 3mm; }
-  .layout-2x1 .sig-line { height: 12mm; }
+  .layout-2x1 .sig-line { height: 10mm; }
   .layout-2x1 .sig-label { font-size: 8px; }
   .layout-2x1 .receipt-footer { padding-top: 4px; margin-top: 4px; }
   .layout-2x1 .receipt-footer .left { font-size: 8px; }
@@ -395,8 +390,7 @@
   .layout-2x1 .receipt-footer .left .acct { font-size: 9px; }
   .layout-2x1 .receipt-footer .right { font-size: 8px; }
   .layout-2x1 .watermark .wm-badge { font-size: 24px; }
-  .layout-2x1 .receipt-stamp { transform: translateX(-50%) rotate(-1.5deg) scale(1); bottom: 15mm; }
-  .layout-2x1 .stamp-space { min-height: 40mm; }
+  .layout-2x1 .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1); top: 68%; }
 
   /* FULL (3x3) */
   .layout-full .receipt-number { font-size: 7px; }
@@ -413,14 +407,12 @@
   .layout-full .totals-row { font-size: 7px; }
   .layout-full .totals-row.big { font-size: 9px; }
   .layout-full .balance-note { font-size: 6.5px; }
-  .layout-full .sig-container { padding-top: 1mm; margin-top: 1mm; }
-  .layout-full .sig-line { height: 8mm; }
+  .layout-full .sig-line { height: 6mm; }
   .layout-full .sig-label { font-size: 5px; }
   .layout-full .receipt-footer .left { font-size: 5.5px; }
   .layout-full .receipt-footer .right { font-size: 6px; }
   .layout-full .watermark .wm-badge { font-size: 22px; }
-  .layout-full .receipt-stamp { transform: translateX(-50%) rotate(-1.5deg) scale(0.65); bottom: 10mm; }
-  .layout-full .stamp-space { min-height: 20mm; }
+  .layout-full .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(0.65); top: 65%; }
 
   /* COMPACT (4x4) */
   .layout-compact .receipt { padding: 2mm; }
@@ -441,14 +433,12 @@
   .layout-compact .totals-row { font-size: 5.5px; }
   .layout-compact .totals-row.big { font-size: 7px; }
   .layout-compact .balance-note { font-size: 5px; }
-  .layout-compact .sig-container { padding-top: 1mm; margin-top: 1mm; }
-  .layout-compact .sig-line { height: 5mm; }
+  .layout-compact .sig-line { height: 4mm; }
   .layout-compact .sig-label { font-size: 4px; }
   .layout-compact .receipt-footer .left { font-size: 4.5px; }
   .layout-compact .receipt-footer .right { font-size: 4.5px; }
   .layout-compact .watermark .wm-badge { font-size: 13px; }
-  .layout-compact .receipt-stamp { transform: translateX(-50%) rotate(-1.5deg) scale(0.4); bottom: 5mm; }
-  .layout-compact .stamp-space { min-height: 10mm; }
+  .layout-compact .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(0.4); top: 60%; }
 
   /* SIGNATURE (2x2) */
   .layout-signature .receipt { padding: 5mm; border: 1.5px solid #000; }
@@ -468,15 +458,13 @@
   .layout-signature .totals-row { font-size: 9px; }
   .layout-signature .totals-row.big { font-size: 12px; }
   .layout-signature .balance-note { font-size: 9px; padding: 4px 6px; }
-  .layout-signature .sig-container { padding-top: 2mm; margin-top: 2mm; }
-  .layout-signature .sig-line { height: 10mm; }
+  .layout-signature .sig-line { height: 8mm; }
   .layout-signature .sig-label { font-size: 7px; }
   .layout-signature .receipt-footer { padding-top: 4px; margin-top: 5px; }
   .layout-signature .receipt-footer .left { font-size: 8px; }
   .layout-signature .receipt-footer .right { font-size: 8px; }
   .layout-signature .watermark .wm-badge { font-size: 28px; }
-  .layout-signature .receipt-stamp { transform: translateX(-50%) rotate(-1.5deg) scale(1); bottom: 12mm; }
-  .layout-signature .stamp-space { min-height: 30mm; }
+  .layout-signature .receipt-stamp { transform: translate(-50%, -50%) rotate(-1.5deg) scale(1); top: 68%; }
 
   .empty-sheet-slot { border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; }
 
@@ -1502,24 +1490,21 @@
         + '</div>'
         + balanceNoteHtml
       + '</div>'
-      + '<div class="sig-container">'
-        + '<div class="sig-row">'
-          + '<div class="sig-box">'
-            + '<div class="sig-line"></div>'
-            + '<div class="sig-label">Bursar\u2019s Signature</div>'
-          + '</div>'
-          + '<div class="sig-box">'
-            + '<div class="sig-line"></div>'
-            + '<div class="sig-label">Official School Stamp</div>'
-          + '</div>'
-        + '</div>'
+      + '<div class="receipt-divider"></div>'
+      + '<div class="receipt-stamp">'
+        + '<div class="stamp-title">THE ACCOUNTS OFFICE</div>'
+        + '<div class="stamp-subtitle">LUNZU SECONDARY SCHOOL</div>'
+        + '<div class="stamp-date">' + escapeHtml(stampDate) + '</div>'
+        + '<div class="stamp-address">PRIVATE BAG 130<br>LUNZU</div>'
       + '</div>'
-      + '<div class="stamp-space">'
-        + '<div class="receipt-stamp">'
-          + '<div class="stamp-title">THE ACCOUNTS OFFICE</div>'
-          + '<div class="stamp-subtitle">LUNZU SECONDARY SCHOOL</div>'
-          + '<div class="stamp-date">' + escapeHtml(stampDate) + '</div>'
-          + '<div class="stamp-address">PRIVATE BAG 130<br>LUNZU</div>'
+      + '<div class="sig-group">'
+        + '<div class="sig-box">'
+          + '<div class="sig-line"></div>'
+          + '<div class="sig-label">Bursar\u2019s Signature</div>'
+        + '</div>'
+        + '<div class="sig-box">'
+          + '<div class="sig-line"></div>'
+          + '<div class="sig-label">Official School Stamp</div>'
         + '</div>'
       + '</div>'
       + '<div class="receipt-footer">'
