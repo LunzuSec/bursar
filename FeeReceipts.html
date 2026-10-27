@@ -250,7 +250,7 @@
   .receipt-footer .right .ts-label { text-transform: uppercase; letter-spacing: 0.4px; display: block; font-family: 'Segoe UI', Arial, sans-serif; color: #666; }
 
   /* ============================================================
-     OFFICIAL STAMP CSS - 60mm x 35mm
+     OFFICIAL STAMP CSS - 60mm x 35mm, ABOVE dotted line
      ============================================================ */
   .receipt-stamp {
     position: absolute;
@@ -274,7 +274,7 @@
     
     opacity: 0.55;
     pointer-events: none;
-    z-index: 0;
+    z-index: 10; /* Ensures the stamp sits ABOVE the dotted line */
     color: #444;
     mix-blend-mode: multiply;
     font-family: 'Impact', 'Arial Narrow', sans-serif;
