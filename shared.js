@@ -3,6 +3,7 @@
 /* Load on every page: <script src="shared.js?v=4"></script>    */
 /* ============================================================ */
 
+// Use the base URL without the /u/1/ suffix.
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzVk1x1U6SDr9xrf32bbHJAb8dLi1QlMpo5n3Z9bcehIHUjAAoS57IhvtjmksSETIjCMg/exec';
 
 /* ============================================================ */
@@ -52,25 +53,27 @@ const SharedSession = {
     verify: function(pw) {
         return new Promise((resolve) => {
             const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-            const url = GAS_URL +
+            const baseUrl = GAS_URL +
                 '?action=verifyAdmin' +
                 '&password=' + encodeURIComponent(pw) +
                 '&callback=' + encodeURIComponent(callbackName);
 
             const script = document.createElement('script');
-            script.src = url;
-            const timeoutId = setTimeout(() => {
-                if (window[callbackName]) {
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    resolve({ success: false, error: 'Request timed out.' });
-                }
-            }, 30000);
+            script.src = baseUrl;
+            
+            let timeoutId = setTimeout(() => {
+                cleanup();
+                resolve({ success: false, error: 'Request timed out.' });
+            }, 15000);
+
+            function cleanup() {
+                clearTimeout(timeoutId);
+                if (window[callbackName]) delete window[callbackName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+            }
 
             window[callbackName] = function(response) {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
+                cleanup();
                 if (response && response.success) {
                     resolve({ success: true });
                 } else {
@@ -78,11 +81,45 @@ const SharedSession = {
                 }
             };
 
+            // FALLBACK FIX: If CORB blocks the script tag, use a fetch request
             script.onerror = function() {
-                clearTimeout(timeoutId);
-                delete window[callbackName];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                resolve({ success: false, error: 'Network error.' });
+                console.warn('JSONP blocked by browser (CORB/Account conflict). Falling back to fetch...');
+                cleanup();
+                
+                // Fetch using the same base URL
+                fetch(baseUrl.replace('&callback=' + callbackName, ''), {
+                    method: 'GET',
+                    mode: 'cors'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.success) {
+                        resolve({ success: true });
+                    } else {
+                        resolve({ success: false, error: (data && data.error) || 'Incorrect password.' });
+                    }
+                })
+                .catch(err => {
+                    console.warn('Fetch failed. Trying /a/gmail.com/ URL trick...');
+                    // Final fallback: use the /a/gmail.com/ URL format
+                    const fallbackUrl = baseUrl.replace('/macros/s/', '/a/gmail.com/macros/s/').replace('&callback=' + callbackName, '');
+                    
+                    fetch(fallbackUrl, {
+                        method: 'GET',
+                        mode: 'cors'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.success) {
+                            resolve({ success: true });
+                        } else {
+                            resolve({ success: false, error: (data && data.error) || 'Incorrect password.' });
+                        }
+                    })
+                    .catch(finalErr => {
+                        resolve({ success: false, error: 'Network error or Google account conflict. Please refresh and try again.' });
+                    });
+                });
             };
 
             document.head.appendChild(script);
