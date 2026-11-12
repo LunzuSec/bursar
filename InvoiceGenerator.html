@@ -46,7 +46,7 @@
         #bg-canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         #bg-canvas-container canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
         .container {
-            position: relative; z-index: 1; max-width: 1080px; margin: 0 auto;
+            position: relative; z-index: 1; max-width: 1120px; margin: 0 auto;
             background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
             backdrop-filter: blur(24px) saturate(160%);
             -webkit-backdrop-filter: blur(24px) saturate(160%);
@@ -103,6 +103,7 @@
             border-bottom: 1px solid rgba(251, 191, 36, 0.15);
             display: flex; align-items: center; gap: 10px;
             letter-spacing: 0.3px; text-transform: uppercase;
+            flex-wrap: wrap;
         }
         .section-title i { font-size: 16px; opacity: 0.9; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -121,39 +122,161 @@
         .form-group input:hover, .form-group select:hover { border-color: rgba(251, 191, 36, 0.3); background: rgba(0, 0, 0, 0.32); }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold-500); background: rgba(0, 0, 0, 0.35); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.12); }
         .form-group input:disabled, .form-group select:disabled { opacity: 0.5; cursor: not-allowed; }
-        .term-checkboxes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
-        .term-checkboxes label {
-            display: flex; align-items: center; gap: 8px;
-            padding: 10px 18px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-subtle); border-radius: 10px;
-            font-size: 13px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; color: var(--text-secondary); user-select: none;
-        }
-        .term-checkboxes label:hover { border-color: rgba(251, 191, 36, 0.35); background: rgba(255, 255, 255, 0.06); color: var(--text-primary); }
-        .term-checkboxes input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--gold-500); cursor: pointer; }
-        .term-checkboxes label.checked { background: var(--gold-soft); border-color: var(--gold-500); color: var(--gold-500); font-weight: 700; box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25); }
 
-        /* ★ NEW: projected term styling */
-        .term-checkboxes label.projected {
-            border-color: rgba(245, 158, 11, 0.5);
-            background: rgba(245, 158, 11, 0.08);
+        /* ============================================================
+           MULTI-YEAR / MULTI-TERM CHECKBOX GRID
+           ============================================================ */
+        .year-block {
+            border: 1px solid rgba(251, 191, 36, 0.18);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.18);
+            transition: 0.2s;
         }
-        .term-checkboxes label.projected::after {
-            content: 'proj.';
-            font-size: 9px;
-            padding: 1px 6px;
-            background: rgba(245, 158, 11, 0.25);
-            border-radius: 4px;
+        .year-block.projected {
+            border-color: rgba(245, 158, 11, 0.45);
+            background: rgba(245, 158, 11, 0.06);
+        }
+        .year-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .year-block-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gold-500);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .year-block-title small {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.2px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            margin-left: 4px;
+        }
+        .year-projected-tag {
+            display: none;
+            font-size: 9px;
+            padding: 2px 8px;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fef3c7;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        .year-block.projected .year-projected-tag { display: inline-block; }
+        .year-block-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .year-quickbtn {
+            background: transparent;
+            border: 1px solid var(--border-medium);
+            color: var(--text-secondary);
+            font-size: 10.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: 0.15s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .year-quickbtn:hover {
+            border-color: var(--gold-500);
+            color: var(--gold-500);
+            background: rgba(251, 191, 36, 0.08);
+        }
+        .term-row-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .term-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            transition: 0.15s;
+            text-align: center;
+        }
+        .term-toggle:hover {
+            border-color: rgba(251, 191, 36, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+        }
+        .term-toggle input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: var(--gold-500);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .term-toggle.checked {
+            background: var(--gold-soft);
+            border-color: var(--gold-500);
+            color: var(--gold-500);
+            font-weight: 700;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25);
+        }
+        .year-block.projected .term-toggle.checked {
+            background: rgba(245, 158, 11, 0.18);
+            border-color: var(--warn);
             color: #fef3c7;
         }
-        .term-checkboxes label.projected.checked {
-            background: rgba(245, 158, 11, 0.2);
-            border-color: var(--warn);
+
+        /* live summary pill */
+        .selection-summary {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            font-size: 12px;
+            color: #dbeafe;
+            line-height: 1.5;
+            display: none;
+        }
+        .selection-summary.show { display: block; }
+        .selection-summary strong { color: #93c5fd; }
+        .selection-summary .proj-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 1px 7px;
+            background: rgba(245, 158, 11, 0.25);
+            color: #fef3c7;
+            border-radius: 100px;
+            margin-left: 6px;
+            font-weight: 700;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
+        @media (max-width: 640px) {
+            .term-row-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ============================================================ */
         .invoice-mode-group {
             margin: 0; padding: 18px 20px;
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.06) 0%, rgba(245, 158, 11, 0.03) 100%);
@@ -167,14 +290,12 @@
             padding: 12px 14px; border: 1px solid var(--border-medium);
             background: rgba(0, 0, 0, 0.25); border-radius: 10px; cursor: pointer;
             font-size: 12px; font-weight: 600; color: var(--text-secondary);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit; text-align: center; line-height: 1.4;
+            transition: all 0.2s; font-family: inherit; text-align: center; line-height: 1.4;
             min-height: 60px; display: flex; align-items: center; justify-content: center;
             letter-spacing: 0.1px;
         }
         .mode-btn:hover { border-color: rgba(251, 191, 36, 0.5); background: rgba(0, 0, 0, 0.35); color: var(--text-primary); transform: translateY(-1px); }
         .mode-btn.active { background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%); color: var(--navy-900); border-color: var(--gold-500); font-weight: 700; box-shadow: 0 6px 20px -4px rgba(251, 191, 36, 0.5); transform: translateY(-1px); }
-        .mode-btn.active:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -4px rgba(251, 191, 36, 0.6); }
         .mode-hint { margin-top: 12px; font-size: 11.5px; color: var(--text-muted); font-style: italic; line-height: 1.5; padding-left: 2px; }
 
         .pos-add-bar {
@@ -335,7 +456,6 @@
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 16px -4px rgba(37, 99, 235, 0.5); }
         .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.7); filter: brightness(1.1); }
-        .btn-primary:active:not(:disabled) { transform: translateY(0); }
         .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 4px 16px -4px rgba(16, 185, 129, 0.5); }
         .btn-success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.7); filter: brightness(1.1); }
         .btn-outline { background: transparent; color: var(--text-primary); border-color: var(--border-medium); }
@@ -350,7 +470,7 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 13, 24, 0.9); backdrop-filter: blur(8px);
             z-index: 9999; justify-content: center; align-items: center;
-            flex-direction: column; color: white; animation: fadeIn 0.25s ease;
+            flex-direction: column; color: white;
         }
         .loading.show { display: flex; }
         .spinner {
@@ -384,7 +504,6 @@
         .status-partial { color: var(--gold-500); font-weight: 700; }
         .status-credit { color: #93c5fd; font-weight: 700; }
 
-        /* ★ NEW: projected badge */
         .projected-badge {
             display: inline-block;
             font-size: 10px;
@@ -408,19 +527,12 @@
         .help-section ul { margin: 0; padding-left: 20px; line-height: 1.9; }
         .help-section li::marker { color: var(--gold-500); }
         .invoice-count { font-size: 11px; color: var(--text-muted); margin-left: 8px; font-weight: 500; text-transform: none; letter-spacing: 0; }
-        .bf-preview {
-            font-size: 10.5px; color: var(--gold-500);
-            background: rgba(251, 191, 36, 0.12);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            padding: 4px 12px; border-radius: 100px; margin-left: 8px;
-            font-weight: 600; text-transform: none; letter-spacing: 0.2px;
-        }
 
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 13, 24, 0.85); backdrop-filter: blur(8px);
             z-index: 10000; justify-content: center; align-items: center;
-            padding: 20px; animation: fadeIn 0.2s ease;
+            padding: 20px;
         }
         .modal-overlay.show { display: flex; }
         .modal-box {
@@ -432,7 +544,7 @@
             max-height: 90vh; overflow-y: auto; color: var(--text-primary);
         }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .modal-box h3 { color: var(--gold-500); margin-bottom: 10px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+        .modal-box h3 { color: var(--gold-500); margin-bottom: 10px; font-size: 18px; font-weight: 700; }
         .modal-box p { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
         .modal-box .form-group label { color: var(--text-secondary); }
         .modal-box .form-group input, .modal-box .form-group select { background: rgba(0, 0, 0, 0.3); color: var(--text-primary); }
@@ -454,8 +566,6 @@
             .form-row { grid-template-columns: 1fr; gap: 0; }
             .btn-group { flex-direction: column; gap: 10px; }
             .btn-group .btn { width: 100%; }
-            .term-checkboxes { flex-direction: column; }
-            .term-checkboxes label { width: 100%; justify-content: center; }
             .progress-bar { width: 220px; }
             .existing-invoices .invoice-item { flex-direction: column; align-items: stretch; }
             .existing-invoices .invoice-item .actions { width: 100%; justify-content: stretch; }
@@ -463,12 +573,6 @@
             .mode-buttons { grid-template-columns: 1fr; }
             .mode-btn { min-height: 48px; }
             .modal-box .btn { flex: none; width: 100%; }
-        }
-        @media (max-width: 420px) {
-            .header h1 { font-size: 18px; }
-            .section-title { font-size: 12px; }
-            .mode-btn { font-size: 11px; }
-            .btn { padding: 12px 18px; font-size: 12.5px; }
         }
     </style>
 </head>
@@ -481,7 +585,7 @@
             <div class="header-icon">🏫</div>
             <h1>LUNZU SECONDARY SCHOOL</h1>
             <div class="subtitle">Boarding Fees Invoice Portal</div>
-            <div class="badge">📄 Multi-Term Invoice · B/F Support</div>
+            <div class="badge">📄 Multi-Year · Multi-Term · B/F Support</div>
         </div>
 
         <div class="net-status">
@@ -516,40 +620,18 @@
 
             <div class="divider"></div>
 
+            <!-- ============================================================
+                 MULTI-YEAR SELECTION
+                 ============================================================ -->
             <div>
                 <h3 class="section-title">
-                    <i class="fas fa-calendar-alt"></i> Academic Year &amp; Terms
-                    <span class="bf-preview" id="bfPreview" style="display:none;"></span>
+                    <i class="fas fa-calendar-alt"></i> Select Years &amp; Terms
+                    <span class="invoice-count" id="yearTermCount">(0 selected)</span>
                 </h3>
 
-                <div class="form-group">
-                    <label for="academicYear">Academic Year <span class="required">*</span></label>
-                    <select id="academicYear" onchange="onAcademicYearChange()">
-                        <option value="2024-2025">2024-2025</option>
-                        <option value="2025-2026">2025-2026</option>
-                        <option value="2026-2027" selected>2026-2027</option>
-                        <option value="2027-2028">2027-2028</option>
-                        <option value="2028-2029">2028-2029</option>
-                    </select>
-                </div>
+                <div id="yearBlocks"></div>
 
-                <div class="form-group">
-                    <label>Select Terms <span class="required">*</span></label>
-                    <div class="term-checkboxes">
-                        <label class="term-label checked" data-term="TERM 1">
-                            <input type="checkbox" class="term-check" value="TERM 1" checked onchange="onTermChange(this)">
-                            TERM 1
-                        </label>
-                        <label class="term-label" data-term="TERM 2">
-                            <input type="checkbox" class="term-check" value="TERM 2" onchange="onTermChange(this)">
-                            TERM 2
-                        </label>
-                        <label class="term-label" data-term="TERM 3">
-                            <input type="checkbox" class="term-check" value="TERM 3" onchange="onTermChange(this)">
-                            TERM 3
-                        </label>
-                    </div>
-                </div>
+                <div class="selection-summary" id="selectionSummary"></div>
             </div>
 
             <div class="divider"></div>
@@ -584,6 +666,7 @@
 
             <div class="divider"></div>
 
+            <!-- Students (unchanged) -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-user-graduate"></i> Students
@@ -649,11 +732,11 @@
                 <strong><i class="fas fa-info-circle"></i> How to Use</strong>
                 <ul>
                     <li>Enter the <strong>parent/guardian name</strong> (required)</li>
-                    <li>Select the <strong>academic year</strong> and <strong>terms</strong> to invoice</li>
-                    <li>Pick a <strong>Balance Display Mode</strong> — applies to new invoices</li>
-                    <li>Choose a class, search a student, click <strong>Add</strong> to add them to the basket</li>
-                    <li>Repeat to add more students — the basket scrolls internally when it fills up</li>
-                    <li>Click <strong>Generate Invoice</strong> to create and download the PDF</li>
+                    <li>Tick any <strong>term checkboxes</strong> — across <strong>any academic years</strong> you need</li>
+                    <li>Use <strong>All</strong> / <strong>Clear</strong> on a year to quickly toggle its terms</li>
+                    <li>Years marked <strong>PROJ.</strong> have no fee sheet yet — the invoice will be billed at standard rates and locked from payment</li>
+                    <li>Pick a <strong>Balance Display Mode</strong></li>
+                    <li>Add one or more students, then click <strong>Generate Invoice</strong></li>
                 </ul>
             </div>
         </div>
@@ -692,7 +775,7 @@
             <h3><i class="fas fa-pen"></i> Edit Invoice</h3>
             <p id="editInvoiceInfo"></p>
             <div style="font-size:11.5px;color:#fef3c7;background:rgba(245,158,11,0.12);padding:12px 14px;border-radius:10px;margin-bottom:16px;border-left:3px solid #f59e0b;line-height:1.5;">
-                <strong>Note:</strong> Students, terms, fees and academic year cannot be edited here. To change those, delete this invoice and regenerate.
+                <strong>Note:</strong> Students, terms, fees and academic years cannot be edited here. Delete and regenerate to change them.
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -734,7 +817,7 @@
             <h3 style="color:#fca5a5;"><i class="fas fa-trash"></i> Delete Invoice</h3>
             <p id="deleteInvoiceInfo"></p>
             <div style="font-size:12px;color:#fca5a5;background:rgba(220,38,38,0.12);padding:12px 14px;border-radius:10px;margin-bottom:16px;border-left:3px solid #ef4444;line-height:1.5;">
-                <strong>⚠️ Warning:</strong> This action cannot be undone. The invoice will be permanently removed.
+                <strong>⚠️ Warning:</strong> This action cannot be undone.
             </div>
             <div id="deleteAlert" class="alert"></div>
             <div class="btn-group">
@@ -754,7 +837,6 @@
             const ctx = canvas.getContext('2d');
             let w, h, notes = [];
             const NOTE_COUNT = 28;
-
             function resizeCanvas() {
                 const rect = container.getBoundingClientRect();
                 canvas.width = rect.width || window.innerWidth;
@@ -807,6 +889,15 @@
         })();
 
         // ============================================
+        // CONSTANTS
+        // ============================================
+        const ACADEMIC_YEARS = ['2024-2025', '2025-2026', '2026-2027', '2027-2028', '2028-2029'];
+        const DEFAULT_YEAR = '2026-2027';
+        const TERMS = ['TERM 1', 'TERM 2', 'TERM 3'];
+        // ★ "projected" = years with no fee sheet yet. 2027-2028 onward.
+        const PROJECTED_YEAR_FROM = '2027-2028';
+
+        // ============================================
         // STATE
         // ============================================
         let currentPDFBase64 = null;
@@ -826,8 +917,12 @@
         let acHighlightIndex = -1;
         let acFilteredNames = [];
 
-        // ★ NEW: which terms are currently projected (no fee sheet yet)
-        let projectedTermsSet = {};
+        // ★ NEW: selection state keyed by "year|term"
+        //   { '2026-2027|TERM 1': true, '2027-2028|TERM 2': true, ... }
+        let selectionState = {};
+
+        // Track which invoices are projected (so we can lock Mark Paid buttons)
+        let currentProjectedInvoiceSet = {};
 
         // ============================================
         // INIT
@@ -848,8 +943,10 @@
 
         function initApp() {
             updateNetworkStatus();
-            updateBFPreview();
-            updateProjectionFlags();   // ★ NEW
+            buildYearBlocks();
+            // Default selection: current year TERM 1
+            toggleSelection(DEFAULT_YEAR, 'TERM 1', true);
+            renderSelectionSummary();
             loadClasses();
             setInvoiceMode('include_both', document.querySelector('.mode-btn[data-mode="include_both"]'));
             renderBasket();
@@ -955,6 +1052,137 @@
         }
 
         // ============================================
+        // BUILD YEAR × TERM GRID  ★ NEW
+        // ============================================
+        function buildYearBlocks() {
+            var container = document.getElementById('yearBlocks');
+            var html = '';
+            for (var i = 0; i < ACADEMIC_YEARS.length; i++) {
+                var year = ACADEMIC_YEARS[i];
+                var isProjected = year >= PROJECTED_YEAR_FROM;
+                html += '<div class="year-block' + (isProjected ? ' projected' : '') + '" data-year="' + year + '">';
+                html += '<div class="year-block-header">';
+                html += '<div class="year-block-title">';
+                html += '<i class="fas fa-graduation-cap"></i> ' + year;
+                if (isProjected) {
+                    html += '<span class="year-projected-tag">PROJ.</span>';
+                }
+                html += '</div>';
+                html += '<div class="year-block-actions">';
+                html += '<button type="button" class="year-quickbtn" onclick="selectAllInYear(\'' + year + '\', true)">All</button>';
+                html += '<button type="button" class="year-quickbtn" onclick="selectAllInYear(\'' + year + '\', false)">Clear</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="term-row-grid">';
+                for (var t = 0; t < TERMS.length; t++) {
+                    var term = TERMS[t];
+                    var key = year + '|' + term;
+                    var checked = !!selectionState[key];
+                    html += '<label class="term-toggle' + (checked ? ' checked' : '') + '" data-key="' + key + '">';
+                    html += '<input type="checkbox" class="term-cb" data-year="' + year + '" data-term="' + term + '"' + (checked ? ' checked' : '') + ' onchange="onTermToggle(this)">';
+                    html += '<span>' + term + '</span>';
+                    html += '</label>';
+                }
+                html += '</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function onTermToggle(cb) {
+            var year = cb.getAttribute('data-year');
+            var term = cb.getAttribute('data-term');
+            toggleSelection(year, term, cb.checked);
+            cb.parentElement.classList.toggle('checked', cb.checked);
+            renderSelectionSummary();
+        }
+
+        function toggleSelection(year, term, checked) {
+            var key = year + '|' + term;
+            if (checked) selectionState[key] = true;
+            else delete selectionState[key];
+
+            // sync the checkbox UI
+            var cb = document.querySelector('.term-cb[data-year="' + year + '"][data-term="' + term + '"]');
+            if (cb) {
+                cb.checked = !!checked;
+                cb.parentElement.classList.toggle('checked', !!checked);
+            }
+            updateYearTermCount();
+        }
+
+        function selectAllInYear(year, checked) {
+            for (var t = 0; t < TERMS.length; t++) {
+                toggleSelection(year, TERMS[t], checked);
+            }
+            renderSelectionSummary();
+        }
+
+        function getSelectedYearTerms() {
+            // Return array like ["2026-2027|TERM 1", "2027-2028|TERM 2", ...] in sorted order
+            var keys = Object.keys(selectionState);
+            keys.sort(function(a, b) {
+                var aP = a.split('|'), bP = b.split('|');
+                var aY = ACADEMIC_YEARS.indexOf(aP[0]);
+                var bY = ACADEMIC_YEARS.indexOf(bP[0]);
+                if (aY !== bY) return aY - bY;
+                return TERMS.indexOf(aP[1]) - TERMS.indexOf(bP[1]);
+            });
+            return keys;
+        }
+
+        function getProjectedYearTerms() {
+            return getSelectedYearTerms().filter(function(k) {
+                return k.split('|')[0] >= PROJECTED_YEAR_FROM;
+            });
+        }
+
+        function updateYearTermCount() {
+            var count = Object.keys(selectionState).length;
+            var el = document.getElementById('yearTermCount');
+            if (el) el.textContent = '(' + count + ' selected)';
+        }
+
+        function renderSelectionSummary() {
+            var summary = document.getElementById('selectionSummary');
+            var selected = getSelectedYearTerms();
+            updateYearTermCount();
+
+            if (selected.length === 0) {
+                summary.classList.remove('show');
+                return;
+            }
+
+            // Group by year for a readable display
+            var byYear = {};
+            for (var i = 0; i < selected.length; i++) {
+                var p = selected[i].split('|');
+                if (!byYear[p[0]]) byYear[p[0]] = [];
+                byYear[p[0]].push(p[1]);
+            }
+
+            var parts = [];
+            var hasProjected = false;
+            var yearKeys = Object.keys(byYear).sort(function(a,b) {
+                return ACADEMIC_YEARS.indexOf(a) - ACADEMIC_YEARS.indexOf(b);
+            });
+            for (var y = 0; y < yearKeys.length; y++) {
+                var yr = yearKeys[y];
+                var isProj = yr >= PROJECTED_YEAR_FROM;
+                if (isProj) hasProjected = true;
+                parts.push('<strong>' + yr + '</strong> ' + byYear[yr].join(', ') + (isProj ? ' <span class="proj-tag">PROJECTED</span>' : ''));
+            }
+
+            var totalTerms = selected.length;
+            var msg = 'Selected <strong>' + totalTerms + '</strong> term' + (totalTerms === 1 ? '' : 's') + ' across <strong>' + yearKeys.length + '</strong> year' + (yearKeys.length === 1 ? '' : 's') + ':<br>' + parts.join('<br>');
+            if (hasProjected) {
+                msg += '<br><br>⚠️ <strong>Projected years</strong> have no fee sheet yet. Their fees are billed at the standard rate and payment will be locked until sheets exist.';
+            }
+            summary.innerHTML = msg;
+            summary.classList.add('show');
+        }
+
+        // ============================================
         // UTILITIES
         // ============================================
         function showAlert(message, type) {
@@ -1008,11 +1236,9 @@
         function setInvoiceMode(mode, btn) {
             currentInvoiceMode = mode;
             document.getElementById('invoiceMode').value = mode;
-
             var all = document.querySelectorAll('.mode-btn');
             for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
             if (btn) btn.classList.add('active');
-
             var hints = {
                 include_both: 'Shows previous balances and payments as recorded.',
                 ignore_bf:    'Previous balances will be shown as K0. Current payments still apply.',
@@ -1057,7 +1283,6 @@
             }
             el.className = 'loading show';
         }
-
         function updateLoading(message, step, progressPct) {
             var text = document.getElementById('loadingText');
             var stepEl = document.getElementById('loadingStep');
@@ -1066,7 +1291,6 @@
             if (step) stepEl.textContent = step;
             if (progressPct !== undefined) fill.style.width = progressPct + '%';
         }
-
         function hideLoading() {
             clearInterval(progressTimer);
             progressTimer = null;
@@ -1082,31 +1306,25 @@
             var maxRetries = 3;
             var callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
             var timeoutMs = 180000;
-
             var data = { action: action, callback: callbackName };
             for (var key in params) {
                 if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
                     data[key] = params[key];
                 }
             }
-
             var qs = Object.keys(data).map(function(k) {
                 return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
             }).join('&');
-
             var script = document.createElement('script');
             script.src = GAS_URL + '?' + qs;
             script.async = true;
-
             var completed = false;
             var timeoutId = null;
-
             function cleanup() {
                 if (script.parentNode) script.parentNode.removeChild(script);
                 try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
                 if (timeoutId) clearTimeout(timeoutId);
             }
-
             function handleFailure(errMsg) {
                 if (completed) return;
                 completed = true;
@@ -1123,7 +1341,6 @@
                     else showAlert('Request failed: ' + errMsg, 'error');
                 }
             }
-
             window[callbackName] = function(result) {
                 if (completed) return;
                 completed = true;
@@ -1136,64 +1353,9 @@
                     handleFailure('Invalid response format');
                 }
             };
-
             script.onerror = function() { handleFailure('Network error'); };
             timeoutId = setTimeout(function() { handleFailure('Request timed out'); }, timeoutMs);
             document.body.appendChild(script);
-        }
-
-        // ============================================
-        // TERMS + B/F PREVIEW + PROJECTION FLAGS  ★ NEW
-        // ============================================
-        function onTermChange(checkbox) {
-            var label = checkbox.parentElement;
-            if (checkbox.checked) label.classList.add('checked');
-            else label.classList.remove('checked');
-            var checked = document.querySelectorAll('.term-check:checked');
-            if (checked.length === 0) {
-                checkbox.checked = true;
-                label.classList.add('checked');
-            }
-            updateBFPreview();
-        }
-
-        // ★ NEW: called whenever academic year changes; also once at startup
-        function updateProjectionFlags() {
-            var year = document.getElementById('academicYear').value;
-            // Projected = anything from 2027-2028 onward (current term config has no sheets there).
-            var isFuture = year >= '2027-2028';
-            projectedTermsSet = {};
-            document.querySelectorAll('.term-check').forEach(function(cb) {
-                var term = cb.value;
-                var label = cb.parentElement;
-                if (isFuture) {
-                    projectedTermsSet[term] = true;
-                    label.classList.add('projected');
-                } else {
-                    label.classList.remove('projected');
-                }
-            });
-            updateBFPreview();
-        }
-
-        function updateBFPreview() {
-            var preview = document.getElementById('bfPreview');
-            var checked = document.querySelectorAll('.term-check:checked');
-            var terms = [];
-            for (var i = 0; i < checked.length; i++) terms.push(checked[i].value);
-            if (terms.length === 0) { preview.style.display = 'none'; return; }
-            var firstTerm = terms[0];
-            var bfSource = '';
-            if (firstTerm === 'TERM 1') bfSource = 'prior year TERM 3';
-            else if (firstTerm === 'TERM 2') bfSource = 'TERM 1';
-            else if (firstTerm === 'TERM 3') bfSource = 'TERM 2';
-            preview.style.display = 'inline-block';
-            var year = document.getElementById('academicYear').value;
-            if (year >= '2027-2028') {
-                preview.textContent = 'B/F unavailable (future year)';
-            } else {
-                preview.textContent = 'B/F from ' + bfSource;
-            }
         }
 
         // ============================================
@@ -1230,10 +1392,12 @@
             if (currentValue) select.value = currentValue;
         }
 
-        function getFirstSelectedTerm() {
-            var checked = document.querySelectorAll('.term-check:checked');
-            if (checked.length === 0) return 'TERM 1';
-            return checked[0].value;
+        // First-selected (year, term) used for autocomplete lookup
+        function getFirstSelectedYearTerm() {
+            var sel = getSelectedYearTerms();
+            if (!sel.length) return { year: DEFAULT_YEAR, term: 'TERM 1' };
+            var p = sel[0].split('|');
+            return { year: p[0], term: p[1] };
         }
 
         // ============================================
@@ -1241,17 +1405,16 @@
         // ============================================
         function loadAutocompleteNames(className) {
             if (!className) return Promise.resolve([]);
-            var academicYear = document.getElementById('academicYear').value;
-            var term = getFirstSelectedTerm();
-            var cacheKey = className + '|' + academicYear + '|' + term;
+            var yt = getFirstSelectedYearTerm();
+            var cacheKey = className + '|' + yt.year + '|' + yt.term;
             if (studentNamesCache[cacheKey]) {
                 return Promise.resolve(studentNamesCache[cacheKey]);
             }
             return new Promise(function(resolve) {
                 callApi('getInvoiceStudentNames', {
                     className: className,
-                    academicYear: academicYear,
-                    term: term
+                    academicYear: yt.year,
+                    term: yt.term
                 }, function(result) {
                     var names = [];
                     if (Array.isArray(result)) names = result;
@@ -1269,24 +1432,20 @@
             var inputEl = document.getElementById('posNameInput');
             var dropdown = document.getElementById('posAutocomplete');
             var q = inputEl.value.toLowerCase().trim();
-
             var currentClass = document.getElementById('posClassSelect').value;
             var addedNames = basket.filter(function(b) { return b.class === currentClass; })
                                     .map(function(b) { return b.name.toLowerCase(); });
-
             var filtered = allNames.filter(function(n) {
                 if (addedNames.indexOf(n.toLowerCase()) !== -1) return false;
                 if (!q) return true;
                 return n.toLowerCase().indexOf(q) !== -1;
             });
-
             acFilteredNames = filtered;
             acHighlightIndex = filtered.length > 0 ? 0 : -1;
-
             var html = '';
             if (filtered.length === 0) {
                 html = '<div class="empty">' +
-                    (allNames.length === 0 ? 'No students in this class' : 'No matching students — all may already be added') +
+                    (allNames.length === 0 ? 'No students in this class for selected year/term' : 'No matching students') +
                     '</div>';
             } else {
                 var limit = 200;
@@ -1301,7 +1460,6 @@
             }
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
-
             dropdown.querySelectorAll('.option').forEach(function(optEl) {
                 optEl.addEventListener('mousedown', function(e) {
                     e.preventDefault();
@@ -1326,9 +1484,7 @@
                 if (i === acHighlightIndex) options[i].classList.add('highlighted');
                 else options[i].classList.remove('highlighted');
             }
-            if (options[acHighlightIndex]) {
-                options[acHighlightIndex].scrollIntoView({ block: 'nearest' });
-            }
+            if (options[acHighlightIndex]) options[acHighlightIndex].scrollIntoView({ block: 'nearest' });
         }
 
         function closeAutocomplete() {
@@ -1343,16 +1499,13 @@
             var cls = document.getElementById('posClassSelect').value;
             var name = document.getElementById('posNameInput').value.trim();
             if (!cls || !name) return;
-
             var dup = basket.some(function(b) { return b.name === name && b.class === cls; });
             if (dup) {
                 showAlert('"' + name + '" is already in the basket', 'warn');
                 return;
             }
-
             basket.push({ name: name, class: cls });
             renderBasket();
-
             document.getElementById('posNameInput').value = '';
             document.getElementById('posAddBtn').disabled = true;
             document.getElementById('posNameInput').focus();
@@ -1377,11 +1530,9 @@
             var countEl = document.getElementById('basketCount');
             var clearBtn = document.getElementById('basketClearBtn');
             var studentCountEl = document.getElementById('studentCount');
-
             countEl.textContent = basket.length;
             studentCountEl.textContent = '(' + basket.length + ' students)';
             clearBtn.style.display = basket.length > 0 ? 'inline-flex' : 'none';
-
             if (basket.length === 0) {
                 listEl.innerHTML =
                     '<div class="pos-empty">' +
@@ -1392,7 +1543,6 @@
                 setTimeout(updateBasketScrollHint, 20);
                 return;
             }
-
             var html = '';
             for (var i = 0; i < basket.length; i++) {
                 var item = basket[i];
@@ -1410,7 +1560,6 @@
                 '</div>';
             }
             listEl.innerHTML = html;
-
             listEl.scrollTop = 0;
             setTimeout(updateBasketScrollHint, 20);
         }
@@ -1420,10 +1569,8 @@
             var fade = document.getElementById('basketFade');
             var hint = document.getElementById('basketScrollHint');
             if (!listEl || !fade || !hint) return;
-
             var hasOverflow = listEl.scrollHeight > listEl.clientHeight + 4;
             var notAtBottom = listEl.scrollTop + listEl.clientHeight < listEl.scrollHeight - 4;
-
             if (hasOverflow && notAtBottom) {
                 fade.classList.add('show');
                 hint.classList.add('show');
@@ -1433,18 +1580,7 @@
             }
         }
 
-        function getStudentsData() {
-            return basket.slice();
-        }
-
-        function onAcademicYearChange() {
-            studentNamesCache = {};
-            closeAutocomplete();
-            document.getElementById('posNameInput').value = '';
-            document.getElementById('posAddBtn').disabled = true;
-            updateBFPreview();
-            updateProjectionFlags();   // ★ NEW
-        }
+        function getStudentsData() { return basket.slice(); }
 
         // ============================================
         // CHECK EXISTING INVOICES
@@ -1480,16 +1616,15 @@
                         var owedAmount = Math.abs(balance);
                         var storedMode = inv.mode || 'include_both';
                         var modeBadge = '<span style="display:inline-block;font-size:10px;padding:2px 8px;background:rgba(99,102,241,0.2);color:#c7d2fe;border-radius:100px;margin-left:6px;vertical-align:middle;border:1px solid rgba(99,102,241,0.3);font-weight:600;">' + (modeLabels[storedMode] || storedMode) + '</span>';
-
-                        // ★ NEW: projected badge
                         var projectedBadge = '';
                         if (inv.isProjected) {
+                            currentProjectedInvoiceSet[inv.invoiceNumber] = true;
                             var projList = (inv.projectedTerms || []).join(', ');
                             projectedBadge = '<span class="projected-badge" title="Projected terms: ' + escapeHtmlAttr(projList) + '">📋 PROJECTED</span>';
+                        } else {
+                            delete currentProjectedInvoiceSet[inv.invoiceNumber];
                         }
-
-                        var isProjectedRow = !!inv.isProjected;
-                        var markPaidBtn = isProjectedRow
+                        var markPaidBtn = inv.isProjected
                             ? '<button class="btn btn-sm btn-secondary" disabled title="Cannot mark projected invoice as paid"><i class="fas fa-lock"></i> Locked</button>'
                             : '<button class="btn btn-sm btn-primary" onclick="openMarkPaidModal(\'' + inv.invoiceNumber + '\', ' + balance + ')"><i class="fas fa-money-bill"></i> Mark Paid</button>';
 
@@ -1543,7 +1678,6 @@
         // MARK PAID
         // ============================================
         function openMarkPaidModal(invoiceNumber, balance) {
-            // ★ NEW: hard block from frontend too (backend already blocks)
             if (invoiceNumber && currentProjectedInvoiceSet[invoiceNumber]) {
                 showAlert('This invoice contains projected (future) terms and cannot be marked as paid.', 'error');
                 return;
@@ -1558,12 +1692,10 @@
             document.getElementById('markPaidModal').className = 'modal-overlay show';
             setTimeout(function() { document.getElementById('paidAmountInput').focus(); }, 100);
         }
-
         function closeMarkPaidModal() {
             document.getElementById('markPaidModal').className = 'modal-overlay';
             currentPaidInvoiceNumber = null;
         }
-
         function submitMarkPaid() {
             var amount = parseFloat(document.getElementById('paidAmountInput').value);
             var password = SharedSession.getPassword();
@@ -1605,12 +1737,7 @@
         }
 
         // ============================================
-        // ★ NEW: track which invoices are projected so we can block Mark Paid
-        // ============================================
-        let currentProjectedInvoiceSet = {};
-
-        // ============================================
-        // EDIT MODAL
+        // EDIT / DELETE
         // ============================================
         function openEditModal(invoiceNumber) {
             currentEditInvoiceNumber = invoiceNumber;
@@ -1628,7 +1755,7 @@
                 document.getElementById('editInvoiceInfo').innerHTML =
                     'Invoice <strong>' + inv.invoiceNumber + '</strong><br>' +
                     'Students: ' + (inv.studentList || '') + '<br>' +
-                    'Academic Year: ' + (inv.academicYear || '') +
+                    'Years: ' + (inv.academicYear || '') +
                     (inv.isProjected ? '<br><span class="projected-badge">📋 PROJECTED</span>' : '');
                 document.getElementById('editParentName').value = inv.parentName || '';
                 document.getElementById('editParentPhone').value = inv.parentPhone || '';
@@ -1640,12 +1767,10 @@
                 alertEl.textContent = 'Network error: ' + error;
             });
         }
-
         function closeEditModal() {
             document.getElementById('editModal').className = 'modal-overlay';
             currentEditInvoiceNumber = null;
         }
-
         function submitEdit() {
             var alertEl = document.getElementById('editAlert');
             var btn = document.getElementById('editSubmitBtn');
@@ -1683,10 +1808,6 @@
                 alertEl.textContent = 'Network error: ' + error;
             });
         }
-
-        // ============================================
-        // DELETE MODAL
-        // ============================================
         function confirmDeleteInvoice(invoiceNumber) {
             currentDeleteInvoiceNumber = invoiceNumber;
             document.getElementById('deleteInvoiceInfo').innerHTML =
@@ -1694,12 +1815,10 @@
             document.getElementById('deleteAlert').className = 'alert';
             document.getElementById('deleteConfirmModal').className = 'modal-overlay show';
         }
-
         function closeDeleteModal() {
             document.getElementById('deleteConfirmModal').className = 'modal-overlay';
             currentDeleteInvoiceNumber = null;
         }
-
         function submitDeleteInvoice() {
             var password = SharedSession.getPassword();
             var alertEl = document.getElementById('deleteAlert');
@@ -1734,44 +1853,37 @@
         }
 
         // ============================================
-        // GENERATE  ★ NEW: projection confirmation
+        // GENERATE
         // ============================================
         function generateAndDownload() {
             if (isGenerating) return;
             var parentName = document.getElementById('parentName').value.trim();
             var parentPhone = document.getElementById('parentPhone').value.trim();
             var parentEmail = document.getElementById('parentEmail').value.trim();
-            var academicYear = document.getElementById('academicYear').value;
-            var terms = getSelectedTerms();
             var students = getStudentsData();
             var password = SharedSession.getPassword();
             var mode = document.getElementById('invoiceMode').value || 'include_both';
+            var yearTerms = getSelectedYearTerms();
 
             if (!parentName) { showAlert('Please enter parent name', 'error'); return; }
-            if (!academicYear) { showAlert('Please select an academic year', 'error'); return; }
-            if (terms.length === 0) { showAlert('Please select at least one term', 'error'); return; }
+            if (yearTerms.length === 0) { showAlert('Please select at least one year + term', 'error'); return; }
             if (students.length === 0) { showAlert('Please add at least one student to the basket', 'error'); return; }
-            if (!password) {
-                showAlert('Session expired. Please reload and sign in again.', 'error');
-                return;
-            }
-            if (!navigator.onLine) {
-                showAlert('You appear to be offline', 'error');
-                return;
-            }
+            if (!password) { showAlert('Session expired. Please reload and sign in again.', 'error'); return; }
+            if (!navigator.onLine) { showAlert('You appear to be offline', 'error'); return; }
 
-            // ★ NEW: confirm projection
-            var projectedTerms = terms.filter(function(t) { return projectedTermsSet[t]; });
-            if (projectedTerms.length > 0) {
+            // Warn if projected terms selected
+            var projectedSelected = yearTerms.filter(function(k) {
+                return k.split('|')[0] >= PROJECTED_YEAR_FROM;
+            });
+            if (projectedSelected.length > 0) {
+                var isODL = students[0] && students[0].class && students[0].class.indexOf('ODL') !== -1;
+                var feeEach = isODL ? 'K60,000' : 'K215,000';
                 var ok = confirm(
                     '⚠️ PROJECTION WARNING\n\n' +
-                    'The following term(s) have no fee sheet yet:\n' +
-                    '  • ' + projectedTerms.join('\n  • ') + '\n\n' +
-                    'They will be billed at the standard rate (' +
-                    (students[0] && students[0].class && students[0].class.indexOf('ODL') !== -1 ? 'K60,000' : 'K215,000') +
-                    ' per term) and marked PROJECTED on the PDF.\n\n' +
-                    'Payment on this invoice will be BLOCKED until real fee sheets are created.\n\n' +
-                    'Continue?'
+                    projectedSelected.length + ' selected term(s) have no fee sheet yet:\n' +
+                    projectedSelected.map(function(k){ return '  • ' + k.replace('|', ' '); }).join('\n') +
+                    '\n\nThey will be billed at the standard rate (' + feeEach + ' per term) and the invoice will be marked PROJECTED.\n\n' +
+                    'Payment on this invoice will be BLOCKED until real fee sheets exist.\n\nContinue?'
                 );
                 if (!ok) return;
             }
@@ -1792,7 +1904,6 @@
                 }
             }, 300000);
             var studentsParam = students.map(function(s) { return s.name + '|' + s.class; }).join(',');
-            var termsParam = terms.join(',');
             updateLoading('Reading fee sheets...', 'STEP 1 OF 4', 20);
             callApi('generateInvoice', {
                 password: password,
@@ -1800,8 +1911,7 @@
                 parentName: parentName,
                 parentPhone: parentPhone,
                 parentEmail: parentEmail,
-                terms: termsParam,
-                academicYear: academicYear,
+                yearTerms: yearTerms.join(','),
                 mode: mode
             }, function(result) {
                 if (!result.success) {
@@ -1813,7 +1923,6 @@
                     showAlert('Failed: ' + (result.error || 'Unknown'), 'error');
                     return;
                 }
-                // ★ NEW: track projected invoices for Mark Paid block
                 if (result.invoice && result.invoice.isProjected) {
                     currentProjectedInvoiceSet[result.invoice.invoiceNumber] = true;
                 }
@@ -1828,9 +1937,7 @@
                         currentPDFBase64 = pdfResult.pdfBase64;
                         currentFileName = pdfResult.fileName || 'invoice.pdf';
                         downloadPDF();
-                        var projMsg = result.invoice.isProjected
-                            ? ' (PROJECTED — payment locked)'
-                            : '';
+                        var projMsg = result.invoice.isProjected ? ' (PROJECTED — payment locked)' : '';
                         showAlert('✅ Invoice generated: ' + result.invoice.invoiceNumber + projMsg, 'success');
                         basket = [];
                         renderBasket();
@@ -1859,13 +1966,6 @@
             });
         }
 
-        function getSelectedTerms() {
-            var terms = [];
-            var checks = document.querySelectorAll('.term-check:checked');
-            for (var i = 0; i < checks.length; i++) terms.push(checks[i].value);
-            return terms;
-        }
-
         function downloadPDF() {
             if (!currentPDFBase64) { showAlert('No PDF available', 'error'); return; }
             try {
@@ -1881,10 +1981,8 @@
         }
 
         // ============================================
-        // EXPOSE TO GLOBAL
+        // EXPOSE
         // ============================================
-        window.onAcademicYearChange = onAcademicYearChange;
-        window.onTermChange = onTermChange;
         window.checkExisting = checkExisting;
         window.generateAndDownload = generateAndDownload;
         window.downloadInvoice = downloadInvoice;
@@ -1900,6 +1998,8 @@
         window.confirmDeleteInvoice = confirmDeleteInvoice;
         window.closeDeleteModal = closeDeleteModal;
         window.submitDeleteInvoice = submitDeleteInvoice;
+        window.onTermToggle = onTermToggle;
+        window.selectAllInYear = selectAllInYear;
     </script>
 </body>
 </html>
