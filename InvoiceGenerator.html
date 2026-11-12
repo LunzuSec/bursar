@@ -123,9 +123,6 @@
         .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold-500); background: rgba(0, 0, 0, 0.35); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.12); }
         .form-group input:disabled, .form-group select:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ============================================================
-           MULTI-YEAR / MULTI-TERM CHECKBOX GRID
-           ============================================================ */
         .year-block {
             border: 1px solid rgba(251, 191, 36, 0.18);
             border-radius: 12px;
@@ -155,13 +152,6 @@
             align-items: center;
             gap: 8px;
         }
-        .year-block-title small {
-            font-size: 10px;
-            color: var(--text-muted);
-            font-weight: 500;
-            letter-spacing: 0.2px;
-            text-transform: uppercase;
-        }
         .year-projected-tag {
             display: none;
             font-size: 9px;
@@ -175,10 +165,7 @@
             font-weight: 700;
         }
         .year-block.projected .year-projected-tag { display: inline-block; }
-        .year-block-actions {
-            display: flex;
-            gap: 6px;
-        }
+        .year-block-actions { display: flex; gap: 6px; }
         .year-quickbtn {
             background: transparent;
             border: 1px solid var(--border-medium);
@@ -244,7 +231,6 @@
             color: #fef3c7;
         }
 
-        /* live summary pill */
         .selection-summary {
             margin-top: 12px;
             padding: 10px 14px;
@@ -276,7 +262,6 @@
             .term-row-grid { grid-template-columns: 1fr; }
         }
 
-        /* ============================================================ */
         .invoice-mode-group {
             margin: 0; padding: 18px 20px;
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.06) 0%, rgba(245, 158, 11, 0.03) 100%);
@@ -620,9 +605,6 @@
 
             <div class="divider"></div>
 
-            <!-- ============================================================
-                 MULTI-YEAR SELECTION
-                 ============================================================ -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-calendar-alt"></i> Select Years &amp; Terms
@@ -666,7 +648,6 @@
 
             <div class="divider"></div>
 
-            <!-- Students (unchanged) -->
             <div>
                 <h3 class="section-title">
                     <i class="fas fa-user-graduate"></i> Students
@@ -734,7 +715,7 @@
                     <li>Enter the <strong>parent/guardian name</strong> (required)</li>
                     <li>Tick any <strong>term checkboxes</strong> — across <strong>any academic years</strong> you need</li>
                     <li>Use <strong>All</strong> / <strong>Clear</strong> on a year to quickly toggle its terms</li>
-                    <li>Years marked <strong>PROJ.</strong> have no fee sheet yet — the invoice will be billed at standard rates and locked from payment</li>
+                    <li>Years marked <strong>PROJ.</strong> have no fee sheet yet — they will be billed at standard rates and locked from payment</li>
                     <li>Pick a <strong>Balance Display Mode</strong></li>
                     <li>Add one or more students, then click <strong>Generate Invoice</strong></li>
                 </ul>
@@ -828,9 +809,6 @@
     </div>
 
     <script>
-        // ============================================
-        // BACKGROUND ANIMATION
-        // ============================================
         (function initBanknoteBackground() {
             const canvas = document.getElementById('banknoteCanvas');
             const container = document.getElementById('bg-canvas-container');
@@ -888,18 +866,11 @@
             startBackground();
         })();
 
-        // ============================================
-        // CONSTANTS
-        // ============================================
         const ACADEMIC_YEARS = ['2024-2025', '2025-2026', '2026-2027', '2027-2028', '2028-2029'];
         const DEFAULT_YEAR = '2026-2027';
         const TERMS = ['TERM 1', 'TERM 2', 'TERM 3'];
-        // ★ "projected" = years with no fee sheet yet. 2027-2028 onward.
         const PROJECTED_YEAR_FROM = '2027-2028';
 
-        // ============================================
-        // STATE
-        // ============================================
         let currentPDFBase64 = null;
         let currentFileName = null;
         let isGenerating = false;
@@ -917,16 +888,10 @@
         let acHighlightIndex = -1;
         let acFilteredNames = [];
 
-        // ★ NEW: selection state keyed by "year|term"
-        //   { '2026-2027|TERM 1': true, '2027-2028|TERM 2': true, ... }
         let selectionState = {};
 
-        // Track which invoices are projected (so we can lock Mark Paid buttons)
         let currentProjectedInvoiceSet = {};
 
-        // ============================================
-        // INIT
-        // ============================================
         document.addEventListener('DOMContentLoaded', async function() {
             try {
                 await ensureUnlocked({
@@ -944,7 +909,6 @@
         function initApp() {
             updateNetworkStatus();
             buildYearBlocks();
-            // Default selection: current year TERM 1
             toggleSelection(DEFAULT_YEAR, 'TERM 1', true);
             renderSelectionSummary();
             loadClasses();
@@ -1051,9 +1015,6 @@
             });
         }
 
-        // ============================================
-        // BUILD YEAR × TERM GRID  ★ NEW
-        // ============================================
         function buildYearBlocks() {
             var container = document.getElementById('yearBlocks');
             var html = '';
@@ -1102,7 +1063,6 @@
             if (checked) selectionState[key] = true;
             else delete selectionState[key];
 
-            // sync the checkbox UI
             var cb = document.querySelector('.term-cb[data-year="' + year + '"][data-term="' + term + '"]');
             if (cb) {
                 cb.checked = !!checked;
@@ -1119,7 +1079,6 @@
         }
 
         function getSelectedYearTerms() {
-            // Return array like ["2026-2027|TERM 1", "2027-2028|TERM 2", ...] in sorted order
             var keys = Object.keys(selectionState);
             keys.sort(function(a, b) {
                 var aP = a.split('|'), bP = b.split('|');
@@ -1153,7 +1112,6 @@
                 return;
             }
 
-            // Group by year for a readable display
             var byYear = {};
             for (var i = 0; i < selected.length; i++) {
                 var p = selected[i].split('|');
@@ -1182,9 +1140,6 @@
             summary.classList.add('show');
         }
 
-        // ============================================
-        // UTILITIES
-        // ============================================
         function showAlert(message, type) {
             var alert = document.getElementById('alert');
             alert.className = 'alert alert-' + type + ' show';
@@ -1230,9 +1185,6 @@
             showAlert('⚠️ You are offline. Please reconnect.', 'warn');
         });
 
-        // ============================================
-        // INVOICE MODE
-        // ============================================
         function setInvoiceMode(mode, btn) {
             currentInvoiceMode = mode;
             document.getElementById('invoiceMode').value = mode;
@@ -1248,9 +1200,6 @@
             document.getElementById('invoiceModeHint').textContent = hints[mode] || '';
         }
 
-        // ============================================
-        // PROGRESS / LOADING
-        // ============================================
         var PROGRESS_STEPS = [
             { text: 'Reading fee sheets...', step: 'STEP 1 OF 4' },
             { text: 'Fetching brought-forward values...', step: 'STEP 2 OF 4' },
@@ -1298,9 +1247,6 @@
             document.getElementById('progressFill').style.width = '0%';
         }
 
-        // ============================================
-        // JSONP API CALLER
-        // ============================================
         function callApi(action, params, onSuccess, onError, retryCount) {
             retryCount = retryCount || 0;
             var maxRetries = 3;
@@ -1358,9 +1304,6 @@
             document.body.appendChild(script);
         }
 
-        // ============================================
-        // CLASSES
-        // ============================================
         function loadClasses() {
             if (classesLoaded && classData.length > 0) {
                 populatePosClassSelect(classData);
@@ -1392,7 +1335,6 @@
             if (currentValue) select.value = currentValue;
         }
 
-        // First-selected (year, term) used for autocomplete lookup
         function getFirstSelectedYearTerm() {
             var sel = getSelectedYearTerms();
             if (!sel.length) return { year: DEFAULT_YEAR, term: 'TERM 1' };
@@ -1400,9 +1342,6 @@
             return { year: p[0], term: p[1] };
         }
 
-        // ============================================
-        // AUTOCOMPLETE
-        // ============================================
         function loadAutocompleteNames(className) {
             if (!className) return Promise.resolve([]);
             var yt = getFirstSelectedYearTerm();
@@ -1492,9 +1431,6 @@
             acHighlightIndex = -1;
         }
 
-        // ============================================
-        // BASKET
-        // ============================================
         function addToBasket() {
             var cls = document.getElementById('posClassSelect').value;
             var name = document.getElementById('posNameInput').value.trim();
@@ -1582,9 +1518,6 @@
 
         function getStudentsData() { return basket.slice(); }
 
-        // ============================================
-        // CHECK EXISTING INVOICES
-        // ============================================
         function checkExisting() {
             var parentName = document.getElementById('parentName').value.trim();
             if (!parentName) {
@@ -1674,9 +1607,6 @@
             });
         }
 
-        // ============================================
-        // MARK PAID
-        // ============================================
         function openMarkPaidModal(invoiceNumber, balance) {
             if (invoiceNumber && currentProjectedInvoiceSet[invoiceNumber]) {
                 showAlert('This invoice contains projected (future) terms and cannot be marked as paid.', 'error');
@@ -1736,9 +1666,6 @@
             });
         }
 
-        // ============================================
-        // EDIT / DELETE
-        // ============================================
         function openEditModal(invoiceNumber) {
             currentEditInvoiceNumber = invoiceNumber;
             var alertEl = document.getElementById('editAlert');
@@ -1852,9 +1779,6 @@
             });
         }
 
-        // ============================================
-        // GENERATE
-        // ============================================
         function generateAndDownload() {
             if (isGenerating) return;
             var parentName = document.getElementById('parentName').value.trim();
@@ -1871,7 +1795,6 @@
             if (!password) { showAlert('Session expired. Please reload and sign in again.', 'error'); return; }
             if (!navigator.onLine) { showAlert('You appear to be offline', 'error'); return; }
 
-            // Warn if projected terms selected
             var projectedSelected = yearTerms.filter(function(k) {
                 return k.split('|')[0] >= PROJECTED_YEAR_FROM;
             });
@@ -1879,11 +1802,9 @@
                 var isODL = students[0] && students[0].class && students[0].class.indexOf('ODL') !== -1;
                 var feeEach = isODL ? 'K60,000' : 'K215,000';
                 var ok = confirm(
-                    '⚠️ PROJECTION WARNING\n\n' +
-                    projectedSelected.length + ' selected term(s) have no fee sheet yet:\n' +
-                    projectedSelected.map(function(k){ return '  • ' + k.replace('|', ' '); }).join('\n') +
-                    '\n\nThey will be billed at the standard rate (' + feeEach + ' per term) and the invoice will be marked PROJECTED.\n\n' +
-                    'Payment on this invoice will be BLOCKED until real fee sheets exist.\n\nContinue?'
+                    'Heads up: ' + projectedSelected.length + ' selected term(s) have no fee sheet yet.\n\n' +
+                    'They will be billed at the standard rate (' + feeEach + ' per term) and the invoice will be marked PROJECTED. ' +
+                    'Payment on it will be blocked until real fee sheets exist.\n\nContinue?'
                 );
                 if (!ok) return;
             }
@@ -1980,9 +1901,6 @@
             }
         }
 
-        // ============================================
-        // EXPOSE
-        // ============================================
         window.checkExisting = checkExisting;
         window.generateAndDownload = generateAndDownload;
         window.downloadInvoice = downloadInvoice;
